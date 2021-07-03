@@ -25,8 +25,9 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa'
 	//tracing
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
-	implementation 'junit:junit:4.13.1'
-	implementation 'junit:junit:4.13.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+	testCompileOnly 'org.junit.jupiter:junit-jupiter-params:5.5.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'mysql:mysql-connector-java'
