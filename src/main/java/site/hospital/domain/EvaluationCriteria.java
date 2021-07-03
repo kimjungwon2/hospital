@@ -1,0 +1,19 @@
+package site.hospital.domain;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Embeddable;
+
+@Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class EvaluationCriteria {
+
+    private int sumPrice;
+    private int kindness;
+    private int symptomRelief;
+    private int cleanliness;
+    private int waitTime;
+}
