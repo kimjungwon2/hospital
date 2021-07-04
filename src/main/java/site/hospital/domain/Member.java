@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +19,6 @@ public class Member extends BaseTimeEntity {
     @Column(name= "member_id")
     private Long id;
 
-
     @OneToMany(mappedBy = "member")
     private List<Appointment> appointments = new ArrayList<>();
     @OneToMany(mappedBy = "member")
@@ -26,17 +26,13 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    //회원 이름
-    private String userName;
     //회원 아이디
     private String memberIdName;
     private String password;
     private String nickName;
-
+    //회원 이름
+    private String userName;
     private int phoneNumber;
-
-    //가입 날짜
-    private LocalDateTime registrationDate;
 
     //회원 권한 부여 상태. [NORMAL, STAFF, ADMIN]
     @Enumerated(EnumType.STRING)
@@ -45,8 +41,20 @@ public class Member extends BaseTimeEntity {
     private Long hospitalNumber;
 
 
-    public Member(String userName){
+    /*
+        생성자
+    */
+
+    //회원 생성
+    @Builder
+    public Member(String memberIdName, String password, String userName, String nickName,
+                             int phoneNumber){
+        this.memberIdName = memberIdName;
+        this.password = password;
         this.userName = userName;
+        this.nickName = nickName;
+        this.phoneNumber = phoneNumber;
+        this.authorizationStatus = authorizationStatus.NORMAL;
     }
 
 }

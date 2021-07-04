@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Member;
-import site.hospital.repository.repository;
+import site.hospital.dto.MemberSearchCondition;
+import site.hospital.dto.MemberSearchResult;
+import site.hospital.repository.MemberRepository;
 
 
 import java.util.List;
@@ -14,31 +16,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final repository memberRepository;
+    private final MemberRepository memberRepository;
 
-    //회원 가입
+    //회원등록
     @Transactional
-    public Long join(Member member){
-        validateDuplicdateMember(member);
+    public Long signUp(Member member){
+        validateDuplicateMember(member);
         memberRepository.save(member);
-        return member.getId(); // 키 값 리턴
+        return member.getId();
     }
 
-    //회원 중복 확인
-    private void validateDuplicdateMember(Member member) {
-        //Exception
-        List<Member> findMembers = memberRepository.findByName(member.getUserName());
+    private void validateDuplicateMember(Member member){
+        List<Member> findMembers = memberRepository.findByMemberIdName(member.getMemberIdName());
+
         if(!findMembers.isEmpty()){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new IllegalStateException("이미 존재하는 회원.");
         }
     }
 
-    //회원 전체 조회
-    public List<Member> findMembers(){
-        return memberRepository.findAll();
+    //멤버 Search
+    public List<MemberSearchResult> search(MemberSearchCondition condition){
+        return memberRepository.search(condition);
     }
 
-    public Member findOne(Long memberId){
-        return memberRepository.findOne(memberId);
-    }
 }
