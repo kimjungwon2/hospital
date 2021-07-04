@@ -2,6 +2,8 @@ package site.hospital.api;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,9 +39,8 @@ public class MemberApiController {
     }
 
     @GetMapping("/member/search")
-    public List<MemberSearchResult> searchMember(MemberSearchCondition condition){
-        return memberService.search(condition);
+    public Page<MemberSearchResult> searchMember(MemberSearchCondition condition, Pageable pageable){
+        return memberService.search(condition, pageable);
     }
-
 
 }

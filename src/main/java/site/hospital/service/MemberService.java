@@ -1,6 +1,8 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Member;
@@ -35,8 +37,8 @@ public class MemberService {
     }
 
     //멤버 Search
-    public List<MemberSearchResult> search(MemberSearchCondition condition){
-        return memberRepository.search(condition);
+    public Page<MemberSearchResult> search(MemberSearchCondition condition, Pageable pageable){
+        return memberRepository.search(condition, pageable);
     }
 
 }

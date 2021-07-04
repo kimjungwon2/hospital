@@ -5,6 +5,8 @@ import site.hospital.domain.Authorization;
 
 @Data
 public class MemberSearchCondition {
+    //모두 검색
+    private String allSearch;
 
     private Long memberId;
     private String memberIdName;

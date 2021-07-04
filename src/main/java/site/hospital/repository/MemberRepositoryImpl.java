@@ -1,9 +1,13 @@
 package site.hospital.repository;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import site.hospital.domain.Authorization;
 import site.hospital.dto.MemberSearchResult;
 import site.hospital.dto.MemberSearchCondition;
@@ -13,6 +17,7 @@ import static site.hospital.domain.QMember.member;
 import static org.springframework.util.StringUtils.hasText;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MemberRepositoryImpl implements MemberRepositoryCustom{
@@ -24,26 +29,61 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     }
 
     @Override
-    public List<MemberSearchResult> search(MemberSearchCondition condition){
+    public Page<MemberSearchResult> search(MemberSearchCondition condition, Pageable pageable){
 
-        return queryFactory
-                .select(new QMemberSearchResult(member.id.as("memberId"),
-                                member.memberIdName,
-                                member.password,member.nickName,
-                                member.userName, member.phoneNumber,
-                                member.authorizationStatus, member.hospitalNumber)
-                        )
-                .from(member)
-                .where(
-                        memberIdEq(condition.getMemberId())
-                        ,(memberIdNameEq(condition.getMemberIdName()))
-                        ,(memberNickNameEq(condition.getNickName()))
-                        ,(memberUserNameEq(condition.getUserName()))
-                        ,(memberPhoneNumberEq(condition.getPhoneNumber()))
-                        ,(memberAuthorizationStatusEq(condition.getAuthorizationStatus()))
-                        ,(memberHospitalNumberEq(condition.getHospitalNumber()))
-                )
-                .fetch();
+        //모두 검색
+        if(condition.getAllSearch() != null){
+            QueryResults<MemberSearchResult> result = queryFactory
+                    .select(new QMemberSearchResult(member.id.as("memberId"),
+                            member.memberIdName,
+                            member.password,member.nickName,
+                            member.userName, member.phoneNumber,
+                            member.authorizationStatus, member.hospitalNumber)
+                    )
+                    .from(member)
+                    .where(
+                            member.memberIdName.eq(condition.getAllSearch())
+                                    .or(member.nickName.eq(condition.getAllSearch()))
+                                    .or(member.userName.eq(condition.getAllSearch()))
+                    )
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+
+            List<MemberSearchResult> content = result.getResults();
+            long total = result.getTotal();
+
+            return new PageImpl<>(content, pageable, total);
+        }
+        //각자 검색
+        else{
+            QueryResults<MemberSearchResult> result = queryFactory
+                    .select(new QMemberSearchResult(member.id.as("memberId"),
+                            member.memberIdName,
+                            member.password,member.nickName,
+                            member.userName, member.phoneNumber,
+                            member.authorizationStatus, member.hospitalNumber)
+                    )
+                    .from(member)
+                    .where(
+                            memberIdEq(condition.getMemberId())
+                            ,(memberIdNameEq(condition.getMemberIdName()))
+                            ,(memberNickNameEq(condition.getNickName()))
+                            ,(memberUserNameEq(condition.getUserName()))
+                            ,(memberPhoneNumberEq(condition.getPhoneNumber()))
+                            ,(memberAuthorizationStatusEq(condition.getAuthorizationStatus()))
+                            ,(memberHospitalNumberEq(condition.getHospitalNumber()))
+                    )
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+
+            List<MemberSearchResult> content = result.getResults();
+            long total = result.getTotal();
+
+            return new PageImpl<>(content, pageable, total);
+        }
+
     }
 
     private BooleanExpression memberIdEq(Long id){
