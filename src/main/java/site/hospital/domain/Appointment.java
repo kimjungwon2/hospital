@@ -25,4 +25,20 @@ public class Appointment extends BaseTimeEntity{
     @OneToMany(mappedBy = "appointment")
     private List<AppointmentHospital> appointmentHospitals = new ArrayList<>();
 
+    //== 연관 관계 메서드 ==/
+    public void changeMember(Member member){
+        this.member = member;
+        member.getAppointments().add(this);
+    }
+
+
+
+    /*
+    생성 메서드
+    */
+
+    public void addAppointmentHospital(AppointmentHospital appointmentHospital){
+        appointmentHospitals.add(appointmentHospital);
+    }
+
 }

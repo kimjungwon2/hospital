@@ -17,7 +17,7 @@ public class Doctor extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "detailed_hos_information_id")
-    private DetailedHosInformation detailedhosinformation;
+    private DetailedHosInformation detailedHosInformation;
 
     private String name;
     private String history;

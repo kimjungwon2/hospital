@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Member extends BaseTimeEntity {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     //회원 아이디
-    @Column(unique=true)
+    @Column(unique=true, nullable = false)
     private String memberIdName;
     private String password;
     private String nickName;

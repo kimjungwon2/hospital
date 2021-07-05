@@ -18,10 +18,10 @@ public class DetailedHosInformation extends BaseTimeEntity {
     @Column(name = "detailed_hos_information_id")
     private long id;
 
-    @OneToOne(mappedBy = "detailed_hos_information", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "detailedHosInformation", fetch = FetchType.LAZY)
     private Hospital hospital;
 
-    @OneToMany(mappedBy = "detailed_hos_information")
+    @OneToMany(mappedBy = "detailedHosInformation")
     private List<Doctor> doctors = new ArrayList<>();
 
     private String photo;

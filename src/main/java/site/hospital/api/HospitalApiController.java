@@ -41,12 +41,11 @@ public class HospitalApiController {
 
     /* DTO */
     @Data
-    public class CreateHospitalResponse {
+    static class CreateHospitalResponse {
         long id;
         public CreateHospitalResponse(long id){
             this.id = id;
         }
     }
-
 
 }
