@@ -4,9 +4,6 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import site.hospital.domain.Authorization;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
 @Data
 public class MemberSearchResult {
     private long memberId;
@@ -18,7 +15,6 @@ public class MemberSearchResult {
     private int phoneNumber;
 
     //회원 권한 부여 상태. [NORMAL, STAFF, ADMIN]
-    @Enumerated(EnumType.STRING)
     private Authorization authorizationStatus;
 
     //병원 번호

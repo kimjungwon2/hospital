@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,5 +21,12 @@ public class Tag extends BaseTimeEntity {
     @OneToMany(mappedBy = "tag")
     private List<PostTag> posttags = new ArrayList<>();
 
+    @Column(unique=true)
     private String name;
+
+    //태그 생성
+    @Builder
+    public Tag(String name) {
+        this.name = name;
+    }
 }

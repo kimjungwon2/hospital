@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,4 +16,11 @@ public class HospitalAddress  {
     private String landLotBasedSystem;
     private String roadBaseAddress;
     private String zipCode;
+
+    @Builder
+    public HospitalAddress(String landLotBasedSystem, String roadBaseAddress, String zipCode) {
+        this.landLotBasedSystem = landLotBasedSystem;
+        this.roadBaseAddress = roadBaseAddress;
+        this.zipCode = zipCode;
+    }
 }

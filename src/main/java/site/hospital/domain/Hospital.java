@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,7 +36,7 @@ public class Hospital extends BaseTimeEntity {
     private String medicalSubject;
     private String medicalSubjectInformation;
     private String businessCondition;
-    private String city;
+    private String cityName;
 
     private int numberHealthcareProvider;
     private int numberWard;
@@ -49,4 +50,37 @@ public class Hospital extends BaseTimeEntity {
     @Embedded
     private HospitalLocation hospitalLocation;
 
+    /*
+    생성자
+    */
+    @Builder
+    public Hospital(Long id, String licensingDate, String hospitalName,
+                    String phoneNumber, String distinguishedName, String medicalSubject,
+                    String medicalSubjectInformation, String businessCondition, String cityName,
+                    int numberHealthcareProvider, int numberWard, int numberPatientRoom,
+                    HospitalAddress hospitalAddress, HospitalLocation hospitalLocation) {
+        this.id = id;
+        this.licensingDate = licensingDate;
+        this.hospitalName = hospitalName;
+        this.phoneNumber = phoneNumber;
+        this.distinguishedName = distinguishedName;
+        this.medicalSubject = medicalSubject;
+        this.medicalSubjectInformation = medicalSubjectInformation;
+        this.businessCondition = businessCondition;
+        this.cityName = cityName;
+        this.numberHealthcareProvider = numberHealthcareProvider;
+        this.numberWard = numberWard;
+        this.numberPatientRoom = numberPatientRoom;
+        this.hospitalAddress = hospitalAddress.builder()
+                .roadBaseAddress(hospitalAddress.getRoadBaseAddress())
+                .landLotBasedSystem(hospitalAddress.getLandLotBasedSystem())
+                .zipCode(hospitalAddress.getZipCode())
+                .build();
+        this.hospitalLocation = hospitalLocation.builder()
+                .latitude(hospitalLocation.getLatitude())
+                .longitude(hospitalLocation.getLongitude())
+                .xCoordination(hospitalLocation.getXCoordination())
+                .yCoordination(hospitalLocation.getYCoordination())
+                .build();
+    }
 }

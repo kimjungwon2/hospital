@@ -4,9 +4,8 @@ import lombok.Data;
 
 @Data
 public class CreateMemberResponse {
-    long id;
-
-    public CreateMemberResponse(long id){
-        this.id = id;
+    long member_id;
+    public CreateMemberResponse(long member_id){
+        this.member_id = member_id;
     }
 }
