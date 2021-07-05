@@ -25,8 +25,8 @@ public class Hospital extends BaseTimeEntity {
 
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "detailedhosinformation_id")
-    private Detailedhosinformation detailedhosinformation;
+    @JoinColumn(name = "detailed_hos_information_id")
+    private DetailedHosInformation detailedhosinformation;
 
     //인허가 날짜
     private String licensingDate;

@@ -12,16 +12,16 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Detailedhosinformation extends BaseTimeEntity {
+public class DetailedHosInformation extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "detailedhosinformation_id")
+    @Column(name = "detailed_hos_information_id")
     private long id;
 
-    @OneToOne(mappedBy = "detailedhosinformation", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "detailed_hos_information", fetch = FetchType.LAZY)
     private Hospital hospital;
 
-    @OneToMany(mappedBy = "detailedhosinformation")
+    @OneToMany(mappedBy = "detailed_hos_information")
     private List<Doctor> doctors = new ArrayList<>();
 
     private String photo;
