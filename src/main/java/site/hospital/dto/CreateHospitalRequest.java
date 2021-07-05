@@ -1,4 +1,4 @@
-package site.hospital.api.dto;
+package site.hospital.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

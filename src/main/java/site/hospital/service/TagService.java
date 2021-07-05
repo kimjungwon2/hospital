@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import site.hospital.api.dto.DeleteTagRequest;
 import site.hospital.domain.Tag;
 import site.hospital.repository.TagRepository;
 
@@ -18,7 +17,7 @@ public class TagService {
     private final TagRepository tagRepository;
 
     @Transactional
-    public Long TagCreate(Tag tag){
+    public Long tagCreate(Tag tag){
         validateDuplicateTag(tag);
         tagRepository.save(tag);
         return tag.getId();
@@ -32,8 +31,7 @@ public class TagService {
     }
 
     @Transactional
-    public void TagDelete(DeleteTagRequest tag){
-        tagRepository.deleteById(tag.getTagId());
+    public void tagDelete(Long id){
+        tagRepository.deleteById(id);
     }
-
 }

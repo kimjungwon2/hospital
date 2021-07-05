@@ -17,7 +17,6 @@ import static site.hospital.domain.QMember.member;
 import static org.springframework.util.StringUtils.hasText;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MemberRepositoryImpl implements MemberRepositoryCustom{

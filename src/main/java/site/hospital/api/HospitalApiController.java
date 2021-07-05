@@ -1,12 +1,12 @@
 package site.hospital.api;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import site.hospital.api.dto.CreateHospitalRequest;
-import site.hospital.api.dto.CreateHospitalResponse;
+import site.hospital.dto.CreateHospitalRequest;
 import site.hospital.domain.Hospital;
 import site.hospital.service.HospitalService;
 
@@ -38,5 +38,15 @@ public class HospitalApiController {
 
         return new CreateHospitalResponse(id);
     }
+
+    /* DTO */
+    @Data
+    public class CreateHospitalResponse {
+        long id;
+        public CreateHospitalResponse(long id){
+            this.id = id;
+        }
+    }
+
 
 }
