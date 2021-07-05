@@ -23,4 +23,9 @@ public class AppointmentHospital extends BaseTimeEntity {
     @JoinColumn(name="hospital_id")
     private Hospital hospital;
 
+    // 연관관계 메서드
+    public void setAppointment(Appointment appointment){
+        this.appointment = appointment;
+    }
+
 }

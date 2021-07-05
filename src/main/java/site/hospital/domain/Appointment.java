@@ -31,14 +31,24 @@ public class Appointment extends BaseTimeEntity{
         member.getAppointments().add(this);
     }
 
+    public void addAppointmentHospital(AppointmentHospital appointmentHospital){
+        appointmentHospitals.add(appointmentHospital);
+        appointmentHospital.setAppointment(this);
+    }
 
 
     /*
     생성 메서드
     */
 
-    public void addAppointmentHospital(AppointmentHospital appointmentHospital){
-        appointmentHospitals.add(appointmentHospital);
+    public Appointment createAppointment(Member member, AppointmentHospital... appointmentHospitals){
+        Appointment appointment = new Appointment();
+        appointment.changeMember(member);
+        for (AppointmentHospital appointmentHospital : appointmentHospitals) {
+            appointment.addAppointmentHospital(appointmentHospital);
+        }
+
+        return appointment;
     }
 
 }
