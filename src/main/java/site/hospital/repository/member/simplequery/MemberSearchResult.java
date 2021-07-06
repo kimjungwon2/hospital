@@ -1,4 +1,4 @@
-package site.hospital.dto;
+package site.hospital.repository.member.simplequery;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;

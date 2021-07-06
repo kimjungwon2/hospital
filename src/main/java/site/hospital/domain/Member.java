@@ -46,7 +46,6 @@ public class Member extends BaseTimeEntity {
     /*
         생성자
     */
-
     //회원 생성
     @Builder
     public Member(String memberIdName, String password, String userName, String nickName,

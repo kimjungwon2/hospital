@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.*;
 import site.hospital.repository.HospitalRepository;
-import site.hospital.repository.MemberRepository;
+import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.ReviewRepository;
 
 @Service

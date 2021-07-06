@@ -1,4 +1,4 @@
-package site.hospital.repository;
+package site.hospital.repository.member.simplequery;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -9,9 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.Authorization;
-import site.hospital.dto.MemberSearchResult;
-import site.hospital.dto.MemberSearchCondition;
+import site.hospital.repository.member.simplequery.MemberSearchResult;
+import site.hospital.repository.member.simplequery.MemberSearchCondition;
 import site.hospital.dto.QMemberSearchResult;
+import site.hospital.repository.member.MemberRepositoryCustom;
 
 import static site.hospital.domain.QMember.member;
 import static org.springframework.util.StringUtils.hasText;
@@ -19,7 +20,7 @@ import static org.springframework.util.StringUtils.hasText;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public class MemberRepositoryImpl implements MemberRepositoryCustom{
+public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 

@@ -1,6 +1,5 @@
 package site.hospital.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import site.hospital.domain.HospitalAddress;
 import site.hospital.domain.HospitalLocation;

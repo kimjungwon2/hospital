@@ -16,10 +16,9 @@ public class AppointmentApiController {
 
     @PostMapping("/hospital/appointment")
     public CreateAppointmentResponse saveAppointment(@RequestBody @Validated CreateAppointmentRequest request){
-        System.out.println("request: "+request);
         Long id = appointmentService.appointment(request.getMemberId(),request.getHospitalId(),
                 request.getYear(),request.getMonth(),request.getDay(),request.getHour(),request.getMinute());
-        System.out.println("Id: "+id);
+
         return new CreateAppointmentResponse(id);
     }
 

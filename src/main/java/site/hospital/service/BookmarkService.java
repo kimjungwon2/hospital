@@ -8,7 +8,7 @@ import site.hospital.domain.Hospital;
 import site.hospital.domain.Member;
 import site.hospital.repository.BookmarkRepository;
 import site.hospital.repository.HospitalRepository;
-import site.hospital.repository.MemberRepository;
+import site.hospital.repository.member.MemberRepository;
 
 @Service
 @Transactional(readOnly = true)

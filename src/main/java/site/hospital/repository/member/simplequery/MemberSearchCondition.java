@@ -1,4 +1,4 @@
-package site.hospital.dto;
+package site.hospital.repository.member.simplequery;
 
 import lombok.Data;
 import site.hospital.domain.Authorization;

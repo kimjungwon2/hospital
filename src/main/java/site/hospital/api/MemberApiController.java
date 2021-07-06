@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.domain.Member;
-import site.hospital.dto.MemberSearchCondition;
-import site.hospital.dto.MemberSearchResult;
+import site.hospital.repository.member.simplequery.MemberSearchCondition;
+import site.hospital.repository.member.simplequery.MemberSearchResult;
 import site.hospital.service.MemberService;
 
 @RestController
