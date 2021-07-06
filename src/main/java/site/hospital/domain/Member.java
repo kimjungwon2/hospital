@@ -24,6 +24,8 @@ public class Member extends BaseTimeEntity {
     private List<QandA> qandas = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<Bookmark> bookmarks = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews = new ArrayList<>();
 
     //회원 아이디
     @Column(unique=true, nullable = false)

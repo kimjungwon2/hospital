@@ -16,10 +16,10 @@ public class AppointmentApiController {
 
     @PostMapping("/hospital/appointment")
     public CreateAppointmentResponse saveAppointment(@RequestBody @Validated CreateAppointmentRequest request){
-
+        System.out.println("request: "+request);
         Long id = appointmentService.appointment(request.getMemberId(),request.getHospitalId(),
                 request.getYear(),request.getMonth(),request.getDay(),request.getHour(),request.getMinute());
-
+        System.out.println("Id: "+id);
         return new CreateAppointmentResponse(id);
     }
 
@@ -39,11 +39,11 @@ public class AppointmentApiController {
     private static class CreateAppointmentRequest{
         private Long memberId;
         private Long hospitalId;
-        private int year;
-        private int month;
-        private int day;
-        private int hour;
-        private int minute;
+        private Integer year;
+        private Integer month;
+        private Integer day;
+        private Integer hour;
+        private Integer minute;
     }
 
 }

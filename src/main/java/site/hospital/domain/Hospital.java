@@ -57,6 +57,8 @@ public class Hospital extends BaseTimeEntity {
     /*
     생성자
     */
+
+    //병원 생성
     @Builder
     public Hospital(Long id, String licensingDate, String hospitalName,
                     String phoneNumber, String distinguishedName, String medicalSubject,

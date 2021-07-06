@@ -44,9 +44,7 @@ public class Appointment extends BaseTimeEntity{
     /*
     생성 메서드
     */
-    @Builder
     public Appointment(LocalDateTime reservationDate){
-
         this.reservationDate = reservationDate;
     }
 

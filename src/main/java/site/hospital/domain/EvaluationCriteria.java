@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,4 +17,14 @@ public class EvaluationCriteria {
     private int symptomRelief;
     private int cleanliness;
     private int waitTime;
+
+    @Builder
+    public EvaluationCriteria(int sumPrice, int kindness, int symptomRelief,
+                              int cleanliness, int waitTime) {
+        this.sumPrice = sumPrice;
+        this.kindness = kindness;
+        this.symptomRelief = symptomRelief;
+        this.cleanliness = cleanliness;
+        this.waitTime = waitTime;
+    }
 }
