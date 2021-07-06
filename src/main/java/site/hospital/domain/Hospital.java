@@ -54,6 +54,12 @@ public class Hospital extends BaseTimeEntity {
     @Embedded
     private HospitalLocation hospitalLocation;
 
+    //== 연관 관계 메서드 ==//
+    public void changeDetailHosInformation(DetailedHosInformation detailedHosInformation){
+        this.detailedHosInformation = detailedHosInformation;
+        detailedHosInformation.setHospital(this);
+    }
+
     /*
     생성자
     */
@@ -90,4 +96,11 @@ public class Hospital extends BaseTimeEntity {
                 .build();
     }
 
+    // 생성 메서드
+    public static Hospital createDetailedHosInformation(DetailedHosInformation detailedHosInformation){
+        Hospital hospital = new Hospital();
+        hospital.changeDetailHosInformation(detailedHosInformation);
+
+        return hospital;
+    }
 }

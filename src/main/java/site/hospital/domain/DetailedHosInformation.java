@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,18 @@ public class DetailedHosInformation extends BaseTimeEntity {
     private String consultationHour;
     private String abnormality;
 
+    /*연관관계 때문에 set 설정*/
+    public void setHospital(Hospital hospital){
+        this.hospital = hospital;
+    }
+
+    //생성자
+
+    @Builder
+    public DetailedHosInformation(String photo, String introduction, String consultationHour, String abnormality) {
+        this.photo = photo;
+        this.introduction = introduction;
+        this.consultationHour = consultationHour;
+        this.abnormality = abnormality;
+    }
 }
