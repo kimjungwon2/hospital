@@ -20,7 +20,8 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy="bookmark")
-    private List<BookmarkHospital> bookmarkHospitals = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
 
 }

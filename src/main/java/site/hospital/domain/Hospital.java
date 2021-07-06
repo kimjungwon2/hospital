@@ -21,7 +21,11 @@ public class Hospital extends BaseTimeEntity {
     @OneToMany(mappedBy = "hospital")
     private List<Estimation> estimations = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
-    private List<PostTag> posttags = new ArrayList<>();
+    private List<PostTag> postTags = new ArrayList<>();
+    @OneToMany(mappedBy = "hospital")
+    private List<Appointment> appointments = new ArrayList<>();
+    @OneToMany(mappedBy = "hospital")
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

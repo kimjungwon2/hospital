@@ -19,7 +19,7 @@ public class Tag extends BaseTimeEntity {
     private long id;
 
     @OneToMany(mappedBy = "tag")
-    private List<PostTag> posttags = new ArrayList<>();
+    private List<PostTag> postTags = new ArrayList<>();
 
     @Column(unique=true, nullable = false)
     private String name;

@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class PostTag extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="posttag_id")
+    @Column(name="postTag_id")
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

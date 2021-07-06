@@ -22,9 +22,9 @@ public class Appointment extends BaseTimeEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "appointment")
-    private List<AppointmentHospital> appointmentHospitals = new ArrayList<>();
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
 
     //== 연관 관계 메서드 ==/
     public void changeMember(Member member){
@@ -32,9 +32,9 @@ public class Appointment extends BaseTimeEntity{
         member.getAppointments().add(this);
     }
 
-    public void addAppointmentHospital(AppointmentHospital appointmentHospital){
-        appointmentHospitals.add(appointmentHospital);
-        appointmentHospital.setAppointment(this);
+    public void changeHospital(Hospital hospital){
+        this.hospital = hospital;
+        hospital.getAppointments().add(this);
     }
 
 
@@ -42,12 +42,10 @@ public class Appointment extends BaseTimeEntity{
     생성 메서드
     */
 
-    public Appointment createAppointment(Member member, AppointmentHospital... appointmentHospitals){
+    public Appointment createAppointment(Member member, Hospital hospital){
         Appointment appointment = new Appointment();
         appointment.changeMember(member);
-        for (AppointmentHospital appointmentHospital : appointmentHospitals) {
-            appointment.addAppointmentHospital(appointmentHospital);
-        }
+        appointment.changeHospital(hospital);
 
         return appointment;
     }
