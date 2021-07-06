@@ -87,4 +87,5 @@ public class Hospital extends BaseTimeEntity {
                 .yCoordination(hospitalLocation.getYCoordination())
                 .build();
     }
+
 }

@@ -43,7 +43,7 @@ public class MemberApiController {
 
     /* DTO */
     @Data
-    static class CreateMemberResponse {
+    private static class CreateMemberResponse {
         long memberId;
         public CreateMemberResponse(long memberId){
             this.memberId = memberId;
@@ -51,14 +51,14 @@ public class MemberApiController {
     }
 
     @Data
-    static class CreateMemberRequest {
+    private static class CreateMemberRequest {
         //회원 이름
         private String userName;
         //회원 아이디
         private String memberIdName;
         private String password;
         private String nickName;
-        private int phoneNumber;
+        private String phoneNumber;
     }
 
 }

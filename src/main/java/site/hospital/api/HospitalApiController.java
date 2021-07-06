@@ -41,7 +41,7 @@ public class HospitalApiController {
 
     /* DTO */
     @Data
-    static class CreateHospitalResponse {
+    private static class CreateHospitalResponse {
         long id;
         public CreateHospitalResponse(long id){
             this.id = id;

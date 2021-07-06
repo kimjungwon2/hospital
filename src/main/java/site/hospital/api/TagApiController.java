@@ -44,15 +44,14 @@ public class TagApiController {
     }
 
 
-
     /* DTO */
     @Data
-    static class CreateTagRequest {
+    private static class CreateTagRequest {
         private String name;
     }
 
     @Data
-    static class CreateTagResponse {
+    private static class CreateTagResponse {
         private long tagId;
         public CreateTagResponse(long tagId) {
             this.tagId = tagId;
@@ -60,18 +59,18 @@ public class TagApiController {
     }
 
     @Data
-    static class DeleteTagRequest {
+    private static class DeleteTagRequest {
         private Long tagId;
     }
 
     @Data
     @AllArgsConstructor
-    static class Result<T>{
+    private static class Result<T>{
         private T Data;
     }
 
     @Data
-    static class allTag{
+    private static class allTag{
         private Long tagId;
         private String name;
         private LocalDateTime createdDate;

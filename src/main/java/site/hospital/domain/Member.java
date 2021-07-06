@@ -32,7 +32,7 @@ public class Member extends BaseTimeEntity {
     private String nickName;
     //회원 이름
     private String userName;
-    private int phoneNumber;
+    private String phoneNumber;
 
     //회원 권한 부여 상태. [NORMAL, STAFF, ADMIN]
     @Enumerated(EnumType.STRING)
@@ -48,7 +48,7 @@ public class Member extends BaseTimeEntity {
     //회원 생성
     @Builder
     public Member(String memberIdName, String password, String userName, String nickName,
-                             int phoneNumber){
+                             String phoneNumber){
         this.memberIdName = memberIdName;
         this.password = password;
         this.userName = userName;
