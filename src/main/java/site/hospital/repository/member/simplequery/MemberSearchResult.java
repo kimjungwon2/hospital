@@ -12,7 +12,7 @@ public class MemberSearchResult {
     private String password;
     private String nickName;
     private String userName;
-    private int phoneNumber;
+    private String phoneNumber;
 
     //회원 권한 부여 상태. [NORMAL, STAFF, ADMIN]
     private Authorization authorizationStatus;
@@ -23,7 +23,7 @@ public class MemberSearchResult {
     @QueryProjection
     public MemberSearchResult(long memberId, String memberIdName,
                               String password, String nickName,
-                              String userName, int phoneNumber,
+                              String userName, String phoneNumber,
                               Authorization authorizationStatus, Long hospitalNumber) {
         this.memberId = memberId;
         this.memberIdName = memberIdName;

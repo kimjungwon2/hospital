@@ -9,4 +9,7 @@ public interface MemberRepository extends JpaRepository<Member,Long>, MemberRepo
     //회원 이름 찾기
     List<Member> findByMemberIdName(String MemberIdName);
 
+    //로그인 하기
+    Member findOneByMemberIdName(String memberIdName);
+
 }

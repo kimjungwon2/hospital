@@ -9,9 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.Authorization;
-import site.hospital.repository.member.simplequery.MemberSearchResult;
-import site.hospital.repository.member.simplequery.MemberSearchCondition;
-import site.hospital.dto.QMemberSearchResult;
 import site.hospital.repository.member.MemberRepositoryCustom;
 
 import static site.hospital.domain.QMember.member;
@@ -98,7 +95,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     private BooleanExpression memberUserNameEq(String userName){
         return hasText(userName) ? member.userName.eq(userName): null ;
     }
-    private BooleanExpression memberPhoneNumberEq(Integer phoneNumber){
+    private BooleanExpression memberPhoneNumberEq(String phoneNumber){
         return phoneNumber != null? member.phoneNumber.eq(phoneNumber) : null;
     }
     private BooleanExpression memberAuthorizationStatusEq(Authorization authorizationStatus){

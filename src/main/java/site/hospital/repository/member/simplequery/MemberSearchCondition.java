@@ -12,7 +12,7 @@ public class MemberSearchCondition {
     private String memberIdName;
     private String nickName;
     private String userName;
-    private Integer phoneNumber;
+    private String phoneNumber;
     private Authorization authorizationStatus;
     private Long hospitalNumber;
 

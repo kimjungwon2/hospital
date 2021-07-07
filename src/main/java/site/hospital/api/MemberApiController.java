@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.domain.Authorization;
 import site.hospital.domain.Member;
 import site.hospital.repository.member.simplequery.MemberSearchCondition;
 import site.hospital.repository.member.simplequery.MemberSearchResult;
@@ -21,6 +22,17 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    @PostMapping("/member/login")
+    public LoginMemberResponse loginMember(@RequestBody @Validated LoginMemberRequest request){
+
+        Member member = memberService.logIn(request.getMemberIdName(),request.getPassword());
+        LoginMemberResponse loginMemberResponse = new LoginMemberResponse(member);
+
+        return loginMemberResponse;
+    }
+
+
+
     @PostMapping("/member/signup")
     public CreateMemberResponse saveMember(@RequestBody @Validated CreateMemberRequest request){
         Member member= Member.builder()
@@ -30,7 +42,7 @@ public class MemberApiController {
                 .userName(request.getUserName())
                 .phoneNumber(request.getPhoneNumber())
                 .build();
-        Long id =memberService.signUp(member);
+        Long id = memberService.signUp(member);
 
         return new CreateMemberResponse(id);
     }
@@ -59,6 +71,35 @@ public class MemberApiController {
         private String password;
         private String nickName;
         private String phoneNumber;
+    }
+
+    @Data
+    private static class LoginMemberRequest{
+        String memberIdName;
+        String password;
+    }
+
+    @Data
+    private static class LoginMemberResponse{
+        private Long memberId;
+        private String memberIdName;
+        private String password;
+        private String nickName;
+        private String name;
+        private String phoneNumber;
+        private Authorization authorizationStatus;
+        private Long hospitalNumber;
+
+        public LoginMemberResponse(Member member) {
+            this.memberId = member.getId();
+            this.memberIdName = member.getMemberIdName();
+            this.password = member.getPassword();
+            this.nickName = member.getNickName();
+            this.name = member.getUserName();
+            this.phoneNumber = member.getPhoneNumber();
+            this.authorizationStatus = member.getAuthorizationStatus();
+            this.hospitalNumber = member.getHospitalNumber();
+        }
     }
 
 }

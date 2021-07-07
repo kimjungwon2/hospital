@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,11 @@ public class Estimation extends BaseTimeEntity {
     private String distinctionGrade;
     private String estimationList;
 
+    @Builder
+    public Estimation(String city, String hospitalName, String distinctionGrade, String estimationList) {
+        this.city = city;
+        this.hospitalName = hospitalName;
+        this.distinctionGrade = distinctionGrade;
+        this.estimationList = estimationList;
+    }
 }
