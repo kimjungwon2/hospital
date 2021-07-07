@@ -3,25 +3,25 @@ package site.hospital.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.domain.DetailedHosInformation;
+import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Doctor;
-import site.hospital.repository.DetailedHosRepository;
+import site.hospital.repository.StaffHosRepository;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class DetailedHosService {
-    private final DetailedHosRepository detailedHosRepository;
+public class StaffHosService {
+    private final StaffHosRepository staffHosRepository;
 
     //의사 등록
     @Transactional
     public Long doctorRegister(String name, String history, String photo){
         Doctor doctor = Doctor.builder().name(name).history(history).photo(photo).build();
 
-        DetailedHosInformation detailedHosInformation = DetailedHosInformation.createDoctor(doctor);
-        detailedHosRepository.save(detailedHosInformation);
+        StaffHosInformation staffHosInformation = StaffHosInformation.createDoctor(doctor);
+        staffHosRepository.save(staffHosInformation);
 
-        return detailedHosInformation.getId();
+        return staffHosInformation.getId();
     }
 
 }

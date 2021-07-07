@@ -1,8 +1,8 @@
 package site.hospital.dto;
 
 import lombok.Data;
-import site.hospital.domain.HospitalAddress;
-import site.hospital.domain.HospitalLocation;
+import site.hospital.domain.detailedHosInformation.HospitalAddress;
+import site.hospital.domain.detailedHosInformation.HospitalLocation;
 
 @Data
 public class CreateHospitalRequest {

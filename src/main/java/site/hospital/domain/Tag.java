@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;

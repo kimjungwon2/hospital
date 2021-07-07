@@ -3,10 +3,10 @@ package site.hospital.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

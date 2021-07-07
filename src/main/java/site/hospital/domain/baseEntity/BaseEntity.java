@@ -1,4 +1,4 @@
-package site.hospital.domain;
+package site.hospital.domain.baseEntity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
@@ -13,7 +13,7 @@ import javax.persistence.MappedSuperclass;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
-public class BaseEntity extends BaseTimeEntity{
+public class BaseEntity extends BaseTimeEntity {
 
     @CreatedBy
     @Column(updatable = false)

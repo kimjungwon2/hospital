@@ -2,7 +2,7 @@ package site.hospital.repository.member.simplequery;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
-import site.hospital.domain.Authorization;
+import site.hospital.domain.member.Authorization;
 
 @Data
 public class MemberSearchResult {

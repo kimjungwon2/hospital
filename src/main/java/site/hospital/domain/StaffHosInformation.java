@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,16 +14,16 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DetailedHosInformation extends BaseTimeEntity {
+public class StaffHosInformation extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "detailed_hos_information_id")
+    @Column(name = "staffHosInformation_id")
     private long id;
 
-    @OneToOne(mappedBy = "detailedHosInformation", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "staffHosInformation", fetch = FetchType.LAZY)
     private Hospital hospital;
 
-    @OneToMany(mappedBy = "detailedHosInformation",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "staffHosInformation",cascade = CascadeType.ALL)
     private List<Doctor> doctors = new ArrayList<>();
 
     private String photo;
@@ -38,23 +39,23 @@ public class DetailedHosInformation extends BaseTimeEntity {
     /*연관관계 메서드*/
     public void addDoctor(Doctor doctor){
         doctors.add(doctor);
-        doctor.setDetailedHosInformation(this);
+        doctor.setStaffHosInformation(this);
     }
 
     //생성자
 
     @Builder
-    public DetailedHosInformation(String photo, String introduction, String consultationHour, String abnormality) {
+    public StaffHosInformation(String photo, String introduction, String consultationHour, String abnormality) {
         this.photo = photo;
         this.introduction = introduction;
         this.consultationHour = consultationHour;
         this.abnormality = abnormality;
     }
 
-    public static DetailedHosInformation createDoctor(Doctor doctor){
-        DetailedHosInformation detailedHosInformation = new DetailedHosInformation();
-        detailedHosInformation.addDoctor(doctor);
+    public static StaffHosInformation createDoctor(Doctor doctor){
+        StaffHosInformation staffHosInformation = new StaffHosInformation();
+        staffHosInformation.addDoctor(doctor);
 
-        return detailedHosInformation;
+        return staffHosInformation;
     }
 }

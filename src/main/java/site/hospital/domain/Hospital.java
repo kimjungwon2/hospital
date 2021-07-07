@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,8 +31,12 @@ public class Hospital extends BaseTimeEntity {
     @OneToMany(mappedBy = "hospital")
     private List<QandA> qandAs = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staffHosInformation_id")
+    private StaffHosInformation staffHosInformation;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "detailed_hos_information_id")
+    @JoinColumn(name = "detailedHosInformation_id")
     private DetailedHosInformation detailedHosInformation;
 
     //인허가 날짜
@@ -43,20 +49,14 @@ public class Hospital extends BaseTimeEntity {
     private String businessCondition;
     private String cityName;
 
-    private int numberHealthcareProvider;
-    private int numberWard;
-    //입원실 수
-    private int numberPatientRoom;
-
-    @Embedded
-    private HospitalAddress hospitalAddress;
-
-    //병원 장소(좌표)
-    @Embedded
-    private HospitalLocation hospitalLocation;
 
     //== 연관 관계 메서드 ==//
-    public void changeDetailHosInformation(DetailedHosInformation detailedHosInformation){
+    public void changeStaffHosInformation(StaffHosInformation staffHosInformation) {
+        this.staffHosInformation = staffHosInformation;
+        staffHosInformation.setHospital(this);
+    }
+
+    public void changeDetailedHosInformation(DetailedHosInformation detailedHosInformation){
         this.detailedHosInformation = detailedHosInformation;
         detailedHosInformation.setHospital(this);
     }
@@ -67,9 +67,7 @@ public class Hospital extends BaseTimeEntity {
     @Builder
     public Hospital(Long id, String licensingDate, String hospitalName,
                     String phoneNumber, String distinguishedName, String medicalSubject,
-                    String medicalSubjectInformation, String businessCondition, String cityName,
-                    int numberHealthcareProvider, int numberWard, int numberPatientRoom,
-                    HospitalAddress hospitalAddress, HospitalLocation hospitalLocation) {
+                    String medicalSubjectInformation, String businessCondition, String cityName) {
         this.id = id;
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
@@ -79,29 +77,25 @@ public class Hospital extends BaseTimeEntity {
         this.medicalSubjectInformation = medicalSubjectInformation;
         this.businessCondition = businessCondition;
         this.cityName = cityName;
-        this.numberHealthcareProvider = numberHealthcareProvider;
-        this.numberWard = numberWard;
-        this.numberPatientRoom = numberPatientRoom;
-        this.hospitalAddress = hospitalAddress.builder()
-                .roadBaseAddress(hospitalAddress.getRoadBaseAddress())
-                .landLotBasedSystem(hospitalAddress.getLandLotBasedSystem())
-                .zipCode(hospitalAddress.getZipCode())
-                .build();
-        this.hospitalLocation = hospitalLocation.builder()
-                .latitude(hospitalLocation.getLatitude())
-                .longitude(hospitalLocation.getLongitude())
-                .xCoordination(hospitalLocation.getXCoordination())
-                .yCoordination(hospitalLocation.getYCoordination())
-                .build();
     }
 
     /* 생성 메서드*/
-
     //병원 상세 정보 등록
     public static Hospital createDetailedHosInformation(DetailedHosInformation detailedHosInformation){
         Hospital hospital = new Hospital();
-        hospital.changeDetailHosInformation(detailedHosInformation);
+        hospital.changeDetailedHosInformation(detailedHosInformation);
 
         return hospital;
     }
+
+    //병원 추가 정보 등록(직원)
+    public static Hospital createStaffHosInformation(StaffHosInformation staffHosInformation){
+        Hospital hospital = new Hospital();
+        hospital.changeStaffHosInformation(staffHosInformation);
+
+        return hospital;
+    }
+
+
+
 }

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.*;
 
@@ -17,16 +18,16 @@ public class Doctor extends BaseTimeEntity {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "detailed_hos_information_id")
-    private DetailedHosInformation detailedHosInformation;
+    @JoinColumn(name = "staffHosInformation_id")
+    private StaffHosInformation staffHosInformation;
 
     private String name;
     private String history;
     private String photo;
 
     //연관관계 때문에 set 설정
-    public void setDetailedHosInformation(DetailedHosInformation detailedHosInformation){
-        this.detailedHosInformation = detailedHosInformation;
+    public void setStaffHosInformation(StaffHosInformation staffHosInformation){
+        this.staffHosInformation = staffHosInformation;
     }
 
     @Builder

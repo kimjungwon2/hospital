@@ -1,4 +1,4 @@
-package site.hospital.domain;
+package site.hospital.domain.reviewHospital;
 
 public enum Recommendation {
     RECOMMENDATION, DECOMMENDATION

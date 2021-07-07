@@ -1,4 +1,4 @@
-package site.hospital.domain;
+package site.hospital.domain.baseEntity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

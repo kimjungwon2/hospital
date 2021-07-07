@@ -1,20 +1,19 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Appointment extends BaseTimeEntity{
+public class Appointment extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")
@@ -49,7 +48,7 @@ public class Appointment extends BaseTimeEntity{
     }
 
 
-    public static Appointment createAppointment(Member member, Hospital hospital,LocalDateTime reservationDate){
+    public static Appointment createAppointment(Member member, Hospital hospital, LocalDateTime reservationDate){
         Appointment appointment = new Appointment(reservationDate);
         appointment.changeMember(member);
         appointment.changeHospital(hospital);

@@ -2,12 +2,12 @@ package site.hospital.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
-import site.hospital.service.DetailedHosService;
+import site.hospital.service.StaffHosService;
 
 @RestController
 @RequiredArgsConstructor
-public class DetailedHosApiController {
+public class StaffHosApiController {
 
-    private final DetailedHosService detailedHosService;
+    private final StaffHosService staffHosService;
 
 }

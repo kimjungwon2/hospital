@@ -1,16 +1,20 @@
-package site.hospital.domain;
+package site.hospital.domain.reviewHospital;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.EvaluationCriteria;
+import site.hospital.domain.Hospital;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.review.Review;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReviewHospital extends BaseTimeEntity{
+public class ReviewHospital extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="review_hospital_id")

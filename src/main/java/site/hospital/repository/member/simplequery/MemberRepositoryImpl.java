@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import site.hospital.domain.Authorization;
+import site.hospital.domain.member.Authorization;
 import site.hospital.repository.member.MemberRepositoryCustom;
 
 import static site.hospital.domain.QMember.member;

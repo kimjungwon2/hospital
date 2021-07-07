@@ -1,7 +1,7 @@
 package site.hospital.repository.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import site.hospital.domain.Member;
+import site.hospital.domain.member.Member;
 
 import java.util.List;
 

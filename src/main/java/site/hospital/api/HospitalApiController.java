@@ -28,15 +28,18 @@ public class HospitalApiController {
                 .medicalSubjectInformation(request.getMedicalSubjectInformation())
                 .businessCondition(request.getBusinessCondition())
                 .cityName(request.getCityName())
-                .numberHealthcareProvider(request.getNumberHealthcareProvider())
-                .numberWard(request.getNumberWard())
-                .numberPatientRoom(request.getNumberPatientRoom())
-                .hospitalAddress(request.getHospitalAddress())
-                .hospitalLocation(request.getHospitalLocation())
                 .build();
         Long id = hospitalService.register(hospital);
 
         return new CreateHospitalResponse(id);
+    }
+
+    @PostMapping("/hospital/register/staff")
+    public Long CreateStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
+        Long id = hospitalService.registerStaffHosInformation(request.getPhoto(),
+                request.getIntroduction(),request.getConsultationHour(),request.getAbnormality());
+
+        return id;
     }
 
     /* DTO */
@@ -46,6 +49,22 @@ public class HospitalApiController {
         public CreateHospitalResponse(long id){
             this.id = id;
         }
+    }
+
+    @Data
+    private static class CreateStaffHospitalResponse {
+        long id;
+        public CreateStaffHospitalResponse(long id){
+            this.id = id;
+        }
+    }
+
+    @Data
+    private static class CreateStaffHospitalRequest{
+        String photo;
+        String introduction;
+        String consultationHour;
+        String abnormality;
     }
 
 }

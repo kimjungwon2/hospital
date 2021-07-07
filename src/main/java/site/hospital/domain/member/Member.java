@@ -1,9 +1,12 @@
-package site.hospital.domain;
+package site.hospital.domain.member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.*;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.review.Review;
 
 import javax.persistence.*;
 import java.util.ArrayList;

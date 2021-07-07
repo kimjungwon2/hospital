@@ -1,7 +1,7 @@
 package site.hospital.repository.member.simplequery;
 
 import lombok.Data;
-import site.hospital.domain.Authorization;
+import site.hospital.domain.member.Authorization;
 
 @Data
 public class MemberSearchCondition {

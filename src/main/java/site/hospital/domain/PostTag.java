@@ -3,6 +3,7 @@ package site.hospital.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.*;
 
