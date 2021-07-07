@@ -17,14 +17,37 @@ public class QandA extends BaseTimeEntity {
     @Column(name= "qanda_id")
     private long id;
 
-    @OneToMany(mappedBy="qanda")
-    private List<QandAHospital> qandAHospitals= new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String hospitalName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
+
     private String content;
 
+    //== 연관 관계 메서드 ==/
+    public void changeMember(Member member){
+        this.member = member;
+        member.getQandas().add(this);
+    }
+
+    public void changeHospital(Hospital hospital){
+        this.hospital = hospital;
+        hospital.getQandAs().add(this);
+    }
+
+    public QandA(String content){
+        this.content = content;
+    }
+
+    //생성 메서드
+    public static QandA CreateQandA(Member member,Hospital hospital, String content){
+        QandA qandA = new QandA(content);
+        qandA.changeMember(member);
+        qandA.changeHospital(hospital);
+
+        return qandA;
+    }
 }

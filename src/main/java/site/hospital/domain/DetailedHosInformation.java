@@ -22,7 +22,7 @@ public class DetailedHosInformation extends BaseTimeEntity {
     @OneToOne(mappedBy = "detailedHosInformation", fetch = FetchType.LAZY)
     private Hospital hospital;
 
-    @OneToMany(mappedBy = "detailedHosInformation")
+    @OneToMany(mappedBy = "detailedHosInformation",cascade = CascadeType.ALL)
     private List<Doctor> doctors = new ArrayList<>();
 
     private String photo;
@@ -30,9 +30,15 @@ public class DetailedHosInformation extends BaseTimeEntity {
     private String consultationHour;
     private String abnormality;
 
-    /*연관관계 때문에 set 설정*/
+    //연관관계 때문에 set 설정
     public void setHospital(Hospital hospital){
         this.hospital = hospital;
+    }
+
+    /*연관관계 메서드*/
+    public void addDoctor(Doctor doctor){
+        doctors.add(doctor);
+        doctor.setDetailedHosInformation(this);
     }
 
     //생성자
@@ -43,5 +49,12 @@ public class DetailedHosInformation extends BaseTimeEntity {
         this.introduction = introduction;
         this.consultationHour = consultationHour;
         this.abnormality = abnormality;
+    }
+
+    public static DetailedHosInformation createDoctor(Doctor doctor){
+        DetailedHosInformation detailedHosInformation = new DetailedHosInformation();
+        detailedHosInformation.addDoctor(doctor);
+
+        return detailedHosInformation;
     }
 }

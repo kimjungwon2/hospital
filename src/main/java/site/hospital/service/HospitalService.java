@@ -25,7 +25,7 @@ public class HospitalService {
     @Transactional
     public Long registerDetailedHosInformation(String photo, String introduction, String consultationHour, String abnormality){
         DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
-                .photo(photo).introduction(introduction).abnormality(abnormality).build();
+                .photo(photo).introduction(introduction).consultationHour(consultationHour).abnormality(abnormality).build();
         Hospital hospital = Hospital.createDetailedHosInformation(detailedHosInformation);
 
         hospitalRepository.save(hospital);

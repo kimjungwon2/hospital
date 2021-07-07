@@ -26,7 +26,8 @@ public class Hospital extends BaseTimeEntity {
     private List<Appointment> appointments = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
     private List<Bookmark> bookmarks = new ArrayList<>();
-
+    @OneToMany(mappedBy = "hospital")
+    private List<QandA> qandAs = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "detailed_hos_information_id")
@@ -60,9 +61,7 @@ public class Hospital extends BaseTimeEntity {
         detailedHosInformation.setHospital(this);
     }
 
-    /*
-    생성자
-    */
+    /*생성자*/
 
     //병원 생성
     @Builder
@@ -96,7 +95,9 @@ public class Hospital extends BaseTimeEntity {
                 .build();
     }
 
-    // 생성 메서드
+    /* 생성 메서드*/
+
+    //병원 상세 정보 등록
     public static Hospital createDetailedHosInformation(DetailedHosInformation detailedHosInformation){
         Hospital hospital = new Hospital();
         hospital.changeDetailHosInformation(detailedHosInformation);
