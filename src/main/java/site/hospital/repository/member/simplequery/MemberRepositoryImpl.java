@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import site.hospital.domain.member.Authorization;
 import site.hospital.repository.member.MemberRepositoryCustom;
 
-import static site.hospital.domain.QMember.member;
+import static site.hospital.domain.member.QMember.member;
 import static org.springframework.util.StringUtils.hasText;
 
 import javax.persistence.EntityManager;

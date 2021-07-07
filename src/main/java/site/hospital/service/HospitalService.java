@@ -35,7 +35,7 @@ public class HospitalService {
                 numberHealthcareProvider(numberHealthcareProvider)
                 .numberWard(numberWard).numberPatientRoom(numberPatientRoom).
                         hospitalAddress(hospitalAddress).hospitalLocation(hospitalLocation)
-        .build();
+                .build();
 
         hospital = Hospital.createDetailedHosInformation(detailedHosInformation);
 

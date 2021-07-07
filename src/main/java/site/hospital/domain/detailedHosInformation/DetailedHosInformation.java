@@ -57,5 +57,4 @@ public class DetailedHosInformation extends BaseTimeEntity {
         this.hospital = hospital;
     }
 
-
 }

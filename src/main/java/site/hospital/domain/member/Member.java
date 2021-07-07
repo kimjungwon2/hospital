@@ -52,7 +52,7 @@ public class Member extends BaseTimeEntity {
     //회원 생성
     @Builder
     public Member(String memberIdName, String password, String userName, String nickName,
-                             String phoneNumber){
+                  String phoneNumber){
         this.memberIdName = memberIdName;
         this.password = password;
         this.userName = userName;

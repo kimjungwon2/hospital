@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.hospital.domain.EvaluationCriteria;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.review.Review;
@@ -65,8 +64,8 @@ public class ReviewHospital extends BaseTimeEntity {
         //평가 기준 적용
         EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
                 .sumPrice(sumPrice).kindness(kindness)
-        .symptomRelief(symptomRelief).cleanliness(cleanliness)
-        .waitTime(waitTime).build();
+                .symptomRelief(symptomRelief).cleanliness(cleanliness)
+                .waitTime(waitTime).build();
 
         //리뷰 병원 등록
         ReviewHospital reviewHospital = ReviewHospital.builder()

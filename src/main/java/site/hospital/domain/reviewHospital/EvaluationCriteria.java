@@ -1,4 +1,4 @@
-package site.hospital.domain;
+package site.hospital.domain.reviewHospital;
 
 import lombok.AccessLevel;
 import lombok.Builder;

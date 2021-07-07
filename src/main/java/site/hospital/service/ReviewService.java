@@ -17,9 +17,9 @@ import site.hospital.repository.ReviewRepository;
 @RequiredArgsConstructor
 public class ReviewService {
 
-   private final ReviewRepository reviewRepository;
-   private final MemberRepository memberRepository;
-   private final HospitalRepository hospitalRepository;
+    private final ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
+    private final HospitalRepository hospitalRepository;
 
     //리뷰 등록
     @Transactional
