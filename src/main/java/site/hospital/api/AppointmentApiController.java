@@ -36,6 +36,7 @@ public class AppointmentApiController {
         return result;
     }
 
+    //멤버 예약 조회
     @GetMapping("/member/appointment/{memberId}")
     public List<SearchMemberAppointmentResponse> searchMemberAppointment(@PathVariable("memberId") Long memberId){
         List<Appointment> appointments = appointmentService.searchMemberAppointment(memberId);
@@ -46,6 +47,7 @@ public class AppointmentApiController {
         return result;
     }
 
+    //병원 예약 조회
     @GetMapping("/hospital/appointment/{hospitalId}")
     public List<SearchHospitalAppointmentResponse> searchHospitalAppointment(@PathVariable("hospitalId") Long hospitalId){
         List<Appointment> appointments = appointmentService.searchHospitalAppointment(hospitalId);

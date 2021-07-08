@@ -1,6 +1,8 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.*;
@@ -10,7 +12,9 @@ import site.hospital.domain.review.Review;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.repository.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
-import site.hospital.repository.ReviewRepository;
+import site.hospital.repository.review.ReviewRepository;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,4 +48,13 @@ public class ReviewService {
         return review.getId();
     }
 
+    //병원에 등록된 리뷰 검색
+    public List<Review> hospitalReviewSearch(Long hospitalId){
+        return reviewRepository.hospitalReviewSearch(hospitalId,null);
+    }
+
+    //리뷰 상세 보기
+    public List<Review> hospitalReviewView(Long reviewId){
+        return reviewRepository.hospitalReviewSearch(null, reviewId);
+    }
 }

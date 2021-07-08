@@ -11,7 +11,7 @@ import static site.hospital.domain.QBookmark.bookmark;
 import static site.hospital.domain.member.QMember.member;
 import static site.hospital.domain.QHospital.hospital;
 
-public class BookmarkRepositoryImpl {
+public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
 

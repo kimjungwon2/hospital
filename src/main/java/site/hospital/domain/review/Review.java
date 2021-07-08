@@ -43,9 +43,13 @@ public class Review extends BaseTimeEntity {
         reviewHospital.setReview(this);
     }
 
+    public void changeReviewHospitals(List<ReviewHospital> reviewHospitals) {
+        this.reviewHospitals = reviewHospitals;
+    }
+
     /*
-    생성 메서드
-     */
+        생성 메서드
+         */
     public Review(String picture){
         this.picture = picture;
         if(picture == null) this.authenticationStatus = authenticationStatus.NONE;
