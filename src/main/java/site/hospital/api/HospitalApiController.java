@@ -6,8 +6,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
+import site.hospital.domain.detailedHosInformation.HospitalAddress;
+import site.hospital.domain.detailedHosInformation.HospitalLocation;
 import site.hospital.dto.CreateHospitalRequest;
 import site.hospital.domain.Hospital;
+import site.hospital.repository.DetailedHosRepository;
 import site.hospital.service.HospitalService;
 
 @RestController
@@ -29,14 +33,32 @@ public class HospitalApiController {
                 .businessCondition(request.getBusinessCondition())
                 .cityName(request.getCityName())
                 .build();
-        Long id = hospitalService.register(hospital);
 
-        return new CreateHospitalResponse(id);
+        //상세 정보를 기입할 경우 hospital+상세정보 저장.
+        if(request.getHospitalAddress()!=null && request.getHospitalLocation()!=null)
+        {
+            DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
+                    .numberWard(request.getNumberWard()).numberPatientRoom(request.getNumberPatientRoom())
+                    .numberHealthcareProvider(request.getNumberHealthcareProvider())
+                    .hospitalLocation(request.getHospitalLocation())
+                    .hospitalAddress(request.getHospitalAddress()).build();
+
+            Long id = hospitalService.register(hospital, detailedHosInformation);
+
+            return new CreateHospitalResponse(id);
+        }
+        //상세정보를 기입하지 않을 경우 hospital 정보만 저장.
+        else
+        {
+            Long id = hospitalService.registerHospital(hospital);
+            return new CreateHospitalResponse(id);
+        }
+
     }
 
     @PostMapping("/hospital/register/staff")
     public Long CreateStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
-        Long id = hospitalService.registerStaffHosInformation(request.getPhoto(),
+        Long id = hospitalService.registerStaffHosInformation(request.getHospitalId(),request.getPhoto(),
                 request.getIntroduction(),request.getConsultationHour(),request.getAbnormality());
 
         return id;
@@ -61,10 +83,16 @@ public class HospitalApiController {
 
     @Data
     private static class CreateStaffHospitalRequest{
+        Long hospitalId;
         String photo;
         String introduction;
         String consultationHour;
         String abnormality;
-    }
+        int numberHealthcareProvider;
+        int numberWard;
+        int numberPatientRoom;
 
+        HospitalAddress hospitalAddress;
+        HospitalLocation hospitalLocation;
+    }
 }

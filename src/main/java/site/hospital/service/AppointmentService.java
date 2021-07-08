@@ -11,6 +11,7 @@ import site.hospital.repository.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional(readOnly=true)
@@ -34,6 +35,24 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
 
         return appointment.getId();
+    }
+
+    public List<Appointment> searchAdminAppointment(){
+        List<Appointment> appointments = appointmentRepository.searchAppointment(null,null);
+
+        return appointments;
+    }
+    //멤버 예약 조회
+    public List<Appointment> searchMemberAppointment(Long memberId){
+        List<Appointment> appointments = appointmentRepository.searchAppointment(memberId,null);
+
+        return appointments;
+    }
+    //병원 예약 조회
+    public List<Appointment> searchHospitalAppointment(Long hospitalId){
+        List<Appointment> appointments = appointmentRepository.searchAppointment(null, hospitalId);
+
+        return appointments;
     }
 
 }

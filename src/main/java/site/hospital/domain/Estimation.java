@@ -27,7 +27,8 @@ public class Estimation extends BaseTimeEntity {
     private String estimationList;
 
     @Builder
-    public Estimation(String city, String hospitalName, String distinctionGrade, String estimationList) {
+    public Estimation(String city, String hospitalName,
+                      String distinctionGrade, String estimationList) {
         this.city = city;
         this.hospitalName = hospitalName;
         this.distinctionGrade = distinctionGrade;

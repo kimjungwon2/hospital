@@ -39,16 +39,19 @@ public class DetailedHosInformation extends BaseTimeEntity {
         this.numberHealthcareProvider = numberHealthcareProvider;
         this.numberWard = numberWard;
         this.numberPatientRoom = numberPatientRoom;
+
+
         this.hospitalAddress = hospitalAddress.builder()
                 .roadBaseAddress(hospitalAddress.getRoadBaseAddress())
                 .landLotBasedSystem(hospitalAddress.getLandLotBasedSystem())
                 .zipCode(hospitalAddress.getZipCode())
                 .build();
+
         this.hospitalLocation = hospitalLocation.builder()
                 .latitude(hospitalLocation.getLatitude())
                 .longitude(hospitalLocation.getLongitude())
-                .xCoordination(hospitalLocation.getXCoordination())
-                .yCoordination(hospitalLocation.getYCoordination())
+                .x_coordination(hospitalLocation.getX_coordination())
+                .y_coordination(hospitalLocation.getY_coordination())
                 .build();
     }
 

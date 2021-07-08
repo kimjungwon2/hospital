@@ -79,23 +79,5 @@ public class Hospital extends BaseTimeEntity {
         this.cityName = cityName;
     }
 
-    /* 생성 메서드*/
-    //병원 상세 정보 등록
-    public static Hospital createDetailedHosInformation(DetailedHosInformation detailedHosInformation){
-        Hospital hospital = new Hospital();
-        hospital.changeDetailedHosInformation(detailedHosInformation);
-
-        return hospital;
-    }
-
-    //병원 추가 정보 등록(직원)
-    public static Hospital createStaffHosInformation(StaffHosInformation staffHosInformation){
-        Hospital hospital = new Hospital();
-        hospital.changeStaffHosInformation(staffHosInformation);
-
-        return hospital;
-    }
-
-
 
 }
