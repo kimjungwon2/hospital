@@ -40,7 +40,6 @@ public class MemberService {
 
     }
 
-
     //멤버 Search
     public Page<MemberSearchResult> search(MemberSearchCondition condition, Pageable pageable){
         return memberRepository.search(condition, pageable);
@@ -52,6 +51,14 @@ public class MemberService {
         if(!findMembers.isEmpty()){
             throw new IllegalStateException("이미 존재하는 회원.");
         }
+    }
+
+    // 관리자 멤버 권한 주기
+    @Transactional
+    public void authorize(Long memberId, String status){
+        Member member = memberRepository.findById(memberId).orElse(null);
+
+        member.authorize(status);
     }
 
 

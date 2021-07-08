@@ -3,12 +3,12 @@ package site.hospital.repository.Appointment;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import site.hospital.domain.Appointment;
+import site.hospital.domain.appointment.Appointment;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static site.hospital.domain.QAppointment.appointment;
+import static site.hospital.domain.appointment.QAppointment.appointment;
 import static site.hospital.domain.member.QMember.member;
 import static site.hospital.domain.QHospital.hospital;
 

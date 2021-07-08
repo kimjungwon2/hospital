@@ -1,6 +1,6 @@
 package site.hospital.repository.Appointment;
 
-import site.hospital.domain.Appointment;
+import site.hospital.domain.appointment.Appointment;
 
 import java.util.List;
 

@@ -1,8 +1,10 @@
-package site.hospital.domain;
+package site.hospital.domain.appointment;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.Hospital;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.member.Member;
 
@@ -20,6 +22,9 @@ public class Appointment extends BaseTimeEntity {
     private Long id;
 
     private LocalDateTime reservationDate;
+    private String symptomName;
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status; //[APPOINTMENT,CANCEL,END] 상태
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -40,16 +45,28 @@ public class Appointment extends BaseTimeEntity {
         hospital.getAppointments().add(this);
     }
 
+    public void cancel(){
+        this.status = status.CANCEL;
+    }
+
+    public void finish(){
+        this.status = status.END;
+    }
+
     /*
     생성 메서드
     */
-    public Appointment(LocalDateTime reservationDate){
+    @Builder
+    public Appointment(LocalDateTime reservationDate, String symptomName){
+        this.symptomName =symptomName;
+        this.status = status.APPOINTMENT;
         this.reservationDate = reservationDate;
     }
 
 
-    public static Appointment createAppointment(Member member, Hospital hospital, LocalDateTime reservationDate){
-        Appointment appointment = new Appointment(reservationDate);
+    public static Appointment createAppointment(Member member, Hospital hospital, LocalDateTime reservationDate,
+                                                String symptomName){
+        Appointment appointment = new Appointment(reservationDate,symptomName);
         appointment.changeMember(member);
         appointment.changeHospital(hospital);
 

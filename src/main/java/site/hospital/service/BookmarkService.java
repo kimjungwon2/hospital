@@ -6,9 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Bookmark;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.member.Member;
-import site.hospital.repository.BookmarkRepository;
+import site.hospital.repository.bookmark.BookmarkRepository;
 import site.hospital.repository.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,5 +30,23 @@ public class BookmarkService {
         bookmarkRepository.save(bookmark);
 
         return bookmark.getId();
+    }
+
+    public List<Bookmark> searchAdminBookmark(){
+        List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(null,null);
+
+        return Bookmark;
+    }
+    //멤버 예약 조회
+    public List<Bookmark> searchMemberBookmark(Long memberId){
+        List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(memberId,null);
+
+        return Bookmark;
+    }
+    //병원 예약 조회
+    public List<Bookmark> searchHospitalBookmark(Long hospitalId){
+        List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(null, hospitalId);
+
+        return Bookmark;
     }
 }

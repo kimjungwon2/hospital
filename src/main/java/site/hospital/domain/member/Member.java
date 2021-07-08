@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.*;
+import site.hospital.domain.appointment.Appointment;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.review.Review;
 
@@ -59,6 +60,11 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.authorizationStatus = authorizationStatus.NORMAL;
+    }
+
+    public void authorize(String status){
+        if(status.equals("STAFF")) this.authorizationStatus = authorizationStatus.STAFF;
+        else if(status.equals("ADMIN")) this.authorizationStatus = authorizationStatus.ADMIN;
     }
 
 }

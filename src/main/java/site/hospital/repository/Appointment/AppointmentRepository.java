@@ -1,7 +1,7 @@
 package site.hospital.repository.Appointment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import site.hospital.domain.Appointment;
+import site.hospital.domain.appointment.Appointment;
 
 
 
