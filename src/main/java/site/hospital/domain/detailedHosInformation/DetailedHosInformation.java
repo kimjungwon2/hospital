@@ -60,4 +60,25 @@ public class DetailedHosInformation extends BaseTimeEntity {
         this.hospital = hospital;
     }
 
+
+    //비즈니스 메서드
+    public void updateDetailedHosInformation(int numberWard, int numberHealthcareProvider, int numberPatientRoom,
+                                             HospitalAddress hospitalAddress, HospitalLocation hospitalLocation){
+        this.numberHealthcareProvider = numberHealthcareProvider;
+        this.numberWard = numberWard;
+        this.numberPatientRoom = numberPatientRoom;
+
+        this.hospitalAddress = hospitalAddress.builder()
+                .roadBaseAddress(hospitalAddress.getRoadBaseAddress())
+                .landLotBasedSystem(hospitalAddress.getLandLotBasedSystem())
+                .zipCode(hospitalAddress.getZipCode())
+                .build();
+        this.hospitalLocation = hospitalLocation.builder()
+                .latitude(hospitalLocation.getLatitude())
+                .longitude(hospitalLocation.getLongitude())
+                .x_coordination(hospitalLocation.getX_coordination())
+                .y_coordination(hospitalLocation.getY_coordination())
+                .build();
+    }
+
 }

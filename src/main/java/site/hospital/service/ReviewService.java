@@ -48,13 +48,25 @@ public class ReviewService {
         return review.getId();
     }
 
+    //리뷰 인증 승인(관리자)
+    @Transactional
+    public void approval(Long reviewId){
+        Review review = reviewRepository.findById(reviewId).orElse(null);
+        review.approve();
+    }
+
     //병원에 등록된 리뷰 검색
-    public List<Review> hospitalReviewSearch(Long hospitalId){
+    public List<Review> hospitalReviewList(Long hospitalId){
         return reviewRepository.hospitalReviewSearch(hospitalId,null);
     }
 
     //리뷰 상세 보기
     public List<Review> hospitalReviewView(Long reviewId){
         return reviewRepository.hospitalReviewSearch(null, reviewId);
+    }
+
+    //관리자 리뷰 작성 보기
+    public List<Review> adminReviewView(){
+        return reviewRepository.hospitalReviewSearch(null, null);
     }
 }

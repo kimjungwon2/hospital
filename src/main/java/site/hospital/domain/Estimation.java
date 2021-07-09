@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
 
@@ -21,15 +22,21 @@ public class Estimation extends BaseTimeEntity {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
-    private String city;
+    private String cityName;
     private String hospitalName;
     private String distinctionGrade;
     private String estimationList;
 
+    //== 연관 관계 메서드 ==/
+    public void changeHospital(Hospital hospital){
+        this.hospital = hospital;
+        hospital.getEstimations().add(this);
+    }
+
     @Builder
-    public Estimation(String city, String hospitalName,
+    public Estimation(String cityName, String hospitalName,
                       String distinctionGrade, String estimationList) {
-        this.city = city;
+        this.cityName = cityName;
         this.hospitalName = hospitalName;
         this.distinctionGrade = distinctionGrade;
         this.estimationList = estimationList;

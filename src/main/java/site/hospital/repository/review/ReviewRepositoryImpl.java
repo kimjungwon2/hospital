@@ -2,7 +2,6 @@ package site.hospital.repository.review;
 
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import site.hospital.domain.review.Review;
 
@@ -11,7 +10,7 @@ import java.util.List;
 
 import static site.hospital.domain.review.QReview.review;
 import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+
 
 
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom{

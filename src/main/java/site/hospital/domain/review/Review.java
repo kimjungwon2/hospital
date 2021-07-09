@@ -67,4 +67,8 @@ public class Review extends BaseTimeEntity {
         return review;
     }
 
+    public void approve(){
+        this.authenticationStatus = authenticationStatus.CERTIFIED;
+    }
+
 }

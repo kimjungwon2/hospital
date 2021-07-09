@@ -6,8 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
-import site.hospital.domain.detailedHosInformation.HospitalAddress;
-import site.hospital.domain.detailedHosInformation.HospitalLocation;
+import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.repository.DetailedHosRepository;
 import site.hospital.repository.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
@@ -62,5 +61,37 @@ public class HospitalService {
         hospitalRepository.save(hospital);
 
         return hospital.getId();
+    }
+
+
+
+    //병원 + 상세 정보 수정
+    @Transactional
+    public Long modifyAllHosInformation(Long hospitalId, Long detailedHosId,
+                                        ModifyHospitalRequest request){
+        //병원 정보만 수정.
+        Hospital selectHospital = hospitalRepository.findById(hospitalId).orElse(null);
+
+        if(detailedHosId == null) {
+
+            selectHospital.updateHospital(request.getLicensingDate(), request.getHospitalName(), request.getPhoneNumber(),
+                    request.getDistinguishedName(), request.getMedicalSubject(),
+                    request.getMedicalSubjectInformation(), request.getBusinessCondition(),
+                    request.getCityName());
+        }
+        //병원 + 상세 정보 수정.
+        else {
+            DetailedHosInformation selectDetailedHosInfo = detailedHosRepository.findById(detailedHosId).orElse(null);
+
+            selectHospital.updateHospital(request.getLicensingDate(), request.getHospitalName(), request.getPhoneNumber(),
+                        request.getDistinguishedName(), request.getMedicalSubject(),
+                    request.getMedicalSubjectInformation(), request.getBusinessCondition(),
+                    request.getCityName());
+
+            selectDetailedHosInfo.updateDetailedHosInformation(request.getNumberWard(),
+                    request.getNumberHealthcareProvider(),request.getNumberPatientRoom(),
+                    request.getHospitalAddress(),request.getHospitalLocation());
+        }
+        return selectHospital.getId();
     }
 }

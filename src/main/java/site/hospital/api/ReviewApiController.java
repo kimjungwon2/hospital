@@ -32,8 +32,8 @@ public class ReviewApiController {
     }
 
     @GetMapping("/hospital/review/{hospitalId}")
-    public List<HospitalReviewResponse> searchReview(@PathVariable("hospitalId") Long hospitalId){
-        List<Review> review = reviewService.hospitalReviewSearch(hospitalId);
+    public List<HospitalReviewResponse> reviewList(@PathVariable("hospitalId") Long hospitalId){
+        List<Review> review = reviewService.hospitalReviewList(hospitalId);
 
         List<HospitalReviewResponse> result = review.stream().map(r -> new HospitalReviewResponse(r))
                 .collect(Collectors.toList());
@@ -47,6 +47,17 @@ public class ReviewApiController {
         List<Review> review = reviewService.hospitalReviewView(reviewId);
 
         List<ReviewViewResponse> result = review.stream().map(r -> new ReviewViewResponse(r))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    //관리자 리뷰보기
+    @GetMapping("/admin/review/view")
+    public List<AdminReviewView> adminReviewView(){
+        List<Review> review = reviewService.adminReviewView();
+
+        List<AdminReviewView> result = review.stream().map(r -> new AdminReviewView(r))
                 .collect(Collectors.toList());
 
         return result;
@@ -133,10 +144,64 @@ public class ReviewApiController {
         private String content;
         private String disease;
         private Integer likeNumber;
+        private String hospitalName;
+        private String medicalSubject;
         Recommendation recommendationStatus;
         EvaluationCriteria evaluationCriteria;
 
         public ReviewViewDto(ReviewHospital reviewHospital) {
+            this.hospitalName = reviewHospital.getHospital().getHospitalName();
+            this.medicalSubject =reviewHospital.getHospital().getMedicalSubjectInformation();
+            this.content = reviewHospital.getContent();
+            this.disease = reviewHospital.getDisease();
+            this.likeNumber =reviewHospital.getLikeNumber();
+            this.recommendationStatus = reviewHospital.getRecommendationStatus();
+            this.evaluationCriteria = reviewHospital.getEvCriteria();
+        }
+    }
+
+    @Data
+    private static class AdminReviewView{
+        private Long reviewId;
+        private Long memberId;
+        private ReviewAuthentication authenticationStatus;
+        private LocalDateTime createdDate;
+        private String userName;
+        private String nickName;
+        private List<AdminReviewDto> reviewHospitals;
+
+        public AdminReviewView(Review reviews) {
+            this.reviewId = reviews.getId();
+            this.memberId = reviews.getMember().getId();
+            this.userName = reviews.getMember().getUserName();
+            this.authenticationStatus = reviews.getAuthenticationStatus();
+            this.createdDate = reviews.getCreatedDate();
+            this.nickName = reviews.getMember().getNickName();
+            this.reviewHospitals = reviews.getReviewHospitals().stream()
+                    .map(reviewHospital -> new AdminReviewDto(reviewHospital))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    private static class AdminReviewDto{
+        private Long reviewHospitalId;
+        private Long hospitalId;
+        private String content;
+        private String disease;
+        private Integer likeNumber;
+        private String hospitalName;
+        private String hospitalCityName;
+        private String medicalSubject;
+        Recommendation recommendationStatus;
+        EvaluationCriteria evaluationCriteria;
+
+        public AdminReviewDto(ReviewHospital reviewHospital) {
+            this.reviewHospitalId = reviewHospital.getId();
+            this.hospitalId = reviewHospital.getHospital().getId();
+            this.hospitalName = reviewHospital.getHospital().getHospitalName();
+            this.hospitalCityName = reviewHospital.getHospital().getCityName();
+            this.medicalSubject =reviewHospital.getHospital().getMedicalSubjectInformation();
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
             this.likeNumber =reviewHospital.getLikeNumber();

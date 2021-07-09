@@ -96,7 +96,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         return hasText(userName) ? member.userName.eq(userName): null ;
     }
     private BooleanExpression memberPhoneNumberEq(String phoneNumber){
-        return phoneNumber != null? member.phoneNumber.eq(phoneNumber) : null;
+        return hasText(phoneNumber)? member.phoneNumber.eq(phoneNumber) : null;
     }
     private BooleanExpression memberAuthorizationStatusEq(Authorization authorizationStatus){
         return authorizationStatus != null? member.authorizationStatus.eq(authorizationStatus): null;

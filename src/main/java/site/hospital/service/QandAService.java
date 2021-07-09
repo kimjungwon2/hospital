@@ -30,4 +30,19 @@ public class QandAService {
 
         return qandA.getId();
     }
+
+    //QandA 수정
+    @Transactional
+    public Long modifyQandA(Long qanda_id, String content){
+        QandA qandA = qandARepository.findById(qanda_id).orElse(null);
+        qandA.modifyQandA(content);
+
+        return qandA.getId();
+    }
+
+    //QandA 삭제
+    @Transactional
+    public void deleteQandA(Long id){
+        qandARepository.deleteById(id);
+    }
 }

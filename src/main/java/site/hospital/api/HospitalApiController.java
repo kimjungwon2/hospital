@@ -11,7 +11,7 @@ import site.hospital.domain.detailedHosInformation.HospitalAddress;
 import site.hospital.domain.detailedHosInformation.HospitalLocation;
 import site.hospital.dto.CreateHospitalRequest;
 import site.hospital.domain.Hospital;
-import site.hospital.repository.DetailedHosRepository;
+import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.service.HospitalService;
 
 @RestController
@@ -57,12 +57,25 @@ public class HospitalApiController {
     }
 
     @PostMapping("/hospital/register/staff")
-    public Long CreateStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
+    public CreateStaffHospitalResponse saveStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
         Long id = hospitalService.registerStaffHosInformation(request.getHospitalId(),request.getPhoto(),
                 request.getIntroduction(),request.getConsultationHour(),request.getAbnormality());
 
-        return id;
+        return new CreateStaffHospitalResponse(id);
     }
+
+    //병원 + 상세 내용 수정
+    @PostMapping("/admin/hospital/modify")
+    public CreateHospitalResponse saveHospitalResponse(@RequestBody @Validated ModifyHospitalRequest request){
+
+        //상세 정보가 있을 경우 hospital+상세정보 저장.
+        Long id = hospitalService.modifyAllHosInformation(request.getHospitalId(), request.getDetailedHosInformationId(),
+                request);
+
+        return new CreateHospitalResponse(id);
+
+    }
+
 
     /* DTO */
     @Data
@@ -76,9 +89,7 @@ public class HospitalApiController {
     @Data
     private static class CreateStaffHospitalResponse {
         long id;
-        public CreateStaffHospitalResponse(long id){
-            this.id = id;
-        }
+        public CreateStaffHospitalResponse(long id){ this.id = id; }
     }
 
     @Data
@@ -95,4 +106,5 @@ public class HospitalApiController {
         HospitalAddress hospitalAddress;
         HospitalLocation hospitalLocation;
     }
+
 }

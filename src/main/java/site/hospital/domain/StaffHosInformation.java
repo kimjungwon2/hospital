@@ -58,4 +58,13 @@ public class StaffHosInformation extends BaseTimeEntity {
 
         return staffHosInformation;
     }
+
+    public void modifyStaffHosInformation(String photo, String introduction,
+                                          String consultationHour, String abnormality) {
+        this.photo = photo;
+        this.introduction = introduction;
+        this.consultationHour = consultationHour;
+        this.abnormality = abnormality;
+    }
+
 }

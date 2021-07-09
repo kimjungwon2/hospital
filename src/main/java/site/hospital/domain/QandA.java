@@ -50,4 +50,11 @@ public class QandA extends BaseTimeEntity {
 
         return qandA;
     }
+
+    //비즈니스 메서드
+
+
+    public void modifyQandA(String content) {
+        this.content = content;
+    }
 }
