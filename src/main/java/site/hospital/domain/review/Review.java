@@ -58,8 +58,8 @@ public class Review extends BaseTimeEntity {
 
     public static Review createReview(String picture, Member member, ReviewHospital... reviewHospitals){
         Review review = new Review(picture);
-
         review.changeMember(member);
+
         for (ReviewHospital reviewHospital : reviewHospitals) {
             review.addReviewHospital(reviewHospital);
         }
