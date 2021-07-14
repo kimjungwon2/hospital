@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class ReviewApiController {
     private final ReviewService reviewService;
 
-    @PostMapping("/hospital/review")
+    @PostMapping("/user/review/register")
     public CreateReviewResponse saveReview(@RequestBody @Validated CreateReviewRequest request){
 
         Long id= reviewService.reviewRegister(request.getMemberId(),request.getHospitalId(),
@@ -42,7 +42,7 @@ public class ReviewApiController {
     }
 
     //리뷰 상세보기
-    @GetMapping("/hospital/review/view/{reviewId}")
+    @GetMapping("/user/review/view/{reviewId}")
     public List<ReviewViewResponse> viewReview(@PathVariable("reviewId") Long reviewId){
         List<Review> review = reviewService.hospitalReviewView(reviewId);
 

@@ -22,7 +22,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @PostMapping("/member/login")
+    @PostMapping("/user/login")
     public LoginMemberResponse loginMember(@RequestBody @Validated LoginMemberRequest request){
 
         Member member = memberService.logIn(request.getMemberIdName(),request.getPassword());
@@ -31,9 +31,7 @@ public class MemberApiController {
         return loginMemberResponse;
     }
 
-
-
-    @PostMapping("/member/signup")
+    @PostMapping("/user/signup")
     public CreateMemberResponse saveMember(@RequestBody @Validated CreateMemberRequest request){
         Member member= Member.builder()
                 .memberIdName(request.getMemberIdName())
@@ -47,7 +45,8 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
-    @GetMapping("/member/search")
+    //관리자 유저 전체 조회
+    @GetMapping("admin/user/search")
     public Page<MemberSearchResult> searchMember(MemberSearchCondition condition, Pageable pageable){
         return memberService.search(condition, pageable);
     }

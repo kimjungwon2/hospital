@@ -17,7 +17,7 @@ public class AppointmentApiController {
 
     private final AppointmentService appointmentService;
 
-    @PostMapping("/hospital/appointment")
+    @PostMapping("/user/appointment")
     public CreateAppointmentResponse saveAppointment(@RequestBody @Validated CreateAppointmentRequest request){
         Long id = appointmentService.appointment(request.getMemberId(),request.getHospitalId(),
                 request.getYear(),request.getMonth(),request.getDay(),request.getHour(),request.getMinute(), request.symptomName);
@@ -26,7 +26,7 @@ public class AppointmentApiController {
     }
 
     //예약 목록 전체 조회(관리자)
-    @GetMapping("/search/appointment")
+    @GetMapping("/admin/appointment/search")
     public List<SearchAppointmentResponse> searchAppointment(){
         List<Appointment> appointments = appointmentService.searchAdminAppointment();
         List<SearchAppointmentResponse> result = appointments.stream()
@@ -37,7 +37,7 @@ public class AppointmentApiController {
     }
 
     //멤버 예약 조회
-    @GetMapping("/member/appointment/{memberId}")
+    @GetMapping("/user/appointment/search/{memberId}")
     public List<SearchMemberAppointmentResponse> searchMemberAppointment(@PathVariable("memberId") Long memberId){
         List<Appointment> appointments = appointmentService.searchMemberAppointment(memberId);
         List<SearchMemberAppointmentResponse> result = appointments.stream()
@@ -48,7 +48,7 @@ public class AppointmentApiController {
     }
 
     //병원 예약 조회
-    @GetMapping("/hospital/appointment/{hospitalId}")
+    @GetMapping("/staff/appointment/search/{hospitalId}")
     public List<SearchHospitalAppointmentResponse> searchHospitalAppointment(@PathVariable("hospitalId") Long hospitalId){
         List<Appointment> appointments = appointmentService.searchHospitalAppointment(hospitalId);
         List<SearchHospitalAppointmentResponse> result = appointments.stream()

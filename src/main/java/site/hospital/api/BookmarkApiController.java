@@ -17,15 +17,15 @@ public class BookmarkApiController {
 
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/hospital/bookmark")
+    @PostMapping("/user/bookmark/register")
     public CreateBookmarkResponse saveBookmark(@RequestBody @Validated CreateBookmarkRequest request){
         Long id = bookmarkService.bookmark(request.getMemberId(), request.hospitalId);
 
         return new CreateBookmarkResponse(id);
     }
 
-    //예약 목록 전체 조회(관리자)
-    @GetMapping("/search/bookmark")
+    //즐겨찾기 목록 전체 조회(관리자)
+    @GetMapping("/admin/bookmark/search")
     public List<SearchBookmarkResponse> searchBookmark(){
         List<Bookmark> bookmarks = bookmarkService.searchAdminBookmark();
         List<SearchBookmarkResponse> result = bookmarks.stream()
@@ -35,7 +35,8 @@ public class BookmarkApiController {
         return result;
     }
 
-    @GetMapping("/member/bookmark/{memberId}")
+    //즐겨찾기 조회(사용자)
+    @GetMapping("/user/bookmark/search/{memberId}")
     public List<SearchMemberBookmarkResponse> searchMemberBookmark(@PathVariable("memberId") Long memberId){
         List<Bookmark> bookmarks = bookmarkService.searchMemberBookmark(memberId);
         List<SearchMemberBookmarkResponse> result = bookmarks.stream()
@@ -44,8 +45,8 @@ public class BookmarkApiController {
 
         return result;
     }
-
-    @GetMapping("/member/bookmark/{hospitalId}")
+    //즐겨찾기 조회(병원 관계자)
+    @GetMapping("/staff/bookmark/search/{hospitalId}")
     public List<SearchHospitalBookmarkResponse> searchHospitalBookmark(@PathVariable("hospitalId") Long hospitalId){
         List<Bookmark> bookmarks = bookmarkService.searchHospitalBookmark(hospitalId);
         List<SearchHospitalBookmarkResponse> result = bookmarks.stream()
