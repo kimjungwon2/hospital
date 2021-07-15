@@ -9,7 +9,6 @@
             <input id="password" type="text" v-model="password"/>
         </div>
         <button v-bind:disabled="!isMemberIdValid || !password" type="submit">로그인</button> 
-        <p>{{ logMessage }}</p>
     </form>
 </template>
 
@@ -22,7 +21,6 @@ export default {
         return {
             memberIdName: '',
             password:'',
-            logMessage:'',
         }
     },
     computed:{
@@ -37,9 +35,10 @@ export default {
                      memberIdName: this.memberIdName,
                      password: this.password,
                 }; 
+                
                const { data } = await loginUser(userData);
+               this.$store.commit('setUser', data);
                this.$router.push('/main');
-               this.logMessage=`${data.nickName}님 환영합니다.`
             } catch (error) {
                 this.logMessage = error.reponse.data;
             } finally{
