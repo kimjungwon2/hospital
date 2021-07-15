@@ -8,4 +8,8 @@ function signupUser(userData){
     return instance.post('signup', userData);
 }
 
-export { signupUser };
+function loginUser(userData){
+    return instance.post('login',userData);
+}
+
+export { signupUser, loginUser };
