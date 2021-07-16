@@ -6,23 +6,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
 import site.hospital.repository.member.simplequery.MemberSearchCondition;
 import site.hospital.repository.member.simplequery.MemberSearchResult;
 import site.hospital.service.MemberService;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class MemberApiController {
 
     private final MemberService memberService;
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public LoginMemberResponse loginMember(@RequestBody @Validated LoginMemberRequest request){
 
         Member member = memberService.logIn(request.getMemberIdName(),request.getPassword());
@@ -31,7 +33,7 @@ public class MemberApiController {
         return loginMemberResponse;
     }
 
-    @PostMapping("/user/signup")
+    @PostMapping("/signup")
     public CreateMemberResponse saveMember(@RequestBody @Validated CreateMemberRequest request){
         Member member= Member.builder()
                 .memberIdName(request.getMemberIdName())
@@ -46,7 +48,7 @@ public class MemberApiController {
     }
 
     //관리자 유저 전체 조회
-    @GetMapping("admin/user/search")
+    @GetMapping("admin/search/user")
     public Page<MemberSearchResult> searchMember(MemberSearchCondition condition, Pageable pageable){
         return memberService.search(condition, pageable);
     }
@@ -64,11 +66,17 @@ public class MemberApiController {
     @Data
     private static class CreateMemberRequest {
         //회원 이름
+        @NotNull(message="이름을 입력해주세요.")
         private String userName;
         //회원 아이디
+        @Email(message="올바른 이메일 형태가 아닙니다.")
+        @NotBlank(message="공백없이 아이디를 입력해주세요.")
         private String memberIdName;
+        @NotNull(message="비밀번호를 입력해주세요.")
         private String password;
+        @NotNull(message="닉네임을 입력해주세요.")
         private String nickName;
+        @NotNull(message="전화번호를 입력해주세요.")
         private String phoneNumber;
     }
 
