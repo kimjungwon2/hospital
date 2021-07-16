@@ -18,14 +18,14 @@ public class MemberApiControllerAdvice {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> signUpValidException(MethodArgumentNotValidException e){
         log.error("signUp validation error",e);
-        ErrorResponse errorResponse = new ErrorResponse("BAD",
+        ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST",
                 e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    public ErrorResponse userHandle(Exception e){
+    public ErrorResponse serverHandle(Exception e){
         log.error("InternalServerException:",e);
         return new ErrorResponse("SERVER_ERROR",e.getMessage());
     }
