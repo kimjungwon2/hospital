@@ -2,6 +2,8 @@ package site.hospital.api;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,8 +60,8 @@ public class HospitalApiController {
 
     //병원 전체 검색
     @PostMapping("/search/hospital")
-    public List<HospitalSearchDto> searchHospital(@RequestBody @Validated HospitalSearchCondition condition){
-        return hospitalService.searchHospital(condition);
+    public Page<HospitalSearchDto> searchHospital(@RequestBody @Validated HospitalSearchCondition condition, Pageable pageable){
+        return hospitalService.searchHospital(condition, pageable);
     }
 
     //병원 정보 등록(직원용)

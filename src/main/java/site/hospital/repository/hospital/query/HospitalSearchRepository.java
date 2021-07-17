@@ -1,9 +1,14 @@
 package site.hospital.repository.hospital.query;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import site.hospital.domain.Hospital;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -25,8 +30,8 @@ public class HospitalSearchRepository {
     public HospitalSearchRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
 
 
-    public List<HospitalSearchDto> searchHospital(HospitalSearchCondition condition){
-        List<HospitalSearchDto> result = findHospitals(condition);
+    public Page<HospitalSearchDto> searchHospital(HospitalSearchCondition condition,Pageable pageable){
+        Page<HospitalSearchDto> result = findHospitals(condition, pageable);
 
         List<Long> hospitalIds = result.stream()
                 .map(h-> h.getHospitalId())
@@ -64,8 +69,8 @@ public class HospitalSearchRepository {
     }
 
 
-    private List<HospitalSearchDto> findHospitals(HospitalSearchCondition condition){
-        List<HospitalSearchDto> findHospitals =  queryFactory
+    private Page<HospitalSearchDto> findHospitals(HospitalSearchCondition condition, Pageable pageable){
+        List<HospitalSearchDto> content =  queryFactory
                 .select(new QHospitalSearchDto(hospital.id,
                         hospital.hospitalName,
                         hospital.businessCondition,
@@ -79,9 +84,20 @@ public class HospitalSearchRepository {
                         .or(hospitalSubjectLike(condition.getSearchName())
                         .or(tagNameLike(condition.getSearchName()))))
                       )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
-        return findHospitals;
+        JPAQuery<Hospital> countQuery= queryFactory
+                .select(hospital)
+                .from(hospital)
+                .join(hospital.detailedHosInformation, detailedHosInformation)
+                .where( (hospitalNameLike(condition.getSearchName())
+                        .or(hospitalSubjectLike(condition.getSearchName())
+                                .or(tagNameLike(condition.getSearchName())))));
+
+
+        return PageableExecutionUtils.getPage(content, pageable, ()-> countQuery.fetchCount());
     }
 
     private BooleanExpression hospitalNameLike(String name){
