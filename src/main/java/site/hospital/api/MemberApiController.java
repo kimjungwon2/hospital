@@ -3,6 +3,7 @@ package site.hospital.api;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -13,10 +14,12 @@ import site.hospital.repository.member.simplequery.MemberSearchCondition;
 import site.hospital.repository.member.simplequery.MemberSearchResult;
 import site.hospital.service.MemberService;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor

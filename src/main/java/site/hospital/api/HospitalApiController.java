@@ -56,6 +56,13 @@ public class HospitalApiController {
 
     }
 
+    //병원 전체 검색
+    @PostMapping("/search/hospital")
+    public List<HospitalSearchDto> searchHospital(@RequestBody @Validated HospitalSearchCondition condition){
+        return hospitalService.searchHospital(condition);
+    }
+
+    //병원 정보 등록(직원용)
     @PostMapping("/hospital/register/staff")
     public CreateStaffHospitalResponse saveStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
         Long id = hospitalService.registerStaffHosInformation(request.getHospitalId(),request.getPhoto(),

@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.QandA;
-import site.hospital.repository.HospitalRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.QandARepository;
 import site.hospital.repository.member.MemberRepository;
 

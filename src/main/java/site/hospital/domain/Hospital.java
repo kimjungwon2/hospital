@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import site.hospital.domain.appointment.Appointment;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
+import site.hospital.domain.reviewHospital.ReviewHospital;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ public class Hospital extends BaseTimeEntity {
     private List<Bookmark> bookmarks = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
     private List<QandA> qandAs = new ArrayList<>();
+    @OneToMany(mappedBy = "hospital")
+    private List<ReviewHospital> reviewHospitals = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staffHosInformation_id")

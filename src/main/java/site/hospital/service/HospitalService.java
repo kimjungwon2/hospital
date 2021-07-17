@@ -6,10 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
-import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.repository.DetailedHosRepository;
-import site.hospital.repository.HospitalRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
+import site.hospital.repository.hospital.query.HospitalSearchCondition;
+import site.hospital.repository.hospital.query.HospitalSearchDto;
+import site.hospital.repository.hospital.query.HospitalSearchRepository;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly=true)
@@ -17,8 +21,8 @@ import site.hospital.repository.StaffHosRepository;
 public class HospitalService {
 
     private final HospitalRepository hospitalRepository;
-    private final DetailedHosRepository detailedHosRepository;
     private final StaffHosRepository staffHosRepository;
+    private final HospitalSearchRepository hospitalSearchRepository;
 
     //병원 + 상세 정보등록
     @Transactional

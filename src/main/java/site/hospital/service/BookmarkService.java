@@ -7,7 +7,7 @@ import site.hospital.domain.Bookmark;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.member.Member;
 import site.hospital.repository.bookmark.BookmarkRepository;
-import site.hospital.repository.HospitalRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 
 import java.util.List;

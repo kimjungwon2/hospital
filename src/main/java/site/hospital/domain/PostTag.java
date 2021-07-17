@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
 
@@ -23,5 +24,25 @@ public class PostTag extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="hospital_id")
     private Hospital hospital;
+
+    //== 연관 관계 메서드 ==/
+    public void changeTag(Tag tag){
+        this.tag = tag;
+        tag.getPostTags().add(this);
+    }
+
+    public void changeHospital(Hospital hospital){
+        this.hospital = hospital;
+        hospital.getPostTags().add(this);
+    }
+
+    //생성 메서드
+    public static PostTag createPostTag(Tag tag, Hospital hospital){
+        PostTag postTag = new PostTag();
+        postTag.changeTag(tag);
+        postTag.changeHospital(hospital);
+
+        return postTag;
+    }
 
 }

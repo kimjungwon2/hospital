@@ -1,4 +1,4 @@
-package site.hospital.repository;
+package site.hospital.repository.hospital;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import site.hospital.domain.Hospital;

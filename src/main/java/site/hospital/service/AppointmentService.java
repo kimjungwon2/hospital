@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.appointment.Appointment;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.member.Member;
-import site.hospital.repository.Appointment.AppointmentRepository;
-import site.hospital.repository.HospitalRepository;
+import site.hospital.repository.appointment.AppointmentRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 
 import java.time.LocalDateTime;

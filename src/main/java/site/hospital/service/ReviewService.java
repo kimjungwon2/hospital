@@ -1,8 +1,6 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.*;
@@ -10,7 +8,7 @@ import site.hospital.domain.member.Member;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.review.Review;
 import site.hospital.domain.reviewHospital.ReviewHospital;
-import site.hospital.repository.HospitalRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.review.ReviewRepository;
 
@@ -38,7 +36,6 @@ public class ReviewService {
         //리뷰 병원 생성
         ReviewHospital reviewHospital = ReviewHospital.createReviewHospital(hospital, content, disease,
                 recommendationStatus, sumPrice, kindness, symptomRelief, cleanliness, waitTime);
-
 
         //리뷰 생성
         Review review = Review.createReview(picture, member, reviewHospital);

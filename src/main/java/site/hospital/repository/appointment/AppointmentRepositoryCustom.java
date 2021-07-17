@@ -1,4 +1,4 @@
-package site.hospital.repository.Appointment;
+package site.hospital.repository.appointment;
 
 import site.hospital.domain.appointment.Appointment;
 

@@ -17,6 +17,7 @@ public class EvaluationCriteria {
     private int symptomRelief;
     private int cleanliness;
     private int waitTime;
+    private double averageRate;
 
     @Builder
     public EvaluationCriteria(int sumPrice, int kindness, int symptomRelief,
@@ -26,5 +27,6 @@ public class EvaluationCriteria {
         this.symptomRelief = symptomRelief;
         this.cleanliness = cleanliness;
         this.waitTime = waitTime;
+        this.averageRate = (sumPrice + kindness + symptomRelief + cleanliness + waitTime)/ 5 ;
     }
 }
