@@ -68,19 +68,11 @@ public class HospitalApiController {
         return hospitalService.searchHospital(condition, pageable);
     }
 
+
     //병원 정보 보기(고객)
     @GetMapping("/hospital/view/{hospitalId}")
-    public ViewHospitalResponse searchMemberBookmark(@PathVariable("hospitalId") Long hospitalId){
-        Hospital hospital = hospitalService.viewHospital(hospitalId);
-        ViewHospitalResponse result = new ViewHospitalResponse(hospital);
-
-        return result;
-    }
-
-    //병원 정보 보기(고객)
-    @GetMapping("/hospital/view2/{hospitalId}")
     public ViewHospitalDTO viewsHospital(@PathVariable("hospitalId") Long hospitalId){
-        return hospitalService.viewsHospital(hospitalId);
+        return hospitalService.viewHospital(hospitalId);
     }
 
 
