@@ -101,6 +101,9 @@ public class HospitalService {
         return selectHospital.getId();
     }
 
-
+    //병원 상세 보기
+    public Hospital viewHospital(Long hospitalId){
+        return hospitalRepository.hospitalInformation(hospitalId);
+    }
 
 }

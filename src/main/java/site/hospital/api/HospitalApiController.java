@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import site.hospital.domain.Estimation;
+import site.hospital.domain.PostTag;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
 import site.hospital.domain.detailedHosInformation.HospitalLocation;
+import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.dto.CreateHospitalRequest;
 import site.hospital.domain.Hospital;
 import site.hospital.dto.ModifyHospitalRequest;
@@ -66,6 +67,16 @@ public class HospitalApiController {
 
         return hospitalService.searchHospital(condition, pageable);
     }
+
+    //병원 정보 보기(고객)
+    @GetMapping("/hospital/view/{hospitalId}")
+    public ViewHospitalResponse searchMemberBookmark(@PathVariable("hospitalId") Long hospitalId){
+        Hospital hospital = hospitalService.viewHospital(hospitalId);
+        ViewHospitalResponse result = new ViewHospitalResponse(hospital);
+
+        return result;
+    }
+
 
     //병원 정보 등록(직원용)
     @PostMapping("/hospital/register/staff")

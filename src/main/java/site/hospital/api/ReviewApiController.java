@@ -37,6 +37,7 @@ public class ReviewApiController {
         return new CreateReviewResponse(id);
     }
 
+    //병원에 등록된 리뷰 보기.
     @GetMapping("/hospital/review/{hospitalId}")
     public List<HospitalReviewResponse> reviewList(@PathVariable("hospitalId") Long hospitalId){
         List<Review> review = reviewService.hospitalReviewList(hospitalId);
@@ -48,7 +49,7 @@ public class ReviewApiController {
     }
 
     //리뷰 상세보기
-    @GetMapping("/user/review/view/{reviewId}")
+    @GetMapping("/review/view/{reviewId}")
     public List<ReviewViewResponse> viewReview(@PathVariable("reviewId") Long reviewId){
         List<Review> review = reviewService.hospitalReviewView(reviewId);
 
