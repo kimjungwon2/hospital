@@ -19,7 +19,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor

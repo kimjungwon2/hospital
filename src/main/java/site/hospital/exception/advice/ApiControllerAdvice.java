@@ -34,4 +34,11 @@ public class ApiControllerAdvice {
         return new ErrorResponse("BAD_REQUEST",e.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler
+    public ErrorResponse NullPointerHandle(java.lang.NullPointerException e){
+        log.error("NullPointerException:",e);
+        return new ErrorResponse("NOT_FOUND", "검색 결과가 없습니다.");
+    }
+
 }

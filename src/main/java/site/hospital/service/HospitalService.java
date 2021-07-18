@@ -100,4 +100,7 @@ public class HospitalService {
         }
         return selectHospital.getId();
     }
+
+
+
 }

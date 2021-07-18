@@ -33,29 +33,20 @@ public class HospitalSearchRepository {
     public Page<HospitalSearchDto> searchHospital(HospitalSearchCondition condition,Pageable pageable){
         Page<HospitalSearchDto> result = findHospitals(condition, pageable);
 
+        if(result == null) return null;
+
         List<Long> hospitalIds = result.stream()
                 .map(h-> h.getHospitalId())
                 .collect(Collectors.toList());
 
-        List<PostTagDto> postTagDtos =
-                queryFactory
-                .select(new QPostTagDto(postTag.hospital.id, postTag.tag.name))
-                .from(postTag)
-                .join(postTag.tag, tag)
-                .where(postTag.hospital.id.in(hospitalIds))
-                .fetch();
-
-        Map<Long, List<PostTagDto>> tagHospitalMap = postTagDtos.stream()
-                .collect(Collectors.groupingBy(PostTagDto -> PostTagDto.getHospitalId()));
-
-        result.forEach(h->h.setPostTagDtos(tagHospitalMap.get(h.getHospitalId())));
-
-
+        //리뷰 넣기
         List<ReviewHospitalDto> reviewHospitalDtos =
                 queryFactory
-                .select(new QReviewHospitalDto(reviewHospital.hospital.id,reviewHospital.evCriteria.sumPrice))
+                .select(new QReviewHospitalDto(reviewHospital.hospital.id,
+                        reviewHospital.evCriteria.averageRate.avg(), reviewHospital.count()))
                 .from(reviewHospital)
                 .join(reviewHospital.hospital, hospital)
+                .groupBy(reviewHospital.hospital.id)
                 .where(reviewHospital.hospital.id.in(hospitalIds))
                 .fetch();
 
@@ -63,6 +54,20 @@ public class HospitalSearchRepository {
                 .collect(Collectors.groupingBy(reviewHospitalDto -> reviewHospitalDto.getHospitalId()));
 
         result.forEach(h->h.setReviewHospitals(reviewHospitalMap.get(h.getHospitalId())));
+
+        //태그 넣기
+        List<PostTagDto> postTagDtos =
+                queryFactory
+                        .select(new QPostTagDto(postTag.hospital.id, postTag.tag.name))
+                        .from(postTag)
+                        .join(postTag.tag, tag)
+                        .where(postTag.hospital.id.in(hospitalIds))
+                        .fetch();
+
+        Map<Long, List<PostTagDto>> tagHospitalMap = postTagDtos.stream()
+                .collect(Collectors.groupingBy(PostTagDto -> PostTagDto.getHospitalId()));
+
+        result.forEach(h->h.setPostTagDtos(tagHospitalMap.get(h.getHospitalId())));
 
         return result;
 
@@ -95,7 +100,6 @@ public class HospitalSearchRepository {
                 .where( (hospitalNameLike(condition.getSearchName())
                         .or(hospitalSubjectLike(condition.getSearchName())
                                 .or(tagNameLike(condition.getSearchName())))));
-
 
         return PageableExecutionUtils.getPage(content, pageable, ()-> countQuery.fetchCount());
     }
