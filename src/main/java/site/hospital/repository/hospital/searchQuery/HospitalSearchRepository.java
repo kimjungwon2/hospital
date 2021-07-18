@@ -1,4 +1,4 @@
-package site.hospital.repository.hospital.query;
+package site.hospital.repository.hospital.searchQuery;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -93,13 +93,15 @@ public class HospitalSearchRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        //쿼리 수 세기
         JPAQuery<Hospital> countQuery= queryFactory
                 .select(hospital)
                 .from(hospital)
                 .join(hospital.detailedHosInformation, detailedHosInformation)
                 .where( (hospitalNameLike(condition.getSearchName())
                         .or(hospitalSubjectLike(condition.getSearchName())
-                                .or(tagNameLike(condition.getSearchName())))));
+                                .or(tagNameLike(condition.getSearchName())
+                                ))));
 
         return PageableExecutionUtils.getPage(content, pageable, ()-> countQuery.fetchCount());
     }

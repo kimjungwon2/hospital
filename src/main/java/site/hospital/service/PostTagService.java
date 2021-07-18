@@ -9,9 +9,6 @@ import site.hospital.domain.Tag;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.TagRepository;
 import site.hospital.repository.postTag.PostTagRepository;
-import site.hospital.repository.hospital.query.HospitalSearchCondition;
-import site.hospital.repository.hospital.query.HospitalSearchDto;
-import site.hospital.repository.hospital.query.HospitalSearchRepository;
 
 import java.util.List;
 

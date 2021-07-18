@@ -11,8 +11,6 @@ import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.domain.reviewHospital.EvaluationCriteria;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
-import site.hospital.repository.hospital.query.HospitalSearchCondition;
-import site.hospital.repository.hospital.query.HospitalSearchDto;
 import site.hospital.repository.review.query.ReviewSearchCondition;
 import site.hospital.repository.review.query.ReviewSearchDto;
 import site.hospital.service.ReviewService;

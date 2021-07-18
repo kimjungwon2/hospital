@@ -77,6 +77,12 @@ public class HospitalApiController {
         return result;
     }
 
+    //병원 정보 보기(고객)
+    @GetMapping("/hospital/view2/{hospitalId}")
+    public ViewHospitalDTO viewsHospital(@PathVariable("hospitalId") Long hospitalId){
+        return hospitalService.viewsHospital(hospitalId);
+    }
+
 
     //병원 정보 등록(직원용)
     @PostMapping("/hospital/register/staff")

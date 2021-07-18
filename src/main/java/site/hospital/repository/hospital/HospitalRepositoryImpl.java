@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import site.hospital.domain.Hospital;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 
 import static site.hospital.domain.QHospital.hospital;

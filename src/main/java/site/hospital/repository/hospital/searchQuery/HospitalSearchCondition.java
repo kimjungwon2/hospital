@@ -1,4 +1,4 @@
-package site.hospital.repository.hospital.query;
+package site.hospital.repository.hospital.searchQuery;
 
 import lombok.Data;
 

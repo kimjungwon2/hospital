@@ -2,6 +2,7 @@ package site.hospital.exception.advice;
 
 import lombok.extern.slf4j.Slf4j;
 import org.omg.CORBA.UserException;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +14,7 @@ import site.hospital.exception.ErrorResponse;
 
 @Slf4j
 @ControllerAdvice(assignableTypes = MemberApiController.class)
+@Order(1)
 public class MemberApiControllerAdvice {
 
     @ExceptionHandler
@@ -23,10 +25,4 @@ public class MemberApiControllerAdvice {
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler
-    public ErrorResponse serverHandle(Exception e){
-        log.error("InternalServerException:",e);
-        return new ErrorResponse("SERVER_ERROR",e.getMessage());
-    }
 }
