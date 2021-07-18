@@ -6,13 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import site.hospital.domain.Estimation;
-import site.hospital.domain.PostTag;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
 import site.hospital.domain.detailedHosInformation.HospitalLocation;
-import site.hospital.domain.reviewHospital.ReviewHospital;
-import site.hospital.dto.CreateHospitalRequest;
+
 import site.hospital.domain.Hospital;
 import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.service.HospitalService;
