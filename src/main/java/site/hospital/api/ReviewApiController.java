@@ -2,6 +2,8 @@ package site.hospital.api;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.review.Review;
@@ -9,6 +11,10 @@ import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.domain.reviewHospital.EvaluationCriteria;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
+import site.hospital.repository.hospital.query.HospitalSearchCondition;
+import site.hospital.repository.hospital.query.HospitalSearchDto;
+import site.hospital.repository.review.query.ReviewSearchCondition;
+import site.hospital.repository.review.query.ReviewSearchDto;
 import site.hospital.service.ReviewService;
 
 import java.time.LocalDateTime;
@@ -61,6 +67,11 @@ public class ReviewApiController {
                 .collect(Collectors.toList());
 
         return result;
+    }
+
+    @PostMapping("/search/review")
+    public Page<ReviewSearchDto> searchReview(@RequestBody @Validated ReviewSearchCondition condition, Pageable pageable){
+        return reviewService.searchReview(condition, pageable);
     }
 
 

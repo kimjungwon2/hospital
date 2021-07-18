@@ -1,6 +1,8 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.*;
@@ -11,6 +13,9 @@ import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.review.ReviewRepository;
+import site.hospital.repository.review.query.ReviewSearchCondition;
+import site.hospital.repository.review.query.ReviewSearchDto;
+import site.hospital.repository.review.query.ReviewSearchRepository;
 
 import java.util.List;
 
@@ -22,6 +27,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
+    private final ReviewSearchRepository reviewSearchRepository;
 
     //리뷰 등록
     @Transactional

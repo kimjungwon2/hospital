@@ -61,6 +61,9 @@ public class HospitalApiController {
     //병원 전체 검색
     @PostMapping("/search/hospital")
     public Page<HospitalSearchDto> searchHospital(@RequestBody @Validated HospitalSearchCondition condition, Pageable pageable){
+        //" " 띄엄표 검색어 null로 인식.
+        if(condition.getSearchName().equals(" ")) return null;
+
         return hospitalService.searchHospital(condition, pageable);
     }
 

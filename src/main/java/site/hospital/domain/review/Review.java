@@ -49,7 +49,7 @@ public class Review extends BaseTimeEntity {
 
     /*
         생성 메서드
-         */
+    */
     public Review(String picture){
         this.picture = picture;
         if(picture == null) this.authenticationStatus = authenticationStatus.NONE;

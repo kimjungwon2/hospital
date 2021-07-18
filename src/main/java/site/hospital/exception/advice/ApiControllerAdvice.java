@@ -38,7 +38,7 @@ public class ApiControllerAdvice {
     @ExceptionHandler
     public ErrorResponse NullPointerHandle(java.lang.NullPointerException e){
         log.error("NullPointerException:",e);
-        return new ErrorResponse("NOT_FOUND", "검색 결과가 없습니다.");
+        return new ErrorResponse("NOT_FOUND", "검색어를 입력해 주세요.");
     }
 
 }
