@@ -1,8 +1,19 @@
 import axios from 'axios';
 
-const instance = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
-})
+function createInstance(){
+     return axios.create({
+         baseURL: process.env.VUE_APP_API_URL,
+     });
+}
+
+function createInstanceWithURL(url){
+    return axios.create({
+        baseURL: `${process.env.VUE_APP_API_URL}${url}`,
+    });
+}
+
+const instance = createInstance();
+export const hospital = createInstanceWithURL('hospital');
 
 function signupUser(userData){
     return instance.post('signup', userData);
@@ -13,7 +24,7 @@ function loginUser(userData){
 }
 
 function searchHospital(searchName){
-    return instance.get('search/hospital/'+searchName);
+    return instance.get(`search/hospital/${searchName}`);
 }
 
 export { signupUser, loginUser, searchHospital };

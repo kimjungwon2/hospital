@@ -1,6 +1,6 @@
 <template>
     <li>
-        <div>
+        <div @click="routeViewHospital">
           {{ contentItem.hospitalName}}
         </div>
         <div>
@@ -25,11 +25,23 @@
 </template>
 
 <script>
+import {viewHospital} from '@/api/hospital';
+
 export default {
   props: {
     contentItem: {
       type:Object,
       required: true,
+    },
+  },
+  methods:{
+    async viewHospital(){
+      const {data} = await viewHospital(this.contentItem.hospitalId);
+      console.log(data);
+    },
+    routeViewHospital(){
+        const id = this.contentItem.hospitalId;
+        this.$router.push(`/hospital/view/${id}`);
     },
   },
 };

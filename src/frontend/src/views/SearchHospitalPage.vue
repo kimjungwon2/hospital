@@ -1,8 +1,7 @@
 <template>
  <div>
     <h1> 병원 검색 결과 페이지</h1>
-     <div v-if="this.contentItems===[]">요청하신 검색 결과가 없습니다. 리뷰 검색을 이용해 주세요.</div> 
-     <ul v-else>
+     <ul>
          <SearchHospitalItem
             v-for="contentItem in contentItems" 
             :key="contentItem.hospitalId"
@@ -27,7 +26,8 @@ export default {
     },
     methods: {
         async searchHospital(){
-            const { data } = await searchHospital(this.$store.getters.getSearchName);
+            const searchName = this.$route.params.searchName;
+            const { data } = await searchHospital(searchName);
             this.contentItems = data.content;
         },
     },

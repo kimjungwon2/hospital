@@ -23,8 +23,12 @@ export default new VueRouter({
             component: () => import('@/views/MainPage.vue'),
        },
        {
-            path:'/search',
-            component: () => import('@/views/SearchHospitalPage.vue')
+            path:'/search/view/:searchName',
+            component: () => import('@/views/SearchHospitalPage.vue'),
+       },
+       {
+            path:'/hospital/view/:id',
+            component: () => import('@/views/ViewHospitalPage.vue'),
        },
        {
            path: '*',

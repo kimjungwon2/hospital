@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { saveSearchNameToCookie } from '@/utils/cookies';
 
 export default {
     data(){
@@ -19,12 +18,7 @@ export default {
     },
     methods: {
         async searchForm(){
-            const data ={
-                searchName: this.searchName,
-            };
-            this.$store.commit('setSearchName', data);
-            saveSearchNameToCookie(data.searchName);
-            this.$router.push('/search');
+            this.$router.push(`/search/view/${this.searchName}`);
         },
     },
 };
