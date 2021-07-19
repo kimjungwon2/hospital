@@ -23,6 +23,10 @@ export default new VueRouter({
             component: () => import('@/views/MainPage.vue'),
        },
        {
+            path:'/search',
+            component: () => import('@/views/SearchHospitalPage.vue')
+       },
+       {
            path: '*',
            component: () => import('@/views/NotFoundPage.vue'),
        }

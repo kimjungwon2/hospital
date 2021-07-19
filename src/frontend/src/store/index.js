@@ -8,12 +8,16 @@ export default new Vuex.Store({
         memberIdName:'',
         name: '',
         nickName: '',
-        phoneNumber:'',
+        phoneNumber: '',
+        searchName: '',
     },
     getters:{
         isLogin(state){
             return state.nickName !== '';
-        }
+        },
+        getSearchName(state){
+            return state.searchName;
+        },
     },
     mutations: {
         setUser(state, data){
@@ -28,6 +32,9 @@ export default new Vuex.Store({
             state.nickName='';
             state.phoneNumber='';
         },
+        setSearchName(state, data){
+            state.searchName = data.searchName;
+        }
     },
 
 });

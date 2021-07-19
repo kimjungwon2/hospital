@@ -12,4 +12,8 @@ function loginUser(userData){
     return instance.post('login',userData);
 }
 
-export { signupUser, loginUser };
+function searchHospital(searchName){
+    return instance.get('search/hospital/'+searchName);
+}
+
+export { signupUser, loginUser, searchHospital };
