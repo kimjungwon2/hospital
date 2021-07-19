@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import {getSearchNameFromCookie} from '@/utils/cookies'
 
 Vue.use(Vuex);
 
@@ -9,7 +10,7 @@ export default new Vuex.Store({
         name: '',
         nickName: '',
         phoneNumber: '',
-        searchName: '',
+        searchName: getSearchNameFromCookie() || '',
     },
     getters:{
         isLogin(state){

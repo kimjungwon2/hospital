@@ -29,7 +29,6 @@ export default {
         async searchHospital(){
             const { data } = await searchHospital(this.$store.getters.getSearchName);
             this.contentItems = data.content;
-            console.log(data.content);
         },
     },
     created(){

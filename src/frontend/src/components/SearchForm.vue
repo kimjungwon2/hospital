@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { saveSearchNameToCookie } from '@/utils/cookies';
 
 export default {
     data(){
@@ -22,6 +23,7 @@ export default {
                 searchName: this.searchName,
             };
             this.$store.commit('setSearchName', data);
+            saveSearchNameToCookie(data.searchName);
             this.$router.push('/search');
         },
     },
