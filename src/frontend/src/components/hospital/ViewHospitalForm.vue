@@ -1,15 +1,16 @@
 <template>
   <div>
-      <ul>
-          제목: {{hospitalName}} | 발급일: {{licensingDate | formatYear}}
+      <h1>병원 정보</h1>
 
-          <div v-if= "countReviews !== 0">
-              리뷰 개수:{{hospitalReviews[0].reviewCount}}
-          </div>
-          <div v-if= "countTags !== 0">
-              태그: {{hospitalTags}}
-          </div>
-      </ul>
+            제목: {{hospital.hospitalName}} | 발급일: {{licensingDate | formatYear}}
+
+              <div v-if= "countReviews !== 0">
+                  리뷰 개수: {{hospitalReviews[0].reviewCount}}
+               </div>
+
+               <div v-if= "countTags !== 0">
+                 태그: {{hospitalTags}}
+               </div>
   </div>
 </template>
 
@@ -19,22 +20,8 @@ import {viewHospital} from '@/api/hospital';
 export default {
     data() {
         return {
-            hospitalName:'',
+            hospital:[],
             licensingDate:'',
-            phoneNumber:'',
-            distinguishedName:'',
-            medicalSubjectInformation:'',
-            businessCondition:'',
-            cityName:'',
-            landLotBaseSystem:'',
-            roadBaseAddress:'',
-            numberHealthcareProvider:'',
-            numberWard:'',
-            numberPatientRoom:'',
-            x_coordination:'',
-            y_coordination:'',
-            latitude: '',
-            longitude: '',
             
             hospitalReviews: [],
             countReviews:0,
@@ -44,14 +31,18 @@ export default {
             hospitalTags:'',
 
             hospitalEstimations:[],
+            countEstimations:0,
+            
+            //부모에게 전달할 추가 병원 정보 ID
+            staffHosInfoId:'',
         };
     },
     methods:{
         createTags(){
             for(let tag in this.tags){
-                this.hospitalTags += ` #${this.tags[tag].tagName}`;
+                this.hospitalTags += `#${this.tags[tag].tagName}`;
             }
-        }
+        },
     },
     filters:{
         formatYear(value){
@@ -66,31 +57,21 @@ export default {
         const id = this.$route.params.id;
         const {data} = await viewHospital(id);
 
-        //값 배치
-        this.hospitalName = data.hospitalName;
+        this.hospital = data;
         this.licensingDate = data.licensingDate;
-        this.phoneNumber = data.phoneNumber
-        this.distinguishedName = data.distinguishedName
-        this.medicalSubjectInformation = data.medicalSubjectInformation
-        this.businessCondition = data.businessCondition
-        this.cityName = data.cityName
-        this.landLotBaseSystem = data.landLotBaseSystem
-        this.roadBaseAddress = data.roadBaseAddress
-        this.numberHealthcareProvider = data.numberHealthcareProvider
-        this.numberWard = data.numberWard
-        this.numberPatientRoom = data.numberPatientRoom
-        this.x_coordination = data.x_coordination
-        this.y_coordination = data.y_coordination
-        this.latitude = data.latitude
-        this.longitude = data.longitude
 
         //List object
         this.hospitalReviews = data.hospitalReviews;
         this.countReviews = this.hospitalReviews.length;
 
+        //태그 생성
         this.tags = data.hospitalTags;
         this.countTags = this.tags.length;
         this.createTags();
+
+        //스태프 정보 부모 컴포넌트에 전달.
+        this.staffHosInfoId = this.hospital.staffHosInfoId;
+        this.$emit("child-event",this.staffHosInfoId);
     },
 }
 </script>

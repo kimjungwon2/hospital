@@ -1,5 +1,5 @@
 <template>
- <div>
+<div>
     <h1> 병원 검색 결과 페이지</h1>
      <ul>
          <SearchHospitalItem

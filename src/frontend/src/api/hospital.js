@@ -7,4 +7,20 @@ function viewHospital(hospitalId){
     return hospital.get('/view/'+hospitalId);
 }
 
-export { viewHospital };
+//병원 추가 정보 보기
+function viewStaffHosInfo(staffHosId){
+    return hospital.get('/staffHosInfo/'+staffHosId);
+}
+
+//병원 리뷰 보기
+function viewHospitalReview(hospitalId){
+    return hospital.get('/review/'+hospitalId);
+}
+
+//병원 Q&A 보기
+function viewHospitalQandA(hospitalId){
+    return hospital.get('/qanda/'+hospitalId);
+}
+
+
+export { viewHospital, viewStaffHosInfo, viewHospitalReview, viewHospitalQandA };

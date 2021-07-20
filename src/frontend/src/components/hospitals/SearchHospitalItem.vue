@@ -13,7 +13,7 @@
           {{ contentItem.roadBaseAddress }}
         </div>
         <div v-if= "contentItem.postTagDtos !== null" >
-            태그:{{tags}}
+            태그: {{tags}}
         </div>
         <div v-if= "contentItem.reviewHospitals !== null">
             리뷰 평가 : {{contentItem.reviewHospitals[0].averageRate}} & 등록된 리뷰 개수 : {{ contentItem.reviewHospitals[0].reviewCount }}
@@ -43,7 +43,7 @@ export default {
     },
     createTags(){
         for(let tag in this.contentItem.postTagDtos){
-                this.tags += ` #${this.contentItem.postTagDtos[tag].tagName}`;
+          this.tags += `#${this.contentItem.postTagDtos[tag].tagName}`;
        }
     },
   },
