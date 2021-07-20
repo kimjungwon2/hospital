@@ -13,9 +13,7 @@
           {{ contentItem.roadBaseAddress }}
         </div>
         <div v-if= "contentItem.postTagDtos !== null" >
-            태그: <p v-for="tag in contentItem.postTagDtos" :key="tag.tagId">
-                {{tag.tagName}}
-            </p>
+            태그:{{tags}}
         </div>
         <div v-if= "contentItem.reviewHospitals !== null">
             리뷰 평가 : {{contentItem.reviewHospitals[0].averageRate}} & 등록된 리뷰 개수 : {{ contentItem.reviewHospitals[0].reviewCount }}
@@ -25,7 +23,6 @@
 </template>
 
 <script>
-import {viewHospital} from '@/api/hospital';
 
 export default {
   props: {
@@ -34,16 +31,25 @@ export default {
       required: true,
     },
   },
+  data(){
+    return{
+      tags:'',
+    };
+  },
   methods:{
-    async viewHospital(){
-      const {data} = await viewHospital(this.contentItem.hospitalId);
-      console.log(data);
-    },
     routeViewHospital(){
         const id = this.contentItem.hospitalId;
         this.$router.push(`/hospital/view/${id}`);
     },
+    createTags(){
+        for(let tag in this.contentItem.postTagDtos){
+                this.tags += ` #${this.contentItem.postTagDtos[tag].tagName}`;
+       }
+    },
   },
+  created(){
+    this.createTags();
+  }
 };
 </script>
 

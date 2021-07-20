@@ -2,7 +2,13 @@
   <div>
       <ul>
           제목: {{hospitalName}} | 발급일: {{licensingDate | formatYear}}
-          리뷰 개수: {{reviewCount}}
+
+          <div v-if= "countReviews !== 0">
+              리뷰 개수:{{hospitalReviews[0].reviewCount}}
+          </div>
+          <div v-if= "countTags !== 0">
+              태그: {{hospitalTags}}
+          </div>
       </ul>
   </div>
 </template>
@@ -30,10 +36,22 @@ export default {
             latitude: '',
             longitude: '',
             
-            reviewCount: '',
+            hospitalReviews: [],
+            countReviews:0,
+
             tags:[],
+            countTags:0,
+            hospitalTags:'',
+
             hospitalEstimations:[],
         };
+    },
+    methods:{
+        createTags(){
+            for(let tag in this.tags){
+                this.hospitalTags += ` #${this.tags[tag].tagName}`;
+            }
+        }
     },
     filters:{
         formatYear(value){
@@ -67,11 +85,12 @@ export default {
         this.longitude = data.longitude
 
         //List object
-        this.reviewCount = data.hospitalReviews[0].reviewCount;
+        this.hospitalReviews = data.hospitalReviews;
+        this.countReviews = this.hospitalReviews.length;
 
-        data.hospitalTags[0].tagName;
-        
-
+        this.tags = data.hospitalTags;
+        this.countTags = this.tags.length;
+        this.createTags();
     },
 }
 </script>
