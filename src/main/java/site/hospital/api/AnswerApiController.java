@@ -14,10 +14,10 @@ import site.hospital.service.AnswerService;
 public class AnswerApiController {
     private final AnswerService answerService;
 
-    @PostMapping
+    @PostMapping("/staff/question/answer")
     public CreateAnswerResponse registerAnswer(@RequestBody @Validated CreateAnswerRequest request){
         Answer answer = Answer.builder().answerContent(request.getAnswerContent()).build();
-        Long id = answerService.registerAnswer(request.getMemberId(),request.getQandaId(),answer);
+        Long id = answerService.registerAnswer(request.getMemberId(),request.getQuestionId(),answer);
 
         return new CreateAnswerResponse(id);
     }
@@ -34,7 +34,7 @@ public class AnswerApiController {
     @Data
     private static class CreateAnswerRequest{
         private Long memberId;
-        private Long qandaId;
+        private Long questionId;
         private String answerContent;
     }
 }

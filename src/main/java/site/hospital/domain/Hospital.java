@@ -31,7 +31,7 @@ public class Hospital extends BaseTimeEntity {
     @OneToMany(mappedBy = "hospital")
     private List<Bookmark> bookmarks = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
-    private List<QandA> qandAs = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
     private List<ReviewHospital> reviewHospitals = new ArrayList<>();
 

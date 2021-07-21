@@ -25,7 +25,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     private List<Appointment> appointments = new ArrayList<>();
     @OneToMany(mappedBy = "member")
-    private List<QandA> qandas = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<Bookmark> bookmarks = new ArrayList<>();
     @OneToMany(mappedBy = "member")

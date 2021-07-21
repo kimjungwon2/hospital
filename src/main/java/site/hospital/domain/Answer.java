@@ -17,9 +17,8 @@ public class Answer {
     @Column(name = "answer_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "qanda_id")
-    private QandA qandA;
+    @OneToOne(mappedBy = "answer", fetch = FetchType.LAZY)
+    private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staffHosInformation_id")
@@ -27,28 +26,21 @@ public class Answer {
 
     private String answerContent;
 
+
+    public void setQuestion(Question question){
+        this.question =question;
+    }
+
     @Builder
     public Answer(String answerContent) {
         this.answerContent = answerContent;
     }
 
+    //연관 관계 메서드
     public void changeMember(Member member){
         this.member = member;
         member.getAnswers().add(this);
     }
 
-    public void changeQandA(QandA qandA){
-        this.qandA = qandA;
-        qandA.setAnswer(this);
-    }
-
-    //생성 메서드
-    public static Answer createAnswer(Member member, QandA qandA){
-        Answer answer = new Answer();
-        answer.changeMember(member);
-        answer.changeQandA(qandA);
-
-        return answer;
-    }
 
 }

@@ -1,6 +1,7 @@
 package site.hospital.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
@@ -11,13 +12,14 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QandA extends BaseTimeEntity {
+public class Question extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "qanda_id")
+    @Column(name= "question_id")
     private long id;
 
-    @OneToOne(mappedBy = "qandA", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id")
     private Answer answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,32 +32,35 @@ public class QandA extends BaseTimeEntity {
 
     private String content;
 
-    public void setAnswer(Answer answer){
-        this.answer =answer;
-    }
 
     //== 연관 관계 메서드 ==/
     public void changeMember(Member member){
         this.member = member;
-        member.getQandas().add(this);
+        member.getQuestions().add(this);
     }
 
     public void changeHospital(Hospital hospital){
         this.hospital = hospital;
-        hospital.getQandAs().add(this);
+        hospital.getQuestions().add(this);
     }
 
-    public QandA(String content){
+    public void changeAnswer(Answer answer){
+        this.answer = answer;
+        answer.setQuestion(this);
+    }
+
+    @Builder
+    public Question(String content){
         this.content = content;
     }
 
     //생성 메서드
-    public static QandA CreateQandA(Member member, Hospital hospital, String content){
-        QandA qandA = new QandA(content);
-        qandA.changeMember(member);
-        qandA.changeHospital(hospital);
+    public static Question CreateQuestion(Member member, Hospital hospital, String content){
+        Question question = new Question(content);
+        question.changeMember(member);
+        question.changeHospital(hospital);
 
-        return qandA;
+        return question;
     }
 
     //비즈니스 메서드
