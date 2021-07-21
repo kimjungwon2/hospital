@@ -48,7 +48,6 @@ public class Member extends BaseTimeEntity {
     //병원 번호
     private Long hospitalNumber;
 
-
     /*
         생성자
     */

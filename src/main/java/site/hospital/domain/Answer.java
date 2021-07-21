@@ -15,13 +15,13 @@ public class Answer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
-    private Long id;
+    private long id;
 
     @OneToOne(mappedBy = "answer", fetch = FetchType.LAZY)
     private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "staffHosInformation_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private String answerContent;
