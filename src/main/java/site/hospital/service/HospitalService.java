@@ -10,7 +10,6 @@ import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
-import site.hospital.repository.hospital.searchQuery.HospitalSearchCondition;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchRepository;
 import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;

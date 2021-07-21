@@ -30,8 +30,8 @@ public class HospitalSearchRepository {
     public HospitalSearchRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
 
 
-    public Page<HospitalSearchDto> searchHospital(HospitalSearchCondition condition,Pageable pageable){
-        Page<HospitalSearchDto> result = findHospitals(condition, pageable);
+    public Page<HospitalSearchDto> searchHospital(String searchName,Pageable pageable){
+        Page<HospitalSearchDto> result = findHospitals(searchName, pageable);
 
         if(result == null) return null;
 
@@ -58,7 +58,7 @@ public class HospitalSearchRepository {
         //태그 넣기
         List<PostTagDto> postTagDtos =
                 queryFactory
-                        .select(new QPostTagDto(postTag.hospital.id, postTag.tag.name))
+                        .select(new QPostTagDto(postTag.hospital.id, tag.id, postTag.tag.name))
                         .from(postTag)
                         .join(postTag.tag, tag)
                         .where(postTag.hospital.id.in(hospitalIds))
@@ -74,7 +74,7 @@ public class HospitalSearchRepository {
     }
 
 
-    private Page<HospitalSearchDto> findHospitals(HospitalSearchCondition condition, Pageable pageable){
+    private Page<HospitalSearchDto> findHospitals(String searchName, Pageable pageable){
         List<HospitalSearchDto> content =  queryFactory
                 .select(new QHospitalSearchDto(hospital.id,
                         hospital.hospitalName,
@@ -85,9 +85,9 @@ public class HospitalSearchRepository {
                 )
                 .from(hospital)
                 .join(hospital.detailedHosInformation, detailedHosInformation)
-                .where( (hospitalNameLike(condition.getSearchName())
-                        .or(hospitalSubjectLike(condition.getSearchName())
-                        .or(tagNameLike(condition.getSearchName()))))
+                .where( (hospitalNameLike(searchName)
+                        .or(hospitalSubjectLike(searchName)
+                        .or(tagNameLike(searchName))))
                       )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -98,9 +98,9 @@ public class HospitalSearchRepository {
                 .select(hospital)
                 .from(hospital)
                 .join(hospital.detailedHosInformation, detailedHosInformation)
-                .where( (hospitalNameLike(condition.getSearchName())
-                        .or(hospitalSubjectLike(condition.getSearchName())
-                                .or(tagNameLike(condition.getSearchName())
+                .where( (hospitalNameLike(searchName)
+                        .or(hospitalSubjectLike(searchName)
+                                .or(tagNameLike(searchName)
                                 ))));
 
         return PageableExecutionUtils.getPage(content, pageable, ()-> countQuery.fetchCount());

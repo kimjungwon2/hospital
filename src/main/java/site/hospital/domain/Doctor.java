@@ -25,9 +25,10 @@ public class Doctor extends BaseTimeEntity {
     private String history;
     private String photo;
 
-    //연관관계 때문에 set 설정
-    public void setStaffHosInformation(StaffHosInformation staffHosInformation){
+    //== 연관 관계 메서드 ==//
+    public void changeStaffHosInformation(StaffHosInformation staffHosInformation){
         this.staffHosInformation = staffHosInformation;
+        staffHosInformation.getDoctors().add(this);
     }
 
     @Builder

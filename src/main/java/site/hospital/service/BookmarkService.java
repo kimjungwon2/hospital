@@ -32,17 +32,20 @@ public class BookmarkService {
         return bookmark.getId();
     }
 
+    //관리자 예약 조회
     public List<Bookmark> searchAdminBookmark(){
         List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(null,null);
 
         return Bookmark;
     }
+
     //멤버 예약 조회
     public List<Bookmark> searchMemberBookmark(Long memberId){
         List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(memberId,null);
 
         return Bookmark;
     }
+
     //병원 예약 조회
     public List<Bookmark> searchHospitalBookmark(Long hospitalId){
         List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(null, hospitalId);

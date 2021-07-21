@@ -15,6 +15,7 @@ import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.service.HospitalService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class HospitalApiController {
 
@@ -57,12 +58,10 @@ public class HospitalApiController {
     }
 
     //병원 전체 검색
-    @PostMapping("/search/hospital")
-    public Page<HospitalSearchDto> searchHospital(@RequestBody @Validated HospitalSearchCondition condition, Pageable pageable){
-        //" " 띄엄표 검색어 null로 인식.
-        if(condition.getSearchName().equals(" ")) return null;
+    @GetMapping("/search/hospital/{searchName}")
+    public Page<HospitalSearchDto> searchHospital(@PathVariable("searchName") String searchName, Pageable pageable){
 
-        return hospitalService.searchHospital(condition, pageable);
+        return hospitalService.searchHospital(searchName, pageable);
     }
 
 
@@ -98,7 +97,7 @@ public class HospitalApiController {
     /* DTO */
     @Data
     private static class CreateHospitalResponse {
-        long id;
+        Long id;
         public CreateHospitalResponse(long id){
             this.id = id;
         }

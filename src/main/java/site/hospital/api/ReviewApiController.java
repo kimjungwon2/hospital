@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class ReviewApiController {
     private final ReviewService reviewService;
@@ -77,7 +78,7 @@ public class ReviewApiController {
     /* DTO */
     @Data
     private static class CreateReviewResponse {
-        long id;
+        Long id;
         public CreateReviewResponse(long id) {
             this.id = id;
         }

@@ -36,11 +36,7 @@ public class StaffHosInformation extends BaseTimeEntity {
         this.hospital = hospital;
     }
 
-    /*연관관계 메서드*/
-    public void addDoctor(Doctor doctor){
-        doctors.add(doctor);
-        doctor.setStaffHosInformation(this);
-    }
+
 
     //생성자
 

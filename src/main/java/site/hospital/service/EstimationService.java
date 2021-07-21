@@ -17,8 +17,19 @@ public class EstimationService {
     private final EstimationRepository estimationRepository;
     private final HospitalRepository hospitalRepository;
 
+    //병원 FK 없이 등록
     @Transactional
-    public Long createEstimation(Estimation estimation){
+    public Long createNoHospitalEstimation(Estimation estimation){
+        estimationRepository.save(estimation);
+
+        return estimation.getId();
+    }
+
+    //병원 FK 있을 때, 등록.
+    @Transactional
+    public Long createEstimation(Long hospitalId, Estimation estimation){
+        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        estimation.changeHospital(hospital);
         estimationRepository.save(estimation);
         return estimation.getId();
     }

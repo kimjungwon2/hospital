@@ -30,6 +30,8 @@ public class Member extends BaseTimeEntity {
     private List<Bookmark> bookmarks = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<Review> reviews = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Answer> answers = new ArrayList<>();
 
     //회원 아이디
     @Column(unique=true, nullable = false)

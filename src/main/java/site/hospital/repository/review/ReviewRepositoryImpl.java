@@ -12,7 +12,6 @@ import static site.hospital.domain.review.QReview.review;
 import static site.hospital.domain.member.QMember.member;
 
 
-
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;

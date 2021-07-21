@@ -59,7 +59,7 @@ public class BookmarkApiController {
     /* DTO */
     @Data
     private static class CreateBookmarkResponse{
-        long id;
+        Long id;
         public CreateBookmarkResponse(long id) {
             this.id = id;
         }
@@ -67,15 +67,15 @@ public class BookmarkApiController {
 
     @Data
     private static class CreateBookmarkRequest{
-        long memberId;
-        long hospitalId;
+        Long memberId;
+        Long hospitalId;
     }
 
     @Data
     private static class SearchBookmarkResponse{
-        long bookmarkId;
-        long hospitalId;
-        long memberId;
+        Long bookmarkId;
+        Long hospitalId;
+        Long memberId;
         String medicalSubjectInformation;
         String businessCondition;
         String cityName;
@@ -98,7 +98,7 @@ public class BookmarkApiController {
 
     @Data
     private static class SearchMemberBookmarkResponse{
-        long hospitalId;
+        Long hospitalId;
         String medicalSubjectInformation;
         String businessCondition;
         String cityName;
@@ -117,8 +117,8 @@ public class BookmarkApiController {
 
     @Data
     private static class SearchHospitalBookmarkResponse{
-        long bookmarkId;
-        long memberId;
+        Long bookmarkId;
+        Long memberId;
         String memberName;
         String nickName;
         String phoneNumber;

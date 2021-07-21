@@ -79,7 +79,7 @@ public class HospitalViewRepository {
                         detailedHosInformation.hospitalLocation.longitude
                         ))
                 .from(hospital)
-                .join(hospital.detailedHosInformation,detailedHosInformation)
+                .leftJoin(hospital.detailedHosInformation,detailedHosInformation)
                 .where(hospitalIdEq(hospitalId))
                 .fetchOne();
 

@@ -50,7 +50,7 @@ public class MemberApiController {
     }
 
     //관리자 유저 전체 조회
-    @GetMapping("admin/search/user")
+    @GetMapping("/admin/search/user")
     public Page<MemberSearchResult> searchMember(MemberSearchCondition condition, Pageable pageable){
         return memberService.search(condition, pageable);
     }
@@ -59,7 +59,7 @@ public class MemberApiController {
     /* DTO */
     @Data
     private static class CreateMemberResponse {
-        long memberId;
+        Long memberId;
         public CreateMemberResponse(long memberId){
             this.memberId = memberId;
         }

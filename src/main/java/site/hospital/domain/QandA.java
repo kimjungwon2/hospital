@@ -17,6 +17,9 @@ public class QandA extends BaseTimeEntity {
     @Column(name= "qanda_id")
     private long id;
 
+    @OneToOne(mappedBy = "qandA", optional = true, fetch = FetchType.LAZY)
+    private Answer answer;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

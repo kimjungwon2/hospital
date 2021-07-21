@@ -7,8 +7,12 @@ import site.hospital.domain.Hospital;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.QandA;
 import site.hospital.repository.hospital.HospitalRepository;
-import site.hospital.repository.QandARepository;
+import site.hospital.repository.qandA.QandARepository;
 import site.hospital.repository.member.MemberRepository;
+import site.hospital.repository.qandA.simpleQuery.HospitalQandARepository;
+import site.hospital.repository.qandA.simpleQuery.SearchHospitalQandADTO;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,6 +22,7 @@ public class QandAService {
     private final QandARepository qandARepository;
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
+    private final HospitalQandARepository hospitalQandARepository;
 
     //QandA 작성
     @Transactional
@@ -45,4 +50,19 @@ public class QandAService {
     public void deleteQandA(Long id){
         qandARepository.deleteById(id);
     }
+
+    //멤버 자신의 QandA 조회
+    public List<QandA> searchMemberQandA(Long memberId){
+        List<QandA> qandA = qandARepository.searchQandA(memberId, null);
+
+        return qandA;
+    }
+
+    //관리자 병원 QandA 조회
+    public List<QandA> searchAdminQandA(){
+        List<QandA> qandA = qandARepository.searchQandA(null, null);
+
+        return qandA;
+    }
+
 }

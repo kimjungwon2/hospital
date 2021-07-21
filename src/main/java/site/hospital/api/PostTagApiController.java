@@ -23,7 +23,7 @@ public class PostTagApiController {
         return new LinkTagResponse(id);
     }
 
-    @GetMapping("/hospital/tagview/{hospitalId}")
+    @GetMapping("/hospital/tag/view/{hospitalId}")
     public List<hospitalTagViewResponse> hospitalTagView(@PathVariable("hospitalId") Long hospitalId){
         List<PostTag> postTags = postTagService.viewHospitalTag(hospitalId);
         List<hospitalTagViewResponse> result = postTags.stream()
@@ -43,7 +43,7 @@ public class PostTagApiController {
 
     @Data
     private static class LinkTagResponse {
-        private long postTagId;
+        private Long postTagId;
         public LinkTagResponse(long postTagId) {
             this.postTagId = postTagId;
         }

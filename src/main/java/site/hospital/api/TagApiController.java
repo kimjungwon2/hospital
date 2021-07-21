@@ -52,7 +52,7 @@ public class TagApiController {
 
     @Data
     private static class CreateTagResponse {
-        private long tagId;
+        private Long tagId;
         public CreateTagResponse(long tagId) {
             this.tagId = tagId;
         }
