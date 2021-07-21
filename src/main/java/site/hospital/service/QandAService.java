@@ -51,6 +51,13 @@ public class QandAService {
         qandARepository.deleteById(id);
     }
 
+    //병원 QandA 조회
+    public List<QandA> searchHospitalQandA2(Long hospitalId){
+        List<QandA> qandA = qandARepository.searchHospitalQandA(hospitalId);
+
+        return qandA;
+    }
+
     //멤버 자신의 QandA 조회
     public List<QandA> searchMemberQandA(Long memberId){
         List<QandA> qandA = qandARepository.searchQandA(memberId, null);

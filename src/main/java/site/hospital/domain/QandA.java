@@ -17,7 +17,7 @@ public class QandA extends BaseTimeEntity {
     @Column(name= "qanda_id")
     private long id;
 
-    @OneToOne(mappedBy = "qandA", optional = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "qandA", fetch = FetchType.LAZY)
     private Answer answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,6 +29,10 @@ public class QandA extends BaseTimeEntity {
     private Hospital hospital;
 
     private String content;
+
+    public void setAnswer(Answer answer){
+        this.answer =answer;
+    }
 
     //== 연관 관계 메서드 ==/
     public void changeMember(Member member){
@@ -46,7 +50,7 @@ public class QandA extends BaseTimeEntity {
     }
 
     //생성 메서드
-    public static QandA CreateQandA(Member member,Hospital hospital, String content){
+    public static QandA CreateQandA(Member member, Hospital hospital, String content){
         QandA qandA = new QandA(content);
         qandA.changeMember(member);
         qandA.changeHospital(hospital);

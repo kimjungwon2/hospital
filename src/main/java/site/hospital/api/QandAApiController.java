@@ -20,7 +20,7 @@ public class QandAApiController {
     private final QandAService qandAService;
 
     //QandA 생성
-    @PostMapping("hospital/qanda/register")
+    @PostMapping("/hospital/qanda/register")
     public CreateQandAResponse createQandA(@RequestBody @Validated CreateQandARequest request){
         Long id = qandAService.qandACreate(request.getMemberId(),request.getHospitalId(),request.getContent());
         return new CreateQandAResponse(id);
@@ -30,6 +30,16 @@ public class QandAApiController {
     @GetMapping("/hospital/qanda/{hospitalId}")
     public List<SearchHospitalQandADTO>  searchHospitalQandA(@PathVariable("hospitalId") Long hospitalId){
         return qandAService.searchHospitalQandA(hospitalId);
+    }
+
+    //병원 QandA 조회.
+    @GetMapping("/hospital/qanda2/{hospitalId}")
+    public List<SearchHospitalQandAResponse>  searchHospitalQandA2(@PathVariable("hospitalId") Long hospitalId){
+        List<QandA> qandAS = qandAService.searchHospitalQandA2(hospitalId);
+        List<SearchHospitalQandAResponse> result = qandAS.stream()
+                .map(q->new SearchHospitalQandAResponse(q))
+                .collect(Collectors.toList());
+        return result;
     }
 
 

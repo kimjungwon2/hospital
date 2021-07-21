@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import site.hospital.domain.Doctor;
 import site.hospital.service.DoctorService;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @RestController
