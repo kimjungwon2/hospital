@@ -1,6 +1,6 @@
 <template>
   <div><h1>Q&A</h1>
-    <ul v-for="QandA in QandAs" :key="QandA.memberId">
+    <ul v-for="QandA in QandAs" :key="QandA.reviewId">
       <li>
         <div>
           닉네임: {{QandA.nickName}}
