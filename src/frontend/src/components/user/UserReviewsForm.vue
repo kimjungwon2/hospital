@@ -1,5 +1,11 @@
 <template>
-  
+  <div>
+      <ul v-for="contentItem in contentItems" :key="contentItem.reviewId">
+        <li @click="routeViewHospital(contentItem)">
+            {{ contentItem.reviewHospitals[0].hospitalName }}
+        </li>
+       </ul>
+  </div>
 </template>
 
 <script>
@@ -17,12 +23,17 @@ export default {
             const id = this.$route.params.id;
             const { data } = await viewUserReviews(id);
             this.contentItems = data;
-            console.log(this.contentItems);
+        },
+
+        routeViewHospital(contentItem){
+            const id = contentItem.reviewHospitals[0].hospitalId;
+            this.$router.push(`/hospital/view/${id}`);
         },
     },
     created(){
         this.userReviews();
     },
+
 };
 </script>
 

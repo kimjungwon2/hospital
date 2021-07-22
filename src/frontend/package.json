@@ -13,6 +13,8 @@
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "node-sass": "^6.0.1",
+    "sass-loader": "^12.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
     "vuex": "^3.6.2"
@@ -38,7 +40,12 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": "off"
+    },
+    "globals": {
+      "kakao": false
+    }
   },
   "browserslist": [
     "> 1%",

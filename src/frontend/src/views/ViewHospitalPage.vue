@@ -1,5 +1,10 @@
 <template>
   <div>병원 보기
+    <ViewMapForm 
+    :landLotBasedSystem="this.landLotBasedSystem"
+    :latitude="this.latitude"
+    :longitude="this.longitude">
+    </ViewMapForm>
     <div>
       <button>리뷰작성</button>
       <button>즐겨찾기</button>
@@ -14,7 +19,16 @@
       </ul>
     </div>
 
-    <template v-if="isHospital" ><ViewHospitalForm @child-event="parents"></ViewHospitalForm></template>
+    <template v-if="isHospital" >
+      <ViewHospitalForm 
+      :staffHosInfoId="staffHosInfoId"
+      :detailedHosId="detailedHosId"
+      :landLotBasedSystem="landLotBasedSystem"
+      :latitude="latitude"
+      :longitude="longitude"
+      @child-event="parents">
+      </ViewHospitalForm>
+    </template>
     <template v-if="isDetailed" ><ViewDetailedInfoForm :staffHosInfoId="staffHosInfoId"></ViewDetailedInfoForm></template>
     <template v-if="isReview" ><ViewHospitalReviewForm></ViewHospitalReviewForm></template>
     <template v-if="isQandA" ><ViewQandAForm></ViewQandAForm></template>    
@@ -23,6 +37,7 @@
 </template>
 
 <script>
+import ViewMapForm from '@/components/hospital/ViewMapForm.vue';
 import ViewHospitalForm from '@/components/hospital/ViewHospitalForm.vue';
 import ViewDetailedInfoForm from '@/components/hospital/ViewDetailedInfoForm.vue';
 import ViewHospitalReviewForm from '@/components/hospital/ViewHospitalReviewForm.vue';
@@ -35,7 +50,13 @@ export default {
       isDetailed : false,
       isReview: false,
       isQandA: false,
-      staffHosInfoId:'',
+
+      //자식 컴포넌트로 올라온 값들.
+      staffHosInofoId:0,
+      landLotBasedSystem:'',
+      detailedHosInfo:0,
+      latitude:0,
+      longitude:0,
     }
   },
   methods:{
@@ -63,8 +84,12 @@ export default {
       this.isReview=false;
       this.isQandA=true;
     },
-    parents(staffHosInfoId){
-      this.staffHosInfoId=staffHosInfoId;
+    parents(detailedHosInfo){
+      this.staffHosInfoId = detailedHosInfo.staffHosInfoId;
+      this.detailedHosId = detailedHosInfo.detailedHosId;
+      this.longitude = detailedHosInfo.longitude;
+      this.latitude = detailedHosInfo.latitude;
+      this.landLotBasedSystem = detailedHosInfo.landLotBasedSystem;
     },
   },
   components:{
@@ -72,6 +97,10 @@ export default {
       ViewDetailedInfoForm,
       ViewHospitalReviewForm,
       ViewQandAForm,
+      ViewMapForm,
+  },
+  created(){
+      console.log(this.landLotBasedSystem);
   },
 };
 </script>

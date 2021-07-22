@@ -35,6 +35,7 @@ export default {
             
             //부모에게 전달할 추가 병원 정보 ID
             staffHosInfoId:'',
+            detailedHosInfo:{},
         };
     },
     methods:{
@@ -71,7 +72,14 @@ export default {
 
         //스태프 정보 부모 컴포넌트에 전달.
         this.staffHosInfoId = this.hospital.staffHosInfoId;
-        this.$emit("child-event",this.staffHosInfoId);
+
+        this.detailedHosInfo.staffHosInfoId = this.hospital.staffHosInfoId;
+        this.detailedHosInfo.landLotBasedSystem = this.hospital.landLotBasedSystem;
+        this.detailedHosInfo.detailedHosId = this.hospital.detailedHosId;
+        this.detailedHosInfo.latitude = this.hospital.latitude;
+        this.detailedHosInfo.longitude = this.hospital.longitude;
+
+        this.$emit("child-event",this.detailedHosInfo);
     },
 }
 </script>
