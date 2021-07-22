@@ -4,6 +4,14 @@
 
 <script>
 export default {
+  props:{
+      detailed:{
+          type: Object,
+          default: function() {
+            return {}
+          }
+      },
+  },
    mounted() {
        if (window.kakao && window.kakao.maps) {
         this.initMap()
@@ -18,31 +26,17 @@ export default {
     initMap () {
       const container = document.querySelector('#map')
       const options = {
-        center: new kakao.maps.LatLng(this.latitude, this.longitude),
+        center: new kakao.maps.LatLng(this.detailed.latitude, this.detailed.longitude),
         level: 3
       }
       const map = new kakao.maps.Map(container, options)
-      const markerPosition = new kakao.maps.LatLng(this.latitude, this.longitude);
+      const markerPosition = new kakao.maps.LatLng(this.detailed.latitude, this.detailed.longitude);
 
       const marker = new kakao.maps.Marker({
         position: markerPosition
       });
       marker.setMap(map)
-    }
-  },
-  props:{
-      landLotBasedSystem:{
-          type: String,
-          required: true,
-      },
-      latitude:{
-          type:Number,
-          required:true,
-      },
-      longitude:{
-          type:Number,
-          required:true,
-      },
+    },
   },
 }
 </script>

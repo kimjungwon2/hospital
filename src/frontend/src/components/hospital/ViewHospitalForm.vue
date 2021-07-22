@@ -1,6 +1,10 @@
 <template>
   <div>
       <h1>병원 정보</h1>
+    <ViewMapForm 
+    :detailed="this.detailed"
+    >
+    </ViewMapForm>
 
             제목: {{hospital.hospitalName}} | 발급일: {{licensingDate | formatYear}}
 
@@ -34,8 +38,7 @@ export default {
             countEstimations:0,
             
             //부모에게 전달할 추가 병원 정보 ID
-            staffHosInfoId:'',
-            detailedHosInfo:{},
+            detailed:{},
         };
     },
     methods:{
@@ -71,15 +74,14 @@ export default {
         this.createTags();
 
         //스태프 정보 부모 컴포넌트에 전달.
-        this.staffHosInfoId = this.hospital.staffHosInfoId;
-
-        this.detailedHosInfo.staffHosInfoId = this.hospital.staffHosInfoId;
-        this.detailedHosInfo.landLotBasedSystem = this.hospital.landLotBasedSystem;
-        this.detailedHosInfo.detailedHosId = this.hospital.detailedHosId;
-        this.detailedHosInfo.latitude = this.hospital.latitude;
-        this.detailedHosInfo.longitude = this.hospital.longitude;
-
-        this.$emit("child-event",this.detailedHosInfo);
+        this.detailed = {
+            staffHosInfoId: this.hospital.staffHosInfoId,
+            landLotBasedSystem: this.hospital.landLotBasedSystem,
+            detailedHosId: this.hospital.detailedHosId,
+            latitude: this.hospital.latitude,
+            longitude: this.hospital.longitude};
+            
+        this.$emit("child-event", this.detailed);
     },
 }
 </script>
