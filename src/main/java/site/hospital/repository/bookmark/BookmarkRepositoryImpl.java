@@ -19,6 +19,17 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    //고객의 즐겨찾기 유무 확인
+    public Bookmark isUserBookmark(Long memberId, Long hospitalId){
+        Bookmark result = queryFactory
+                .select(bookmark)
+                .from(bookmark)
+                .where(memberIdEq(memberId),hospitalIdEq(hospitalId))
+                .fetchOne();
+
+        return result;
+    }
+
     public List<Bookmark> searchBookmark(Long memberId,Long hospitalId){
         List<Bookmark> result = queryFactory
                 .select(bookmark)
@@ -35,7 +46,7 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
         return id != null? bookmark.member.id.eq(id): null;
     }
     private BooleanExpression hospitalIdEq(Long id){
-        return id != null? bookmark.member.id.eq(id): null;
+        return id != null? bookmark.hospital.id.eq(id): null;
     }
 
 }

@@ -63,9 +63,14 @@ public class ReviewService {
         return reviewRepository.hospitalReviewSearch(hospitalId,null);
     }
 
+    //유저가 등록한 리뷰 검색
+    public List<Review> userReviewSearch(Long memberId){
+        return reviewRepository.hospitalReviewSearch(null,memberId,null);
+    }
+
     //리뷰 상세 보기
     public List<Review> hospitalReviewView(Long reviewId){
-        return reviewRepository.hospitalReviewSearch(null, reviewId);
+        return reviewRepository.hospitalReviewSearch(null, null,reviewId);
     }
 
     //관리자 리뷰 작성 보기

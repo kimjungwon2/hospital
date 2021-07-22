@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Question;
 import site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO;
+import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
 import site.hospital.service.QuestionService;
 
 import java.util.List;
@@ -29,6 +30,12 @@ public class QuestionApiController {
     @GetMapping("/hospital/question/{hospitalId}")
     public List<SearchHospitalQuestionDTO>  searchHospitalQuestion(@PathVariable("hospitalId") Long hospitalId){
         return questionService.searchHospitalQuestion(hospitalId);
+    }
+
+    //유저 Question 조회
+    @GetMapping("/user/{memberId}/questions")
+    public List<SearchUserQuestionDTO>  searchUserQuestion(@PathVariable("memberId") Long memberId){
+        return questionService.searchUserQuestion(memberId);
     }
 
     //병원 Question 조회.

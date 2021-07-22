@@ -11,6 +11,8 @@ import site.hospital.repository.question.QuestionRepository;
 import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.question.simpleQuery.HospitalQuestionRepository;
 import site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO;
+import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
+import site.hospital.repository.question.userQuery.UserQuestionRepository;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class QuestionService {
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
     private final HospitalQuestionRepository hospitalQuestionRepository;
+    private final UserQuestionRepository userQuestionRepository;
 
     //Question 작성
     @Transactional
@@ -49,6 +52,13 @@ public class QuestionService {
     @Transactional
     public void deleteQandA(Long id){
         qandARepository.deleteById(id);
+    }
+
+    //병원 Question user가 조회
+    public List<SearchUserQuestionDTO> searchUserQuestion(Long memberId){
+        List<SearchUserQuestionDTO> question = userQuestionRepository.viewUserQuestion(memberId);
+
+        return question;
     }
 
     //병원 Question 조회

@@ -21,15 +21,35 @@ public class BookmarkService {
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
 
+    //북마크 여부 확인.
+    public Bookmark isBookmark(Long memberId, Long hospitalId){
+        Bookmark isBookmark = bookmarkRepository.isUserBookmark(memberId,hospitalId);
+
+        return isBookmark;
+    }
+
     @Transactional
-    public Long bookmark(Long memberId, Long hospitalId){
-        Member member = memberRepository.findById(memberId).orElse(null);
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+    public void bookmark(Long memberId, Long hospitalId){
 
-        Bookmark bookmark = Bookmark.createBookmark(member,hospital);
-        bookmarkRepository.save(bookmark);
+        //북마크 했는지 체크 여부
+        Boolean existence = false;
 
-        return bookmark.getId();
+        //북마크 있는지 확인.
+        Bookmark isBookmark = bookmarkRepository.isUserBookmark(memberId,hospitalId);
+
+        //북마크 존재 시, true
+        if(isBookmark!=null) existence = true;
+
+        //북마크가 있으면 삭제.
+        if(existence== true) bookmarkRepository.delete(isBookmark);
+
+        //북마크 여부가 없으면 북마크 저장
+        else {
+            Member member = memberRepository.findById(memberId).orElse(null);
+            Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+            Bookmark bookmark = Bookmark.createBookmark(member, hospital);
+            bookmarkRepository.save(bookmark);
+        }
     }
 
     //관리자 예약 조회

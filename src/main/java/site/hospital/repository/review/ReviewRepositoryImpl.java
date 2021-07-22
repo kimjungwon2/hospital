@@ -21,23 +21,28 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public List<Review> hospitalReviewSearch(Long hospitalId, Long reviewId){
+    public List<Review> hospitalReviewSearch(Long hospitalId, Long memberId, Long reviewId){
         List<Review> result = queryFactory
                 .select(review)
                 .from(review)
                 .join(review.member, member).fetchJoin()
-                .where(hospitalIdEq(hospitalId),reviewIdEq(reviewId))
+                .where(hospitalIdEq(hospitalId),reviewIdEq(reviewId),memberIdEq(memberId))
                 .fetch();
 
         return result;
     }
 
+
+
+    private BooleanExpression memberIdEq(Long id){
+        return id == null? null:review.member.id.eq(id);
+    }
     private BooleanExpression reviewIdEq(Long id){
-        return id != null? review.id.eq(id) :null;
+        return id == null? null: review.id.eq(id);
     }
 
     private BooleanExpression hospitalIdEq(Long id){
-        return id != null? review.reviewHospitals.any().hospital.id.eq(id) :null;
+        return id == null? null: review.reviewHospitals.any().hospital.id.eq(id);
     }
 
 }

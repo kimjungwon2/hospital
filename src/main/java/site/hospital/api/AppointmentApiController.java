@@ -37,7 +37,7 @@ public class AppointmentApiController {
     }
 
     //멤버 예약 조회
-    @GetMapping("/user/appointment/search/{memberId}")
+    @GetMapping("/user/{memberId}/appointments")
     public List<SearchMemberAppointmentResponse> searchMemberAppointment(@PathVariable("memberId") Long memberId){
         List<Appointment> appointments = appointmentService.searchMemberAppointment(memberId);
         List<SearchMemberAppointmentResponse> result = appointments.stream()

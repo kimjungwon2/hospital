@@ -47,6 +47,17 @@ public class ReviewApiController {
         return result;
     }
 
+    //유저가 등록한 리뷰 보기
+    @GetMapping("/user/{memberId}/reviews")
+    public List<UserReviewResponse> userReview(@PathVariable("memberId") Long memberId){
+        List<Review> review = reviewService.userReviewSearch(memberId);
+
+        List<UserReviewResponse> result = review.stream().map(r -> new UserReviewResponse(r))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
     //리뷰 상세보기
     @GetMapping("/review/view/{reviewId}")
     public List<ReviewViewResponse> viewReview(@PathVariable("reviewId") Long reviewId){
@@ -128,6 +139,55 @@ public class ReviewApiController {
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
             this.likeNumber =reviewHospital.getLikeNumber();
+        }
+    }
+
+    @Data
+    private static class UserReviewResponse{
+        private Long reviewId;
+        private ReviewAuthentication authenticationStatus;
+        private LocalDateTime createdDate;
+        private List<ReviewHospitalUserDto> reviewHospitals;
+
+
+        public UserReviewResponse(Review reviews) {
+            this.reviewId = reviews.getId();
+            this.authenticationStatus = reviews.getAuthenticationStatus();
+            this.createdDate = reviews.getCreatedDate();
+            this.reviewHospitals = reviews.getReviewHospitals().stream()
+                    .map(reviewHospital -> new ReviewHospitalUserDto(reviewHospital))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    private static class ReviewHospitalUserDto{
+        private Long hospitalId;
+        private String hospitalName;
+        private String content;
+        private String disease;
+        private Recommendation recommendationStatus;
+        private Integer sumPrice;
+        private Integer kindness;
+        private Integer symptomRelief;
+        private Integer cleanliness;
+        private Integer waitTime;
+        private Double averageRate;
+        private Integer likeNumber;
+
+        public ReviewHospitalUserDto(ReviewHospital reviewHospital) {
+            this.hospitalId = reviewHospital.getHospital().getId();
+            this.hospitalName = reviewHospital.getHospital().getHospitalName();
+            this.content = reviewHospital.getContent();
+            this.disease = reviewHospital.getDisease();
+            this.recommendationStatus = reviewHospital.getRecommendationStatus();
+            this.sumPrice = reviewHospital.getEvCriteria().getSumPrice();
+            this.kindness = reviewHospital.getEvCriteria().getKindness();
+            this.symptomRelief = reviewHospital.getEvCriteria().getSymptomRelief();
+            this.cleanliness = reviewHospital.getEvCriteria().getCleanliness();
+            this.waitTime = reviewHospital.getEvCriteria().getWaitTime();
+            this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
+            this.likeNumber = reviewHospital.getLikeNumber();
         }
     }
 

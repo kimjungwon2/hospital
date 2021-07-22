@@ -17,11 +17,24 @@ public class BookmarkApiController {
 
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/user/bookmark/register")
-    public CreateBookmarkResponse saveBookmark(@RequestBody @Validated CreateBookmarkRequest request){
-        Long id = bookmarkService.bookmark(request.getMemberId(), request.hospitalId);
+    //북마크 등록 + 삭제
+    @PostMapping("/hospital/bookmark/register")
+    public void saveBookmark(@RequestBody @Validated CreateBookmarkRequest request){
+        bookmarkService.bookmark(request.getMemberId(), request.hospitalId);
+    }
 
-        return new CreateBookmarkResponse(id);
+    //북마크 여부 확인.
+    @GetMapping(value ={"/hospital/{hospitalId}/bookmark/{memberId}"})
+    public IsBookmark isNullBookmark(@PathVariable("memberId") Long memberId,
+                                     @PathVariable("hospitalId") Long hospitalId){
+        Boolean isBookmark = false;
+
+        Bookmark bookmark = bookmarkService.isBookmark(memberId, hospitalId);
+
+        //북마크가 있으면 true 반환.
+        if(bookmark != null) isBookmark = true;
+
+        return new IsBookmark(isBookmark);
     }
 
     //즐겨찾기 목록 전체 조회(관리자)
@@ -36,7 +49,7 @@ public class BookmarkApiController {
     }
 
     //즐겨찾기 조회(사용자)
-    @GetMapping("/user/bookmark/search/{memberId}")
+    @GetMapping("/user/{memberId}/bookmarks")
     public List<SearchMemberBookmarkResponse> searchMemberBookmark(@PathVariable("memberId") Long memberId){
         List<Bookmark> bookmarks = bookmarkService.searchMemberBookmark(memberId);
         List<SearchMemberBookmarkResponse> result = bookmarks.stream()
@@ -45,6 +58,7 @@ public class BookmarkApiController {
 
         return result;
     }
+
     //즐겨찾기 조회(병원 관계자)
     @GetMapping("/staff/bookmark/search/{hospitalId}")
     public List<SearchHospitalBookmarkResponse> searchHospitalBookmark(@PathVariable("hospitalId") Long hospitalId){
@@ -57,31 +71,33 @@ public class BookmarkApiController {
     }
 
     /* DTO */
+
     @Data
-    private static class CreateBookmarkResponse{
-        Long id;
-        public CreateBookmarkResponse(long id) {
-            this.id = id;
+    private static class CreateBookmarkRequest{
+        private Long memberId;
+        private Long hospitalId;
+    }
+
+    @Data
+    private static class IsBookmark{
+        private Boolean isBookmark;
+
+        public IsBookmark(Boolean isBookmark) {
+            this.isBookmark = isBookmark;
         }
     }
 
     @Data
-    private static class CreateBookmarkRequest{
-        Long memberId;
-        Long hospitalId;
-    }
-
-    @Data
     private static class SearchBookmarkResponse{
-        Long bookmarkId;
-        Long hospitalId;
-        Long memberId;
-        String medicalSubjectInformation;
-        String businessCondition;
-        String cityName;
-        String userName;
-        String hospitalName;
-        LocalDateTime createTime;
+        private Long bookmarkId;
+        private Long hospitalId;
+        private Long memberId;
+        private String medicalSubjectInformation;
+        private String businessCondition;
+        private String cityName;
+        private String userName;
+        private String hospitalName;
+        private LocalDateTime createTime;
 
         public SearchBookmarkResponse(Bookmark bookmark) {
             this.bookmarkId = bookmark.getId();
@@ -98,12 +114,12 @@ public class BookmarkApiController {
 
     @Data
     private static class SearchMemberBookmarkResponse{
-        Long hospitalId;
-        String medicalSubjectInformation;
-        String businessCondition;
-        String cityName;
-        String hospitalName;
-        LocalDateTime createTime;
+        private Long hospitalId;
+        private String medicalSubjectInformation;
+        private String businessCondition;
+        private String cityName;
+        private String hospitalName;
+        private LocalDateTime createTime;
 
         public SearchMemberBookmarkResponse(Bookmark bookmark) {
             this.hospitalId = bookmark.getHospital().getId();
@@ -117,12 +133,12 @@ public class BookmarkApiController {
 
     @Data
     private static class SearchHospitalBookmarkResponse{
-        Long bookmarkId;
-        Long memberId;
-        String memberName;
-        String nickName;
-        String phoneNumber;
-        LocalDateTime createTime;
+        private Long bookmarkId;
+        private Long memberId;
+        private String memberName;
+        private String nickName;
+        private String phoneNumber;
+        private LocalDateTime createTime;
 
         public SearchHospitalBookmarkResponse(Bookmark bookmark) {
             this.bookmarkId = bookmark.getId();

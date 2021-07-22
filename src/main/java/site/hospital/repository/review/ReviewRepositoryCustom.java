@@ -6,5 +6,5 @@ import java.util.List;
 
 
 public interface ReviewRepositoryCustom {
-    List<Review> hospitalReviewSearch(Long hospitalId, Long reviewId);
+    public List<Review> hospitalReviewSearch(Long hospitalId, Long memberId, Long reviewId);
 }
