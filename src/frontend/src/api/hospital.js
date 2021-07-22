@@ -19,7 +19,7 @@ function viewHospitalReview(hospitalId){
 
 //병원 Q&A 보기
 function viewHospitalQandA(hospitalId){
-    return hospital.get('/qanda/'+hospitalId);
+    return hospital.get('/question/'+hospitalId);
 }
 
 

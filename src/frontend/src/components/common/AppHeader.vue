@@ -1,19 +1,36 @@
 <template>
     <header>
+      <nav class="navbar">
+        <div class="navbar_logo">
+          <router-link to="/main"><font-awesome-icon icon="ambulance" /> K-Hospital</router-link>
+        </div>
 
-      <template v-if="isLogin">
-        <span>{{ $store.state.nickName }}</span> |
-        <a href="javacript:;" @click="logoutUser">로그아웃</a>
-      </template>
-      <template v-else>
-        <router-link to="/login">로그인</router-link> |
-        <router-link to="/signup">회원가입</router-link>
-      </template>
+        
+          <ul class="navbar_menu" v-if="isLogin">
+              <li><router-link to="/user/activity">나의 활동</router-link></li>
+              <li><router-link to="/user/info">정보 수정</router-link></li>
+          </ul>
 
+
+          <ul class="navbar_user" v-if="isLogin">
+              <li><span>{{ $store.state.nickName }}</span></li>
+              <li><a href="javacript:;" @click="logoutUser">로그아웃</a></li>
+          </ul>
+          <ul class="navbar_user" v-else>
+              <li><router-link to="/login">Log in</router-link></li>
+              <li><router-link to="/signup">Sign up</router-link></li>
+          </ul>
+      
+      </nav>
     </header>
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faAmbulance } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faAmbulance)
+
 export default {
   computed:{
     isLogin(){
@@ -30,5 +47,52 @@ export default {
 </script>
 
 <style>
+header{
+  margin: 0;
+}
+
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #5F9EA0;
+  padding: 8px 100px;
+}
+
+.navbar_logo {
+  font-size: 24px;
+  color: #A0605F;
+}
+
+a{
+  text-decoration: none;
+  color:white;
+}
+
+.navbar_menu{
+  display: flex;
+  list-style:none;
+  padding-left: 0;
+}
+
+.navbar_menu li{
+  padding:8px 12px;
+}
+
+.navbar_user{
+  display: flex;
+  list-style: none;
+  color:white;
+  padding-left:0;
+}
+
+.navbar_user li{
+  padding: 8px 12px;
+}
+
+a.router-link-exact-active {
+  text-decoration: none;
+  color:#226365;
+}
 
 </style>

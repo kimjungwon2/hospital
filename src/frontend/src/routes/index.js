@@ -19,6 +19,30 @@ export default new VueRouter({
            component: () => import('@/views/SignupPage.vue'),
        },
        {
+            path: '/user/info',
+            component:() => import('@/views/user/UserInfoPage.vue'),
+       },
+       {
+           path: '/user/activity',
+           component:() => import('@/views/user/UserActivityPage.vue'),
+       },
+       {
+           path:'/user/:id/bookmarks',
+           component: ()=> import('@/views/user/UserBookmarksPage.vue'),
+       },
+       {
+           path:'/user/:id/reviews',
+           component: ()=> import('@/views/user/UserReviewsPage.vue'),
+       },
+       {
+           path:'/user/:id/questions',
+           component: ()=> import('@/views/user/UserQuestionsPage.vue'),
+       },
+       {
+           path:'/user/:id/appointments',
+           component: ()=> import('@/views/user/UserAppointmentsPage.vue'),
+       },
+       {
             path:'/main',
             component: () => import('@/views/MainPage.vue'),
        },

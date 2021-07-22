@@ -14,6 +14,7 @@ function createInstanceWithURL(url){
 
 const instance = createInstance();
 export const hospital = createInstanceWithURL('hospital');
+export const user = createInstanceWithURL('user');
 
 function signupUser(userData){
     return instance.post('signup', userData);
