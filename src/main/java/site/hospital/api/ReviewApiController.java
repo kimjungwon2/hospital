@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class ReviewApiController {
     private final ReviewService reviewService;

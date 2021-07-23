@@ -16,6 +16,9 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
+jwt:
+  secret: jwtsecret
+
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace

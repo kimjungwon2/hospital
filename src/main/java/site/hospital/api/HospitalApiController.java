@@ -15,7 +15,6 @@ import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.service.HospitalService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class HospitalApiController {
 

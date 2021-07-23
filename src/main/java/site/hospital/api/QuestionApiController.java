@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class QuestionApiController {
     private final QuestionService questionService;
