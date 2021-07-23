@@ -1,10 +1,6 @@
 <template>
   <div>
       <h1>병원 정보</h1>
-    <ViewMapForm 
-    :detailed="this.detailed"
-    >
-    </ViewMapForm>
 
             제목: {{hospital.hospitalName}} | 발급일: {{licensingDate | formatYear}}
 
