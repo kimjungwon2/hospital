@@ -1,13 +1,8 @@
 <template>
   <div>병원 보기
-    <ViewMapForm 
-    :detailed="this.detailed"
-    >
-    </ViewMapForm>
     <div>
       <button>리뷰작성{{staffHosInfoId}}</button>
       <button>즐겨찾기</button>
-      위도:{{detailed.latitude}} 경도:{{detailed.longitude}}
     </div>
 
     <div>
@@ -31,7 +26,6 @@
 </template>
 
 <script>
-import ViewMapForm from '@/components/hospital/ViewMapForm.vue'
 import ViewHospitalForm from '@/components/hospital/ViewHospitalForm.vue';
 import ViewDetailedInfoForm from '@/components/hospital/ViewDetailedInfoForm.vue';
 import ViewHospitalReviewForm from '@/components/hospital/ViewHospitalReviewForm.vue';
@@ -75,13 +69,11 @@ export default {
       this.isReview=false;
       this.isQandA=true;
     },
-    getChild(detailed){
-      this.detailed = detailed;
-      this.staffHosInfoId = detailed.staffHosInfoId;
+    getChild(staffHosInfoId){
+      this.staffHosInfoId = staffHosInfoId;
     },
   },
   components:{
-      ViewMapForm,
       ViewHospitalForm,
       ViewDetailedInfoForm,
       ViewHospitalReviewForm,

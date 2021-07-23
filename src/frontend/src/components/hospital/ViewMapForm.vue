@@ -35,8 +35,7 @@ export default {
 
           const map = new kakao.maps.Map(container, options)
           const markerPosition = new kakao.maps.LatLng(this.detailed.latitude, this.detailed.longitude);
-          console.log(this.detailed.longitude);
-          console.log(this.detailed.latitude);
+          console.log('지도출력');
           const marker = new kakao.maps.Marker({
           position: markerPosition
       });

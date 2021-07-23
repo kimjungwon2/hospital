@@ -1,5 +1,9 @@
 <template>
   <div>
+      <ViewMapForm v-if= "this.hospital.detailedHosId !==null"
+      :detailed="this.detailed"
+      >
+      </ViewMapForm>
       <h1>병원 정보</h1>
 
             제목: {{hospital.hospitalName}} | 발급일: {{licensingDate | formatYear}}
@@ -16,6 +20,7 @@
 
 <script>
 import {viewHospital} from '@/api/hospital';
+import ViewMapForm from '@/components/hospital/ViewMapForm.vue';
 
 export default {
     data() {
@@ -35,7 +40,11 @@ export default {
             
             //부모에게 전달할 추가 병원 정보 ID
             detailed:{},
+            staffHosInfoId:'',
         };
+    },
+    components:{
+        ViewMapForm,
     },
     methods:{
         createTags(){
@@ -69,15 +78,15 @@ export default {
         this.countTags = this.tags.length;
         this.createTags();
 
-        //스태프 정보 부모 컴포넌트에 전달.
         this.detailed = {
-            staffHosInfoId: this.hospital.staffHosInfoId,
             landLotBasedSystem: this.hospital.landLotBasedSystem,
-            detailedHosId: this.hospital.detailedHosId,
             latitude: this.hospital.latitude,
-            longitude: this.hospital.longitude};
-            
-        this.$emit("child-event", this.detailed);
+            longitude: this.hospital.longitude
+        };
+
+        //스태프 정보 부모 컴포넌트에 전달
+        this.staffHosInfoId = this.hospital.staffHosInfoId;
+        this.$emit("child-event", this.staffHosInfoId);
     },
 }
 </script>
