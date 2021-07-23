@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class ViewHospitalDTO {
     private Long hospitalId;
+    private Long detailedHosId;
     private Long staffHosInfoId;
     private String licensingDate;
     private String hospitalName;
@@ -41,7 +42,7 @@ public class ViewHospitalDTO {
     private List<HospitalEstimationDTO> hospitalEstimations;
 
     @QueryProjection
-    public ViewHospitalDTO(Long hospitalId, Long staffHosInfoId, String licensingDate, String hospitalName,
+    public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId, String licensingDate, String hospitalName,
                            String phoneNumber, String distinguishedName,
                            String medicalSubjectInformation, String businessCondition,
                            String cityName, String landLotBasedSystem,
@@ -51,6 +52,7 @@ public class ViewHospitalDTO {
                            BigDecimal latitude, BigDecimal longitude) {
 
         this.hospitalId = hospitalId;
+        this.detailedHosId = detailedHosId;
         this.staffHosInfoId = staffHosInfoId;
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
