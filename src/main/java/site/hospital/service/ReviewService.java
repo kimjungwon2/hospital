@@ -77,4 +77,9 @@ public class ReviewService {
     public List<Review> adminReviewView(){
         return reviewRepository.hospitalReviewSearch(null, null);
     }
+
+    //관리자 리뷰 검색
+    public List<Review> adminReviews(int offset, int limit){
+        return reviewRepository.adminReviews(offset, limit);
+    }
 }

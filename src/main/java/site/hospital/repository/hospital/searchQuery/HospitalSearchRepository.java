@@ -84,7 +84,7 @@ public class HospitalSearchRepository {
                         )
                 )
                 .from(hospital)
-                .join(hospital.detailedHosInformation, detailedHosInformation)
+                .leftJoin(hospital.detailedHosInformation, detailedHosInformation)
                 .where( (hospitalNameLike(searchName)
                         .or(hospitalSubjectLike(searchName)
                         .or(tagNameLike(searchName))))

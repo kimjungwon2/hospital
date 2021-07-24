@@ -41,8 +41,8 @@ public class MemberService {
     }
 
     //멤버 Search
-    public Page<MemberSearchResult> search(MemberSearchCondition condition, Pageable pageable){
-        return memberRepository.search(condition, pageable);
+    public Page<MemberSearchResult> memberSearch(MemberSearchCondition condition, Pageable pageable){
+        return memberRepository.memberSearch(condition, pageable);
     }
 
     private void validateDuplicateMember(Member member){

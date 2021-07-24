@@ -84,6 +84,16 @@ public class ReviewApiController {
         return reviewService.searchReview(condition, pageable);
     }
 
+    //관리자 리뷰 검색
+    @GetMapping("/admin/reviews")
+    public List<AdminReviewsResponse> adminReviews(@RequestParam(value="offset",defaultValue = "0") int offset,
+                                                   @RequestParam(value="limit",defaultValue = "20") int limit){
+        List<Review> reviews = reviewService.adminReviews(offset, limit);
+        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
+                .collect(Collectors.toList());
+
+        return result;
+    }
 
     /* DTO */
     @Data
@@ -277,6 +287,35 @@ public class ReviewApiController {
             this.likeNumber =reviewHospital.getLikeNumber();
             this.recommendationStatus = reviewHospital.getRecommendationStatus();
             this.evaluationCriteria = reviewHospital.getEvCriteria();
+        }
+    }
+
+        @Data
+        private static class AdminReviewsResponse{
+        private Long reviewId;
+        private String memberIdName;
+        private String nickName;
+        private List<AdminReviewsHospitalDto> reviewHospitals;
+
+
+        public AdminReviewsResponse(Review review) {
+            this.reviewId = review.getId();
+            this.memberIdName = review.getMember().getMemberIdName();
+            this.nickName = review.getMember().getNickName();
+            this.reviewHospitals = review.getReviewHospitals().stream()
+                    .map(reviewHospital -> new AdminReviewsHospitalDto(reviewHospital))
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        private static class AdminReviewsHospitalDto{
+            private String hospitalName;
+            private Double averageRate;
+
+            public AdminReviewsHospitalDto(ReviewHospital reviewHospital) {
+                this.hospitalName = reviewHospital.getHospital().getHospitalName();
+                this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
+            }
         }
     }
 

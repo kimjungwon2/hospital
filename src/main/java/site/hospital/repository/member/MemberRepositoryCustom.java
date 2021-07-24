@@ -6,5 +6,5 @@ import site.hospital.repository.member.simplequery.MemberSearchResult;
 import site.hospital.repository.member.simplequery.MemberSearchCondition;
 
 public interface MemberRepositoryCustom {
-    Page<MemberSearchResult> search(MemberSearchCondition condition, Pageable pageable);
+    Page<MemberSearchResult> memberSearch(MemberSearchCondition condition, Pageable pageable);
 }

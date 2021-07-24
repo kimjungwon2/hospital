@@ -1,6 +1,8 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Hospital;
@@ -69,15 +71,15 @@ public class QuestionService {
     }
 
     //멤버 자신의 Question 조회
-    public List<Question> searchMemberQuestion(Long memberId){
-        List<Question> question = questionRepository.searchQuestion(memberId, null);
+    public Page<Question> searchMemberQuestion(Long memberId, Pageable pageable){
+        Page<Question> question = questionRepository.searchQuestion(memberId, null, pageable);
 
         return question;
     }
 
     //관리자 병원 Question 조회
-    public List<Question> searchAdminQuestion(){
-        List<Question> question = questionRepository.searchQuestion(null, null);
+    public Page<Question> searchAdminQuestion(Pageable pageable){
+        Page<Question> question = questionRepository.searchQuestion(null, null, pageable);
 
         return question;
     }

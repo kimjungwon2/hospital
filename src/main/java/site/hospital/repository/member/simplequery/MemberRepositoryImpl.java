@@ -26,14 +26,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public Page<MemberSearchResult> search(MemberSearchCondition condition, Pageable pageable){
+    public Page<MemberSearchResult> memberSearch(MemberSearchCondition condition, Pageable pageable){
 
         //모두 검색
         if(condition.getAllSearch() != null){
             QueryResults<MemberSearchResult> result = queryFactory
                     .select(new QMemberSearchResult(member.id.as("memberId"),
                             member.memberIdName,
-                            member.password,member.nickName,
+                            member.nickName,
                             member.userName, member.phoneNumber,
                             member.authorizationStatus, member.hospitalNumber)
                     )
@@ -57,7 +57,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
             QueryResults<MemberSearchResult> result = queryFactory
                     .select(new QMemberSearchResult(member.id.as("memberId"),
                             member.memberIdName,
-                            member.password,member.nickName,
+                            member.nickName,
                             member.userName, member.phoneNumber,
                             member.authorizationStatus, member.hospitalNumber)
                     )

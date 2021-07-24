@@ -47,9 +47,9 @@ public class MemberApiController {
     }
 
     //관리자 유저 전체 조회
-    @GetMapping("/admin/search/user")
-    public Page<MemberSearchResult> searchMember(MemberSearchCondition condition, Pageable pageable){
-        return memberService.search(condition, pageable);
+    @PostMapping("/admin/search/user")
+    public Page<MemberSearchResult> searchMember(@RequestBody @Validated MemberSearchCondition condition, Pageable pageable){
+        return memberService.memberSearch(condition, pageable);
     }
 
 

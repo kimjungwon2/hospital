@@ -1,7 +1,11 @@
 package site.hospital.repository.question;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import site.hospital.domain.Question;
 
 import javax.persistence.EntityManager;
@@ -32,16 +36,21 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         return result;
     }
 
-    public List<Question> searchQuestion(Long memberId, Long hospitalId){
-        List<Question> result = queryFactory
+    public Page<Question> searchQuestion(Long memberId, Long hospitalId, Pageable pageable){
+        QueryResults<Question> result = queryFactory
                 .select(question)
                 .from(question)
                 .join(question.member, member).fetchJoin()
                 .join(question.hospital, hospital).fetchJoin()
                 .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
-                .fetch();
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
-        return result;
+        List<Question> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content,pageable,total);
     }
 
     private BooleanExpression memberIdEq(Long id){

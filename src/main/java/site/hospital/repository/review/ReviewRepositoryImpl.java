@@ -1,9 +1,14 @@
 package site.hospital.repository.review;
 
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import site.hospital.domain.review.Review;
+import site.hospital.dto.ReviewSearchCondition;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -27,6 +32,19 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
                 .from(review)
                 .join(review.member, member).fetchJoin()
                 .where(hospitalIdEq(hospitalId),reviewIdEq(reviewId),memberIdEq(memberId))
+                .fetch();
+
+        return result;
+    }
+
+    @Override
+    public List<Review> adminReviews(int offset, int limit){
+        List<Review> result = queryFactory
+                .select(review)
+                .from(review)
+                .join(review.member, member).fetchJoin()
+                .offset(offset)
+                .limit(limit)
                 .fetch();
 
         return result;

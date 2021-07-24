@@ -7,9 +7,7 @@ import site.hospital.domain.member.Authorization;
 @Data
 public class MemberSearchResult {
     private long memberId;
-
     private String memberIdName;
-    private String password;
     private String nickName;
     private String userName;
     private String phoneNumber;
@@ -22,12 +20,11 @@ public class MemberSearchResult {
 
     @QueryProjection
     public MemberSearchResult(long memberId, String memberIdName,
-                              String password, String nickName,
+                              String nickName,
                               String userName, String phoneNumber,
                               Authorization authorizationStatus, Long hospitalNumber) {
         this.memberId = memberId;
         this.memberIdName = memberIdName;
-        this.password = password;
         this.nickName = nickName;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
