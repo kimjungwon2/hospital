@@ -10,6 +10,7 @@ import site.hospital.domain.member.Member;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.review.Review;
 import site.hospital.domain.reviewHospital.ReviewHospital;
+import site.hospital.dto.AdminReviewSearchCondition;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.review.ReviewRepository;
@@ -78,8 +79,13 @@ public class ReviewService {
         return reviewRepository.hospitalReviewSearch(null, null);
     }
 
+    //관리자 리뷰 조회
+    public Page<Review> adminReviews(Pageable pageable){
+        return reviewRepository.adminReviews(pageable);
+    }
+
     //관리자 리뷰 검색
-    public List<Review> adminReviews(int offset, int limit){
-        return reviewRepository.adminReviews(offset, limit);
+    public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable){
+        return reviewRepository.adminSearchReviews(condition, pageable);
     }
 }

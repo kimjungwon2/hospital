@@ -3,6 +3,7 @@ package site.hospital.api;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.domain.reviewHospital.EvaluationCriteria;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
+import site.hospital.dto.AdminReviewSearchCondition;
 import site.hospital.repository.review.query.ReviewSearchCondition;
 import site.hospital.repository.review.query.ReviewSearchDto;
 import site.hospital.service.ReviewService;
@@ -84,16 +86,37 @@ public class ReviewApiController {
         return reviewService.searchReview(condition, pageable);
     }
 
-    //관리자 리뷰 검색
+    //관리자 리뷰 조회
     @GetMapping("/admin/reviews")
-    public List<AdminReviewsResponse> adminReviews(@RequestParam(value="offset",defaultValue = "0") int offset,
-                                                   @RequestParam(value="limit",defaultValue = "20") int limit){
-        List<Review> reviews = reviewService.adminReviews(offset, limit);
+    public Page<AdminReviewsResponse> adminReviews(Pageable pageable){
+        Page<Review> reviews = reviewService.adminReviews(pageable);
         List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
                 .collect(Collectors.toList());
 
-        return result;
+        long total = reviews.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
     }
+
+    //관리자 리뷰 검색
+    @GetMapping("/admin/reviews/search")
+    public Page<AdminReviewsResponse> adminSearchReviews(@RequestParam(value="nickName",required = false) String nickName,
+                                                         @RequestParam(value="hospitalName",required = false) String hospitalName,
+                                                         @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                                         Pageable pageable){
+        //받은 값들 생성자로 생성.
+        AdminReviewSearchCondition condition = AdminReviewSearchCondition.builder()
+                .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
+
+        Page<Review> reviews = reviewService.adminSearchReviews(condition,pageable);
+        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
+                .collect(Collectors.toList());
+
+        Long total = reviews.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
+    }
+
 
     /* DTO */
     @Data
