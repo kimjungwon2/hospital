@@ -9,6 +9,7 @@
           <ul class="navbar_menu" v-if="isLogin">
               <li><router-link to="/user/activity">나의 활동</router-link></li>
               <li><router-link to="/user/info">정보 수정</router-link></li>
+              <li><router-link to="/admin">관리 페이지</router-link></li>
           </ul>
 
 
@@ -64,7 +65,7 @@ header{
   color: #A0605F;
 }
 
-a{
+.navbar a{
   text-decoration: none;
   color:white;
 }
