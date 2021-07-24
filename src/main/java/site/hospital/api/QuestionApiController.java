@@ -2,9 +2,14 @@ package site.hospital.api;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Question;
+import site.hospital.dto.AdminQuestionSearchCondition;
+import site.hospital.repository.question.adminSearchQuery.AdminSearchQuestionDto;
 import site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO;
 import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
 import site.hospital.service.QuestionService;
@@ -47,6 +52,25 @@ public class QuestionApiController {
         return result;
     }
 
+    //관리자 Question 조회
+    @GetMapping("/admin/questions")
+    public Page<AdminSearchQuestionDto> adminQuestions(Pageable pageable){
+        return questionService.adminQuestions(pageable);
+    }
+
+    //관리자 Questions 검색
+    @GetMapping("/admin/questions/search")
+    public Page<AdminSearchQuestionDto> adminSearchQuestions(@RequestParam(value="nickName",required = false) String nickName,
+                                                             @RequestParam(value="hospitalName",required = false) String hospitalName,
+                                                             @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                                             Pageable pageable){
+        AdminQuestionSearchCondition condition = AdminQuestionSearchCondition.builder()
+                .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
+
+        return questionService.adminSearchQuestions(condition,pageable);
+    }
+
+
 
     /* DTO */
     @Data
@@ -82,5 +106,6 @@ public class QuestionApiController {
 
         }
     }
+
 
 }

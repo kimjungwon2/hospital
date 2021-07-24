@@ -1,28 +1,28 @@
-package site.hospital.repository.member.simplequery;
+package site.hospital.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Data;
 import site.hospital.domain.member.Authorization;
 
 @Data
-public class MemberSearchResult {
-    private long memberId;
+public class AdminMemberSearchCondition {
+    //모두 검색
+    private String allSearch;
+
+    private Long memberId;
     private String memberIdName;
     private String nickName;
     private String userName;
     private String phoneNumber;
-
-    //회원 권한 부여 상태. [NORMAL, STAFF, ADMIN]
     private Authorization authorizationStatus;
-
-    //병원 번호
     private Long hospitalNumber;
 
-    @QueryProjection
-    public MemberSearchResult(long memberId, String memberIdName,
-                              String nickName,
-                              String userName, String phoneNumber,
-                              Authorization authorizationStatus, Long hospitalNumber) {
+    @Builder
+    public AdminMemberSearchCondition(String allSearch, Long memberId, String memberIdName,
+                                      String nickName, String userName,
+                                      String phoneNumber, Authorization authorizationStatus,
+                                      Long hospitalNumber) {
+        this.allSearch = allSearch;
         this.memberId = memberId;
         this.memberIdName = memberIdName;
         this.nickName = nickName;

@@ -1,21 +1,22 @@
 package site.hospital.api;
 
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
-import site.hospital.repository.member.simplequery.MemberSearchCondition;
-import site.hospital.repository.member.simplequery.MemberSearchResult;
+import site.hospital.dto.AdminMemberSearchCondition;
 import site.hospital.service.MemberService;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,10 +47,42 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
-    //관리자 유저 전체 조회
-    @PostMapping("/admin/search/user")
-    public Page<MemberSearchResult> searchMember(@RequestBody @Validated MemberSearchCondition condition, Pageable pageable){
-        return memberService.memberSearch(condition, pageable);
+    //관리자 유저 조회
+    @GetMapping("/admin/users")
+    public Page<MemberSearchResult> adminMembers(Pageable pageable){
+        Page<Member> members = memberService.adminMembers(pageable);
+        List<MemberSearchResult> result = members.stream()
+                .map(m->new MemberSearchResult(m)).collect(Collectors.toList());
+
+        Long total =members.getTotalElements();
+
+        return new PageImpl<>(result, pageable,total);
+    }
+
+    //관리자 유저 검색
+    @GetMapping("/admin/users/search")
+    public Page<MemberSearchResult> adminSearchMembers(@RequestParam(value="allSearch",required = false) String allSearch,
+                                                       @RequestParam(value="memberId",required = false) Long memberId,
+                                                       @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                                       @RequestParam(value="nickName",required = false) String nickName,
+                                                       @RequestParam(value="userName",required = false) String userName,
+                                                       @RequestParam(value="phoneNumber",required = false) String phoneNumber,
+                                                       @RequestParam(value="authorizationStatus",required = false) Authorization authorizationStatus,
+                                                       @RequestParam(value="hospitalNumber",required = false) Long hospitalNumber,
+                                                       Pageable pageable){
+
+        //받은 값들 생성자로 생성.
+        AdminMemberSearchCondition condition = AdminMemberSearchCondition.builder()
+                .allSearch(allSearch).memberId(memberId).memberIdName(memberIdName).nickName(nickName)
+        .userName(userName).phoneNumber(phoneNumber).authorizationStatus(authorizationStatus).hospitalNumber(hospitalNumber).build();
+
+        Page<Member> members = memberService.adminSearchMembers(condition, pageable);
+        List<MemberSearchResult> result = members.stream()
+                .map(m->new MemberSearchResult(m)).collect(Collectors.toList());
+
+        Long total =members.getTotalElements();
+
+        return new PageImpl<>(result, pageable,total);
     }
 
 
@@ -108,4 +141,24 @@ public class MemberApiController {
         }
     }
 
+    @Data
+    public static class MemberSearchResult {
+        private Long memberId;
+        private String memberIdName;
+        private String nickName;
+        private String userName;
+        private String phoneNumber;
+        private Authorization authorizationStatus;
+        private Long hospitalNumber;
+
+        public MemberSearchResult(Member member) {
+            this.memberId = member.getId();
+            this.memberIdName = member.getMemberIdName();
+            this.nickName = member.getNickName();
+            this.userName = member.getUserName();
+            this.phoneNumber = member.getPhoneNumber();
+            this.authorizationStatus = member.getAuthorizationStatus();
+            this.hospitalNumber = member.getHospitalNumber();
+        }
+    }
 }

@@ -8,9 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.Question;
 import site.hospital.domain.member.Member;
+import site.hospital.dto.AdminQuestionSearchCondition;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.question.QuestionRepository;
 import site.hospital.repository.member.MemberRepository;
+import site.hospital.repository.question.adminSearchQuery.AdminQuestionSearchRepository;
+import site.hospital.repository.question.adminSearchQuery.AdminSearchQuestionDto;
 import site.hospital.repository.question.simpleQuery.HospitalQuestionRepository;
 import site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO;
 import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
@@ -28,6 +31,7 @@ public class QuestionService {
     private final HospitalRepository hospitalRepository;
     private final HospitalQuestionRepository hospitalQuestionRepository;
     private final UserQuestionRepository userQuestionRepository;
+    private final AdminQuestionSearchRepository adminQuestionSearchRepository;
 
     //Question 작성
     @Transactional
@@ -78,10 +82,13 @@ public class QuestionService {
     }
 
     //관리자 병원 Question 조회
-    public Page<Question> searchAdminQuestion(Pageable pageable){
-        Page<Question> question = questionRepository.searchQuestion(null, null, pageable);
+    public Page<AdminSearchQuestionDto> adminQuestions(Pageable pageable){
+        return adminQuestionSearchRepository.adminQuestions(pageable);
+    }
 
-        return question;
+    //관리자 병원 Question 검색
+    public Page<AdminSearchQuestionDto> adminSearchQuestions(AdminQuestionSearchCondition condition, Pageable pageable){
+        return adminQuestionSearchRepository.adminSearchQuestions(condition,pageable);
     }
 
 }

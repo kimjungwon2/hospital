@@ -1,4 +1,4 @@
-package site.hospital.repository.member.simplequery;
+package site.hospital.repository.member;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -9,7 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.member.Authorization;
-import site.hospital.repository.member.MemberRepositoryCustom;
+import site.hospital.domain.member.Member;
+import site.hospital.dto.AdminMemberSearchCondition;
 
 import static site.hospital.domain.member.QMember.member;
 import static org.springframework.util.StringUtils.hasText;
@@ -26,45 +27,53 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public Page<MemberSearchResult> memberSearch(MemberSearchCondition condition, Pageable pageable){
+    public Page<Member> adminMembers(Pageable pageable) {
+        QueryResults<Member> result = queryFactory
+                .select(member)
+                .from(member)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
-        //모두 검색
+        List<Member> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+
+    }
+
+
+    @Override
+    public Page<Member> adminSearchMembers(AdminMemberSearchCondition condition, Pageable pageable){
+
+        //모두 검색(아이디+닉네임+유저이름+폰번호)
         if(condition.getAllSearch() != null){
-            QueryResults<MemberSearchResult> result = queryFactory
-                    .select(new QMemberSearchResult(member.id.as("memberId"),
-                            member.memberIdName,
-                            member.nickName,
-                            member.userName, member.phoneNumber,
-                            member.authorizationStatus, member.hospitalNumber)
-                    )
+            QueryResults<Member> result = queryFactory
+                    .select(member)
                     .from(member)
                     .where(
-                            member.memberIdName.eq(condition.getAllSearch())
-                                    .or(member.nickName.eq(condition.getAllSearch()))
-                                    .or(member.userName.eq(condition.getAllSearch()))
+                            memberNickNameEq(condition.getAllSearch())
+                           .or(memberIdNameLike(condition.getAllSearch()))
+                           .or(memberUserNameEq(condition.getAllSearch()))
+                           .or(memberPhoneNumberEq(condition.getAllSearch()))
                     )
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetchResults();
 
-            List<MemberSearchResult> content = result.getResults();
+            List<Member> content = result.getResults();
             long total = result.getTotal();
 
             return new PageImpl<>(content, pageable, total);
         }
         //각자 검색
         else{
-            QueryResults<MemberSearchResult> result = queryFactory
-                    .select(new QMemberSearchResult(member.id.as("memberId"),
-                            member.memberIdName,
-                            member.nickName,
-                            member.userName, member.phoneNumber,
-                            member.authorizationStatus, member.hospitalNumber)
-                    )
+            QueryResults<Member> result = queryFactory
+                    .select(member)
                     .from(member)
                     .where(
                             memberIdEq(condition.getMemberId())
-                            ,(memberIdNameEq(condition.getMemberIdName()))
+                            ,(memberIdNameLike(condition.getMemberIdName()))
                             ,(memberNickNameEq(condition.getNickName()))
                             ,(memberUserNameEq(condition.getUserName()))
                             ,(memberPhoneNumberEq(condition.getPhoneNumber()))
@@ -75,7 +84,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                     .limit(pageable.getPageSize())
                     .fetchResults();
 
-            List<MemberSearchResult> content = result.getResults();
+            List<Member> content = result.getResults();
             long total = result.getTotal();
 
             return new PageImpl<>(content, pageable, total);
@@ -84,25 +93,25 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     private BooleanExpression memberIdEq(Long id){
-        return id != null? member.id.eq(id): null;
+        return id == null? null: member.id.eq(id);
     }
-    private BooleanExpression memberIdNameEq(String memberIdName){
-        return hasText(memberIdName) ? member.memberIdName.eq(memberIdName): null ;
+    private BooleanExpression memberIdNameLike(String memberIdName){
+        return memberIdName ==null ? null: member.memberIdName.contains(memberIdName) ;
     }
     private BooleanExpression memberNickNameEq(String nickName){
-        return hasText(nickName) ? member.nickName.eq(nickName): null ;
+        return nickName == null ? null: member.nickName.eq(nickName);
     }
     private BooleanExpression memberUserNameEq(String userName){
-        return hasText(userName) ? member.userName.eq(userName): null ;
+        return userName == null ? null: member.userName.eq(userName);
     }
     private BooleanExpression memberPhoneNumberEq(String phoneNumber){
-        return hasText(phoneNumber)? member.phoneNumber.eq(phoneNumber) : null;
+        return phoneNumber == null? null: member.phoneNumber.eq(phoneNumber) ;
     }
     private BooleanExpression memberAuthorizationStatusEq(Authorization authorizationStatus){
-        return authorizationStatus != null? member.authorizationStatus.eq(authorizationStatus): null;
+        return authorizationStatus == null? null: member.authorizationStatus.eq(authorizationStatus);
     }
     private BooleanExpression memberHospitalNumberEq(Long hospitalNumber){
-        return hospitalNumber != null? member.hospitalNumber.eq(hospitalNumber): null;
+        return hospitalNumber == null? null: member.hospitalNumber.eq(hospitalNumber);
     }
 
 }

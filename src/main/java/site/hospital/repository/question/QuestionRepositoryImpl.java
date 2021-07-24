@@ -53,6 +53,23 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         return new PageImpl<>(content,pageable,total);
     }
 
+    public Page<Question> adminSearchQuestion(Long memberId, Long hospitalId, Pageable pageable){
+        QueryResults<Question> result = queryFactory
+                .select(question)
+                .from(question)
+                .join(question.member, member).fetchJoin()
+                .join(question.hospital, hospital).fetchJoin()
+                .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Question> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content,pageable,total);
+    }
+
     private BooleanExpression memberIdEq(Long id){
         return id == null? null:question.member.id.eq(id);
     }

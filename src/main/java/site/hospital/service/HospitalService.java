@@ -8,8 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
+import site.hospital.dto.AdminHospitalSearchCondition;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
+import site.hospital.repository.hospital.adminSearchQuery.AdminHospitalSearchRepository;
+import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchRepository;
 import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;
@@ -24,6 +27,7 @@ public class HospitalService {
     private final StaffHosRepository staffHosRepository;
     private final HospitalSearchRepository hospitalSearchRepository;
     private final HospitalViewRepository hospitalViewRepository;
+    private final AdminHospitalSearchRepository adminHospitalSearchRepository;
 
     //병원 + 상세 정보등록
     @Transactional
@@ -103,5 +107,16 @@ public class HospitalService {
     //병원 정보 상세 보기
     public ViewHospitalDTO viewHospital(Long hospitalId){
         return hospitalViewRepository.viewHospital(hospitalId);
+    }
+
+
+    //관리자 병원 조회
+    public Page<AdminSearchHospitalDto> adminHospitals(Pageable pageable){
+        return adminHospitalSearchRepository.adminHospitals(pageable);
+    }
+
+    //관리자 병원 검색
+    public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition, Pageable pageable){
+        return adminHospitalSearchRepository.adminSearchHospitals(condition, pageable);
     }
 }

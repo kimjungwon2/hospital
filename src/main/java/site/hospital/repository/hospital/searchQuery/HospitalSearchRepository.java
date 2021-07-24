@@ -70,9 +70,7 @@ public class HospitalSearchRepository {
         result.forEach(h->h.setPostTagDtos(tagHospitalMap.get(h.getHospitalId())));
 
         return result;
-
     }
-
 
     private Page<HospitalSearchDto> findHospitals(String searchName, Pageable pageable){
         List<HospitalSearchDto> content =  queryFactory

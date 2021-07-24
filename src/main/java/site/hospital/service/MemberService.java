@@ -6,8 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.member.Member;
-import site.hospital.repository.member.simplequery.MemberSearchCondition;
-import site.hospital.repository.member.simplequery.MemberSearchResult;
+import site.hospital.dto.AdminMemberSearchCondition;
 import site.hospital.repository.member.MemberRepository;
 
 
@@ -40,17 +39,23 @@ public class MemberService {
 
     }
 
-    //멤버 Search
-    public Page<MemberSearchResult> memberSearch(MemberSearchCondition condition, Pageable pageable){
-        return memberRepository.memberSearch(condition, pageable);
-    }
-
+    //중복 아이디 검사
     private void validateDuplicateMember(Member member){
         List<Member> findMembers = memberRepository.findByMemberIdName(member.getMemberIdName());
 
         if(!findMembers.isEmpty()){
             throw new IllegalStateException("이미 존재하는 회원.");
         }
+    }
+
+    //관리자 멤버 보기
+    public Page<Member> adminMembers(Pageable pageable){
+        return memberRepository.adminMembers(pageable);
+    }
+
+
+    public Page<Member> adminSearchMembers(AdminMemberSearchCondition condition, Pageable pageable){
+        return memberRepository.adminSearchMembers(condition,pageable);
     }
 
     // 관리자 멤버 권한 주기

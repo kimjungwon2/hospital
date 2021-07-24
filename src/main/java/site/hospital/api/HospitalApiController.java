@@ -80,6 +80,25 @@ public class HospitalApiController {
         return new CreateStaffHospitalResponse(id);
     }
 
+    //관리자 병원 조회
+    @GetMapping("/admin/hospitals")
+    public Page<AdminSearchHospitalDto> adminHospitals(Pageable pageable){
+        return hospitalService.adminHospitals(pageable);
+    }
+
+    //관리자 병원 검색
+    @GetMapping("/admin/hospitals/search")
+    public Page<AdminSearchHospitalDto> adminSearchHospitals(@RequestParam(value="hospitalId",required = false) Long hospitalId,
+                                                             @RequestParam(value="hospitalName",required = false) String hospitalName,
+                                                             @RequestParam(value="businessCondition",required = false) String businessCondition,
+                                                             @RequestParam(value="cityName",required = false) String cityName,
+                                                             Pageable pageable){
+        AdminHospitalSearchCondition condition = AdminHospitalSearchCondition.builder()
+                .hospitalId(hospitalId).hospitalName(hospitalName).businessCondition(businessCondition).cityName(cityName).build();
+
+        return hospitalService.adminSearchHospitals(condition, pageable);
+    }
+
     //병원 + 상세 내용 수정
     @PostMapping("/admin/hospital/modify")
     public CreateHospitalResponse saveHospitalResponse(@RequestBody @Validated ModifyHospitalRequest request){
