@@ -126,7 +126,6 @@ public class HospitalApiController {
     }
 
     //관리자 병원 삭제
-    //관리자 Question 삭제
     @DeleteMapping("/admin/hospital/delete/{hospitalId}")
     public void deleteHospital(@PathVariable("hospitalId") Long hospitalId,
                                @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
@@ -135,11 +134,20 @@ public class HospitalApiController {
 
     //관리자 병원 추가 정보 등록
     @PostMapping("/admin/hospital/register/staff")
-    public Long AdminCreateStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
-        Long id = hospitalService.adminRegisterStaffHosInformation(request.getHospitalId(),request.getPhoto(),
-                request.getIntroduction(),request.getConsultationHour(),request.getAbnormality());
+    public AdminCreateStaffHosResponse adminCreateStaffHosResponse(@RequestBody @Validated AdminCreateStaffHosRequest request){
+        StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
+                .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).photo(request.getPhoto()).build();
 
-        return id;
+        //의사 정보가 있어야지 의사 추가.
+        if(request.getDoctors()!=null) {
+            List<Doctor> doctors = request.getDoctors().stream().map(d -> new Doctor(d)).collect(Collectors.toList());
+            Long id = hospitalService.adminRegisterStaffHosInformation(request.getHospitalId(),staffHosInformation, doctors);
+            return new AdminCreateStaffHosResponse(id);
+        }
+
+        //추가 정보만 추가.
+        Long id = hospitalService.adminRegisterStaffHosInfo(request.getHospitalId(), staffHosInformation);
+        return new AdminCreateStaffHosResponse(id);
     }
 
 

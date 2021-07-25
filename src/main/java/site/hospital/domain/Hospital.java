@@ -92,6 +92,11 @@ public class Hospital extends BaseTimeEntity {
         this.cityName = cityName;
     }
 
+    //staffHos fk키 지우기
+    public void deleteStaffHosId(){
+        this.staffHosInformation = null;
+    }
+
     // 비즈니스 메서드 //
 
 

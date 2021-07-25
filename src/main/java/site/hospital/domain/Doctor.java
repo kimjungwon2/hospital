@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
 
 import javax.persistence.*;
 
@@ -25,10 +26,9 @@ public class Doctor extends BaseTimeEntity {
     private String history;
     private String photo;
 
-    //== 연관 관계 메서드 ==//
-    public void changeStaffHosInformation(StaffHosInformation staffHosInformation){
+    //연관 관계 때문에 설정.
+    public void setStaffHosInformation(StaffHosInformation staffHosInformation) {
         this.staffHosInformation = staffHosInformation;
-        staffHosInformation.getDoctors().add(this);
     }
 
     @Builder

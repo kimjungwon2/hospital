@@ -27,9 +27,17 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom{
                 .leftJoin(hospital.staffHosInformation, staffHosInformation)
                 .where(hospitalIdEq(hospitalId))
                 .fetchOne();
-
         return result;
     }
+
+    public Hospital findByStaffHosId(Long staffHosId){
+        Hospital result = queryFactory
+                .selectFrom(hospital)
+                .where(hospital.staffHosInformation.id.eq(staffHosId))
+                .fetchOne();
+        return result;
+    }
+
     private BooleanExpression hospitalIdEq(Long id){
         return id != null? hospital.id.eq(id): null;
     }

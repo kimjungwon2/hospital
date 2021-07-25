@@ -2,6 +2,7 @@ package site.hospital.api;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
@@ -33,6 +34,12 @@ public class StaffHosApiController {
         StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
 
         return staffHosInfoView;
+    }
+
+    //관리자 추가 정보 삭제하기
+    @DeleteMapping("/admin/staffHosInfo/delete/{staffHosId}")
+    public void deleteStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
+        staffHosService.adminDeleteStaffHosInfo(staffHosId);
     }
 
     /*DTO*/
@@ -67,5 +74,17 @@ public class StaffHosApiController {
             this.photo = doctor.getPhoto();
         }
     }
+
+    @Data
+    private static class AdminCreateStaffHosResponse{
+        Long staffHosInfoId;
+
+        public AdminCreateStaffHosResponse(Long staffHosInfoId) {
+            this.staffHosInfoId = staffHosInfoId;
+        }
+    }
+
+
+
 
 }

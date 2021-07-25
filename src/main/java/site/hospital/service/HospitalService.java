@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
@@ -19,6 +20,8 @@ import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchRepository;
 import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly=true)
@@ -57,17 +60,31 @@ public class HospitalService {
     }
 
 
-    //관리자 병원 추가정보 등록.
+    //관리자 병원 추가정보 + 의사 등록
     @Transactional
-    public Long adminRegisterStaffHosInformation(Long hospitalId, String photo, String introduction,
-                                            String consultationHour, String abnormality){
+    public Long adminRegisterStaffHosInformation(Long hospitalId, StaffHosInformation staffHosInformation, List<Doctor> doctors){
         Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
 
         //병원 테이블 추가정보 유무 확인
         if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
 
-        StaffHosInformation staffHosInformation = StaffHosInformation.builder()
-                .photo(photo).introduction(introduction).consultationHour(consultationHour).abnormality(abnormality).build();
+        staffHosInformation.createStaffHosInformation(staffHosInformation,doctors);
+        staffHosRepository.save(staffHosInformation);
+
+        //양방향 연관관계
+        hospital.changeStaffHosInformation(staffHosInformation);
+        hospitalRepository.save(hospital);
+
+        return staffHosInformation.getId();
+    }
+
+    //관리자 병원 추가정보만 등록.
+    @Transactional
+    public Long adminRegisterStaffHosInfo(Long hospitalId, StaffHosInformation staffHosInformation){
+        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+
+        //병원 테이블 추가정보 유무 확인
+        if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
 
         staffHosRepository.save(staffHosInformation);
 
@@ -75,7 +92,7 @@ public class HospitalService {
         hospital.changeStaffHosInformation(staffHosInformation);
         hospitalRepository.save(hospital);
 
-        return hospital.getId();
+        return staffHosInformation.getId();
     }
 
 
@@ -135,11 +152,10 @@ public class HospitalService {
     @Transactional
     public void adminDeleteHospital(Long hospitalId, Long staffHosId){
         Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
-        hospitalRepository.deleteById(hospitalId);
-
 
         //병원 STAFF 정보도 삭제.
-        if(staffHosId!=null){
+        if(staffHosId!=null)
+        {
 
            if(hospital.getStaffHosInformation().getId() != staffHosId)
                throw new IllegalStateException("해당 병원과 staffId가 일치하지 않습니다.");
@@ -147,6 +163,8 @@ public class HospitalService {
            StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
            staffHosRepository.deleteById(staffHosId);
         }
+
+        hospitalRepository.deleteById(hospitalId);
     }
 
     //관리자 병원 수정하기

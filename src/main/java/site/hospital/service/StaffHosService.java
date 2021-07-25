@@ -13,12 +13,24 @@ import site.hospital.repository.StaffHosRepository;
 @RequiredArgsConstructor
 public class StaffHosService {
     private final StaffHosRepository staffHosRepository;
+    private final DoctorRepository doctorRepository;
+    private final HospitalRepository hospitalRepository;
 
     //병원 추가 정보 보기(고객)
     public StaffHosInformation viewStaffHosInfo(Long staffHosId){
         StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
 
         return staffHosInformation;
+    }
+
+    //병원 추가 정보 삭제
+    @Transactional
+    public void adminDeleteStaffHosInfo(Long staffHosId){
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
+        Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
+        hospital.deleteStaffHosId();
+
+        staffHosRepository.deleteById(staffHosId);
     }
 
 }
