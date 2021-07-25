@@ -29,7 +29,7 @@ public class AdminQuestionSearchRepository {
     public Page<AdminSearchQuestionDto> adminQuestions(Pageable pageable){
         QueryResults<AdminSearchQuestionDto> result = queryFactory
                 .select(new QAdminSearchQuestionDto(question.id, member.memberIdName,
-                        member.nickName, hospital.hospitalName, question.content, answer.answerContent))
+                        member.nickName, hospital.hospitalName, question.content, answer.id, answer.answerContent))
                 .from(question)
                 .join(question.member, member)
                 .leftJoin(question.answer, answer)
@@ -47,7 +47,7 @@ public class AdminQuestionSearchRepository {
     public Page<AdminSearchQuestionDto> adminSearchQuestions(AdminQuestionSearchCondition condition, Pageable pageable){
         QueryResults<AdminSearchQuestionDto> result = queryFactory
                 .select(new QAdminSearchQuestionDto(question.id, member.memberIdName,
-                        member.nickName, hospital.hospitalName, question.content, answer.answerContent))
+                        member.nickName, hospital.hospitalName, question.content, answer.id, answer.answerContent))
                 .from(question)
                 .join(question.member, member)
                 .leftJoin(question.answer, answer)

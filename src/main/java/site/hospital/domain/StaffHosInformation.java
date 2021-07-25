@@ -18,7 +18,7 @@ public class StaffHosInformation extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staffHosInformation_id")
-    private long id;
+    private Long id;
 
     @OneToOne(mappedBy = "staffHosInformation", fetch = FetchType.LAZY)
     private Hospital hospital;

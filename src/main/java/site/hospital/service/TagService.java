@@ -29,12 +29,13 @@ public class TagService {
             throw new IllegalStateException("이미 존재하는 태그이름.");
         }
     }
-
+    //태그 삭제
     @Transactional
     public void tagDelete(Long id){
         tagRepository.deleteById(id);
     }
 
+    //모든 태그 보기
     public List<Tag> allSearchTag(){
         return tagRepository.findAll();
     }

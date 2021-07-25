@@ -5,10 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.domain.Answer;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.Question;
 import site.hospital.domain.member.Member;
 import site.hospital.dto.AdminQuestionSearchCondition;
+import site.hospital.repository.AnswerRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.question.QuestionRepository;
 import site.hospital.repository.member.MemberRepository;
@@ -32,6 +34,7 @@ public class QuestionService {
     private final HospitalQuestionRepository hospitalQuestionRepository;
     private final UserQuestionRepository userQuestionRepository;
     private final AdminQuestionSearchRepository adminQuestionSearchRepository;
+    private final AnswerRepository answerRepository;
 
     //Question 작성
     @Transactional
@@ -91,4 +94,16 @@ public class QuestionService {
         return adminQuestionSearchRepository.adminSearchQuestions(condition,pageable);
     }
 
+    //관리자 병원 Question 삭제
+    @Transactional
+    public void questionDelete(Long questionId, Long answerId){
+        Question question = questionRepository.findById(questionId).orElse(null);
+        questionRepository.deleteById(questionId);
+
+        //Answer가 있으면 answer도 삭제.
+        if(answerId !=null) {
+            Answer answer =   answerRepository.findById(answerId).orElse(null);
+            answerRepository.deleteById(answerId);
+        }
+    }
 }

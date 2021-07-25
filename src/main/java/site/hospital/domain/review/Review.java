@@ -30,7 +30,7 @@ public class Review extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy="review")
+    @OneToMany(mappedBy="review", cascade = CascadeType.ALL)
     private List<ReviewHospital> reviewHospitals = new ArrayList<>();
 
     //== 연관 관계 메서드 ==/

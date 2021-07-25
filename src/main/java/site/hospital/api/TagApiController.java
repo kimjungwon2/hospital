@@ -18,25 +18,25 @@ import java.util.stream.Collectors;
 public class TagApiController {
     private final TagService tagService;
 
-    @PostMapping("/tag/create")
+    @PostMapping("/admin/tag/create")
     public CreateTagResponse saveTag(@RequestBody @Validated CreateTagRequest request){
         Tag tag = Tag.builder().
-                name(request.getName()).build();
+                name(request.getTagName()).build();
         Long id = tagService.tagCreate(tag);
 
         return new CreateTagResponse(id);
     }
 
-    @DeleteMapping("/tag/delete")
+    @DeleteMapping("/admin/tag/delete")
     public void deleteTag(@RequestBody @Validated DeleteTagRequest request){
         tagService.tagDelete(request.getTagId());
     }
 
-    @GetMapping("/tag/search")
+    @GetMapping("/admin/tag/search")
     public Result allSearchTag(){
         List<Tag> allTags = tagService.allSearchTag();
         List<allTag> collect = allTags.stream()
-                .map(t-> new allTag(t.getId(), t.getName(), t.getCreatedDate()))
+                .map(t-> new allTag(t))
                 .collect(Collectors.toList());
 
         return new Result(collect);
@@ -46,7 +46,7 @@ public class TagApiController {
     /* DTO */
     @Data
     private static class CreateTagRequest {
-        private String name;
+        private String tagName;
     }
 
     @Data
@@ -74,10 +74,10 @@ public class TagApiController {
         private String name;
         private LocalDateTime createdDate;
 
-        public allTag(Long tagId, String name, LocalDateTime createdDate) {
-            this.tagId = tagId;
-            this.name = name;
-            this.createdDate = createdDate;
+        public allTag(Tag tag) {
+            this.tagId = tag.getId();
+            this.name = tag.getName();
+            this.createdDate = tag.getCreatedDate();
         }
     }
 

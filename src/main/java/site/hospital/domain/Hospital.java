@@ -48,7 +48,6 @@ public class Hospital extends BaseTimeEntity {
     private String hospitalName;
     private String phoneNumber;
     private String distinguishedName;
-    private String medicalSubject;
     private String medicalSubjectInformation;
     private String businessCondition;
     private String cityName;
@@ -65,19 +64,29 @@ public class Hospital extends BaseTimeEntity {
         detailedHosInformation.setHospital(this);
     }
 
+    //병원 수정
+    public void modifyHospital(Hospital hospital) {
+        this.licensingDate = hospital.getLicensingDate();
+        this.hospitalName = hospital.getHospitalName();
+        this.phoneNumber = hospital.getPhoneNumber();
+        this.distinguishedName = hospital.getDistinguishedName();
+        this.medicalSubjectInformation = hospital.getMedicalSubjectInformation();
+        this.businessCondition = hospital.getBusinessCondition();
+        this.cityName = hospital.getCityName();
+    }
+
     /*생성자*/
 
     //병원 생성
     @Builder
     public Hospital(Long id, String licensingDate, String hospitalName,
-                    String phoneNumber, String distinguishedName, String medicalSubject,
+                    String phoneNumber, String distinguishedName,
                     String medicalSubjectInformation, String businessCondition, String cityName) {
         this.id = id;
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
         this.phoneNumber = phoneNumber;
         this.distinguishedName = distinguishedName;
-        this.medicalSubject = medicalSubject;
         this.medicalSubjectInformation = medicalSubjectInformation;
         this.businessCondition = businessCondition;
         this.cityName = cityName;

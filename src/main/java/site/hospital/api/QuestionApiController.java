@@ -70,6 +70,12 @@ public class QuestionApiController {
         return questionService.adminSearchQuestions(condition,pageable);
     }
 
+    //관리자 Question 삭제
+    @DeleteMapping("/admin/question/delete")
+    public void deleteQuestion(@RequestBody @Validated DeleteQuestionRequest request){
+        questionService.questionDelete(request.getQuestionId(),request.getAnswerId());
+    }
+
 
 
     /* DTO */
@@ -105,6 +111,12 @@ public class QuestionApiController {
             this.answerContent = question.getAnswer().getAnswerContent();
 
         }
+    }
+
+    @Data
+    private static class DeleteQuestionRequest{
+        private Long questionId;
+        private Long answerId;
     }
 
 

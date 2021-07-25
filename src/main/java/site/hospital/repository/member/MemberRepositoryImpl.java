@@ -13,7 +13,6 @@ import site.hospital.domain.member.Member;
 import site.hospital.dto.AdminMemberSearchCondition;
 
 import static site.hospital.domain.member.QMember.member;
-import static org.springframework.util.StringUtils.hasText;
 
 import javax.persistence.EntityManager;
 import java.util.List;

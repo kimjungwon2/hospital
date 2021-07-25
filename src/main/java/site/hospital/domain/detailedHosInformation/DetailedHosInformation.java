@@ -33,6 +33,15 @@ public class DetailedHosInformation extends BaseTimeEntity {
     @Embedded
     private HospitalLocation hospitalLocation;
 
+
+    public void modifyDetailedHosInformation(DetailedHosInformation detailedHosInformation){
+        this.numberHealthcareProvider = detailedHosInformation.getNumberHealthcareProvider();
+        this.numberWard = detailedHosInformation.getNumberWard();
+        this.numberPatientRoom = detailedHosInformation.getNumberPatientRoom();
+        this.hospitalAddress = detailedHosInformation.getHospitalAddress();
+        this.hospitalLocation = detailedHosInformation.getHospitalLocation();
+    }
+
     @Builder
     public DetailedHosInformation(int numberHealthcareProvider, int numberWard, int numberPatientRoom,
                                   HospitalAddress hospitalAddress, HospitalLocation hospitalLocation) {

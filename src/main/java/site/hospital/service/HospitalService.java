@@ -9,6 +9,8 @@ import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.dto.AdminHospitalSearchCondition;
+import site.hospital.dto.AdminModifyHospitalRequest;
+import site.hospital.repository.DetailedHosRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
 import site.hospital.repository.hospital.adminSearchQuery.AdminHospitalSearchRepository;
@@ -28,13 +30,11 @@ public class HospitalService {
     private final HospitalSearchRepository hospitalSearchRepository;
     private final HospitalViewRepository hospitalViewRepository;
     private final AdminHospitalSearchRepository adminHospitalSearchRepository;
+    private final DetailedHosRepository detailedHosRepository;
 
     //병원 + 상세 정보등록
     @Transactional
-    public Long register(Hospital hospital,DetailedHosInformation detailedHosInformation){
-
-        //병원 테이블 상세정보 유무 확인
-        if(hospital.getDetailedHosInformation() !=null) throw new IllegalStateException("이미 상세 정보가 있습니다.");
+    public Long register(Hospital hospital, DetailedHosInformation detailedHosInformation){
 
         hospital.changeDetailedHosInformation(detailedHosInformation);
         hospitalRepository.save(hospital);
@@ -48,6 +48,12 @@ public class HospitalService {
         hospitalRepository.save(hospital);
 
         return hospital.getId();
+    }
+
+    //병원 조회
+    public Hospital findOne(Long hospitalId){
+        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        return hospital;
     }
 
 
@@ -119,4 +125,59 @@ public class HospitalService {
     public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition, Pageable pageable){
         return adminHospitalSearchRepository.adminSearchHospitals(condition, pageable);
     }
+
+    //관리자 병원 보기
+    public Hospital adminViewHospital(Long hospitalId){
+        return hospitalRepository.adminViewHospital(hospitalId);
+    }
+
+    //관리자 병원 삭제하기
+    @Transactional
+    public void adminDeleteHospital(Long hospitalId, Long staffHosId){
+        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        hospitalRepository.deleteById(hospitalId);
+
+
+        //병원 STAFF 정보도 삭제.
+        if(staffHosId!=null){
+
+           if(hospital.getStaffHosInformation().getId() != staffHosId)
+               throw new IllegalStateException("해당 병원과 staffId가 일치하지 않습니다.");
+
+           StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
+           staffHosRepository.deleteById(staffHosId);
+        }
+    }
+
+    //관리자 병원 수정하기
+    @Transactional
+    public void adminUpdateHospital(Long hospitalId, AdminModifyHospitalRequest request){
+        Hospital modifyHospital = hospitalRepository.findById(hospitalId).orElse(null);
+        Hospital hospital = Hospital.builder().hospitalName(request.getHospitalName())
+                .cityName(request.getCityName()).businessCondition(request.getBusinessCondition())
+                .medicalSubjectInformation(request.getMedicalSubjectInformation())
+                .distinguishedName(request.getDistinguishedName())
+                .phoneNumber(request.getPhoneNumber()).licensingDate(request.getLicensingDate()).build();
+
+        modifyHospital.modifyHospital(hospital);
+
+        //병원 추가정보 수정 유무
+        if(request.getDetailedModifyCheck()==true)
+        {
+            //detailed hospitalId가 일치하지 않으면 수정 취소.
+            if(modifyHospital.getDetailedHosInformation().getId() != request.getDetailedHosInfoId())
+                throw new IllegalStateException("DetailedHosInfoId가 일치하지 않습니다.");
+
+            DetailedHosInformation detailedHosInformation =detailedHosRepository.findById(request.getDetailedHosInfoId()).orElse(null);
+
+            DetailedHosInformation modifyDetailedHosInformation = DetailedHosInformation.builder()
+                    .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
+                    .numberHealthcareProvider(request.getNumberHealthcareProvider()).hospitalAddress(request.getHospitalAddress())
+                    .hospitalLocation(request.getHospitalLocation()).build();
+
+            detailedHosInformation.modifyDetailedHosInformation(modifyDetailedHosInformation);
+        }
+    }
+
+
 }

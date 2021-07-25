@@ -26,6 +26,15 @@ public class StaffHosApiController {
         return staffHosInfoView;
     }
 
+    //관리자 병원 추가 정보 보기
+    @GetMapping("/admin/staffHosInfo/{staffHosId}")
+    public StaffHosInfoView adminViewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
+        StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
+        StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
+
+        return staffHosInfoView;
+    }
+
     /*DTO*/
     @Data
     private static class StaffHosInfoView{
