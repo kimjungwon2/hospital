@@ -32,21 +32,16 @@ public class ReviewService {
 
     //리뷰 등록
     @Transactional
-    public Long reviewRegister(Long memberId, Long hospitalId, String picture, String content, String disease,
-                               Recommendation recommendationStatus,
-                               int sumPrice, int kindness, int symptomRelief,
-                               int cleanliness, int waitTime){
+    public Long reviewRegister(Long memberId, Long hospitalId, String picture, ReviewHospital reviewHospitalDTO){
 
         Member member = memberRepository.findById(memberId).orElse(null);
         Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
 
         //리뷰 병원 생성
-        ReviewHospital reviewHospital = ReviewHospital.createReviewHospital(hospital, content, disease,
-                recommendationStatus, sumPrice, kindness, symptomRelief, cleanliness, waitTime);
+        ReviewHospital reviewHospital = ReviewHospital.saveReviewHospital(hospital, reviewHospitalDTO);
 
         //리뷰 생성
         Review review = Review.createReview(picture, member, reviewHospital);
-
         reviewRepository.save(review);
 
         return review.getId();

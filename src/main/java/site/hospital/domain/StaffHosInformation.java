@@ -23,7 +23,7 @@ public class StaffHosInformation extends BaseTimeEntity {
     @OneToOne(mappedBy = "staffHosInformation", fetch = FetchType.LAZY)
     private Hospital hospital;
 
-    @OneToMany(mappedBy = "staffHosInformation",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "staffHosInformation", cascade = CascadeType.ALL)
     private List<Doctor> doctors = new ArrayList<>();
 
     private String photo;
@@ -39,7 +39,6 @@ public class StaffHosInformation extends BaseTimeEntity {
 
 
     //생성자
-
     @Builder
     public StaffHosInformation(String photo, String introduction, String consultationHour, String abnormality) {
         this.photo = photo;

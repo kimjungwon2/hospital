@@ -57,9 +57,9 @@ public class HospitalService {
     }
 
 
-    //병원 추가정보 등록.
+    //관리자 병원 추가정보 등록.
     @Transactional
-    public Long registerStaffHosInformation(Long hospitalId, String photo, String introduction,
+    public Long adminRegisterStaffHosInformation(Long hospitalId, String photo, String introduction,
                                             String consultationHour, String abnormality){
         Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
 

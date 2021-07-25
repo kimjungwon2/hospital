@@ -57,22 +57,21 @@ public class ReviewHospital extends BaseTimeEntity {
     }
 
     //리뷰 병원 작성
-    public static ReviewHospital createReviewHospital(Hospital hospital, String content, String disease,
-                                                      Recommendation recommendationStatus,
-                                                      int sumPrice, int kindness, int symptomRelief,
-                                                      int cleanliness, int waitTime){
+    public static ReviewHospital saveReviewHospital(Hospital hospital, ReviewHospital reviewHospitalDTO){
         //평가 기준 적용
         EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
-                .sumPrice(sumPrice).kindness(kindness)
-                .symptomRelief(symptomRelief).cleanliness(cleanliness)
-                .waitTime(waitTime).build();
+                .sumPrice(reviewHospitalDTO.getEvCriteria().getSumPrice())
+                .kindness(reviewHospitalDTO.getEvCriteria().getKindness())
+                .symptomRelief(reviewHospitalDTO.getEvCriteria().getSymptomRelief())
+                .cleanliness(reviewHospitalDTO.getEvCriteria().getCleanliness())
+                .waitTime(reviewHospitalDTO.getEvCriteria().getWaitTime()).build();
 
         //리뷰 병원 등록
         ReviewHospital reviewHospital = ReviewHospital.builder()
                 .hospital(hospital)
-                .content(content).disease(disease)
+                .content(reviewHospitalDTO.getContent()).disease(reviewHospitalDTO.getDisease())
                 .evCriteria(evaluationCriteria)
-                .recommendationStatus(recommendationStatus).build();
+                .recommendationStatus(reviewHospitalDTO.getRecommendationStatus()).build();
 
         return reviewHospital;
     }

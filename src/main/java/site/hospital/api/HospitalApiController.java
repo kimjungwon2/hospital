@@ -38,15 +38,6 @@ public class HospitalApiController {
     }
 
 
-    //병원 정보 등록(직원용)
-    @PostMapping("/hospital/register/staff")
-    public CreateStaffHospitalResponse saveStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
-        Long id = hospitalService.registerStaffHosInformation(request.getHospitalId(),request.getPhoto(),
-                request.getIntroduction(),request.getConsultationHour(),request.getAbnormality());
-
-        return new CreateStaffHospitalResponse(id);
-    }
-
     //관리자 병원 조회
     @GetMapping("/admin/hospitals")
     public Page<AdminSearchHospitalDto> adminHospitals(Pageable pageable){
@@ -142,6 +133,15 @@ public class HospitalApiController {
         hospitalService.adminDeleteHospital(hospitalId, staffHosInfoId);
     }
 
+    //관리자 병원 추가 정보 등록
+    @PostMapping("/admin/hospital/register/staff")
+    public Long AdminCreateStaffHospitalResponse(@RequestBody @Validated CreateStaffHospitalRequest request){
+        Long id = hospitalService.adminRegisterStaffHosInformation(request.getHospitalId(),request.getPhoto(),
+                request.getIntroduction(),request.getConsultationHour(),request.getAbnormality());
+
+        return id;
+    }
+
 
     /* DTO */
     @Data
@@ -165,12 +165,7 @@ public class HospitalApiController {
         String introduction;
         String consultationHour;
         String abnormality;
-        int numberHealthcareProvider;
-        int numberWard;
-        int numberPatientRoom;
 
-        HospitalAddress hospitalAddress;
-        HospitalLocation hospitalLocation;
     }
 
 }

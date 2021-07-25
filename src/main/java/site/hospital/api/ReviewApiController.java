@@ -26,13 +26,21 @@ import java.util.stream.Collectors;
 public class ReviewApiController {
     private final ReviewService reviewService;
 
+    //리뷰 등록
     @PostMapping("/user/review/register")
     public CreateReviewResponse saveReview(@RequestBody @Validated CreateReviewRequest request){
+        EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
+                .sumPrice(request.getSumPrice()).kindness(request.getKindness())
+                .symptomRelief(request.getSymptomRelief()).cleanliness(request.getCleanliness())
+                .waitTime(request.getWaitTime()).build();
+
+        ReviewHospital reviewHospital = ReviewHospital.builder()
+                .content(request.getContent()).disease(request.getDisease())
+                .recommendationStatus(request.getRecommendationStatus()).evCriteria(evaluationCriteria)
+                .build();
 
         Long id= reviewService.reviewRegister(request.getMemberId(),request.getHospitalId(),
-                request.getPicture(),request.getContent(),request.getDisease(),
-                request.getRecommendationStatus(),request.getSumPrice(),request.getKindness(),
-                request.getSymptomRelief(),request.getCleanliness(),request.getWaitTime());
+                request.getPicture(),reviewHospital);
 
         return new CreateReviewResponse(id);
     }
@@ -134,11 +142,11 @@ public class ReviewApiController {
         private String content;
         private String disease;
         private Recommendation recommendationStatus;
-        private int sumPrice;
-        private int kindness;
-        private int symptomRelief;
-        private int cleanliness;
-        private int waitTime;
+        private Integer sumPrice;
+        private Integer kindness;
+        private Integer symptomRelief;
+        private Integer cleanliness;
+        private Integer waitTime;
     }
 
     @Data
