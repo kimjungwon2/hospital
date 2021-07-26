@@ -19,8 +19,8 @@ public class DoctorService {
     //doctor 생성
     @Transactional
     public Long createDoctor(CreateDoctorRequest request){
-        StaffHosInformation staffHosInformation = staffHosRepository.findById(request.getStaffHosId()).orElse(null);
-        if(staffHosInformation==null) throw new IllegalArgumentException("해당되는 staffHosId가 존재하지 않습니다.");
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(request.getStaffHosId())
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         Doctor doctor =Doctor.builder().staffHosInformation(staffHosInformation).history(request.getHistory())
                 .photo(request.getPhoto()).name(request.getName()).build();

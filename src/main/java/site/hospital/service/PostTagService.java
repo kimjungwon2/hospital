@@ -24,11 +24,10 @@ public class PostTagService {
 
     @Transactional
     public Long tagLink(Long tagId, Long hospitalId){
-        Tag tag = tagRepository.findById(tagId).orElse(null);
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
-
-        if(tag==null) throw new IllegalStateException("해당 태그가 존재하지 않습니다.");
-        if(hospital==null) throw new IllegalStateException("해당 병원이 존재하지 않습니다.");
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         validateDuplicateLinkTag(tag, hospital);
 
@@ -52,6 +51,7 @@ public class PostTagService {
     //태그 연결 중복 확인.
     private void validateDuplicateLinkTag(Tag tag,Hospital hospital){
         PostTag findLinkTag= postTagRepository.findByTagAndHospital(tag, hospital);
+
         if(findLinkTag != null){
             throw new IllegalStateException("이미 존재하는 태그 연결.");
         }

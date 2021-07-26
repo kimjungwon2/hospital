@@ -48,6 +48,15 @@ public class MemberService {
         }
     }
 
+    //멤버 수정하기
+    @Transactional
+    public void modifyMember(Long memberId, Member modifyMember){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        member.modifyMember(modifyMember);
+    }
+
     //관리자 멤버 보기
     public Page<Member> adminMembers(Pageable pageable){
         return memberRepository.adminMembers(pageable);
@@ -58,13 +67,39 @@ public class MemberService {
         return memberRepository.adminSearchMembers(condition,pageable);
     }
 
+    //멤버 상세 조회하기
+    public Member viewMember(Long memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        return member;
+    }
+
     // 관리자 멤버 권한 주기
     @Transactional
     public void authorize(Long memberId, String status){
-        Member member = memberRepository.findById(memberId).orElse(null);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
         member.authorize(status);
     }
 
+    //관리자 멤버 삭제하기
+    @Transactional
+    public void adminDeleteMember(Long memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        memberRepository.deleteById(memberId);
+    }
+
+    //관리자 멤버 수정하기
+    @Transactional
+    public void adminModifyMember(Long memberId, Member modifyMember){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        member.adminModifyMember(modifyMember);
+    }
 
 }

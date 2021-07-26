@@ -9,7 +9,8 @@ import java.util.List;
 
 
 public interface ReviewRepositoryCustom {
-    public List<Review> hospitalReviewSearch(Long hospitalId, Long memberId, Long reviewId);
-    public Page<Review> adminReviews(Pageable pageable);
-    public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable);
+    List<Review> hospitalReviewSearch(Long hospitalId, Long memberId);
+    Page<Review> adminReviews(Pageable pageable);
+    Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable);
+    Review viewHospitalReview(Long reviewId);
 }

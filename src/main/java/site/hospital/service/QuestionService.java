@@ -39,8 +39,10 @@ public class QuestionService {
     //Question 작성
     @Transactional
     public Long questionCreate(Long memberId, Long hospitalId, String content){
-        Member member = memberRepository.findById(memberId).orElse(null);
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         Question question = Question.CreateQuestion(member,hospital,content);
         questionRepository.save(question);
@@ -97,12 +99,14 @@ public class QuestionService {
     //관리자 병원 Question 삭제
     @Transactional
     public void questionDelete(Long questionId, Long answerId){
-        Question question = questionRepository.findById(questionId).orElse(null);
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 질문이 존재하지 않습니다."));
         questionRepository.deleteById(questionId);
 
         //Answer가 있으면 answer도 삭제.
         if(answerId !=null) {
-            Answer answer =   answerRepository.findById(answerId).orElse(null);
+            Answer answer =   answerRepository.findById(answerId)
+                    .orElseThrow(()->new IllegalStateException("해당 id에 속하는 답변이 존재하지 않습니다."));
             answerRepository.deleteById(answerId);
         }
     }

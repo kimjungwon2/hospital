@@ -28,8 +28,10 @@ public class AppointmentService {
     public Long appointment(Long memberId, Long hospitalId,
                             Integer year, Integer month, Integer day, Integer hour, Integer minute, String symptomName){
 
-        Member member = memberRepository.findById(memberId).orElse(null);
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         Appointment appointment = Appointment.createAppointment(member,hospital,LocalDateTime.of(year,month,day,hour,minute),symptomName);
         appointmentRepository.save(appointment);

@@ -19,7 +19,8 @@ public class StaffHosService {
 
     //병원 추가 정보 보기(고객)
     public StaffHosInformation viewStaffHosInfo(Long staffHosId){
-        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         return staffHosInformation;
     }
@@ -27,7 +28,8 @@ public class StaffHosService {
     //병원 추가 정보 삭제
     @Transactional
     public void adminDeleteStaffHosInfo(Long staffHosId){
-        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
         hospital.deleteStaffHosId();
 
@@ -36,7 +38,8 @@ public class StaffHosService {
 
     @Transactional
     public void adminModifyStaffHosInfo(Long staffHosId, AdminModifyStaffHosRequest request){
-        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
         StaffHosInformation modifyStaffHosInformation = StaffHosInformation.builder()
                 .abnormality(request.getAbnormality()).consultationHour(request.getConsultationHour())
                 .introduction(request.getIntroduction()).photo(request.getPhoto()).build();

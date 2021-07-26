@@ -69,9 +69,8 @@ public class HospitalService {
     @Transactional
     public Long adminRegisterStaffHosInformation(Long hospitalId, StaffHosInformation staffHosInformation,
                                                  List<Doctor> doctors){
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
-        if(hospital==null) throw new IllegalStateException("해당하는 병원이 존재하지 않습니다.");
-
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
 
         //병원 테이블 추가정보 유무 확인
         if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
@@ -89,10 +88,8 @@ public class HospitalService {
     //관리자 병원 추가정보만 등록.
     @Transactional
     public Long adminRegisterStaffHosInfo(Long hospitalId, StaffHosInformation staffHosInformation){
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
-
-        //병원 테이블 추가정보 유무 확인
-        if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
 
         staffHosRepository.save(staffHosInformation);
 
@@ -178,7 +175,8 @@ public class HospitalService {
     //관리자 병원 수정하기
     @Transactional
     public void adminUpdateHospital(Long hospitalId, AdminModifyHospitalRequest request){
-        Hospital modifyHospital = hospitalRepository.findById(hospitalId).orElse(null);
+        Hospital modifyHospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
         Hospital hospital = Hospital.builder().hospitalName(request.getHospitalName())
                 .cityName(request.getCityName()).businessCondition(request.getBusinessCondition())
                 .medicalSubjectInformation(request.getMedicalSubjectInformation())
@@ -194,7 +192,8 @@ public class HospitalService {
             if(modifyHospital.getDetailedHosInformation().getId() != request.getDetailedHosInfoId())
                 throw new IllegalStateException("DetailedHosInfoId가 일치하지 않습니다.");
 
-            DetailedHosInformation detailedHosInformation =detailedHosRepository.findById(request.getDetailedHosInfoId()).orElse(null);
+            DetailedHosInformation detailedHosInformation =detailedHosRepository.findById(request.getDetailedHosInfoId())
+                    .orElseThrow(()->new IllegalStateException("해당 id에 속하는 상세 병원 정보가 존재하지 않습니다."));
 
             DetailedHosInformation modifyDetailedHosInformation = DetailedHosInformation.builder()
                     .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())

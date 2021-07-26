@@ -24,8 +24,8 @@ public class HospitalImageService {
 
 
     public List<HospitalImage> fileInfo(Long staffHosInfoId, List<MultipartFile> multipartFiles) throws Exception{
-        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosInfoId).orElse(null);
-        if(staffHosInformation == null) throw new IllegalStateException("해당 병원이 존재하지 않습니다.");
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosInfoId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         List<HospitalImage> fileList = new ArrayList<>();
 

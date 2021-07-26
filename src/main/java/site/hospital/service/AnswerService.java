@@ -21,8 +21,10 @@ public class AnswerService {
     //답변 등록
     @Transactional
     public Long registerAnswer(Long memberId, Long questionId, Answer answer){
-        Member member = memberRepository.findById(memberId).orElse(null);
-        Question question = questionRepository.findById(questionId).orElse(null);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 질문이 존재하지 않습니다."));
 
         answer.changeMember(member);
         answerRepository.save(answer);

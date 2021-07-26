@@ -69,22 +69,11 @@ public class ReviewApiController {
 
     //리뷰 상세보기
     @GetMapping("/review/view/{reviewId}")
-    public List<ReviewViewResponse> viewReview(@PathVariable("reviewId") Long reviewId){
-        List<Review> review = reviewService.hospitalReviewView(reviewId);
+    public ReviewViewResponse viewReview(@PathVariable("reviewId") Long reviewId){
 
-        List<ReviewViewResponse> result = review.stream().map(r -> new ReviewViewResponse(r))
-                .collect(Collectors.toList());
+        Review review = reviewService.viewHospitalReview(reviewId);
 
-        return result;
-    }
-
-    //관리자 리뷰보기
-    @GetMapping("/admin/review/view")
-    public List<AdminReviewView> adminReviewView(){
-        List<Review> review = reviewService.adminReviewView();
-
-        List<AdminReviewView> result = review.stream().map(r -> new AdminReviewView(r))
-                .collect(Collectors.toList());
+        ReviewViewResponse result = new ReviewViewResponse(review);
 
         return result;
     }
@@ -129,6 +118,16 @@ public class ReviewApiController {
     @DeleteMapping("/admin/review/delete/{reviewId}")
     public void deleteReview(@PathVariable("reviewId") Long reviewId){
         reviewService.deleteReview(reviewId);
+    }
+
+    //관리자 리뷰 상세보기
+    @GetMapping("/admin/review/view/{reviewId}")
+    public ReviewViewResponse adminViewReview(@PathVariable("reviewId") Long reviewId){
+
+        Review review = reviewService.viewHospitalReview(reviewId);
+        ReviewViewResponse result = new ReviewViewResponse(review);
+
+        return result;
     }
 
 

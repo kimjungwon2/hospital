@@ -34,8 +34,10 @@ public class ReviewService {
     @Transactional
     public Long reviewRegister(Long memberId, Long hospitalId, String picture, ReviewHospital reviewHospitalDTO){
 
-        Member member = memberRepository.findById(memberId).orElse(null);
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         //리뷰 병원 생성
         ReviewHospital reviewHospital = ReviewHospital.saveReviewHospital(hospital, reviewHospitalDTO);
@@ -61,17 +63,12 @@ public class ReviewService {
 
     //유저가 등록한 리뷰 검색
     public List<Review> userReviewSearch(Long memberId){
-        return reviewRepository.hospitalReviewSearch(null,memberId,null);
+        return reviewRepository.hospitalReviewSearch(null,memberId);
     }
 
-    //리뷰 상세 보기
-    public List<Review> hospitalReviewView(Long reviewId){
-        return reviewRepository.hospitalReviewSearch(null, null,reviewId);
-    }
-
-    //관리자 리뷰 작성 보기
-    public List<Review> adminReviewView(){
-        return reviewRepository.hospitalReviewSearch(null, null);
+    //리뷰 전체 검색
+    public Page<ReviewSearchDto> searchReview(ReviewSearchCondition condition, Pageable pageable){
+        return reviewSearchRepository.searchReview(condition, pageable);
     }
 
     //관리자 리뷰 조회
@@ -83,11 +80,18 @@ public class ReviewService {
     public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable){
         return reviewRepository.adminSearchReviews(condition, pageable);
     }
+
+    //리뷰 상세 보기
+    public Review viewHospitalReview(Long reviewId){
+        return reviewRepository.viewHospitalReview(reviewId);
+    }
+
     //관리자 리뷰 삭제
     @Transactional
     public void deleteReview(Long reviewId){
-        Review review = reviewRepository.findById(reviewId).orElse(null);
-        if(review == null) throw new IllegalStateException("해당 id에 속하는 리뷰가 없습니다.");
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
+
 
         reviewRepository.deleteById(reviewId);
     }
