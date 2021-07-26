@@ -31,8 +31,10 @@ public class Doctor extends BaseTimeEntity {
         this.staffHosInformation = staffHosInformation;
     }
 
+
     @Builder
-    public Doctor(String name, String history, String photo) {
+    public Doctor(StaffHosInformation staffHosInformation, String name, String history, String photo) {
+        this.staffHosInformation = staffHosInformation;
         this.name = name;
         this.history = history;
         this.photo = photo;
@@ -44,5 +46,10 @@ public class Doctor extends BaseTimeEntity {
         this.photo = photo;
     }
 
-
+    //수정 메서드
+    public void modifyDoctor(Doctor doctor){
+        this.photo = doctor.getPhoto();
+        this.name = doctor.getName();
+        this.history = doctor.getHistory();
+    }
 }

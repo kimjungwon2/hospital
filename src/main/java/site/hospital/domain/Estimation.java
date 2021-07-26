@@ -33,6 +33,12 @@ public class Estimation extends BaseTimeEntity {
         hospital.getEstimations().add(this);
     }
 
+    public void modifyEstimation(Estimation estimation){
+        this.city = estimation.getCity();
+        this.hospitalName = estimation.getHospitalName();
+        this.distinctionGrade = estimation.getDistinctionGrade();
+    }
+
     @Builder
     public Estimation(String cityName, String hospitalName,
                       String distinctionGrade, String estimationList) {

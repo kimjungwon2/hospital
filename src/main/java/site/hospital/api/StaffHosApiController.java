@@ -6,6 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
+import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
+import site.hospital.dto.staffHosInfo.AdminModifyStaffHosRequest;
 import site.hospital.service.StaffHosService;
 
 import java.util.List;
@@ -36,6 +38,13 @@ public class StaffHosApiController {
         return staffHosInfoView;
     }
 
+    //관리자 추가 정보 수정하기
+    @PutMapping("/admin/staffHosInfo/modify/{staffHosId}")
+    public void modifyStaffHosInfo(@PathVariable("staffHosId") Long staffHosId,
+                                   @RequestBody @Validated AdminModifyStaffHosRequest request){
+        staffHosService.adminModifyStaffHosInfo(staffHosId, request);
+    }
+
     //관리자 추가 정보 삭제하기
     @DeleteMapping("/admin/staffHosInfo/delete/{staffHosId}")
     public void deleteStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
@@ -49,7 +58,7 @@ public class StaffHosApiController {
         private String introduction;
         private String consultationHour;
         private String abnormality;
-        private List<doctorDTO> doctors;
+        private List<DoctorDTO> doctors;
 
         public StaffHosInfoView(StaffHosInformation staffHosInformation) {
             this.photo = staffHosInformation.getPhoto();
@@ -57,34 +66,25 @@ public class StaffHosApiController {
             this.consultationHour = staffHosInformation.getConsultationHour();
             this.abnormality = staffHosInformation.getAbnormality();
             this.doctors = staffHosInformation.getDoctors().stream()
-                    .map(d->new doctorDTO(d))
+                    .map(d->new DoctorDTO(d))
                     .collect(Collectors.toList());
         }
     }
 
     @Data
-    private static class doctorDTO{
+    private static class DoctorDTO{
+        private Long doctorId;
         private String name;
         private String history;
         private String photo;
 
-        public doctorDTO(Doctor doctor) {
+        public DoctorDTO(Doctor doctor) {
+            this.doctorId = doctor.getId();
             this.name = doctor.getName();
             this.history = doctor.getHistory();
             this.photo = doctor.getPhoto();
         }
     }
-
-    @Data
-    private static class AdminCreateStaffHosResponse{
-        Long staffHosInfoId;
-
-        public AdminCreateStaffHosResponse(Long staffHosInfoId) {
-            this.staffHosInfoId = staffHosInfoId;
-        }
-    }
-
-
 
 
 }

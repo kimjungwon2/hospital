@@ -52,6 +52,14 @@ public class StaffHosInformation extends BaseTimeEntity {
         return staffHosInformation;
     }
 
+    //수정 메서드
+    public void modifyStaffHosInformation(StaffHosInformation staffHosInformation){
+        this.photo = staffHosInformation.getPhoto();
+        this.introduction = staffHosInformation.getIntroduction();
+        this.consultationHour = staffHosInformation.getConsultationHour();
+        this.abnormality = staffHosInformation.getAbnormality();
+    }
+
     //생성자
     @Builder
     public StaffHosInformation(String photo, String introduction, String consultationHour, String abnormality) {

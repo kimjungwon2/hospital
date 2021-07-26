@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
+import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.repository.DoctorRepository;
 import site.hospital.repository.StaffHosRepository;
 
@@ -15,6 +16,21 @@ public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final StaffHosRepository staffHosRepository;
 
+    //doctor 생성
+    @Transactional
+    public Long createDoctor(CreateDoctorRequest request){
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(request.getStaffHosId()).orElse(null);
+        if(staffHosInformation==null) throw new IllegalArgumentException("해당되는 staffHosId가 존재하지 않습니다.");
+
+        Doctor doctor =Doctor.builder().staffHosInformation(staffHosInformation).history(request.getHistory())
+                .photo(request.getPhoto()).name(request.getName()).build();
+
+        doctorRepository.save(doctor);
+
+        return doctor.getId();
+    }
+
+    //doctor 수정
     @Transactional
     public Long registerDoctor(Long staffHosInfoId, Doctor doctor){
         StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosInfoId).orElse(null);

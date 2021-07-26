@@ -33,4 +33,14 @@ public class StaffHosService {
         staffHosRepository.deleteById(staffHosId);
     }
 
+    @Transactional
+    public void adminModifyStaffHosInfo(Long staffHosId, AdminModifyStaffHosRequest request){
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
+        StaffHosInformation modifyStaffHosInformation = StaffHosInformation.builder()
+                .abnormality(request.getAbnormality()).consultationHour(request.getConsultationHour())
+                .introduction(request.getIntroduction()).photo(request.getPhoto()).build();
+
+        staffHosInformation.modifyStaffHosInformation(modifyStaffHosInformation);
+
+    }
 }
