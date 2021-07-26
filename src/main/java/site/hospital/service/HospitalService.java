@@ -5,13 +5,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.Doctor;
+import site.hospital.domain.HospitalImage;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.dto.AdminHospitalSearchCondition;
 import site.hospital.dto.AdminModifyHospitalRequest;
 import site.hospital.repository.DetailedHosRepository;
+import site.hospital.repository.HospitalImageRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
 import site.hospital.repository.hospital.adminSearchQuery.AdminHospitalSearchRepository;
@@ -22,6 +25,7 @@ import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 
 import java.util.List;
+import java.util.logging.FileHandler;
 
 @Service
 @Transactional(readOnly=true)
@@ -34,6 +38,7 @@ public class HospitalService {
     private final HospitalViewRepository hospitalViewRepository;
     private final AdminHospitalSearchRepository adminHospitalSearchRepository;
     private final DetailedHosRepository detailedHosRepository;
+
 
     //병원 + 상세 정보등록
     @Transactional
@@ -60,15 +65,18 @@ public class HospitalService {
     }
 
 
-    //관리자 병원 추가정보 + 의사 등록
+    //관리자 병원 추가정보 + 사진 등록 +의사 등록
     @Transactional
-    public Long adminRegisterStaffHosInformation(Long hospitalId, StaffHosInformation staffHosInformation, List<Doctor> doctors){
+    public Long adminRegisterStaffHosInformation(Long hospitalId, StaffHosInformation staffHosInformation,
+                                                 List<Doctor> doctors){
         Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        if(hospital==null) throw new IllegalStateException("해당하는 병원이 존재하지 않습니다.");
+
 
         //병원 테이블 추가정보 유무 확인
         if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
 
-        staffHosInformation.createStaffHosInformation(staffHosInformation,doctors);
+        staffHosInformation.createStaffHosInformation(staffHosInformation, doctors);
         staffHosRepository.save(staffHosInformation);
 
         //양방향 연관관계

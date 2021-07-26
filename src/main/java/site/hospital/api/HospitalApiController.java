@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.*;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
@@ -135,6 +136,7 @@ public class HospitalApiController {
     //관리자 병원 추가 정보 등록
     @PostMapping("/admin/hospital/register/staff")
     public AdminCreateStaffHosResponse adminCreateStaffHosResponse(@RequestBody @Validated AdminCreateStaffHosRequest request){
+
         StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
                 .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).photo(request.getPhoto()).build();
 

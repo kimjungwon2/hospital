@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
@@ -36,6 +37,13 @@ public class StaffHosApiController {
         StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
 
         return staffHosInfoView;
+    }
+
+    //관리자 병원 추가 정보 사진 추가하기
+    @PostMapping("/admin/staffHosInfo/photo/register")
+    public void addHospitalPhotos(@RequestParam("staffHosInfoId") Long staffHosInfoId,
+                                  List<MultipartFile> files) throws Exception{
+        staffHosService.addHospitalPhoto(staffHosInfoId,files);
     }
 
     //관리자 추가 정보 수정하기
@@ -85,6 +93,5 @@ public class StaffHosApiController {
             this.photo = doctor.getPhoto();
         }
     }
-
 
 }

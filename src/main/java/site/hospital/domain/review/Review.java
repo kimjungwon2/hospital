@@ -3,6 +3,7 @@ package site.hospital.domain.review;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.ReviewImage;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.member.Member;
@@ -25,6 +26,10 @@ public class Review extends BaseTimeEntity {
     //인증 상태[NONE, WAITING,CERTIFIED]
     @Enumerated(EnumType.STRING)
     private ReviewAuthentication authenticationStatus;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_image_id")
+    private ReviewImage reviewImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
