@@ -83,4 +83,12 @@ public class ReviewService {
     public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable){
         return reviewRepository.adminSearchReviews(condition, pageable);
     }
+    //관리자 리뷰 삭제
+    @Transactional
+    public void deleteReview(Long reviewId){
+        Review review = reviewRepository.findById(reviewId).orElse(null);
+        if(review == null) throw new IllegalStateException("해당 id에 속하는 리뷰가 없습니다.");
+
+        reviewRepository.deleteById(reviewId);
+    }
 }

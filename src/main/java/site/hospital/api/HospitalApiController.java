@@ -106,7 +106,7 @@ public class HospitalApiController {
 
     //관리자 병원 보기
     @GetMapping("/admin/hospital/view/{hospitalId}")
-    public AdminHospitalView saveHospital(@PathVariable("hospitalId") Long hospitalId,
+    public AdminHospitalView viewHospital(@PathVariable("hospitalId") Long hospitalId,
                                           @RequestParam(value="detailedHosInfoId",required = false) Long detailedHosInfoId,
                                           @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
         Hospital hospital = hospitalService.adminViewHospital(hospitalId);

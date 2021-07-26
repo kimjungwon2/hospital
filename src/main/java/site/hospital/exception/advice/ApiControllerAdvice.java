@@ -6,6 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,6 +37,13 @@ public class ApiControllerAdvice {
     @ExceptionHandler
     public ErrorResponse userHandle(UserException e){
         log.error("UserException:",e);
+        return new ErrorResponse("BAD_REQUEST",e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResponse userHandle(HttpRequestMethodNotSupportedException e){
+        log.error("HttpRequestMethodNotSupportedException:",e);
         return new ErrorResponse("BAD_REQUEST",e.getMessage());
     }
 

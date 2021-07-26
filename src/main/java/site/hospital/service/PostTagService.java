@@ -27,6 +27,9 @@ public class PostTagService {
         Tag tag = tagRepository.findById(tagId).orElse(null);
         Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
 
+        if(tag==null) throw new IllegalStateException("해당 태그가 존재하지 않습니다.");
+        if(hospital==null) throw new IllegalStateException("해당 병원이 존재하지 않습니다.");
+
         validateDuplicateLinkTag(tag, hospital);
 
         PostTag postTag = PostTag.createPostTag(tag,hospital);
@@ -40,6 +43,10 @@ public class PostTagService {
 
         return PostTags;
     }
+
+    //관리자 병원 등록 태그 삭제
+    @Transactional
+    public void postTagDelete(Long postTagId){ postTagRepository.deleteById(postTagId);}
 
 
     //태그 연결 중복 확인.

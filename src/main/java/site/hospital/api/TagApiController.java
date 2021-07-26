@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import site.hospital.domain.Tag;
+import site.hospital.service.PostTagService;
 import site.hospital.service.TagService;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TagApiController {
     private final TagService tagService;
+    private final PostTagService postTagService;
 
     @PostMapping("/admin/tag/create")
     public CreateTagResponse saveTag(@RequestBody @Validated CreateTagRequest request){
@@ -26,6 +28,7 @@ public class TagApiController {
 
         return new CreateTagResponse(id);
     }
+
 
     @DeleteMapping("/admin/tag/delete")
     public void deleteTag(@RequestBody @Validated DeleteTagRequest request){
@@ -42,6 +45,12 @@ public class TagApiController {
         return new Result(collect);
     }
 
+    @GetMapping("/admin/tag/search/{tagName}")
+    public ResponseSearchTagName searchTagName(@PathVariable("tagName") String tagName){
+        Tag tag = tagService.searchTagName(tagName);
+
+        return new ResponseSearchTagName(tag);
+    }
 
     /* DTO */
     @Data
@@ -66,6 +75,15 @@ public class TagApiController {
     @AllArgsConstructor
     private static class Result<T>{
         private T Data;
+    }
+
+    @Data
+    private static class ResponseSearchTagName{
+        private String tagName;
+
+        public ResponseSearchTagName(Tag tag) {
+            this.tagName = tag.getName();
+        }
     }
 
     @Data

@@ -23,6 +23,12 @@ public class TagService {
         return tag.getId();
     }
 
+    public Tag searchTagName(String tagName){
+        Tag findTag= tagRepository.findOneByName(tagName);
+
+        return findTag;
+    }
+
     private void validateDuplicateTag(Tag tag){
         List<Tag> findTag= tagRepository.findByName(tag.getName());
         if(!findTag.isEmpty()){
@@ -35,6 +41,7 @@ public class TagService {
     public void tagDelete(Long id){
         tagRepository.deleteById(id);
     }
+
 
     //모든 태그 보기
     public List<Tag> allSearchTag(){

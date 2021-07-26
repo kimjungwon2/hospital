@@ -16,12 +16,18 @@ public class PostTagApiController {
 
     private final PostTagService postTagService;
 
-    @PostMapping("/tag/link")
+    @PostMapping("/admin/hospital/tag/link")
     public LinkTagResponse linkTag(@RequestBody @Validated LinkTagRequest request){
         Long id = postTagService.tagLink(request.getTagId(), request.getHospitalId());
 
         return new LinkTagResponse(id);
     }
+
+    @DeleteMapping("/admin/hospital/tag/delete/{postTagId}")
+    public void postTagDelete(@PathVariable("postTagId") Long postTagId){
+        postTagService.postTagDelete(postTagId);
+    }
+
 
     @GetMapping("/hospital/tag/view/{hospitalId}")
     public List<hospitalTagViewResponse> hospitalTagView(@PathVariable("hospitalId") Long hospitalId){

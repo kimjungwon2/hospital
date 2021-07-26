@@ -125,6 +125,12 @@ public class ReviewApiController {
         return new PageImpl<>(result, pageable, total);
     }
 
+    //관리자 리뷰 삭제
+    @DeleteMapping("/admin/review/delete/{reviewId}")
+    public void deleteReview(@PathVariable("reviewId") Long reviewId){
+        reviewService.deleteReview(reviewId);
+    }
+
 
     /* DTO */
     @Data
