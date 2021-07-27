@@ -48,6 +48,11 @@ public class Review extends BaseTimeEntity {
         reviewHospital.setReview(this);
     }
 
+    //리뷰 인증 승인
+    public void approveCertification(ReviewAuthentication authenticationStatus){
+        this.authenticationStatus = authenticationStatus;
+    }
+
     /*
         생성 메서드
     */

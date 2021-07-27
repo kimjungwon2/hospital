@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.*;
 import site.hospital.domain.member.Member;
+import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.review.Review;
 import site.hospital.domain.reviewHospital.ReviewHospital;
@@ -79,6 +80,14 @@ public class ReviewService {
     //관리자 리뷰 검색
     public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable){
         return reviewRepository.adminSearchReviews(condition, pageable);
+    }
+
+    //관리자 리뷰 승인해주기
+    @Transactional
+    public void approve(Long reviewId, ReviewAuthentication reviewAuthentication){
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
+        review.approveCertification(reviewAuthentication);
     }
 
     //리뷰 상세 보기

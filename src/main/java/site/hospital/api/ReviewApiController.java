@@ -114,6 +114,12 @@ public class ReviewApiController {
         return new PageImpl<>(result, pageable, total);
     }
 
+    //관리자 리뷰 승인해주기
+    @PutMapping("/admin/approve/review/{reviewId}")
+    public void approveReview(@PathVariable("reviewId") Long reviewId,@RequestBody @Validated AdminApproveReviewRequest request){
+        reviewService.approve(reviewId,request.getReviewAuthentication());
+    }
+
     //관리자 리뷰 삭제
     @DeleteMapping("/admin/review/delete/{reviewId}")
     public void deleteReview(@PathVariable("reviewId") Long reviewId){
@@ -253,6 +259,11 @@ public class ReviewApiController {
                     .map(reviewHospital -> new ReviewViewDto(reviewHospital))
                     .collect(Collectors.toList());
         }
+    }
+
+    @Data
+    private static class AdminApproveReviewRequest{
+        private ReviewAuthentication reviewAuthentication;
     }
 
     @Data

@@ -64,9 +64,8 @@ public class Member extends BaseTimeEntity {
     }
 
     //권한 주기
-    public void authorize(String status){
-        if(status.equals("STAFF")) this.authorizationStatus = authorizationStatus.STAFF;
-        else if(status.equals("ADMIN")) this.authorizationStatus = authorizationStatus.ADMIN;
+    public void authorize(Authorization authorizationStatus){
+        this.authorizationStatus = authorizationStatus;
     }
 
     //수정하기
@@ -76,8 +75,8 @@ public class Member extends BaseTimeEntity {
         this.userName = member.userName;
     }
     //관리자 멤버 수정하기
-    public void adminModifyMember(Member member){
-        this.authorizationStatus = member.authorizationStatus;
+    public void adminModifyMember(Member member,Authorization authorizationStatus){
+        this.authorizationStatus = authorizationStatus;
         this.nickName = member.nickName;
         this.phoneNumber= member.phoneNumber;
         this.userName = member.userName;

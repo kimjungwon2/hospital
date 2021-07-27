@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
 import site.hospital.dto.AdminMemberSearchCondition;
 import site.hospital.repository.member.MemberRepository;
@@ -67,7 +68,7 @@ public class MemberService {
         return memberRepository.adminSearchMembers(condition,pageable);
     }
 
-    //멤버 상세 조회하기
+    //멤버 상세정보 보기
     public Member viewMember(Long memberId){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
@@ -75,13 +76,22 @@ public class MemberService {
         return member;
     }
 
+    //회원등록
+    @Transactional
+    public Long adminSignUp(Member member, Authorization authorizationStatus){
+        validateDuplicateMember(member);
+        member.authorize(authorizationStatus);
+        memberRepository.save(member);
+        return member.getId();
+    }
+
     // 관리자 멤버 권한 주기
     @Transactional
-    public void authorize(Long memberId, String status){
+    public void authorize(Long memberId, Authorization authorizationStatus){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
-        member.authorize(status);
+        member.authorize(authorizationStatus);
     }
 
     //관리자 멤버 삭제하기
@@ -95,11 +105,11 @@ public class MemberService {
 
     //관리자 멤버 수정하기
     @Transactional
-    public void adminModifyMember(Long memberId, Member modifyMember){
+    public void adminModifyMember(Long memberId, Member modifyMember,Authorization authorizationStatus){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
-        member.adminModifyMember(modifyMember);
+        member.adminModifyMember(modifyMember,authorizationStatus);
     }
 
 }

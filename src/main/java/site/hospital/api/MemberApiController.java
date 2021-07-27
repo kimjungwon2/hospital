@@ -85,6 +85,50 @@ public class MemberApiController {
         return new PageImpl<>(result, pageable,total);
     }
 
+    //관리자 유저 상세 조회
+    @GetMapping("/admin/view/member/{memberId}")
+    public adminViewMember adminViewMember(@PathVariable("memberId") Long memberId){
+        Member member = memberService.viewMember(memberId);
+        adminViewMember adminViewMember =new adminViewMember(member);
+
+        return adminViewMember;
+    }
+
+    //관리자 멤버 생성
+    @PostMapping("/admin/signup")
+    public CreateMemberResponse adminSaveMember(@RequestBody @Validated AdminCreateMemberRequest request){
+        Member member= Member.builder()
+                .memberIdName(request.getMemberIdName())
+                .password(request.getPassword())
+                .nickName(request.getNickName())
+                .userName(request.getUserName())
+                .phoneNumber(request.getPhoneNumber())
+                .build();
+        Long id = memberService.adminSignUp(member, request.getAuthorizationStatus());
+
+        return new CreateMemberResponse(id);
+    }
+
+    //관리자 멤버 권한 부여
+    @PutMapping("/admin/authorize/member/{memberId}")
+    public void adminAuthorize(@PathVariable("memberId") Long memberId, @Validated @RequestBody AdminMemberAuthorizeRequest request){
+        memberService.authorize(memberId,request.getAuthorizationStatus());
+    }
+
+    //관리자 멤버 삭제
+    @DeleteMapping("/admin/delete/member/{memberId}")
+    public void adminDeleteMember(@PathVariable("memberId") Long memberId){
+        memberService.adminDeleteMember(memberId);
+    }
+
+    //관리자 멤버 수정하기
+    @PutMapping("/admin/modify/member/{memberId}")
+    public void adminModifyMember(@PathVariable("memberId") Long memberId,
+                                  @RequestBody @Validated AdminModifyMemberRequest request){
+        Member member = Member.builder().phoneNumber(request.getPhoneNumber()).nickName(request.getNickName())
+                .userName(request.getUserName()).build();
+        memberService.adminModifyMember(memberId, member, request.getAuthorizationStatus());
+    }
 
     /* DTO */
     @Data
@@ -160,5 +204,54 @@ public class MemberApiController {
             this.authorizationStatus = member.getAuthorizationStatus();
             this.hospitalNumber = member.getHospitalNumber();
         }
+    }
+
+    @Data
+    private static class adminViewMember{
+        private Long id;
+        private String memberIdName;
+        private String userName;
+        private String nickName;
+        private String phoneNumber;
+        private Authorization authorizationStatus;
+
+        public adminViewMember(Member member) {
+            this.id = member.getId();
+            this.memberIdName = member.getMemberIdName();
+            this.userName = member.getUserName();
+            this.nickName = member.getNickName();
+            this.phoneNumber = member.getPhoneNumber();
+            this.authorizationStatus = member.getAuthorizationStatus();
+        }
+    }
+    @Data
+    private static class AdminMemberAuthorizeRequest{
+        private Authorization authorizationStatus;
+    }
+    @Data
+    private static class AdminModifyMemberRequest{
+        private Authorization authorizationStatus;
+        private String nickName;
+        private String phoneNumber;
+        private String userName;
+    }
+
+    @Data
+    private static class AdminCreateMemberRequest {
+        //회원 이름
+        @NotNull(message="이름을 입력해주세요.")
+        private String userName;
+        //회원 아이디
+        @Email(message="올바른 이메일 형태가 아닙니다.")
+        @NotBlank(message="공백없이 아이디를 입력해주세요.")
+        private String memberIdName;
+        @NotNull(message="비밀번호를 입력해주세요.")
+        private String password;
+        @NotNull(message="닉네임을 입력해주세요.")
+        private String nickName;
+        @NotNull(message="전화번호를 입력해주세요.")
+        private String phoneNumber;
+        @NotNull(message="권한을 넣어주세요.")
+        private Authorization authorizationStatus;
     }
 }
