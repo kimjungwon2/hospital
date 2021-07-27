@@ -138,7 +138,7 @@ public class HospitalApiController {
     public AdminCreateStaffHosResponse adminCreateStaffHosResponse(@RequestBody @Validated AdminCreateStaffHosRequest request){
 
         StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
-                .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).photo(request.getPhoto()).build();
+                .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).build();
 
         //의사 정보가 있어야지 의사 추가.
         if(request.getDoctors()!=null) {

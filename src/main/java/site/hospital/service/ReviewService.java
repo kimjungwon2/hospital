@@ -33,7 +33,7 @@ public class ReviewService {
 
     //리뷰 등록
     @Transactional
-    public Long reviewRegister(Long memberId, Long hospitalId, String picture, ReviewHospital reviewHospitalDTO){
+    public Long reviewRegister(Long memberId, Long hospitalId, ReviewHospital reviewHospitalDTO){
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
@@ -44,7 +44,7 @@ public class ReviewService {
         ReviewHospital reviewHospital = ReviewHospital.saveReviewHospital(hospital, reviewHospitalDTO);
 
         //리뷰 생성
-        Review review = Review.createReview(picture, member, reviewHospital);
+        Review review = Review.createReview(member, reviewHospital);
         reviewRepository.save(review);
 
         return review.getId();

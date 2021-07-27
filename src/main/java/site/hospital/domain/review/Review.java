@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.ReviewImage;
+import site.hospital.domain.ReviewLike;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.member.Member;
@@ -14,14 +15,11 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private long id;
-
-    private String picture;
 
     //인증 상태[NONE, WAITING,CERTIFIED]
     @Enumerated(EnumType.STRING)
@@ -37,6 +35,8 @@ public class Review extends BaseTimeEntity {
 
     @OneToMany(mappedBy="review", cascade = CascadeType.ALL)
     private List<ReviewHospital> reviewHospitals = new ArrayList<>();
+    @OneToMany(mappedBy="review")
+    private List<ReviewLike> reviewLikes = new ArrayList<>();
 
     //== 연관 관계 메서드 ==/
     public void changeMember(Member member){
@@ -56,14 +56,17 @@ public class Review extends BaseTimeEntity {
     /*
         생성 메서드
     */
-    public Review(String picture){
-        this.picture = picture;
-        if(picture == null) this.authenticationStatus = authenticationStatus.NONE;
+    public Review(ReviewImage reviewImage){
+        if(reviewImage == null) this.authenticationStatus = authenticationStatus.NONE;
         else this.authenticationStatus = authenticationStatus.WAITING;
     }
 
-    public static Review createReview(String picture, Member member, ReviewHospital... reviewHospitals){
-        Review review = new Review(picture);
+    public Review(){
+    }
+
+    public static Review createReview(Member member, ReviewHospital... reviewHospitals){
+        Review review = new Review();
+
         review.changeMember(member);
 
         for (ReviewHospital reviewHospital : reviewHospitals) {

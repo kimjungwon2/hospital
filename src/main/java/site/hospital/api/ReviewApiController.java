@@ -40,7 +40,7 @@ public class ReviewApiController {
                 .build();
 
         Long id= reviewService.reviewRegister(request.getMemberId(),request.getHospitalId(),
-                request.getPicture(),reviewHospital);
+                reviewHospital);
 
         return new CreateReviewResponse(id);
     }
@@ -149,7 +149,6 @@ public class ReviewApiController {
     private static class CreateReviewRequest {
         private Long memberId;
         private Long hospitalId;
-        private String picture;
         private String content;
         private String disease;
         private Recommendation recommendationStatus;
@@ -184,12 +183,10 @@ public class ReviewApiController {
     private static class ReviewHospitalDto{
         private String content;
         private String disease;
-        private Integer likeNumber;
 
         public ReviewHospitalDto(ReviewHospital reviewHospital) {
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
-            this.likeNumber =reviewHospital.getLikeNumber();
         }
     }
 
@@ -224,7 +221,6 @@ public class ReviewApiController {
         private Integer cleanliness;
         private Integer waitTime;
         private Double averageRate;
-        private Integer likeNumber;
 
         public ReviewHospitalUserDto(ReviewHospital reviewHospital) {
             this.hospitalId = reviewHospital.getHospital().getId();
@@ -238,7 +234,6 @@ public class ReviewApiController {
             this.cleanliness = reviewHospital.getEvCriteria().getCleanliness();
             this.waitTime = reviewHospital.getEvCriteria().getWaitTime();
             this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
-            this.likeNumber = reviewHospital.getLikeNumber();
         }
     }
 
@@ -331,7 +326,6 @@ public class ReviewApiController {
             this.medicalSubject =reviewHospital.getHospital().getMedicalSubjectInformation();
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
-            this.likeNumber =reviewHospital.getLikeNumber();
             this.recommendationStatus = reviewHospital.getRecommendationStatus();
             this.evaluationCriteria = reviewHospital.getEvCriteria();
         }

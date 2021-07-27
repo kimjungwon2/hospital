@@ -23,7 +23,7 @@ public class DoctorService {
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         Doctor doctor =Doctor.builder().staffHosInformation(staffHosInformation).history(request.getHistory())
-                .photo(request.getPhoto()).name(request.getName()).build();
+                .name(request.getName()).build();
 
         doctorRepository.save(doctor);
 

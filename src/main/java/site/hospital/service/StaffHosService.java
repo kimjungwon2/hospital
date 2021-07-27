@@ -42,7 +42,7 @@ public class StaffHosService {
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
         StaffHosInformation modifyStaffHosInformation = StaffHosInformation.builder()
                 .abnormality(request.getAbnormality()).consultationHour(request.getConsultationHour())
-                .introduction(request.getIntroduction()).photo(request.getPhoto()).build();
+                .introduction(request.getIntroduction()).build();
 
         staffHosInformation.modifyStaffHosInformation(modifyStaffHosInformation);
 

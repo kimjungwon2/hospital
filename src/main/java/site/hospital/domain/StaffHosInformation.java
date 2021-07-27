@@ -28,7 +28,7 @@ public class StaffHosInformation extends BaseTimeEntity {
     @OneToMany(mappedBy = "staffHosInformation", cascade = CascadeType.ALL)
     private List<HospitalImage> hospitalImages = new ArrayList<>();
 
-    private String photo;
+
     private String introduction;
     private String consultationHour;
     private String abnormality;
@@ -70,7 +70,6 @@ public class StaffHosInformation extends BaseTimeEntity {
 
     //수정 메서드
     public void modifyStaffHosInformation(StaffHosInformation staffHosInformation){
-        this.photo = staffHosInformation.getPhoto();
         this.introduction = staffHosInformation.getIntroduction();
         this.consultationHour = staffHosInformation.getConsultationHour();
         this.abnormality = staffHosInformation.getAbnormality();
@@ -78,8 +77,7 @@ public class StaffHosInformation extends BaseTimeEntity {
 
     //생성자
     @Builder
-    public StaffHosInformation(String photo, String introduction, String consultationHour, String abnormality) {
-        this.photo = photo;
+    public StaffHosInformation(String introduction, String consultationHour, String abnormality) {
         this.introduction = introduction;
         this.consultationHour = consultationHour;
         this.abnormality = abnormality;

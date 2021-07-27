@@ -5,6 +5,5 @@ import lombok.Data;
 @Data
 public class AdminDoctorDTO {
     private String name;
-    private String history;
-    private String photo;
+    private String history;;
 }

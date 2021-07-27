@@ -62,14 +62,12 @@ public class StaffHosApiController {
     /*DTO*/
     @Data
     private static class StaffHosInfoView{
-        private String photo;
         private String introduction;
         private String consultationHour;
         private String abnormality;
         private List<DoctorDTO> doctors;
 
         public StaffHosInfoView(StaffHosInformation staffHosInformation) {
-            this.photo = staffHosInformation.getPhoto();
             this.introduction = staffHosInformation.getIntroduction();
             this.consultationHour = staffHosInformation.getConsultationHour();
             this.abnormality = staffHosInformation.getAbnormality();
@@ -84,13 +82,11 @@ public class StaffHosApiController {
         private Long doctorId;
         private String name;
         private String history;
-        private String photo;
 
         public DoctorDTO(Doctor doctor) {
             this.doctorId = doctor.getId();
             this.name = doctor.getName();
             this.history = doctor.getHistory();
-            this.photo = doctor.getPhoto();
         }
     }
 

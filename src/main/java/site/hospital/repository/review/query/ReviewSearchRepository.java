@@ -36,8 +36,8 @@ public class ReviewSearchRepository {
         List<ReviewHospitalDTO2> reviewHospitalDto =
                 queryFactory
                 .select(new QReviewHospitalDTO2(review.id
-                        ,reviewHospital.content,reviewHospital.disease
-                        , reviewHospital.likeNumber, reviewHospital.evCriteria.averageRate
+                        ,reviewHospital.content,reviewHospital.disease,
+                        reviewHospital.evCriteria.averageRate
                         ,hospital.hospitalName))
                 .from(reviewHospital)
                 .join(reviewHospital.review, review)

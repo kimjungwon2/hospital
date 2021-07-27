@@ -24,7 +24,7 @@ public class DoctorApiController {
     public void modifyDoctor(@PathVariable("doctorId") Long doctorId,
                              @RequestBody @Validated AdminModifyDoctorRequest request){
         Doctor doctor = Doctor.builder()
-                .photo(request.getPhoto()).history(request.getHistory())
+                .history(request.getHistory())
                 .name(request.getName()).build();
 
         doctorService.modifyDoctor(doctorId, doctor);
@@ -46,7 +46,6 @@ public class DoctorApiController {
 
     @Data
     private static class AdminModifyDoctorRequest{
-        private String photo;
         private String history;
         private String name;
     }
