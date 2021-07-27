@@ -1,4 +1,4 @@
-package site.hospital.domain;
+package site.hospital.domain.reviewLike;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,6 +27,7 @@ public class ReviewLike extends BaseTimeEntity {
     @JoinColumn(name="member_id")
     private Member member;
 
-    private Boolean check;
+    @Enumerated(EnumType.STRING)
+    private LikeCheck likeCheck;
 
 }

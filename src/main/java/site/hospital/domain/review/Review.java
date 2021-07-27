@@ -1,10 +1,8 @@
 package site.hospital.domain.review;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import site.hospital.domain.ReviewImage;
-import site.hospital.domain.ReviewLike;
+import site.hospital.domain.reviewLike.ReviewLike;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.member.Member;

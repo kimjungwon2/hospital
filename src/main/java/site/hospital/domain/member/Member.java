@@ -8,6 +8,7 @@ import site.hospital.domain.*;
 import site.hospital.domain.appointment.Appointment;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.review.Review;
+import site.hospital.domain.reviewLike.ReviewLike;
 
 import javax.persistence.*;
 import java.util.ArrayList;
