@@ -29,7 +29,6 @@ public class ReviewHospital extends BaseTimeEntity {
 
     private String content;
     private String disease;
-    private int likeNumber;
 
     //평가 항목
     @Embedded

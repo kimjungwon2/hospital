@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
 
 import javax.persistence.*;
@@ -37,6 +38,11 @@ public class Doctor extends BaseTimeEntity {
         this.staffHosInformation = staffHosInformation;
         this.name = name;
         this.history = history;
+    }
+
+    public Doctor(CreateDoctorRequest request){
+        this.name = request.getName();
+        this.history = request.getHistory();
     }
 
     //수정 메서드

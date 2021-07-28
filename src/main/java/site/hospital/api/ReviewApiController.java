@@ -265,7 +265,6 @@ public class ReviewApiController {
     private static class ReviewViewDto{
         private String content;
         private String disease;
-        private Integer likeNumber;
         private String hospitalName;
         private String medicalSubject;
         Recommendation recommendationStatus;
@@ -276,7 +275,6 @@ public class ReviewApiController {
             this.medicalSubject =reviewHospital.getHospital().getMedicalSubjectInformation();
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
-            this.likeNumber =reviewHospital.getLikeNumber();
             this.recommendationStatus = reviewHospital.getRecommendationStatus();
             this.evaluationCriteria = reviewHospital.getEvCriteria();
         }
@@ -311,7 +309,6 @@ public class ReviewApiController {
         private Long hospitalId;
         private String content;
         private String disease;
-        private Integer likeNumber;
         private String hospitalName;
         private String hospitalCityName;
         private String medicalSubject;

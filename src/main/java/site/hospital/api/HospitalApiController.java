@@ -1,13 +1,12 @@
 package site.hospital.api;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.*;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
@@ -16,11 +15,15 @@ import site.hospital.domain.detailedHosInformation.HospitalLocation;
 import site.hospital.domain.Hospital;
 import site.hospital.dto.AdminHospitalSearchCondition;
 import site.hospital.dto.AdminModifyHospitalRequest;
-import site.hospital.dto.ModifyHospitalRequest;
+import site.hospital.dto.doctor.CreateDoctorRequest;
+import site.hospital.dto.hospital.admin.AdminHospitalView;
 import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 import site.hospital.service.HospitalService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,6 +65,7 @@ public class HospitalApiController {
 
         return hospitalService.adminSearchHospitals(condition, pageable);
     }
+
     //관리자 병원 생성
     @PostMapping("/admin/hospital/register")
     public CreateHospitalResponse saveHospital(@RequestBody @Validated CreateHospitalRequest request) {
@@ -107,11 +111,75 @@ public class HospitalApiController {
         }
         //상세 정보를 체크했는데도 상세 정보를 모두 기입 안 할 경우
         else throw new IllegalStateException("상세 정보를 모두 기입하세요");
+    }
 
+
+    //관리자 병원 보기
+    @GetMapping("/admin/hospital/view/{hospitalId}")
+    public AdminHospitalView viewHospital(@PathVariable("hospitalId") Long hospitalId,
+                                          @RequestParam(value="detailedHosInfoId",required = false) Long detailedHosInfoId,
+                                          @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
+        Hospital hospital = hospitalService.adminViewHospital(hospitalId);
+        AdminHospitalView adminHospitalView = new AdminHospitalView(hospital,detailedHosInfoId,staffHosInfoId);
+
+        return adminHospitalView;
+    }
+
+    //관리자 병원 수정
+    @PutMapping("/admin/hospital/modify/{hospitalId}")
+    public AdminUpdateHospitalResponse updateHospital(@PathVariable("hospitalId") Long hospitalId,
+                                                      @RequestBody @Validated AdminModifyHospitalRequest request){
+        hospitalService.adminUpdateHospital(hospitalId,request);
+        Hospital findHospital = hospitalService.findOne(hospitalId);
+
+        return new AdminUpdateHospitalResponse(findHospital.getId());
+    }
+
+    //관리자 병원 삭제
+    @DeleteMapping("/admin/hospital/delete/{hospitalId}")
+    public void deleteHospital(@PathVariable("hospitalId") Long hospitalId,
+                               @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
+        hospitalService.adminDeleteHospital(hospitalId, staffHosInfoId);
+    }
+
+    //관리자 병원 추가 정보 등록
+    @PostMapping("/admin/hospital/register/staff")
+    public AdminCreateStaffHosResponse adminCreateStaffHosResponse(@RequestBody @Validated AdminCreateStaffHosRequest request){
+
+        StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
+                .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).build();
+
+        //의사 정보가 있어야지 의사 추가.
+        if(request.getDoctors()!=null) {
+            List<Doctor> doctors = request.getDoctors().stream().map(d -> new Doctor(d)).collect(Collectors.toList());
+            Long id = hospitalService.adminRegisterStaffHosInformation(request.getHospitalId(),staffHosInformation, doctors);
+            return new AdminCreateStaffHosResponse(id);
+        }
+        //추가 정보만 추가.
+        Long id = hospitalService.adminRegisterStaffHosInfo(request.getHospitalId(), staffHosInformation);
+        return new AdminCreateStaffHosResponse(id);
     }
 
 
     /* DTO */
+    @Data
+    private static class AdminUpdateHospitalResponse{
+        Long id;
+
+        public AdminUpdateHospitalResponse(Long id) {
+            this.id = id;
+        }
+    }
+
+    @Data
+    private static class AdminCreateStaffHosResponse{
+        Long id;
+
+        public AdminCreateStaffHosResponse(Long id) {
+            this.id = id;
+        }
+    }
+
     @Data
     private static class CreateHospitalResponse {
         Long id;
@@ -129,7 +197,6 @@ public class HospitalApiController {
     @Data
     private static class CreateStaffHospitalRequest{
         Long hospitalId;
-        String photo;
         String introduction;
         String consultationHour;
         String abnormality;
@@ -157,6 +224,15 @@ public class HospitalApiController {
         private HospitalLocation hospitalLocation;
         private HospitalAddress hospitalAddress;
 
+    }
+
+    @Data
+    private static class AdminCreateStaffHosRequest{
+        private Long hospitalId;
+        private String introduction;
+        private String consultationHour;
+        private String abnormality;
+        private List<CreateDoctorRequest> doctors;
     }
 
 }
