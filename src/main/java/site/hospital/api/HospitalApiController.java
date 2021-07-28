@@ -14,7 +14,12 @@ import site.hospital.domain.detailedHosInformation.HospitalAddress;
 import site.hospital.domain.detailedHosInformation.HospitalLocation;
 
 import site.hospital.domain.Hospital;
+import site.hospital.dto.AdminHospitalSearchCondition;
+import site.hospital.dto.AdminModifyHospitalRequest;
 import site.hospital.dto.ModifyHospitalRequest;
+import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto;
+import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
+import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 import site.hospital.service.HospitalService;
 
 @RestController
@@ -105,53 +110,6 @@ public class HospitalApiController {
 
     }
 
-    //관리자 병원 보기
-    @GetMapping("/admin/hospital/view/{hospitalId}")
-    public AdminHospitalView viewHospital(@PathVariable("hospitalId") Long hospitalId,
-                                          @RequestParam(value="detailedHosInfoId",required = false) Long detailedHosInfoId,
-                                          @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
-        Hospital hospital = hospitalService.adminViewHospital(hospitalId);
-        AdminHospitalView adminHospitalView = new AdminHospitalView(hospital,detailedHosInfoId,staffHosInfoId);
-
-        return adminHospitalView;
-    }
-
-    //관리자 병원 수정
-    @PutMapping("/admin/hospital/modify/{hospitalId}")
-    public AdminUpdateHospitalResponse updateHospital(@PathVariable("hospitalId") Long hospitalId,
-                                          @RequestBody @Validated AdminModifyHospitalRequest request){
-        hospitalService.adminUpdateHospital(hospitalId,request);
-        Hospital findHospital = hospitalService.findOne(hospitalId);
-
-        return new AdminUpdateHospitalResponse(findHospital.getId());
-    }
-
-    //관리자 병원 삭제
-    @DeleteMapping("/admin/hospital/delete/{hospitalId}")
-    public void deleteHospital(@PathVariable("hospitalId") Long hospitalId,
-                               @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
-        hospitalService.adminDeleteHospital(hospitalId, staffHosInfoId);
-    }
-
-    //관리자 병원 추가 정보 등록
-    @PostMapping("/admin/hospital/register/staff")
-    public AdminCreateStaffHosResponse adminCreateStaffHosResponse(@RequestBody @Validated AdminCreateStaffHosRequest request){
-
-        StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
-                .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).build();
-
-        //의사 정보가 있어야지 의사 추가.
-        if(request.getDoctors()!=null) {
-            List<Doctor> doctors = request.getDoctors().stream().map(d -> new Doctor(d)).collect(Collectors.toList());
-            Long id = hospitalService.adminRegisterStaffHosInformation(request.getHospitalId(),staffHosInformation, doctors);
-            return new AdminCreateStaffHosResponse(id);
-        }
-
-        //추가 정보만 추가.
-        Long id = hospitalService.adminRegisterStaffHosInfo(request.getHospitalId(), staffHosInformation);
-        return new AdminCreateStaffHosResponse(id);
-    }
-
 
     /* DTO */
     @Data
@@ -175,6 +133,29 @@ public class HospitalApiController {
         String introduction;
         String consultationHour;
         String abnormality;
+    }
+
+    @Data
+    private static class CreateHospitalRequest{
+        private Long hospitalId;
+
+        private String licensingDate;
+        private String hospitalName;
+        private String phoneNumber;
+        private String distinguishedName;
+        private String medicalSubject;
+        private String medicalSubjectInformation;
+        private String businessCondition;
+        private String cityName;
+
+        private Boolean detailedInfoCheck;
+
+        private Integer numberHealthcareProvider;
+        private Integer numberWard;
+        private Integer numberPatientRoom;
+
+        private HospitalLocation hospitalLocation;
+        private HospitalAddress hospitalAddress;
 
     }
 
