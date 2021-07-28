@@ -42,15 +42,6 @@ public class QuestionApiController {
         return questionService.searchUserQuestion(memberId);
     }
 
-    //병원 Question 조회.
-    @GetMapping("/hospital/question2/{hospitalId}")
-    public List<SearchHospitalQuestionResponse>  searchHospitalQandA2(@PathVariable("hospitalId") Long hospitalId){
-        List<Question> questions = questionService.searchHospitalQandA2(hospitalId);
-        List<SearchHospitalQuestionResponse> result = questions.stream()
-                .map(q->new SearchHospitalQuestionResponse(q))
-                .collect(Collectors.toList());
-        return result;
-    }
 
     //관리자 Question 조회
     @GetMapping("/admin/questions")

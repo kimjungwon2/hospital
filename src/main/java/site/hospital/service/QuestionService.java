@@ -53,16 +53,16 @@ public class QuestionService {
     //QandA 수정
     @Transactional
     public Long modifyQandA(Long qanda_id, String content){
-        QandA qandA = qandARepository.findById(qanda_id).orElse(null);
-        qandA.modifyQandA(content);
+        Question question = questionRepository.findById(qanda_id).orElse(null);
+        question.modifyQandA(content);
 
-        return qandA.getId();
+        return question.getId();
     }
 
     //QandA 삭제
     @Transactional
     public void deleteQandA(Long id){
-        qandARepository.deleteById(id);
+        questionRepository.deleteById(id);
     }
 
     //병원 Question user가 조회
@@ -73,10 +73,8 @@ public class QuestionService {
     }
 
     //병원 Question 조회
-    public List<Question> searchHospitalQandA2(Long hospitalId){
-        List<Question> question = questionRepository.searchHospitalQuestion(hospitalId);
-
-        return question;
+    public List<SearchHospitalQuestionDTO> searchHospitalQuestion(Long hospitalId){
+        return hospitalQuestionRepository.viewHospitalQuestion(hospitalId);
     }
 
     //멤버 자신의 Question 조회

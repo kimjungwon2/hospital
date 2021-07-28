@@ -65,6 +65,11 @@ public class HospitalService {
         return hospital;
     }
 
+    //병원 검색
+    public Page<HospitalSearchDto> searchHospital(String searchName,Pageable pageable){
+        return hospitalSearchRepository.searchHospital(searchName,pageable);
+    }
+
 
     //관리자 병원 추가정보 + 사진 등록 +의사 등록
     @Transactional

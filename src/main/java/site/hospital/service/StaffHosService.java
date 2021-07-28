@@ -3,10 +3,19 @@ package site.hospital.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import site.hospital.domain.Hospital;
+import site.hospital.domain.HospitalImage;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.Doctor;
 import site.hospital.dto.ModifyStaffHospitalRequest;
+import site.hospital.dto.staffHosInfo.AdminModifyStaffHosRequest;
+import site.hospital.repository.HospitalImageRepository;
 import site.hospital.repository.StaffHosRepository;
+import site.hospital.repository.hospital.HospitalRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)

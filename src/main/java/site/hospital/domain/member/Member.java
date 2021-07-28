@@ -63,7 +63,6 @@ public class Member extends BaseTimeEntity {
         this.userName = userName;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
-        this.authorizationStatus = authorizationStatus.NORMAL;
     }
 
     //권한 주기
