@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Estimation;
 import site.hospital.domain.Hospital;
-import site.hospital.repository.HospitalRepository;
 import site.hospital.repository.estimation.EstimationRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 
 import java.util.List;
 

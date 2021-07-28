@@ -34,7 +34,7 @@ public class Estimation extends BaseTimeEntity {
     }
 
     public void modifyEstimation(Estimation estimation){
-        this.city = estimation.getCity();
+        this.cityName = estimation.getCityName();
         this.hospitalName = estimation.getHospitalName();
         this.distinctionGrade = estimation.getDistinctionGrade();
     }

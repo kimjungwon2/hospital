@@ -13,6 +13,7 @@ import site.hospital.domain.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.dto.AdminHospitalSearchCondition;
 import site.hospital.dto.AdminModifyHospitalRequest;
+import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.repository.DetailedHosRepository;
 import site.hospital.repository.HospitalImageRepository;
 import site.hospital.repository.hospital.HospitalRepository;

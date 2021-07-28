@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
+import site.hospital.dto.ModifyDoctorRequest;
 import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.repository.DoctorRepository;
 import site.hospital.repository.StaffHosRepository;
@@ -34,7 +35,6 @@ public class DoctorService {
     @Transactional
     public Long registerDoctor(Long staffHosInfoId, Doctor doctor){
         StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosInfoId).orElse(null);
-        doctor.changeStaffHosInformation(staffHosInformation);
         doctorRepository.save(doctor);
 
         return doctor.getId();
@@ -42,9 +42,9 @@ public class DoctorService {
 
     //의사 수정
     @Transactional
-    public Long modifyDoctor(Long doctorId, ModifyDoctorRequest request){
+    public Long modifyDoctor(Long doctorId, Doctor modifyDoctor){
         Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
-        doctor.modifyDoctor(request.getName(), request.getHistory(), request.getPhoto());
+        doctor.modifyDoctor(modifyDoctor);
 
         return doctor.getId();
     }

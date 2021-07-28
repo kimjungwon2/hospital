@@ -39,12 +39,6 @@ public class Doctor extends BaseTimeEntity {
         this.history = history;
     }
 
-    public void modifyDoctor(String name, String history, String photo) {
-        this.name = name;
-        this.history = history;
-        this.photo = photo;
-    }
-
     //수정 메서드
     public void modifyDoctor(Doctor doctor){
         this.name = doctor.getName();

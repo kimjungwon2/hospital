@@ -23,7 +23,7 @@ public class EstimationApiController {
 
         //병원 아이디를 기입 안 할 경우.
         if (request.getHospitalId() == null){
-            Long id = estimationService.createEstimation(estimation);
+            Long id = estimationService.createNoHospitalEstimation(estimation);
 
             return new CreateEstimationResponse(id);
         }
