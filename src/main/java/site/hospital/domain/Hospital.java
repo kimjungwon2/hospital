@@ -101,13 +101,12 @@ public class Hospital extends BaseTimeEntity {
 
 
     public void updateHospital(String licensingDate, String hospitalName, String phoneNumber,
-                               String distinguishedName, String medicalSubject, String medicalSubjectInformation,
+                               String distinguishedName, String medicalSubjectInformation,
                                String businessCondition, String cityName) {
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
         this.phoneNumber = phoneNumber;
         this.distinguishedName = distinguishedName;
-        this.medicalSubject = medicalSubject;
         this.medicalSubjectInformation = medicalSubjectInformation;
         this.businessCondition = businessCondition;
         this.cityName = cityName;

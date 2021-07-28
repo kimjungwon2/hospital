@@ -118,7 +118,7 @@ public class HospitalService {
         if(detailedHosId == null) {
 
             selectHospital.updateHospital(request.getLicensingDate(), request.getHospitalName(), request.getPhoneNumber(),
-                    request.getDistinguishedName(), request.getMedicalSubject(),
+                    request.getDistinguishedName(),
                     request.getMedicalSubjectInformation(), request.getBusinessCondition(),
                     request.getCityName());
         }
@@ -127,7 +127,7 @@ public class HospitalService {
             DetailedHosInformation selectDetailedHosInfo = detailedHosRepository.findById(detailedHosId).orElse(null);
 
             selectHospital.updateHospital(request.getLicensingDate(), request.getHospitalName(), request.getPhoneNumber(),
-                        request.getDistinguishedName(), request.getMedicalSubject(),
+                        request.getDistinguishedName(),
                     request.getMedicalSubjectInformation(), request.getBusinessCondition(),
                     request.getCityName());
 

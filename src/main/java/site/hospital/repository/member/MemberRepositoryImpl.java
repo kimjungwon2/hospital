@@ -76,7 +76,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                             ,(memberNickNameEq(condition.getNickName()))
                             ,(memberUserNameEq(condition.getUserName()))
                             ,(memberPhoneNumberEq(condition.getPhoneNumber()))
-                            ,(memberAuthorizationStatusEq(condition.getAuthorizationStatus()))
                             ,(memberHospitalNumberEq(condition.getHospitalNumber()))
                     )
                     .offset(pageable.getOffset())
@@ -105,9 +104,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
     private BooleanExpression memberPhoneNumberEq(String phoneNumber){
         return phoneNumber == null? null: member.phoneNumber.eq(phoneNumber) ;
-    }
-    private BooleanExpression memberAuthorizationStatusEq(Authorization authorizationStatus){
-        return authorizationStatus == null? null: member.authorizationStatus.eq(authorizationStatus);
     }
     private BooleanExpression memberHospitalNumberEq(Long hospitalNumber){
         return hospitalNumber == null? null: member.hospitalNumber.eq(hospitalNumber);

@@ -45,9 +45,6 @@ public class Member extends BaseTimeEntity {
     private String userName;
     private String phoneNumber;
 
-    //회원 권한 부여 상태. [NORMAL, STAFF, ADMIN]
-    @Enumerated(EnumType.STRING)
-    private Authorization authorizationStatus;
     //병원 번호
     private Long hospitalNumber;
 
@@ -65,22 +62,10 @@ public class Member extends BaseTimeEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    //권한 주기
-    public void authorize(Authorization authorizationStatus){
-        this.authorizationStatus = authorizationStatus;
-    }
-
     //수정하기
     public void modifyMember(Member member){
         this.nickName =member.nickName;
         this.phoneNumber=member.phoneNumber;
-        this.userName = member.userName;
-    }
-    //관리자 멤버 수정하기
-    public void adminModifyMember(Member member,Authorization authorizationStatus){
-        this.authorizationStatus = authorizationStatus;
-        this.nickName = member.nickName;
-        this.phoneNumber= member.phoneNumber;
         this.userName = member.userName;
     }
 

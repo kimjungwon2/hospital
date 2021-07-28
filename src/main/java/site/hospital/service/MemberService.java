@@ -78,21 +78,13 @@ public class MemberService {
 
     //회원등록
     @Transactional
-    public Long adminSignUp(Member member, Authorization authorizationStatus){
+    public Long adminSignUp(Member member){
         validateDuplicateMember(member);
-        member.authorize(authorizationStatus);
         memberRepository.save(member);
         return member.getId();
     }
 
-    // 관리자 멤버 권한 주기
-    @Transactional
-    public void authorize(Long memberId, Authorization authorizationStatus){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
-        member.authorize(authorizationStatus);
-    }
 
     //관리자 멤버 삭제하기
     @Transactional
@@ -103,13 +95,6 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
-    //관리자 멤버 수정하기
-    @Transactional
-    public void adminModifyMember(Long memberId, Member modifyMember,Authorization authorizationStatus){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
-        member.adminModifyMember(modifyMember,authorizationStatus);
-    }
 
 }
