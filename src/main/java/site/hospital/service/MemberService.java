@@ -3,11 +3,13 @@ package site.hospital.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.domain.member.Authorization;
-import site.hospital.domain.member.Member;
+import site.hospital.domain.member.*;
 import site.hospital.dto.AdminMemberSearchCondition;
+import site.hospital.repository.AuthorityRepository;
+import site.hospital.repository.MemberAuthorityRepository;
 import site.hospital.repository.member.MemberRepository;
 
 
@@ -19,12 +21,33 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final AuthorityRepository authorityRepository;
+    private final MemberAuthorityRepository memberAuthorityRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //회원등록
     @Transactional
-    public Long signUp(Member member){
-        validateDuplicateMember(member);
+    public Long signUp(Member memberDto){
+        validateDuplicateMember(memberDto);
+
+
+        Member member = Member.builder().userName(memberDto.getUserName())
+                .nickName(memberDto.getNickName()).phoneNumber(memberDto.getPhoneNumber())
+                .memberIdName(memberDto.getMemberIdName()).memberStatus(MemberStatus.NORMAL)
+                .password(passwordEncoder.encode(memberDto.getPassword())).build();
+
+        //USER 권한 찾기
+        Authority authority = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
+        if(authority == null) throw new IllegalStateException("USER 권한 데이터가 없습니다.");
+
         memberRepository.save(member);
+
+        //새로 생성한 멤버에게 USER 권한 주기.
+        MemberAuthority memberAuthority = MemberAuthority.builder()
+                .member(member).authority(authority).build();
+
+        memberAuthorityRepository.save(memberAuthority);
+
         return member.getId();
     }
 
@@ -35,9 +58,7 @@ public class MemberService {
             throw new IllegalStateException("해당 아이디는 존재하지 않습니다.");
         }
 
-        if(findMembers.getPassword().equals(password)) return findMembers;
-        else throw new IllegalStateException("아이디 혹은 비밀번호가 틀렸습니다.");
-
+        return findMembers;
     }
 
     //중복 아이디 검사
@@ -84,8 +105,6 @@ public class MemberService {
         return member.getId();
     }
 
-
-
     //관리자 멤버 삭제하기
     @Transactional
     public void adminDeleteMember(Long memberId){
@@ -94,7 +113,5 @@ public class MemberService {
 
         memberRepository.deleteById(memberId);
     }
-
-
 
 }

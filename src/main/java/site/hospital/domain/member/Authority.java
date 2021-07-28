@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,4 +22,8 @@ public class Authority {
     @Column(unique=true, nullable = false)
     @Enumerated(EnumType.STRING)
     private Authorization authorizationStatus;
+
+    public Authority(Authorization authorizationStatus) {
+        this.authorizationStatus = authorizationStatus;
+    }
 }

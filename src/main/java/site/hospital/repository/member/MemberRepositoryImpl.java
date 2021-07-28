@@ -8,11 +8,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
+import site.hospital.domain.member.MemberAuthority;
 import site.hospital.dto.AdminMemberSearchCondition;
 
 import static site.hospital.domain.member.QMember.member;
+import static site.hospital.domain.member.QMemberAuthority.memberAuthority;
+import static site.hospital.domain.member.QAuthority.authority;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -39,6 +41,18 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
         return new PageImpl<>(content, pageable, total);
 
+    }
+
+    //권한 찾기
+    @Override
+    public List<MemberAuthority> memberAuthorities(String memberIdName){
+        return queryFactory
+                .select(memberAuthority)
+                .from(memberAuthority)
+                .join(memberAuthority.member, member)
+                .join(memberAuthority.authority, authority).fetchJoin()
+                .where(memberAuthority.member.memberIdName.eq(memberIdName))
+                .fetch();
     }
 
 

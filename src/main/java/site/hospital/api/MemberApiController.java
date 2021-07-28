@@ -5,11 +5,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
+import site.hospital.domain.member.MemberStatus;
 import site.hospital.dto.AdminMemberSearchCondition;
+import site.hospital.jwtToken.JwtFilter;
+import site.hospital.jwtToken.TokenProvider;
 import site.hospital.service.MemberService;
 
 import javax.validation.constraints.Email;
@@ -23,14 +33,26 @@ import java.util.stream.Collectors;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/login")
-    public LoginMemberResponse loginMember(@RequestBody @Validated LoginMemberRequest request){
+    public ResponseEntity<LoginMemberResponse> loginMember(@RequestBody @Validated LoginMemberRequest request){
 
-        Member member = memberService.logIn(request.getMemberIdName(),request.getPassword());
-        LoginMemberResponse loginMemberResponse = new LoginMemberResponse(member);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(request.getMemberIdName(), request.getPassword());
 
-        return loginMemberResponse;
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Member member =memberService.logIn(request.getMemberIdName(),request.getPassword());
+
+        String jwt = tokenProvider.createToken(authentication, member.getPhoneNumber());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return new ResponseEntity<>(new LoginMemberResponse(member.getNickName(),member.getMemberStatus(),jwt), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/signup")
@@ -163,23 +185,14 @@ public class MemberApiController {
 
     @Data
     private static class LoginMemberResponse{
-        private Long memberId;
-        private String memberIdName;
-        private String password;
-        private String nickName;
-        private String name;
-        private String phoneNumber;
-        private Authorization authorizationStatus;
-        private Long hospitalNumber;
+        String nickName;
+        MemberStatus memberStatus;
+        String token;
 
-        public LoginMemberResponse(Member member) {
-            this.memberId = member.getId();
-            this.memberIdName = member.getMemberIdName();
-            this.password = member.getPassword();
-            this.nickName = member.getNickName();
-            this.name = member.getUserName();
-            this.phoneNumber = member.getPhoneNumber();
-            this.hospitalNumber = member.getHospitalNumber();
+        public LoginMemberResponse(String nickName, MemberStatus memberStatus, String token) {
+            this.nickName = nickName;
+            this.memberStatus = memberStatus;
+            this.token = token;
         }
     }
 

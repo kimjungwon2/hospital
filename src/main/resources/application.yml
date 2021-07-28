@@ -17,7 +17,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
 jwt:
-  secret: jwtsecret
+  secret: dkjclvc
 
 logging.level:
   org.hibernate.SQL: debug

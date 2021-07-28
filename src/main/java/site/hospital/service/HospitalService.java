@@ -26,7 +26,6 @@ import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 
 import java.util.List;
-import java.util.logging.FileHandler;
 
 @Service
 @Transactional(readOnly=true)

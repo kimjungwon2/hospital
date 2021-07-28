@@ -35,6 +35,8 @@ public class Member extends BaseTimeEntity {
     private List<Answer> answers = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<ReviewLike> reviewLikes = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<MemberAuthority> memberAuthorities = new ArrayList<>();
 
     //회원 아이디
     @Column(unique=true, nullable = false)
@@ -48,18 +50,23 @@ public class Member extends BaseTimeEntity {
     //병원 번호
     private Long hospitalNumber;
 
+    //멤버 권한.
+    @Enumerated(EnumType.STRING)
+    MemberStatus memberStatus;
+
     /*
         생성자
     */
     //회원 생성
     @Builder
     public Member(String memberIdName, String password, String userName, String nickName,
-                  String phoneNumber){
+                  String phoneNumber, MemberStatus memberStatus){
         this.memberIdName = memberIdName;
         this.password = password;
         this.userName = userName;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
+        this.memberStatus = memberStatus;
     }
 
     //수정하기

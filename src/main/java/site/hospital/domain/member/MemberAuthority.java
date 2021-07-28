@@ -1,6 +1,7 @@
 package site.hospital.domain.member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,12 @@ public class MemberAuthority {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="authority_id")
     private Authority authority;
+
+    @Builder
+    public MemberAuthority(Member member, Authority authority) {
+        this.member = member;
+        this.authority = authority;
+    }
 
     //권한을 주기
     public void giveAuthority(Authority authority){

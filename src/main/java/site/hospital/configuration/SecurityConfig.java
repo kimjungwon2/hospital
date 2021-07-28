@@ -2,7 +2,6 @@ package site.hospital.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -10,16 +9,30 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import site.hospital.jwtToken.JwtAccessDeniedHandler;
+import site.hospital.jwtToken.JwtAuthenticationEntryPoint;
+import site.hospital.jwtToken.JwtSecurityConfig;
+import site.hospital.jwtToken.TokenProvider;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final TokenProvider tokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    public SecurityConfig(TokenProvider tokenProvider, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                          JwtAccessDeniedHandler jwtAccessDeniedHandler){
+        this.tokenProvider = tokenProvider;
+        this.jwtAccessDeniedHandler =jwtAccessDeniedHandler;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
+
     //허용 url
     private static final String[] PUBLIC_URI = {
-            "/login","/signup","/search/hospital/**","/hospital/view/**","/**",
+            "/login","/signup","/search/hospital/**","/hospital/view/**","/api/authenticate",
             "/hospital/staffHosInfo/**","/hospital/review/**","/hospital/question/**"
     };
 
@@ -28,15 +41,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().and()
                 .csrf().disable()
+
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler).and()
+
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 // 리소스 별 허용 범위 설정
                 .authorizeRequests()
                 .antMatchers(PUBLIC_URI).permitAll()
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
-        ;
+
+                .and()
+                .apply(new JwtSecurityConfig(tokenProvider));
     }
+
     //비밀번호 암호화
     @Bean public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
