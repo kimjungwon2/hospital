@@ -22,7 +22,7 @@ export default new Vuex.Store({
             return state.memberStatus === 'NORMAL';
         },
         isAdmin(state){
-            return state.memberStatus === "ADMIN";
+            return state.memberStatus === 'ADMIN';
         }
     },
     mutations: {

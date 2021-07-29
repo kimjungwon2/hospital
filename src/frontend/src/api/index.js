@@ -23,6 +23,7 @@ function createInstanceWithToken(url){
 
 export const hospital = createInstanceWithURL('hospital');
 export const user = createInstanceWithToken('user');
+export const admin = createInstanceWithToken('admin');
 
 
 const instance = createInstance();

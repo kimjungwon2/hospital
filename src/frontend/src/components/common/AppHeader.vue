@@ -2,7 +2,7 @@
     <header>
       <nav class="navbar">
         <div class="navbar_logo">
-          <router-link to="/main"><font-awesome-icon icon="ambulance" /> K-Hospital</router-link>
+          <router-link :to="logoLink"><font-awesome-icon icon="ambulance" /> K-Hospital</router-link>
         </div>
 
         
@@ -16,7 +16,7 @@
           </ul>
 
 
-          <ul class="navbar_user" v-if="isLogin">
+          <ul class="navbar_user" v-if="isLogin||isAdmin">
               <li><span>{{ $store.state.nickName }}</span></li>
               <li><a href="javacript:;" @click="logoutUser">로그아웃</a></li>
           </ul>
@@ -43,7 +43,18 @@ export default {
     },
     isAdmin(){
       return this.$store.getters.isAdmin;
-    }
+    },
+    logoLink(){
+      if(this.$store.getters.isLogin){
+        return '/main';
+      }
+      else if(this.$store.getters.isAdmin){
+        return '/admin';
+      }
+      else{
+        return '/main';
+      }
+    },
   },
   methods:{
     logoutUser(){
