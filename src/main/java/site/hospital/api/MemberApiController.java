@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -108,7 +107,7 @@ public class MemberApiController {
         return new PageImpl<>(result, pageable,total);
     }
 
-    //관리자 유저 상세 조회
+    //관리자 유저 상세 보기
     @GetMapping("/admin/view/member/{memberId}")
     public adminViewMember adminViewMember(@PathVariable("memberId") Long memberId){
         Member member = memberService.viewMember(memberId);
@@ -125,6 +124,7 @@ public class MemberApiController {
                 .password(request.getPassword())
                 .nickName(request.getNickName())
                 .userName(request.getUserName())
+                .memberStatus(request.getMemberStatus())
                 .phoneNumber(request.getPhoneNumber())
                 .build();
         Long id = memberService.adminSignUp(member);
@@ -265,6 +265,6 @@ public class MemberApiController {
         @NotNull(message="전화번호를 입력해주세요.")
         private String phoneNumber;
         @NotNull(message="권한을 넣어주세요.")
-        private Authorization authorizationStatus;
+        private MemberStatus memberStatus;
     }
 }

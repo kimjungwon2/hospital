@@ -97,11 +97,49 @@ public class MemberService {
         return member;
     }
 
-    //회원등록
+    //관리자 회원등록
     @Transactional
     public Long adminSignUp(Member member){
         validateDuplicateMember(member);
-        memberRepository.save(member);
+
+        //USER 권한 주기
+        if(member.getMemberStatus() == MemberStatus.NORMAL ||
+                member.getMemberStatus() == MemberStatus.STAFF ||
+                member.getMemberStatus() == MemberStatus.ADMIN){
+            //USER 권한 찾기
+            Authority authority_USER = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
+            if(authority_USER == null) throw new IllegalStateException("USER 권한 데이터가 없습니다.");
+            memberRepository.save(member);
+
+            //새로 생성한 멤버에게 USER 권한 주기.
+            MemberAuthority userAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_USER).build();
+
+            memberAuthorityRepository.save(userAuthority);
+        }
+
+        //MANAGER 권한 주기(staff, admin 포함)
+        if(member.getMemberStatus() ==MemberStatus.STAFF || member.getMemberStatus() == MemberStatus.ADMIN){
+            Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
+            if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
+
+            MemberAuthority managerAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_STAFF).build();
+
+            memberAuthorityRepository.save(managerAuthority);
+        }
+        //ADMIN 권한 주기(관리자만)
+        if(member.getMemberStatus() == MemberStatus.ADMIN){
+            Authority authority_ADMIN = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_ADMIN);
+            if(authority_ADMIN == null) throw new IllegalStateException("ADMIN 권한 데이터가 없습니다.");
+
+            //admin 권한 저장하기
+            MemberAuthority adminAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_ADMIN).build();
+
+            memberAuthorityRepository.save(adminAuthority);
+        }
+
         return member.getId();
     }
 
