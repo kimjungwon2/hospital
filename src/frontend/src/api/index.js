@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { setInterceptors } from './common/interceptors';
+
 
 function createInstance(){
      return axios.create({
@@ -13,14 +15,17 @@ function createInstanceWithURL(url){
 }
 
 function createInstanceWithToken(url){
-    return axios.create({
+    const instance = axios.create({
         baseURL: `${process.env.VUE_APP_API_URL}${url}`,
     });
+    return setInterceptors(instance);
 }
 
-const instance = createInstance();
 export const hospital = createInstanceWithURL('hospital');
-export const user = createInstanceWithURL('user');
+export const user = createInstanceWithToken('user');
+
+
+const instance = createInstance();
 
 function signupUser(userData){
     return instance.post('signup', userData);
