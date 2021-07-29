@@ -9,6 +9,9 @@
           <ul class="navbar_menu" v-if="isLogin">
               <li><router-link to="/user/activity">나의 활동</router-link></li>
               <li><router-link to="/user/info">정보 수정</router-link></li>
+          </ul>
+
+          <ul class="navbar_menu" v-if="isAdmin">
               <li><router-link to="/admin">관리 페이지</router-link></li>
           </ul>
 
@@ -29,6 +32,7 @@
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAmbulance } from '@fortawesome/free-solid-svg-icons'
+import { deleteCookie } from '@/utils/cookies'
 
 library.add(faAmbulance)
 
@@ -37,10 +41,16 @@ export default {
     isLogin(){
       return this.$store.getters.isLogin;
     },
+    isAdmin(){
+      return this.$store.getters.isAdmin;
+    }
   },
   methods:{
     logoutUser(){
       this.$store.commit('clearUserInfo');
+       deleteCookie('member_status');
+       deleteCookie('nick_name');
+       deleteCookie('token');
       this.$router.push('/');
     },
   },
@@ -57,7 +67,7 @@ header{
   justify-content: space-between;
   align-items: center;
   background-color: #5F9EA0;
-  padding: 8px 100px;
+  padding: 8px 50px;
 }
 
 .navbar_logo {

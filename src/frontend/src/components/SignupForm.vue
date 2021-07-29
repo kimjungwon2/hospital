@@ -50,7 +50,9 @@ export default {
                 phoneNumber: this.phoneNumber,
             }
             await signupUser(userData);
+            this.$alert("회원 가입이 완료되었습니다.")
             this.initForm();
+            this.$router.push('/main').catch(error=>error);
         },
         initForm(){
             this.memberIdName = '';

@@ -12,6 +12,12 @@ function createInstanceWithURL(url){
     });
 }
 
+function createInstanceWithToken(url){
+    return axios.create({
+        baseURL: `${process.env.VUE_APP_API_URL}${url}`,
+    });
+}
+
 const instance = createInstance();
 export const hospital = createInstanceWithURL('hospital');
 export const user = createInstanceWithURL('user');

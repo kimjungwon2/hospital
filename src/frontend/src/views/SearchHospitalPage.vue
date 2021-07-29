@@ -39,19 +39,15 @@ export default {
                     page: this.page,
                 },
             }).then(({ data }) => {
-
-                setTimeout(()=>{ // 스크롤 페이징을 띄우기 위한 지연 시간 0.4초
-                   if(data.content.length){
-                          this.page+=1;
-                          this.contentItems.push(...data.content);
-                          $state.loaded();
-                        }
-                       else $state.complete();
-                    },400)
-                }).catch(error=>{
+                 if(data.content.length){
+                    this.page+=1;
+                    this.contentItems.push(...data.content);
+                    $state.loaded();
+            }
+            else $state.complete();
+            }).catch(error=>{
                 console.error(error);
-               });
-            
+            });
         },
     }
 };
