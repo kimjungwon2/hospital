@@ -44,13 +44,13 @@ public class QuestionApiController {
 
 
     //관리자 Question 조회
-    @GetMapping("/admin/questions")
+    @GetMapping("/admin/question")
     public Page<AdminSearchQuestionDto> adminQuestions(Pageable pageable){
         return questionService.adminQuestions(pageable);
     }
 
     //관리자 Questions 검색
-    @GetMapping("/admin/questions/search")
+    @GetMapping("/admin/question/search")
     public Page<AdminSearchQuestionDto> adminSearchQuestions(@RequestParam(value="nickName",required = false) String nickName,
                                                              @RequestParam(value="hospitalName",required = false) String hospitalName,
                                                              @RequestParam(value="memberIdName",required = false) String memberIdName,
@@ -63,8 +63,9 @@ public class QuestionApiController {
 
     //관리자 Question 삭제
     @DeleteMapping("/admin/question/delete")
-    public void deleteQuestion(@RequestBody @Validated DeleteQuestionRequest request){
-        questionService.questionDelete(request.getQuestionId(),request.getAnswerId());
+    public void deleteQuestion(@RequestParam(value="questionId",required = false) Long questionId,
+                               @RequestParam(value="answerId",required = false) Long answerId){
+        questionService.questionDelete(questionId,answerId);
     }
 
 
@@ -103,12 +104,5 @@ public class QuestionApiController {
 
         }
     }
-
-    @Data
-    private static class DeleteQuestionRequest{
-        private Long questionId;
-        private Long answerId;
-    }
-
 
 }

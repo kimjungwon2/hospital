@@ -30,12 +30,12 @@ public class TagApiController {
     }
 
 
-    @DeleteMapping("/admin/tag/delete")
-    public void deleteTag(@RequestBody @Validated DeleteTagRequest request){
-        tagService.tagDelete(request.getTagId());
+    @DeleteMapping("/admin/tag/delete/{tagId}")
+    public void deleteTag(@PathVariable("tagId") Long tagId){
+        tagService.tagDelete(tagId);
     }
 
-    @GetMapping("/admin/tag/search")
+    @GetMapping("/admin/tag")
     public Result allSearchTag(){
         List<Tag> allTags = tagService.allSearchTag();
         List<allTag> collect = allTags.stream()
@@ -64,11 +64,6 @@ public class TagApiController {
         public CreateTagResponse(long tagId) {
             this.tagId = tagId;
         }
-    }
-
-    @Data
-    private static class DeleteTagRequest {
-        private Long tagId;
     }
 
     @Data

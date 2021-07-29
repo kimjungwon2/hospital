@@ -70,7 +70,7 @@ public class MemberApiController {
     }
 
     //관리자 유저 조회
-    @GetMapping("/admin/users")
+    @GetMapping("/admin/user")
     public Page<MemberSearchResult> adminMembers(Pageable pageable){
         Page<Member> members = memberService.adminMembers(pageable);
         List<MemberSearchResult> result = members.stream()
@@ -82,7 +82,7 @@ public class MemberApiController {
     }
 
     //관리자 유저 검색
-    @GetMapping("/admin/users/search")
+    @GetMapping("/admin/user/search/")
     public Page<MemberSearchResult> adminSearchMembers(@RequestParam(value="allSearch",required = false) String allSearch,
                                                        @RequestParam(value="memberId",required = false) Long memberId,
                                                        @RequestParam(value="memberIdName",required = false) String memberIdName,
@@ -108,7 +108,7 @@ public class MemberApiController {
     }
 
     //관리자 유저 상세 보기
-    @GetMapping("/admin/view/member/{memberId}")
+    @GetMapping("/admin/user/view/{memberId}")
     public adminViewMember adminViewMember(@PathVariable("memberId") Long memberId){
         Member member = memberService.viewMember(memberId);
         adminViewMember adminViewMember =new adminViewMember(member);
@@ -133,13 +133,13 @@ public class MemberApiController {
     }
 
     //관리자 멤버 삭제
-    @DeleteMapping("/admin/delete/member/{memberId}")
+    @DeleteMapping("/admin/user/delete/{memberId}")
     public void adminDeleteMember(@PathVariable("memberId") Long memberId){
         memberService.adminDeleteMember(memberId);
     }
 
     //관리자 멤버 수정하기
-    @PutMapping("/admin/modify/member/{memberId}")
+    @PutMapping("/admin/user/modify/{memberId}")
     public void adminModifyMember(@PathVariable("memberId") Long memberId,
                                   @RequestBody @Validated AdminModifyMemberRequest request){
         Member member = Member.builder().phoneNumber(request.getPhoneNumber()).nickName(request.getNickName())
@@ -147,7 +147,7 @@ public class MemberApiController {
     }
 
     //관리자 멤버 권한 부여하기.
-    @PutMapping("/admin/authority/member/{memberId}")
+    @PutMapping("/admin/user/authority/{memberId}")
     public void adminGiveAuthorityMember(@PathVariable("memberId") Long memberId,
                                   @RequestBody @Validated AdminMemberAuthorizeRequest request){
         memberService.adminGiveAuthority(memberId,request.getMemberStatus());

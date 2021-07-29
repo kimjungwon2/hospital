@@ -84,7 +84,7 @@ public class ReviewApiController {
     }
 
     //관리자 리뷰 조회
-    @GetMapping("/admin/reviews")
+    @GetMapping("/admin/review")
     public Page<AdminReviewsResponse> adminReviews(Pageable pageable){
         Page<Review> reviews = reviewService.adminReviews(pageable);
         List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
@@ -96,7 +96,7 @@ public class ReviewApiController {
     }
 
     //관리자 리뷰 검색
-    @GetMapping("/admin/reviews/search")
+    @GetMapping("/admin/review/search")
     public Page<AdminReviewsResponse> adminSearchReviews(@RequestParam(value="nickName",required = false) String nickName,
                                                          @RequestParam(value="hospitalName",required = false) String hospitalName,
                                                          @RequestParam(value="memberIdName",required = false) String memberIdName,
@@ -115,7 +115,7 @@ public class ReviewApiController {
     }
 
     //관리자 리뷰 승인해주기
-    @PutMapping("/admin/approve/review/{reviewId}")
+    @PutMapping("/admin/review/approve/{reviewId}")
     public void approveReview(@PathVariable("reviewId") Long reviewId,@RequestBody @Validated AdminApproveReviewRequest request){
         reviewService.approve(reviewId,request.getReviewAuthentication());
     }

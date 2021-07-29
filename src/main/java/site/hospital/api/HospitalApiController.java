@@ -54,7 +54,7 @@ public class HospitalApiController {
     }
 
     //관리자 병원 검색
-    @GetMapping("/admin/hospitals/search")
+    @GetMapping("/admin/search/hospitals")
     public Page<AdminSearchHospitalDto> adminSearchHospitals(@RequestParam(value="hospitalId",required = false) Long hospitalId,
                                                              @RequestParam(value="hospitalName",required = false) String hospitalName,
                                                              @RequestParam(value="businessCondition",required = false) String businessCondition,
