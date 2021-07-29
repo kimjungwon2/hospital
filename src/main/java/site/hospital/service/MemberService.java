@@ -114,4 +114,44 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
+    //관리자 멤버 권한주기
+    @Transactional
+    public void adminGiveAuthority(Long memberId, MemberStatus memberStatus){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        //유효한 권한만 받기.
+       if(memberStatus==null) throw new IllegalStateException("권한을 입력하세요");
+
+       MemberAuthority findMemberManager = memberRepository.findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
+
+       //이미 MANAGER 권한이 있으면 MANAGER 권한을 주지 않는다.
+       if(findMemberManager == null) {
+           Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
+           if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
+
+           //manager 권한 주기
+           MemberAuthority managerAuthority = MemberAuthority.builder()
+                   .member(member).authority(authority_STAFF).build();
+           memberAuthorityRepository.save(managerAuthority);
+       }
+
+        //멤버의 staff 권한 주기
+       if(memberStatus == MemberStatus.STAFF){
+           member.giveAuthority(MemberStatus.STAFF);
+       }
+        //admin 권한 주기
+       else if(memberStatus == MemberStatus.ADMIN){
+            Authority authority_ADMIN = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_ADMIN);
+            if(authority_ADMIN == null) throw new IllegalStateException("ADMIN 권한 데이터가 없습니다.");
+
+            //admin 권한 저장하기
+            MemberAuthority adminAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_ADMIN).build();
+
+            member.giveAuthority(MemberStatus.ADMIN);
+            memberAuthorityRepository.save(adminAuthority);
+        }
+
+    }
 }

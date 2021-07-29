@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -38,21 +39,21 @@ public class MemberApiController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginMemberResponse> loginMember(@RequestBody @Validated LoginMemberRequest request){
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(request.getMemberIdName(), request.getPassword());
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(request.getMemberIdName(), request.getPassword());
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            Member member = memberService.logIn(request.getMemberIdName(), request.getPassword());
 
-        Member member =memberService.logIn(request.getMemberIdName(),request.getPassword());
+            String jwt = tokenProvider.createToken(authentication, member.getPhoneNumber());
 
-        String jwt = tokenProvider.createToken(authentication, member.getPhoneNumber());
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+            return new ResponseEntity<>(new LoginMemberResponse(member.getNickName(), member.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
 
-        return new ResponseEntity<>(new LoginMemberResponse(member.getNickName(),member.getMemberStatus(),jwt), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/signup")
@@ -131,12 +132,6 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
-    //관리자 멤버 권한 부여
-    @PutMapping("/admin/authorize/member/{memberId}")
-    public void adminAuthorize(@PathVariable("memberId") Long memberId, @Validated @RequestBody AdminMemberAuthorizeRequest request){
-
-    }
-
     //관리자 멤버 삭제
     @DeleteMapping("/admin/delete/member/{memberId}")
     public void adminDeleteMember(@PathVariable("memberId") Long memberId){
@@ -149,6 +144,13 @@ public class MemberApiController {
                                   @RequestBody @Validated AdminModifyMemberRequest request){
         Member member = Member.builder().phoneNumber(request.getPhoneNumber()).nickName(request.getNickName())
                 .userName(request.getUserName()).build();
+    }
+
+    //관리자 멤버 권한 부여하기.
+    @PutMapping("/admin/authority/member/{memberId}")
+    public void adminGiveAuthorityMember(@PathVariable("memberId") Long memberId,
+                                  @RequestBody @Validated AdminMemberAuthorizeRequest request){
+        memberService.adminGiveAuthority(memberId,request.getMemberStatus());
     }
 
     /* DTO */
@@ -235,15 +237,17 @@ public class MemberApiController {
     }
     @Data
     private static class AdminMemberAuthorizeRequest{
-        private Authorization authorizationStatus;
+        private MemberStatus memberStatus;
     }
+
     @Data
     private static class AdminModifyMemberRequest{
-        private Authorization authorizationStatus;
+        private MemberStatus memberStatus;
         private String nickName;
         private String phoneNumber;
         private String userName;
     }
+
 
     @Data
     private static class AdminCreateMemberRequest {

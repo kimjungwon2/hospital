@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.Hospital;
-import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Appointment extends BaseTimeEntity {
+public class Appointment extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")

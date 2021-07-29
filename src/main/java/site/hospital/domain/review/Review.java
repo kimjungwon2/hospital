@@ -2,8 +2,8 @@ package site.hospital.domain.review;
 
 import lombok.Getter;
 import site.hospital.domain.ReviewImage;
+import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.reviewLike.ReviewLike;
-import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.member.Member;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-public class Review extends BaseTimeEntity {
+public class Review extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")

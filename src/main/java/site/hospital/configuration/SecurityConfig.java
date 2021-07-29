@@ -7,9 +7,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import site.hospital.exception.CustomAuthFailureHandler;
 import site.hospital.jwtToken.JwtAccessDeniedHandler;
 import site.hospital.jwtToken.JwtAuthenticationEntryPoint;
 import site.hospital.jwtToken.JwtSecurityConfig;
@@ -33,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //허용 url
     private static final String[] PUBLIC_URI = {
             "/login","/signup","/search/hospital/**","/hospital/view/**","/api/authenticate",
-            "/hospital/staffHosInfo/**","/hospital/review/**","/hospital/question/**"
+            "/hospital/staffHosInfo/**","/hospital/review/**","/hospital/question/**","/**"
     };
 
     @Override
@@ -44,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler).and()
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
 
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -52,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 리소스 별 허용 범위 설정
                 .authorizeRequests()
                 .antMatchers(PUBLIC_URI).permitAll()
+                .antMatchers("/user/**").hasAnyRole("USER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
 
@@ -62,6 +66,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //비밀번호 암호화
     @Bean public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthFailureHandler();
     }
 
     //CORS 정책 시행.

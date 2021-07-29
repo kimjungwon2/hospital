@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Doctor extends BaseTimeEntity {
+public class Doctor extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="doctor_id")

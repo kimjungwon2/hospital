@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.member.MemberAuthority;
 import site.hospital.dto.AdminMemberSearchCondition;
@@ -53,6 +54,19 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .join(memberAuthority.authority, authority).fetchJoin()
                 .where(memberAuthority.member.memberIdName.eq(memberIdName))
                 .fetch();
+    }
+
+    //STAFF 권한 유무 확인권한 찾기
+    @Override
+    public MemberAuthority findMemberStaffAuthority(Long memberId, Authorization authorization){
+        return queryFactory
+                .select(memberAuthority)
+                .from(memberAuthority)
+                .join(memberAuthority.member, member)
+                .join(memberAuthority.authority, authority)
+                .where(memberAuthority.member.id.eq(memberId)
+                ,memberAuthority.authority.authorizationStatus.eq(authorization))
+                .fetchOne();
     }
 
 

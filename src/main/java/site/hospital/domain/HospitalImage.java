@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HospitalImage extends BaseTimeEntity {
+public class HospitalImage extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hospital_image_id")
     private Long id;

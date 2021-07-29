@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.appointment.Appointment;
+import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Hospital extends BaseTimeEntity {
+public class Hospital extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hospital_id")
@@ -92,12 +93,10 @@ public class Hospital extends BaseTimeEntity {
         this.cityName = cityName;
     }
 
-    //staffHos fk키 지우기
+    //fk 제거를 위해서 staffHos 지우기
     public void deleteStaffHosId(){
         this.staffHosInformation = null;
     }
-
-    // 비즈니스 메서드 //
 
 
     public void updateHospital(String licensingDate, String hospitalName, String phoneNumber,

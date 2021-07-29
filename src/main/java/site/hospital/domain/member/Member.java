@@ -35,7 +35,7 @@ public class Member extends BaseTimeEntity {
     private List<Answer> answers = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<ReviewLike> reviewLikes = new ArrayList<>();
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberAuthority> memberAuthorities = new ArrayList<>();
 
     //회원 아이디
@@ -74,6 +74,11 @@ public class Member extends BaseTimeEntity {
         this.nickName =member.nickName;
         this.phoneNumber=member.phoneNumber;
         this.userName = member.userName;
+    }
+
+    //멤버 권한 주기
+    public void giveAuthority(MemberStatus memberStatus){
+        this.memberStatus = memberStatus;
     }
 
 }
