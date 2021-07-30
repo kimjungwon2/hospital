@@ -69,6 +69,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetchOne();
     }
 
+    public void adminDeleteMemberAuthority(Member member){
+        queryFactory.delete(memberAuthority)
+                .where(memberAuthority.member.eq(member))
+                .execute();
+    }
+
+
+
 
     @Override
     public Page<Member> adminSearchMembers(AdminMemberSearchCondition condition, Pageable pageable){

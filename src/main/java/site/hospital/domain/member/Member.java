@@ -71,9 +71,10 @@ public class Member extends BaseTimeEntity {
 
     //수정하기
     public void modifyMember(Member member){
-        this.nickName =member.nickName;
-        this.phoneNumber=member.phoneNumber;
-        this.userName = member.userName;
+        this.nickName =member.getNickName();
+        this.phoneNumber=member.getPhoneNumber();
+        this.userName = member.getUserName();
+        this.memberStatus = member.getMemberStatus();
     }
 
     //멤버 권한 주기

@@ -76,6 +76,44 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
+        //권한이 같다면 권한 수정을 안 한다.
+        if(member.getMemberStatus() == modifyMember.getMemberStatus()){
+
+        }
+
+        else if(modifyMember.getMemberStatus() == MemberStatus.NORMAL){
+            //모든 권한 삭제
+            memberRepository.adminDeleteMemberAuthority(member);
+
+            //ROLE_USER 권한 주기
+            Authority authority_USER = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
+            if(authority_USER == null) throw new IllegalStateException("USER 권한 데이터가 없습니다.");
+
+            MemberAuthority memberAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_USER).build();
+
+            memberAuthorityRepository.save(memberAuthority);
+        }
+        else if(modifyMember.getMemberStatus() == MemberStatus.STAFF){
+            //모든 권한 삭제
+            memberRepository.adminDeleteMemberAuthority(member);
+
+            //ROLE_USER, ROLE_MANAGER 권한 주기
+            Authority authority_USER = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
+            if(authority_USER == null) throw new IllegalStateException("USER 권한 데이터가 없습니다.");
+
+            MemberAuthority memberAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_USER).build();
+
+            memberAuthorityRepository.save(memberAuthority);
+
+            Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
+            if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
+            MemberAuthority managerAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_STAFF).build();
+            memberAuthorityRepository.save(managerAuthority);
+        }
+
         member.modifyMember(modifyMember);
     }
 
@@ -99,8 +137,14 @@ public class MemberService {
 
     //관리자 회원등록
     @Transactional
-    public Long adminSignUp(Member member){
-        validateDuplicateMember(member);
+    public Long adminSignUp(Member memberDto){
+
+        validateDuplicateMember(memberDto);
+
+        Member member = Member.builder().userName(memberDto.getUserName())
+                .nickName(memberDto.getNickName()).phoneNumber(memberDto.getPhoneNumber())
+                .memberIdName(memberDto.getMemberIdName()).memberStatus(memberDto.getMemberStatus())
+                .password(passwordEncoder.encode(memberDto.getPassword())).build();
 
         //USER 권한 주기
         if(member.getMemberStatus() == MemberStatus.NORMAL ||
@@ -149,6 +193,9 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
+        //멤버 권리부터 삭제.
+        memberRepository.adminDeleteMemberAuthority(member);
+
         memberRepository.deleteById(memberId);
     }
 
@@ -157,9 +204,6 @@ public class MemberService {
     public void adminGiveAuthority(Long memberId, MemberStatus memberStatus){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
-
-        //유효한 권한만 받기.
-       if(memberStatus==null) throw new IllegalStateException("권한을 입력하세요");
 
        MemberAuthority findMemberManager = memberRepository.findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
 

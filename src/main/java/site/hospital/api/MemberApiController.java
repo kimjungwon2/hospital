@@ -142,8 +142,10 @@ public class MemberApiController {
     @PutMapping("/admin/user/modify/{memberId}")
     public void adminModifyMember(@PathVariable("memberId") Long memberId,
                                   @RequestBody @Validated AdminModifyMemberRequest request){
-        Member member = Member.builder().phoneNumber(request.getPhoneNumber()).nickName(request.getNickName())
+        Member member = Member.builder().phoneNumber(request.getPhoneNumber()).memberStatus(request.getMemberStatus()).nickName(request.getNickName())
                 .userName(request.getUserName()).build();
+
+        memberService.modifyMember(memberId, member);
     }
 
     //관리자 멤버 권한 부여하기.
@@ -202,18 +204,15 @@ public class MemberApiController {
     public static class MemberSearchResult {
         private Long memberId;
         private String memberIdName;
-        private String nickName;
         private String userName;
-        private String phoneNumber;
-        private Authorization authorizationStatus;
+        private MemberStatus memberStatus;
         private Long hospitalNumber;
 
         public MemberSearchResult(Member member) {
             this.memberId = member.getId();
             this.memberIdName = member.getMemberIdName();
-            this.nickName = member.getNickName();
             this.userName = member.getUserName();
-            this.phoneNumber = member.getPhoneNumber();
+            this.memberStatus = member.getMemberStatus();
             this.hospitalNumber = member.getHospitalNumber();
         }
     }
@@ -225,7 +224,7 @@ public class MemberApiController {
         private String userName;
         private String nickName;
         private String phoneNumber;
-        private Authorization authorizationStatus;
+        private MemberStatus memberStatus;
 
         public adminViewMember(Member member) {
             this.id = member.getId();
@@ -233,6 +232,7 @@ public class MemberApiController {
             this.userName = member.getUserName();
             this.nickName = member.getNickName();
             this.phoneNumber = member.getPhoneNumber();
+            this.memberStatus = member.getMemberStatus();
         }
     }
     @Data
