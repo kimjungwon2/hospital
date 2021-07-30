@@ -7,10 +7,11 @@
     전화번호 : {{member.phoneNumber}}
     권한 : {{member.memberStatus}}
   </div>
+  
 </template>
 
 <script>
-import {adminViewMember} from '@/api/admin';
+import {adminViewMember,adminModifyMember} from '@/api/admin';
 
 export default {
 
@@ -23,8 +24,7 @@ export default {
         const memberId = this.$route.params.userId;
         const {data} = await adminViewMember(memberId);
         this.member = data;
-    }
-
+    },
 }
 </script>
 
