@@ -1,7 +1,5 @@
 <template>
-  <div>
-      <h1>유저 관리 페이지</h1>
-  </div>
+  <router-link to="/admin/signup">+</router-link>
 </template>
 
 <script>

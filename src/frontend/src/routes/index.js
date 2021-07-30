@@ -80,8 +80,18 @@ const router =  new VueRouter({
        },
        {
             path:'/admin/users',
-            component: () => import('@/views/admin/ManageUsersPage.vue'),
+            component: () => import('@/views/admin/user/ManageUsersPage.vue'),
             meta: { admin: true},
+       },
+       {
+            path:'/admin/user/view/:userId',
+            component:() => import('@/views/admin/user/ManageViewUserPage.vue'),
+            meta: {admin: true},
+       },
+       {
+            path:'/admin/signup',
+            component:() => import('@/views/admin/user/ManageAddUserPage.vue'),
+            meta: {admin: true},
        },
        {
             path:'/admin/tags',

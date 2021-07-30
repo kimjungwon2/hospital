@@ -37,7 +37,7 @@ function adminDeleteMember(memberId){
 }
 
 //관리자 멤버 수정하기
-function adminModifyMember(memberId,userData){
+function adminModifyMember(memberId, userData){
     return admin.put('/user/modify/'+memberId, userData);
 }
 
