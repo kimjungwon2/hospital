@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {adminViewMember,adminModifyMember} from '@/api/admin';
+import {adminViewMember} from '@/api/admin';
 
 export default {
 

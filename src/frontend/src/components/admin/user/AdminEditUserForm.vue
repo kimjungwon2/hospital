@@ -21,9 +21,10 @@
         </div>
         <div>
             <select name="memberStatus" v-model="memberStatus">
-                  <option value="">멤버 권한 선택</option>
-                  <option value="NORMAL">NORMAL</option>
-                  <option value="STAFF">STAFF</option>
+                  <option value="ADMIN" v-if="isAdmin" >ADMIN</option>
+                  <option value="" v-if="isNormal">멤버 권한 선택</option>
+                  <option value="NORMAL" v-if="isNormal">NORMAL</option>
+                  <option value="STAFF" v-if="isNormal">STAFF</option>
             </select>
         </div>
         <button type="submit">수정하기</button>
@@ -47,7 +48,23 @@ export default {
             member:{},
         }
     },
+    computed:{
+        isAdmin(){
+            return this.confirmAdmin();
+        },
+        isNormal(){
+            return this.confirmNormal();
+        },
+    },
     methods:{
+        confirmAdmin(){
+            if(this.memberStatus ==="ADMIN") return true;
+            else false;
+        },
+        confirmNormal(){
+            if(this.memberStatus !=="ADMIN") return true;
+            else false;
+        },
         async submitForm(){
             const userData = {
                 userName: this.userName,

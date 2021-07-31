@@ -7,18 +7,19 @@ function adminViewMemberLists(){
     return admin.get('/user');
 }
 //관리자 멤버 리스트 검색
-function adminSearchMemberLists(allSearch, memberId, memberIdName, nickName, userName, phoneNumber,authorizationStatus,hospitalNumber){
+function adminSearchMemberLists(searchCondition){
     return admin.get('/user/search',
     {
         params:{
-            allSearch: allSearch,
-            memberId: memberId,
-            memberIdName: memberIdName,
-            nickName:nickName,
-            userName:userName,
-            phoneNumber:phoneNumber,
-            authorizationStatus:authorizationStatus,
-            hospitalNumber:hospitalNumber,
+            allSearch: searchCondition.allSearch,
+            memberId: searchCondition.memberId,
+            memberIdName: searchCondition.memberIdName,
+            nickName: searchCondition.nickName,
+            userName: searchCondition.userName,
+            phoneNumber: searchCondition.phoneNumber,
+            authorizationStatus: searchCondition.authorizationStatus,
+            hospitalNumber: searchCondition.hospitalNumber,
+            page: searchCondition.page,
         },
     });
 }
@@ -54,13 +55,13 @@ function adminViewReviewLists(){
 }
 
 //리뷰 리스트 검색
-function adminSearchReviewLists(nickName, hospitalName, memberIdName){
+function adminSearchReviewLists(searchCondition){
     return admin.get('/review/search',
     {
         params:{
-            nickName: nickName,
-            hospitalName: hospitalName,
-            memberIdName: memberIdName,
+            nickName: searchCondition.nickName,
+            hospitalName: searchCondition.hospitalName,
+            memberIdName: searchCondition.memberIdName,
         },
     });
 }
@@ -102,19 +103,25 @@ function adminViewQuestionsList(){
     return admin.get('/question');
 }
 
-function adminSearchQuestionsList(nickName, hospitalName, memberIdName){
+function adminSearchQuestionsList(searchCondition){
     return admin.get('/question/search',
     {
         params:{
-            nickName: nickName,
-            hospitalName: hospitalName,
-            memberIdName: memberIdName,
+            nickName: searchCondition.nickName,
+            hospitalName: searchCondition.hospitalName,
+            memberIdName: searchCondition.memberIdName,
         },
     });
 }
 
-function adminDeleteQuestion(){
-    return admin.get('/question/delete');
+function adminDeleteQuestion(questionId,answerId){
+    return admin.delete('/question/delete',
+    {
+        params:{
+            questionId:questionId,
+            answerId:answerId
+        }
+    });
 }
 
 

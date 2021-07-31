@@ -1,17 +1,17 @@
 <template>
   <div>
-      <h1>유저 관리 페이지</h1>
-      <AdminViewUsersForm></AdminViewUsersForm>
       <AdminAddUserForm></AdminAddUserForm>
+      <h1>유저 관리 페이지</h1>
+      <AdminSearchUsersForm></AdminSearchUsersForm>
   </div>
 </template>
 
 <script>
-import AdminViewUsersForm from '@/components/admin/user/AdminViewUsersForm.vue'
+import AdminSearchUsersForm from '@/components/admin/user/AdminSearchUsersForm.vue'
 import AdminAddUserForm from '@/components/admin/user/AdminAddUserForm.vue'
 export default {
   components:{
-    AdminViewUsersForm,
+    AdminSearchUsersForm,
     AdminAddUserForm,
   },
 }
