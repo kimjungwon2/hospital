@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface MemberRepositoryCustom {
     Page<Member> adminSearchMembers(AdminMemberSearchCondition condition, Pageable pageable);
-    Page<Member> adminMembers(Pageable pageable);
     List<MemberAuthority> memberAuthorities(String memberIdName);
     MemberAuthority findMemberStaffAuthority(Long memberId, Authorization authorization);
     void adminDeleteMemberAuthority(Member member);

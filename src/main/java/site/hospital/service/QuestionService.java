@@ -84,11 +84,6 @@ public class QuestionService {
         return question;
     }
 
-    //관리자 병원 Question 조회
-    public Page<AdminSearchQuestionDto> adminQuestions(Pageable pageable){
-        return adminQuestionSearchRepository.adminQuestions(pageable);
-    }
-
     //관리자 병원 Question 검색
     public Page<AdminSearchQuestionDto> adminSearchQuestions(AdminQuestionSearchCondition condition, Pageable pageable){
         return adminQuestionSearchRepository.adminSearchQuestions(condition,pageable);

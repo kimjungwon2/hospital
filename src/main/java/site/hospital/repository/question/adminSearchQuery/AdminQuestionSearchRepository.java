@@ -26,23 +26,6 @@ public class AdminQuestionSearchRepository {
 
     public AdminQuestionSearchRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
 
-    public Page<AdminSearchQuestionDto> adminQuestions(Pageable pageable){
-        QueryResults<AdminSearchQuestionDto> result = queryFactory
-                .select(new QAdminSearchQuestionDto(question.id, member.memberIdName,
-                        member.nickName, hospital.hospitalName, question.content, answer.id, answer.answerContent))
-                .from(question)
-                .join(question.member, member)
-                .leftJoin(question.answer, answer)
-                .join(question.hospital, hospital)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-
-        List<AdminSearchQuestionDto> content = result.getResults();
-        Long total = result.getTotal();
-
-        return new PageImpl<>(content,pageable,total);
-    }
 
     public Page<AdminSearchQuestionDto> adminSearchQuestions(AdminQuestionSearchCondition condition, Pageable pageable){
         QueryResults<AdminSearchQuestionDto> result = queryFactory

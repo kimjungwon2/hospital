@@ -83,18 +83,6 @@ public class ReviewApiController {
         return reviewService.searchReview(condition, pageable);
     }
 
-    //관리자 리뷰 조회
-    @GetMapping("/admin/review")
-    public Page<AdminReviewsResponse> adminReviews(Pageable pageable){
-        Page<Review> reviews = reviewService.adminReviews(pageable);
-        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
-                .collect(Collectors.toList());
-
-        long total = reviews.getTotalElements();
-
-        return new PageImpl<>(result, pageable, total);
-    }
-
     //관리자 리뷰 검색
     @GetMapping("/admin/review/search")
     public Page<AdminReviewsResponse> adminSearchReviews(@RequestParam(value="nickName",required = false) String nickName,
@@ -331,6 +319,7 @@ public class ReviewApiController {
         @Data
         private static class AdminReviewsResponse{
         private Long reviewId;
+        private ReviewAuthentication reviewAuthentication;
         private String memberIdName;
         private String nickName;
         private List<AdminReviewsHospitalDto> reviewHospitals;
@@ -338,6 +327,7 @@ public class ReviewApiController {
 
         public AdminReviewsResponse(Review review) {
             this.reviewId = review.getId();
+            this.reviewAuthentication = review.getAuthenticationStatus();
             this.memberIdName = review.getMember().getMemberIdName();
             this.nickName = review.getMember().getNickName();
             this.reviewHospitals = review.getReviewHospitals().stream()

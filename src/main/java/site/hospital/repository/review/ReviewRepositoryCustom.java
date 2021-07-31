@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface ReviewRepositoryCustom {
     List<Review> hospitalReviewSearch(Long hospitalId, Long memberId);
-    Page<Review> adminReviews(Pageable pageable);
     Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable);
     Review viewHospitalReview(Long reviewId);
 }

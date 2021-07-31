@@ -50,22 +50,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public Page<Review> adminReviews(Pageable pageable){
-        QueryResults<Review> result = queryFactory
-                .select(review)
-                .from(review)
-                .join(review.member, member).fetchJoin()
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-
-        List<Review> content = result.getResults();
-        long total = result.getTotal();
-
-        return new PageImpl<>(content, pageable, total);
-    }
-
-    @Override
     public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable){
         QueryResults<Review> result = queryFactory
                 .select(review)

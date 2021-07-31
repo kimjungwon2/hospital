@@ -72,11 +72,6 @@ public class ReviewService {
         return reviewSearchRepository.searchReview(condition, pageable);
     }
 
-    //관리자 리뷰 조회
-    public Page<Review> adminReviews(Pageable pageable){
-        return reviewRepository.adminReviews(pageable);
-    }
-
     //관리자 리뷰 검색
     public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable){
         return reviewRepository.adminSearchReviews(condition, pageable);

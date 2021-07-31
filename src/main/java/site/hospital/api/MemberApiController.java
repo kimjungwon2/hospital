@@ -69,20 +69,8 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
-    //관리자 유저 조회
-    @GetMapping("/admin/user")
-    public Page<MemberSearchResult> adminMembers(Pageable pageable){
-        Page<Member> members = memberService.adminMembers(pageable);
-        List<MemberSearchResult> result = members.stream()
-                .map(m->new MemberSearchResult(m)).collect(Collectors.toList());
-
-        Long total =members.getTotalElements();
-
-        return new PageImpl<>(result, pageable,total);
-    }
-
     //관리자 유저 검색
-    @GetMapping("/admin/user/search/")
+    @GetMapping("/admin/user/search")
     public Page<MemberSearchResult> adminSearchMembers(@RequestParam(value="allSearch",required = false) String allSearch,
                                                        @RequestParam(value="memberId",required = false) Long memberId,
                                                        @RequestParam(value="memberIdName",required = false) String memberIdName,
@@ -242,6 +230,7 @@ public class MemberApiController {
 
     @Data
     private static class AdminModifyMemberRequest{
+        @NotNull(message="권한을 넣어주세요.")
         private MemberStatus memberStatus;
         private String nickName;
         private String phoneNumber;

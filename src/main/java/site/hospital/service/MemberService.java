@@ -80,7 +80,9 @@ public class MemberService {
         if(member.getMemberStatus() == modifyMember.getMemberStatus()){
 
         }
-
+        //관리자는 권한 수정을 못 하게 한다.
+        else if(modifyMember.getMemberStatus() == MemberStatus.ADMIN){
+        }
         else if(modifyMember.getMemberStatus() == MemberStatus.NORMAL){
             //모든 권한 삭제
             memberRepository.adminDeleteMemberAuthority(member);
@@ -117,12 +119,8 @@ public class MemberService {
         member.modifyMember(modifyMember);
     }
 
-    //관리자 멤버 보기
-    public Page<Member> adminMembers(Pageable pageable){
-        return memberRepository.adminMembers(pageable);
-    }
 
-
+    //관리자 멤버 검색
     public Page<Member> adminSearchMembers(AdminMemberSearchCondition condition, Pageable pageable){
         return memberRepository.adminSearchMembers(condition,pageable);
     }

@@ -42,13 +42,6 @@ public class QuestionApiController {
         return questionService.searchUserQuestion(memberId);
     }
 
-
-    //관리자 Question 조회
-    @GetMapping("/admin/question")
-    public Page<AdminSearchQuestionDto> adminQuestions(Pageable pageable){
-        return questionService.adminQuestions(pageable);
-    }
-
     //관리자 Questions 검색
     @GetMapping("/admin/question/search")
     public Page<AdminSearchQuestionDto> adminSearchQuestions(@RequestParam(value="nickName",required = false) String nickName,

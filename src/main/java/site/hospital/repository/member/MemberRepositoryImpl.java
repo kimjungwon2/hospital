@@ -28,22 +28,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Override
-    public Page<Member> adminMembers(Pageable pageable) {
-        QueryResults<Member> result = queryFactory
-                .select(member)
-                .from(member)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-
-        List<Member> content = result.getResults();
-        long total = result.getTotal();
-
-        return new PageImpl<>(content, pageable, total);
-
-    }
-
     //권한 찾기
     @Override
     public List<MemberAuthority> memberAuthorities(String memberIdName){
