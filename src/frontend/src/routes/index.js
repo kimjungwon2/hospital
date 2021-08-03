@@ -69,6 +69,12 @@ const router =  new VueRouter({
             meta: { admin: true},
        },
        {
+            path:'/admin/hospital/view',
+            component:() => import('@/views/admin/hospital/ManageViewHospitalPage.vue'),
+            name:'adminHospitalView',
+            meta: {admin: true},
+       },
+       {
             path:'/admin/QandAs',
             component: () => import('@/views/admin/ManageQandAsPage.vue'),
             meta: { admin: true},
@@ -102,6 +108,11 @@ const router =  new VueRouter({
             path:'/admin/tags',
             component: () => import('@/views/admin/ManageTagsPage.vue'),
             meta: { ladminogin: true},
+       },
+       {
+            path:'/admin/create/tag',
+            component:() => import('@/views/admin/ManageCreateTagPage.vue'),
+            meta: {admin: true},
        },
        {
             path:'/search/view/:searchName',

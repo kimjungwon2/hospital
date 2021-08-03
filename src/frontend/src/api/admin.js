@@ -1,11 +1,6 @@
-import { admin } from './index';
+import { admin, hospital } from './index';
 
 /* 멤버 관리 */
-
-//관리자 멤버 리스트 보기
-function adminViewMemberLists(){
-    return admin.get('/user');
-}
 //관리자 멤버 리스트 검색
 function adminSearchMemberLists(searchCondition){
     return admin.get('/user/search',
@@ -47,6 +42,58 @@ function adminAuthorizeMember(memberId, request){
     return admin.put('/user/authority/'+memberId, request);
 }
 
+/* 병원 관리 */
+//관리자 병원 검색
+function adminSearchHospitalLists(searchCondition){
+    return admin.get('/hospital/search',
+    {
+        params:{
+            hospitalId: searchCondition.hospitalId,
+            hospitalName: searchCondition.hospitalName,
+            businessCondition: searchCondition.businessCondition,
+            cityName: searchCondition.cityName,
+            page: searchCondition.page,
+        },
+    });
+}
+//관리자 병원 생성
+function adminCreateHospital(hospitalData){
+    return admin.post('/hospital/register',hospitalData);
+}
+
+//관리자 병원 상세 보기
+function adminViewHospital(hospitalId, detailedHosInfoId, staffHosInfoId){
+    return admin.get('/hospital/view',
+    {
+        params:{
+            hospitalId:hospitalId,
+            detailedHosInfoId: detailedHosInfoId,
+            staffHosInfoId: staffHosInfoId,
+        },
+    });
+}
+
+//관리자 병원 수정
+function adminModifyHospital(hospitalId,hospitalData){
+    return admin.put('/hospital/modify/'+hospitalId,hospitalData);
+}
+
+//관리자 병원 삭제
+function adminDeleteHospital(hospitalId,staffHosInfoId){
+    return admin.delete('/hospital/delete/'+hospitalId,
+    {
+        params:{
+            staffHosInfoId:staffHosInfoId,
+        }
+    });
+}
+
+//관리자 추가 정보 등록
+function adminRegisterStaffHospitalInfo(staffHosInfo){
+    return admin.post('/hospital/register/staff',staffHosInfo);
+}
+
+
 
 /* 리뷰 관리 */
 
@@ -62,14 +109,12 @@ function adminSearchReviewLists(searchCondition){
             nickName: searchCondition.nickName,
             hospitalName: searchCondition.hospitalName,
             memberIdName: searchCondition.memberIdName,
+            page: searchCondition.page,
         },
     });
 }
 
 //리뷰 상세보기
-function adminViewReview(reviewId){
-    return admin.get('/review/view/'+reviewId);
-}
 
 //리뷰 승인해주기
 function adminApproveReview(reviewId, request){
@@ -82,8 +127,13 @@ function adminDeleteReview(reviewId){
 }
 
 /* 태그 관리 */
-function adminViewTagsList(){
-    return admin.get('/tag');
+function adminViewTagsList(page){
+    return admin.get('/tags',
+    {
+        params:{
+            page:page,
+        },
+    });
 }
 //태그 이름 검색
 function adminSearchTags(tagName){
@@ -99,9 +149,6 @@ function adminCreateTag(tagData){
 }
 
 /* Q&A 관리 */
-function adminViewQuestionsList(){
-    return admin.get('/question');
-}
 
 function adminSearchQuestionsList(searchCondition){
     return admin.get('/question/search',
@@ -110,6 +157,7 @@ function adminSearchQuestionsList(searchCondition){
             nickName: searchCondition.nickName,
             hospitalName: searchCondition.hospitalName,
             memberIdName: searchCondition.memberIdName,
+            page: searchCondition.page,
         },
     });
 }
@@ -129,18 +177,23 @@ function adminDeleteQuestion(questionId,answerId){
 
 export { 
     //멤버
-    adminViewMemberLists, adminSearchMemberLists, 
+    adminSearchMemberLists, 
     adminViewMember, adminCreateMember, 
     adminDeleteMember, adminModifyMember, 
     adminAuthorizeMember,
 
+    //병원
+    adminSearchHospitalLists,adminCreateHospital,
+    adminViewHospital, adminModifyHospital,
+    adminDeleteHospital,adminRegisterStaffHospitalInfo,
+
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,
-    adminViewReview, adminApproveReview, adminDeleteReview,
+    adminApproveReview, adminDeleteReview,
 
     //태그
     adminViewTagsList, adminSearchTags, adminDeleteTag, adminCreateTag,
 
     //Q&A
-    adminViewQuestionsList, adminSearchQuestionsList, adminDeleteQuestion
+    adminSearchQuestionsList, adminDeleteQuestion
 };

@@ -126,7 +126,6 @@ export default {
             page: 0,
        }
         const {data} = await adminSearchQuestionsList(condition);
-        console.log(data);
         this.questions = data;
         this.totalPageNum = this.questions.totalPages;
     }

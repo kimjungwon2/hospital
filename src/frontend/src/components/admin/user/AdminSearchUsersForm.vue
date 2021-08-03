@@ -1,6 +1,4 @@
 <template>
-
-
   <div>
     <form @submit.prevent="submitForm">
             <select name="searchCondition" v-model="searchCondition">
@@ -75,6 +73,14 @@ export default {
     },
     routeAdminViewUser(memberId){
       this.$router.push('/admin/user/view/'+memberId)
+    },
+    //권한 주기
+    async authorityMember(memberId){
+      const request = {
+        MemberStatus:"STAFF"
+      }
+      await adminAuthorizeMember(memberId,request);
+      this.adminLoadMembers();
     },
 
     //멤버 삭제
