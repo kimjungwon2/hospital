@@ -1,11 +1,13 @@
 package site.hospital.dto.hospital.admin;
 
+import lombok.Data;
 import site.hospital.domain.Hospital;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
 public class AdminHospitalView {
 
     private Long hospitalId;

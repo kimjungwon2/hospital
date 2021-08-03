@@ -1,6 +1,8 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +25,8 @@ public class TagService {
         return tag.getId();
     }
 
-    public Tag searchTagName(String tagName){
-        Tag findTag= tagRepository.findOneByName(tagName);
-
-        return findTag;
+    public Page<Tag> searchTagName(String tagName, Pageable pageable){
+        return tagRepository.findOneByName(tagName, pageable);
     }
 
     private void validateDuplicateTag(Tag tag){
@@ -44,7 +44,7 @@ public class TagService {
 
 
     //모든 태그 보기
-    public List<Tag> allSearchTag(){
-        return tagRepository.findAll();
+    public Page<Tag> allSearchTag(Pageable pageable){
+        return tagRepository.findAll(pageable);
     }
 }

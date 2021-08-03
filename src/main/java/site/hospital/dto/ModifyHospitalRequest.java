@@ -12,7 +12,6 @@ public class ModifyHospitalRequest {
     private String hospitalName;
     private String phoneNumber;
     private String distinguishedName;
-    private String medicalSubject;
     private String medicalSubjectInformation;
     private String businessCondition;
     private String cityName;

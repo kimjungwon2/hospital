@@ -3,6 +3,9 @@ package site.hospital.api;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,21 +38,27 @@ public class TagApiController {
         tagService.tagDelete(tagId);
     }
 
-    @GetMapping("/admin/tag")
-    public Result allSearchTag(){
-        List<Tag> allTags = tagService.allSearchTag();
+    @GetMapping("/admin/tags")
+    public Page allSearchTag(Pageable pageable){
+        Page<Tag> allTags = tagService.allSearchTag(pageable);
         List<allTag> collect = allTags.stream()
                 .map(t-> new allTag(t))
                 .collect(Collectors.toList());
 
-        return new Result(collect);
+        Long total =allTags.getTotalElements();
+
+        return new PageImpl<>(collect, pageable,total);
     }
 
     @GetMapping("/admin/tag/search/{tagName}")
-    public ResponseSearchTagName searchTagName(@PathVariable("tagName") String tagName){
-        Tag tag = tagService.searchTagName(tagName);
+    public Page searchTagName(@PathVariable("tagName") String tagName,Pageable pageable){
+        Page<Tag> findTags = tagService.searchTagName(tagName, pageable);
+        List<ResponseSearchTagName> responseSearchTagName = findTags.stream()
+                .map(t-> new ResponseSearchTagName(t))
+                .collect(Collectors.toList());
+        Long total = findTags.getTotalElements();
 
-        return new ResponseSearchTagName(tag);
+        return new PageImpl<>(responseSearchTagName, pageable, total);
     }
 
     /* DTO */
@@ -67,17 +76,15 @@ public class TagApiController {
     }
 
     @Data
-    @AllArgsConstructor
-    private static class Result<T>{
-        private T Data;
-    }
-
-    @Data
     private static class ResponseSearchTagName{
-        private String tagName;
+        private Long tagId;
+        private String name;
+        private LocalDateTime createdDate;
 
-        public ResponseSearchTagName(Tag tag) {
-            this.tagName = tag.getName();
+        public ResponseSearchTagName(Tag tag){
+            this.tagId = tag.getId();
+            this.name = tag.getName();
+            this.createdDate = tag.getCreatedDate();
         }
     }
 

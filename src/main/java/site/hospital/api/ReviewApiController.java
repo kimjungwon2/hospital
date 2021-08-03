@@ -254,13 +254,13 @@ public class ReviewApiController {
         private String content;
         private String disease;
         private String hospitalName;
-        private String medicalSubject;
+        private String medicalSubjectInformation;
         Recommendation recommendationStatus;
         EvaluationCriteria evaluationCriteria;
 
         public ReviewViewDto(ReviewHospital reviewHospital) {
             this.hospitalName = reviewHospital.getHospital().getHospitalName();
-            this.medicalSubject =reviewHospital.getHospital().getMedicalSubjectInformation();
+            this.medicalSubjectInformation =reviewHospital.getHospital().getMedicalSubjectInformation();
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
             this.recommendationStatus = reviewHospital.getRecommendationStatus();

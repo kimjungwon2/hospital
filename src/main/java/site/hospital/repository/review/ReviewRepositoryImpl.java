@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import site.hospital.domain.Hospital;
 import site.hospital.domain.review.Review;
 import site.hospital.dto.AdminReviewSearchCondition;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 import static site.hospital.domain.review.QReview.review;
 import static site.hospital.domain.member.QMember.member;
+import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
 
 
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
@@ -47,6 +49,13 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
                 .fetchOne();
 
         return result;
+    }
+
+    @Override
+    public void adminDeleteReviewHospital(Hospital hospital){
+        queryFactory.delete(reviewHospital)
+                .where(reviewHospital.hospital.eq(hospital))
+                .execute();
     }
 
     @Override

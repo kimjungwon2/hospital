@@ -19,7 +19,7 @@ public class Tag extends BaseEntity {
     @Column(name = "tag_id")
     private long id;
 
-    @OneToMany(mappedBy = "tag")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tag")
     private List<PostTag> postTags = new ArrayList<>();
 
     @Column(unique=true, nullable = false)

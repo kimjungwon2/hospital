@@ -54,7 +54,7 @@ public class HospitalApiController {
     }
 
     //관리자 병원 검색
-    @GetMapping("/admin/search/hospitals")
+    @GetMapping("/admin/hospital/search")
     public Page<AdminSearchHospitalDto> adminSearchHospitals(@RequestParam(value="hospitalId",required = false) Long hospitalId,
                                                              @RequestParam(value="hospitalName",required = false) String hospitalName,
                                                              @RequestParam(value="businessCondition",required = false) String businessCondition,
@@ -115,12 +115,12 @@ public class HospitalApiController {
 
 
     //관리자 병원 보기
-    @GetMapping("/admin/hospital/view/{hospitalId}")
-    public AdminHospitalView viewHospital(@PathVariable("hospitalId") Long hospitalId,
+    @GetMapping("/admin/hospital/view")
+    public AdminHospitalView viewHospital(@RequestParam(value="hospitalId",required = false) Long hospitalId,
                                           @RequestParam(value="detailedHosInfoId",required = false) Long detailedHosInfoId,
                                           @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
         Hospital hospital = hospitalService.adminViewHospital(hospitalId);
-        AdminHospitalView adminHospitalView = new AdminHospitalView(hospital,detailedHosInfoId,staffHosInfoId);
+        AdminHospitalView adminHospitalView = new AdminHospitalView(hospital, detailedHosInfoId, staffHosInfoId);
 
         return adminHospitalView;
     }
@@ -204,13 +204,11 @@ public class HospitalApiController {
 
     @Data
     private static class CreateHospitalRequest{
-        private Long hospitalId;
 
         private String licensingDate;
         private String hospitalName;
         private String phoneNumber;
         private String distinguishedName;
-        private String medicalSubject;
         private String medicalSubjectInformation;
         private String businessCondition;
         private String cityName;

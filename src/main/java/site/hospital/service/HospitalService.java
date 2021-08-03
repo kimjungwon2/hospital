@@ -16,6 +16,7 @@ import site.hospital.dto.AdminModifyHospitalRequest;
 import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.repository.DetailedHosRepository;
 import site.hospital.repository.HospitalImageRepository;
+import site.hospital.repository.estimation.EstimationRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
 import site.hospital.repository.hospital.adminSearchQuery.AdminHospitalSearchRepository;
@@ -24,6 +25,8 @@ import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchRepository;
 import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
+import site.hospital.repository.question.QuestionRepository;
+import site.hospital.repository.review.ReviewRepository;
 
 import java.util.List;
 
@@ -38,6 +41,9 @@ public class HospitalService {
     private final HospitalViewRepository hospitalViewRepository;
     private final AdminHospitalSearchRepository adminHospitalSearchRepository;
     private final DetailedHosRepository detailedHosRepository;
+    private final ReviewRepository reviewRepository;
+    private final QuestionRepository questionRepository;
+    private final EstimationRepository estimationRepository;
 
 
     //병원 + 상세 정보등록
@@ -166,13 +172,17 @@ public class HospitalService {
         //병원 STAFF 정보도 삭제.
         if(staffHosId!=null)
         {
-
            if(hospital.getStaffHosInformation().getId() != staffHosId)
                throw new IllegalStateException("해당 병원과 staffId가 일치하지 않습니다.");
 
            StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId).orElse(null);
            staffHosRepository.deleteById(staffHosId);
         }
+
+        //병원과 연관된 review, question, estimation 삭제.
+        reviewRepository.adminDeleteReviewHospital(hospital);
+        questionRepository.adminDeleteQuestion(hospital);
+        estimationRepository.adminDeleteEstimation(hospital);
 
         hospitalRepository.deleteById(hospitalId);
     }
