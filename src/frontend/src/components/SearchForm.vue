@@ -1,14 +1,17 @@
 <template>
       <form @submit.prevent="searchForm">
-        <div>
+        <div class="search">
             <label for="searchHospital"></label>
-            <input id="searchHospital" type="text" maxlength = 2000 v-model="searchName">
+            <input id="searchHospital" type="text" v-model="searchName">
+            <font-awesome-icon icon="search"  @click.prevent="searchForm"/>
         </div>
-        <button type="submit">Search</button>
     </form>
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+library.add(faSearch)
 
 export default {
     data(){
@@ -18,12 +21,30 @@ export default {
     },
     methods: {
         async searchForm(){
-            this.$router.push(`/search/view/${this.searchName}`);
+            if(this.searchName==='') alert('검색어를 입력하세요.');
+            else this.$router.push(`/search/view/${this.searchName}`);
         },
     },
 };
 </script>
 
 <style>
-
+.search {
+    position: relative;
+    text-align: center;
+    width: 400px;
+    margin: 0 auto;
+}
+.search input {
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid #bbb;
+    margin: 10px 0;
+    padding: 10px 12px;
+}
+.fa-search {
+    position: absolute;
+    right: 5px;    
+    top: 20px;
+}
 </style>

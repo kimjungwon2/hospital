@@ -75,6 +75,11 @@ const router =  new VueRouter({
             meta: {admin: true},
        },
        {
+            path:'/admin/hospital/create',
+            component:() => import('@/views/admin/hospital/ManageCreateHospitalPage.vue'),
+            meta: {admin: true},
+       },
+       {
             path:'/admin/QandAs',
             component: () => import('@/views/admin/ManageQandAsPage.vue'),
             meta: { admin: true},
@@ -117,12 +122,10 @@ const router =  new VueRouter({
        {
             path:'/search/view/:searchName',
             component: () => import('@/views/SearchHospitalPage.vue'),
-            meta: { admin: true},
        },
        {
             path:'/hospital/view/:id',
             component: () => import('@/views/ViewHospitalPage.vue'),
-            meta: { admin: true},
        },
        {
            path: '*',

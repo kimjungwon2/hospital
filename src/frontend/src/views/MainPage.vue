@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>MainPage</h1>
+      <h1 class="mainFont">경기도 내 모든 병원</h1>
       <SearchForm></SearchForm>
   </div>
 </template>
@@ -15,5 +15,10 @@ export default {
 </script>
 
 <style>
-
+.mainFont {
+    position: relative;
+    text-align: center;
+    width: 600px;
+    margin: 0 auto;
+}
 </style>

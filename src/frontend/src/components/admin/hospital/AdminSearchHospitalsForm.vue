@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-link to="/admin/hospital/create">+</router-link>
     <form @submit.prevent="submitForm">
             <select name="searchCondition" v-model="searchCondition">
                   <option value="hospitalId">병원 번호</option>

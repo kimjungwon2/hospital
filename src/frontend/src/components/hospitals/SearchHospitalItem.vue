@@ -1,13 +1,10 @@
 <template>
     <li>
-        <div @click="routeViewHospital">
+        <h3 @click="routeViewHospital">
           {{ contentItem.hospitalName}}
-        </div>
+        </h3>
         <div>
-          {{ contentItem.businessCondition }}
-        </div>
-        <div>
-          {{ contentItem.medicalSubjectInformation }}
+          {{ contentItem.businessCondition }} 진료과목: {{ contentItem.medicalSubjectInformation }}
         </div>
         <div>
           {{ contentItem.roadBaseAddress }}
