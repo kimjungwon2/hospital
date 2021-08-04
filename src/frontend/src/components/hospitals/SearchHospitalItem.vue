@@ -1,21 +1,21 @@
 <template>
-    <li>
-        <h3 @click="routeViewHospital">
+    <div class="container" @click="routeViewHospital">
+        <h3 class="item item1">
           {{ contentItem.hospitalName}}
         </h3>
-        <div>
-          {{ contentItem.businessCondition }} 진료과목: {{ contentItem.medicalSubjectInformation }}
+        <div class="item item2">
+          <b>{{ contentItem.businessCondition }}</b> 진료 과목: {{ contentItem.medicalSubjectInformation }}
         </div>
-        <div>
+        <div class="item item3" v-if="contentItem.roadBaseAddress!==null">
           {{ contentItem.roadBaseAddress }}
         </div>
         <div v-if= "contentItem.postTagDtos !== null" >
             태그: {{tags}}
         </div>
-        <div v-if= "contentItem.reviewHospitals !== null">
+        <div class="item item4" v-if= "contentItem.reviewHospitals !== null">
             리뷰 평가 : {{contentItem.reviewHospitals[0].averageRate}} & 등록된 리뷰 개수 : {{ contentItem.reviewHospitals[0].reviewCount }}
         </div>
-    </li>
+    </div>
   
 </template>
 
@@ -51,5 +51,16 @@ export default {
 </script>
 
 <style>
+.container{
+  width:100%;
+  height:100px;
+  
+}
+
+.item.item2 b{
+  border: 1px solid black;
+  border-radius: 4px;
+  font-size:regular;
+}
 
 </style>

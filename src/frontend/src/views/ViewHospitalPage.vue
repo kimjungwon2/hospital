@@ -1,17 +1,15 @@
 <template>
-  <div>병원 보기
+  <div>
     <div>
       <button>리뷰작성{{staffHosInfoId}}</button>
       <button>즐겨찾기</button>
     </div>
 
-    <div>
-      <ul role="tablist">
-        <li @click.prevent="viewHospital" role="presentation"> 병원 정보 </li>
-        <li @click.prevent="viewDetailed" role="presentation"> 상세 정보 </li>
-        <li @click.prevent="viewReview" role="presentation"> 리뷰 </li>
-        <li @click.prevent="viewQandA" role="presentation"> Q&A </li>
-      </ul>
+    <div class="hospital__categories">
+        <button class="category__btn" @click.prevent="viewHospital"> 병원 정보 </button>
+        <button class="category__btn" @click.prevent="viewDetailed" > 상세 정보 </button>
+        <button class="category__btn" @click.prevent="viewReview" > 리뷰 </button>
+        <button class="category__btn" @click.prevent="viewQandA" > Q&A </button>
     </div>
 
     <template v-if="isHospital" >
@@ -83,4 +81,24 @@ export default {
 </script>
 
 <style>
+.hospital__categories{
+  margin : 50px;
+  position: relative;
+  text-align: center;
+}
+
+.category__btn{
+  width: 20%;
+  border: 2px solid black;
+  font-size:14px;
+  border-radius: 4px;
+  padding: 8px 48px;
+  size:35px;
+}
+
+.category__btn.active,
+.category__btn:hover{
+  background-color:bisque;
+}
+
 </style>

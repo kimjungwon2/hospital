@@ -9,8 +9,8 @@
       <li>과목: {{hospital.medicalSubjectInformation}}</li>
       <li>영업 상태: {{hospital.businessCondition}}</li>
       <li>도시 이름: {{hospital.cityName}}</li>
+      <h2>상세 정보</h2>
       <div v-if="hospital.detailedHosInfoId!==null">
-           <h2>상세 정보</h2>
            <li>상세 정보: {{ hospital.detailedHosInfoId}}</li>
            <li>종업원 수: {{ hospital.numberHealthcareProvider}}</li>
            <li>병실 수: {{ hospital.numberWard}}</li>
@@ -25,12 +25,14 @@
            <li>위도: {{ hospital.latitude}}</li>
            <li>경도: {{ hospital.longitude}}</li>
       </div>
-      <div v-else>상세 정보가 없습니다.</div>
-      <h2>추가 정보</h2>
-      <div v-if="hospital.staffHosInfoId!==null">
-         추가 정보: {{ hospital.staffHosInfoId}}
+      <div v-else>상세 정보가 없습니다. 
+        <button>(상세정보 추가하기)</button>
       </div>
-      <div v-else> 추가 정보가 없습니다.</div>
+      <h3>추가 정보</h3>
+      <div v-if="hospital.staffHosInfoId!==null">
+         추가 정보 번호: {{ hospital.staffHosInfoId}}
+      </div>
+      <div v-else> 추가 정보가 등록되지 않았습니다.</div>
       <h2>병원 태그</h2>
       <div v-if="hospital.hospitalTags===null">병원 태그가 없습니다.</div>
       <div v-else> </div>
