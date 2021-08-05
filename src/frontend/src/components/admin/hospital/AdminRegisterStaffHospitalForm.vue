@@ -25,6 +25,7 @@ export default {
             consultationHour:'',
             abnormality:'',
             doctors:[],
+            isCreate:false,
         }
     },
     methods:{
@@ -35,11 +36,10 @@ export default {
                 consultationHour: this.consultationHour,
                 abnormality: this.abnormality,
             }
-            await adminRegisterStaffHospitalInfo(hospitalData);
+            const staffHosId = await adminRegisterStaffHospitalInfo(hospitalData);
             this.initForm();
             this.$alert("추가 정보 등록이 정상적으로 이뤄졌습니다.");
-            const isCreate = true;
-            this.$emit("event", isCreate);
+            this.$router.push('/admin/hospitals');
         },
         initForm(){
             this.introduction='';

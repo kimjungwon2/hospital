@@ -21,8 +21,8 @@
               <li><a href="javacript:;" @click="logoutUser">로그아웃</a></li>
           </ul>
           <ul class="navbar_user" v-else>
-              <li><router-link to="/login">Log in</router-link></li>
-              <li><router-link to="/signup">Sign up</router-link></li>
+              <li><router-link to="/login">Login</router-link></li>
+              <li><router-link to="/signup">Signup</router-link></li>
           </ul>
       
       </nav>

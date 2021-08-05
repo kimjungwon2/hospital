@@ -13,7 +13,7 @@
       <div>
         <li>태그 번호: {{ tag.tagId }} </li>
         <li>태그 이름: {{ tag.name}}</li>
-        <li>등록 날짜: {{ tag.createdDate }}</li>
+        <li>등록 날짜: {{ tag.createdDate|formatDate }}</li>
         <div><font-awesome-icon icon="trash-alt" @click.prevent="deleteTag(tag.tagId)"/></div>
       </div>
     </ul>

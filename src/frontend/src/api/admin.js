@@ -93,6 +93,11 @@ function adminRegisterStaffHospitalInfo(staffHosInfo){
     return admin.post('/hospital/register/staff',staffHosInfo);
 }
 
+//관리자 추가 정보 보기
+function adminViewStaffHospitalInfo(staffHosInfoId){
+    return admin.get('/staffHosInfo/'+staffHosInfoId);
+}
+
 
 
 /* 리뷰 관리 */
@@ -186,6 +191,7 @@ export {
     adminSearchHospitalLists,adminCreateHospital,
     adminViewHospital, adminModifyHospital,
     adminDeleteHospital,adminRegisterStaffHospitalInfo,
+    adminViewStaffHospitalInfo,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,
