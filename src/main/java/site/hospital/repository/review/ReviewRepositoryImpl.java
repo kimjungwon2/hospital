@@ -3,6 +3,7 @@ package site.hospital.repository.review;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -53,8 +54,21 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
     @Override
     public void adminDeleteReviewHospital(Hospital hospital){
+        //리뷰 아이디
+        List<Long> reviewIds = queryFactory
+                .select(reviewHospital.review.id)
+                .from(reviewHospital)
+                .where(reviewHospital.hospital.eq(hospital))
+                .fetch();
+
+        //리뷰 hospital 먼저 삭제
         queryFactory.delete(reviewHospital)
                 .where(reviewHospital.hospital.eq(hospital))
+                .execute();
+
+        //리뷰 삭제.
+        queryFactory.delete(review)
+                .where(review.id.in(reviewIds))
                 .execute();
     }
 
@@ -77,8 +91,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
         return new PageImpl<>(content, pageable, total);
     }
-
-
 
     private BooleanExpression memberIdEq(Long id){
         return id == null? null:review.member.id.eq(id);

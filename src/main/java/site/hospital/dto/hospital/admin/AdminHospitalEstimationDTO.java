@@ -1,7 +1,9 @@
 package site.hospital.dto.hospital.admin;
 
+import lombok.Data;
 import site.hospital.domain.Estimation;
 
+@Data
 public class AdminHospitalEstimationDTO {
     private Long estimationId;
 

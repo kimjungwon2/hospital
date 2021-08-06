@@ -10,6 +10,4 @@ import site.hospital.repository.ReviewImageRepository;
 @RequiredArgsConstructor
 public class ReviewImageService {
     private final ReviewImageRepository reviewImageRepository;
-
-
 }

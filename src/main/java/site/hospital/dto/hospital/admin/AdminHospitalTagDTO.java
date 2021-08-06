@@ -1,7 +1,9 @@
 package site.hospital.dto.hospital.admin;
 
+import lombok.Data;
 import site.hospital.domain.PostTag;
 
+@Data
 public class AdminHospitalTagDTO {
     private Long postTagId;
     private String tagName;

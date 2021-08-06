@@ -1,8 +1,10 @@
 package site.hospital.dto.hospital.admin;
 
+import lombok.Data;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 
+@Data
 public class AdminReviewHospitalDTO {
     private Long reviewId;
     private Long reviewHospitalId;
