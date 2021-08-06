@@ -5,7 +5,7 @@
     생성 날짜 : {{review.createdDate|formatDate}}
     닉네임 : {{review.nickName}}
     병원 이름 : {{reviewHospital.hospitalName}}
-    진료 과목 : {{reviewHospital.medicalSubject}}
+    진료 과목 : {{reviewHospital.medicalSubjectInformation}}
     <div>
         <h1>리뷰 정보</h1>
         내용 : {{reviewHospital.content}}
@@ -29,7 +29,7 @@
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import {adminViewReview,  adminApproveReview} from '@/api/admin';
+import { adminViewReview, adminApproveReview} from '@/api/admin';
 
 library.add(faCheckCircle)
 
@@ -51,8 +51,8 @@ export default {
              };
                 await adminApproveReview(reviewId, data);
                 this.loadReview();
-            }
-        },
+          }
+    },
     async loadReview(){
         const reviewId = this.$route.params.reviewId;
         const {data} = await adminViewReview(reviewId);
@@ -61,7 +61,6 @@ export default {
         this.evaluationCriteria = this.reviewHospital.evaluationCriteria;
     }
     },
-
     async created(){
         this.loadReview();
     },

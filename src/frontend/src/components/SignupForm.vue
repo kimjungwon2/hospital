@@ -4,27 +4,27 @@
             <div class="title">Registration</div> 
            <div class="user-details"> 
                <div class="input-box">
-                   <label class="details" for="memberIdName">회원 아이디(이메일):</label>
+                   <label class="details" for="memberIdName">회원 아이디(이메일)</label>
                    <input id="memberIdName" type="text" placeholder="Enter your email" required v-model="memberIdName">
                </div>
                 <div class="input-box">
-                   <label class="details" for="userName">이름:</label>
+                   <label class="details" for="userName">이름</label>
                    <input id="userName" type="text" placeholder="Enter your name" required v-model="userName">
                </div>
                <div class="input-box">
-                   <label class="details" for="password">비밀번호:</label>
+                   <label class="details" for="password">비밀번호</label>
                    <input id="password" type="password" placeholder="Enter your password" required v-model="password">
                </div>
                 <div class="input-box">
-                   <label class="details" for="repassword">비밀번호 확인:</label>
+                   <label class="details" for="repassword">비밀번호 확인</label>
                    <input id="repassword" type="password" placeholder="Enter your password" required v-model="repassword">
                </div>
                <div class="input-box">
-                   <label class="details" for="nickName">닉네임:</label>
+                   <label class="details" for="nickName">닉네임</label>
                    <input id="nickName" type="text" placeholder="Enter your nickname" required v-model="nickName">
                </div>
                <div class="input-box">
-                   <label class="details" for="phoneNumber">전화번호:</label>
+                   <label class="details" for="phoneNumber">전화번호</label>
                    <input id="phoneNumber" type="text" placeholder="Enter your phonenumber" required v-model="phoneNumber">
                </div>
            </div>  

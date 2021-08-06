@@ -98,6 +98,21 @@ function adminViewStaffHospitalInfo(staffHosInfoId){
     return admin.get('/staffHosInfo/'+staffHosInfoId);
 }
 
+//관리자 추가 병원 정보 수정
+function adminModifyStaffHosInfo(staffHosId, staffHosData){
+    return admin.put('/staffHosInfo/modify/'+staffHosId, staffHosData);
+}
+
+//관리자 추가 병원 정보 삭제
+function adminDeleteStaffHosInfo(staffHosId){
+    return admin.delete('/staffHosInfo/delete/'+staffHosId);
+}
+
+//관리자 병원 태그 삭제
+function adminDeleteHospitalTag(postTagId){
+    return admin.delete('/hospital/tag/delete/'+postTagId);
+}
+
 
 
 /* 리뷰 관리 */
@@ -120,6 +135,9 @@ function adminSearchReviewLists(searchCondition){
 }
 
 //리뷰 상세보기
+function adminViewReview(reviewId){
+    return admin.get('/review/view/'+reviewId);
+}
 
 //리뷰 승인해주기
 function adminApproveReview(reviewId, request){
@@ -191,11 +209,12 @@ export {
     adminSearchHospitalLists,adminCreateHospital,
     adminViewHospital, adminModifyHospital,
     adminDeleteHospital,adminRegisterStaffHospitalInfo,
-    adminViewStaffHospitalInfo,
+    adminViewStaffHospitalInfo,adminModifyStaffHosInfo,adminDeleteStaffHosInfo,
+    adminDeleteHospitalTag,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,
-    adminApproveReview, adminDeleteReview,
+    adminApproveReview, adminDeleteReview,adminViewReview,
 
     //태그
     adminViewTagsList, adminSearchTags, adminDeleteTag, adminCreateTag,

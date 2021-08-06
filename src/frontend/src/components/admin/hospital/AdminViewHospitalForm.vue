@@ -28,19 +28,34 @@
       <div v-else>상세 정보가 없습니다. 
         <button>(상세정보 추가하기)</button>
       </div>
-      <h3>추가 정보</h3>
-      <div v-if="hospital.staffHosInfoId!==null">
-         추가 정보 번호: {{ hospital.staffHosInfoId}}
-      </div>
-      <div v-else> 추가 정보가 등록되지 않았습니다.</div>
       <h2>병원 태그</h2>
-      <div v-if="hospital.hospitalTags===null">병원 태그가 없습니다.</div>
-      <div v-else> </div>
+      <div v-if="tags.length===0">병원 태그가 없습니다.</div>
+      <div v-else> 
+          <span v-for="tag in tags" :key="tag.postTagId">#<b>{{tag.tagName}}</b> 
+          <font-awesome-icon icon="trash-alt" @click.prevent="deleteTag(tag.postTagId)"/>   </span>
+     </div>
       <h2>병원 리뷰</h2>
-      <div v-if="hospital.reviewHospitals===null">병원 리뷰가 없습니다.</div>
-      <div v-else> </div>
+      <div v-if="reviews.length===0">병원 리뷰가 없습니다.</div>
+      <div v-else> 
+          <div v-for="review in reviews" :key="review.reviewId">
+              <ul>
+                  <li><b>리뷰 번호:{{review.reviewId}}</b></li>
+                  <li>리뷰 병원번호:{{review.reviewHospitalId}}</li>
+                  <li>리뷰 내용:{{review.content}}</li>
+                  <li>질병:{{review.disease}}</li>
+                  <li>추천유무:{{review.recommedationStatus}}</li>
+                  <li>가격 점수:{{review.sumPrice}}</li>
+                  <li>친절함:{{review.kindness}}</li>
+                  <li>증상 완화:{{review.symptomRelief}}</li>
+                  <li>청결 점수:{{review.cleanliness}}</li>
+                  <li>대기시간:{{review.waitTime}}</li>
+                  <li>종합 점수:{{review.averageRate}}</li>
+              </ul> 
+                <font-awesome-icon icon="trash-alt" @click.prevent="deleteReview(review.reviewId)"/>   
+          </div>
+      </div>
       <h2>병원 평가</h2>
-      <div v-if="hospital.estimations===null">병원 평가가 없습니다.</div>
+      <div v-if="estimations.length===0">병원 평가가 없습니다.</div>
       <div v-else> </div>
 
   </div>
@@ -48,21 +63,54 @@
 </template>
 
 <script>
-import {adminViewHospital} from '@/api/admin';
+import {adminViewHospital,adminDeleteHospitalTag,adminDeleteReview} from '@/api/admin';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
+library.add(faTrashAlt);
 export default {
 
     data() {
         return {
             hospital: [],
+            tags:[],
+            reviews:[],
+            estimations:[],
+            hospitalId:'',
         }
     },
+    methods:{
+        //태그 삭제
+        async deleteTag(postTagId){
+            if(confirm('정말로 해당 태그를 삭제하시겠습니까?')){
+               await adminDeleteHospitalTag(postTagId);
+               this.adminLoadHospital();
+            }
+        },
+        async adminLoadHospital(){
+            const detailedHosInfoId = this.$route.query.detailedHosInfoId;
+            const staffHosInfoId = this.$route.query.staffHosInfoId;
+            const {data} = await adminViewHospital(this.hospitalId, detailedHosInfoId, staffHosInfoId);
+            this.tags=data.hospitalTags;
+            this.reviews=data.reviewHospitals;
+            this.estimations=data.estimations;  
+        },
+        async deleteReview(reviewId){
+            if(confirm('정말로 해당 리뷰를 삭제하시겠습니까?')){
+               await adminDeleteReview(reviewId);
+               this.adminLoadHospital();
+            }
+        },
+    },
     async created(){
-        const hospitalId = this.$route.query.hospitalId;
+        this.hospitalId = this.$route.query.hospitalId;
         const detailedHosInfoId = this.$route.query.detailedHosInfoId;
         const staffHosInfoId = this.$route.query.staffHosInfoId;
-        const {data} = await adminViewHospital(hospitalId,detailedHosInfoId,staffHosInfoId);
+        const {data} = await adminViewHospital(this.hospitalId,detailedHosInfoId,staffHosInfoId);
         this.hospital = data;
+        this.tags=data.hospitalTags;
+        this.reviews=data.reviewHospitals;
+        this.estimations=data.estimations;
     },
 }
 </script>

@@ -70,6 +70,11 @@ const router =  new VueRouter({
             meta: {admin: true},
        },
        {
+            path:'/admin/staffHospital/edit/:staffHosId',
+            component:() => import('@/views/admin/hospital/ManageEditStaffHospitalInfoPage.vue'),
+            meta: {admin: true},
+       },
+       {
             path:'/admin/hospital/create',
             component:() => import('@/views/admin/hospital/ManageCreateHospitalPage.vue'),
             meta: {admin: true},
