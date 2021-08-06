@@ -27,35 +27,34 @@ public class EstimationService {
 
     //병원 FK 있을 때, 등록.
     @Transactional
-    public Long createEstimation(Long hospitalId, Estimation estimation){
-        Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
-        estimation.changeHospital(hospital);
-        estimationRepository.save(estimation);
-        return estimation.getId();
-    }
-
-    @Transactional
     public Long createHospitalEstimation(Long hospitalId, Estimation estimation){
 
-        Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 병원은 존재하지 않습니다."));;
 
-        if(hospital==null){
-            throw new IllegalStateException("해당 병원은 존재하지 않습니다..");
+        List<Estimation> estimationList = estimationRepository.searchEstimation(hospital,
+                estimation.getEstimationList());
+
+        // 이미 중복된 평가 리스트인지 확인한다.
+        if(!estimationList.isEmpty()){
+            throw new IllegalStateException("이미 등록된 평가 리스트입니다.");
         }
 
-        List<Estimation> estimationList = estimationRepository.searchEstimation(estimation.getHospitalName(),
-                estimation.getCityName());
-
-        // 병원 정보와 평가 정보의 병원이 일치하는지 확인
-        if(estimationList.isEmpty()){
-            throw new IllegalStateException("평가 정보와 병원 정보가 일치하지 않습니다.");
-        }
         estimation.changeHospital(hospital);
         estimationRepository.save(estimation);
 
         return estimation.getId();
     }
+
+    //평가 삭제하기.
+    @Transactional
+    public void adminDeleteEstimation(Long estimationId){
+        Estimation estimation = estimationRepository.findById(estimationId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 평가가 존재하지 않습니다."));
+
+        estimationRepository.deleteById(estimationId);
+    }
+
 
 
     //평가 전체 보기(관리자)
@@ -63,6 +62,4 @@ public class EstimationService {
         List<Estimation> estimationList = estimationRepository.findAll();
         return estimationList;
     }
-
-
 }

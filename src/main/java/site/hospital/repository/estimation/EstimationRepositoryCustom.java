@@ -6,6 +6,6 @@ import site.hospital.domain.Hospital;
 import java.util.List;
 
 public interface EstimationRepositoryCustom {
-    List<Estimation> searchEstimation(String hospitalName, String cityName);
+    List<Estimation> searchEstimation(Hospital hospital, String estimationList);
     void adminDeleteEstimation(Hospital hospital);
 }

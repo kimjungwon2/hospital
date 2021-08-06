@@ -20,14 +20,12 @@ public class EstimationRepositoryImpl implements EstimationRepositoryCustom{
 
     public EstimationRepositoryImpl(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
 
-    public List<Estimation> searchEstimation(String hospitalName, String cityName){
+    public List<Estimation> searchEstimation(Hospital hospital, String estimationList){
         List<Estimation> result =queryFactory
                 .select(estimation)
                 .from(estimation)
-                .join(estimation.hospital, hospital).fetchJoin()
-                .where(hospitalNameEq(hospitalName),cityNameEq(cityName))
+                .where(hospitalEq(hospital),cityNameEq(estimationList))
                 .fetch();
-
         return result;
     }
 
@@ -39,10 +37,10 @@ public class EstimationRepositoryImpl implements EstimationRepositoryCustom{
     }
 
 
-    private BooleanExpression hospitalNameEq(String hospitalName){
-        return hasText(hospitalName) ? estimation.hospital.hospitalName.eq(hospitalName): null;
+    private BooleanExpression hospitalEq(Hospital hospital){
+        return hospital == null ? null: estimation.hospital.eq(hospital);
     }
-    private BooleanExpression cityNameEq(String cityName){
-        return hasText(cityName)? estimation.hospital.cityName.eq(cityName): null;
+    private BooleanExpression cityNameEq(String estimationList){
+        return estimationList == null? null: estimation.estimationList.eq(estimationList);
     }
 }

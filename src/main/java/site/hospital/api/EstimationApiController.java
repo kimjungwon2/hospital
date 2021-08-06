@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Estimation;
-import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.service.EstimationService;
 
 @RestController
@@ -23,16 +22,20 @@ public class EstimationApiController {
 
         //병원 아이디를 기입 안 할 경우.
         if (request.getHospitalId() == null){
-            Long id = estimationService.createNoHospitalEstimation(estimation);
+            Long estimationId = estimationService.createNoHospitalEstimation(estimation);
 
-            return new CreateEstimationResponse(id);
+            return new CreateEstimationResponse(estimationId);
         }
-
         else {
             Long id = estimationService.createHospitalEstimation(request.getHospitalId(), estimation);
-
             return new CreateEstimationResponse(id);
         }
+    }
+
+    //평가 삭제
+    @DeleteMapping("/admin/estimation/delete/{estimationId}")
+    public void adminDeleteEstimation(@PathVariable("estimationId") Long estimationId){
+        estimationService.adminDeleteEstimation(estimationId);
     }
 
 
