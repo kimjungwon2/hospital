@@ -1,5 +1,10 @@
 <template>
   <div>
+      <AdminCreateTagModal :hospitalTags="hospitalTags" v-if ="isCreateTags===true" 
+      @tagCancel="cancelTagModal" @tagLoad="adminLoadHospital"/>
+      <AdminCreateEstimationModal :estimations="estimations" :hospitalEstimationInfo="hospitalEstimationInfo"
+      v-if ="isCreateEstimatons===true"
+      @estimationCancel="cancelEstimationModal" @estimationLoad="adminLoadHospital"/>
       <h1>병원 정보</h1>
       <li>병원 번호: {{hospital.hospitalId}}</li>
       <li>병원 이름: {{hospital.hospitalName}}</li>
@@ -28,12 +33,18 @@
       <div v-else>상세 정보가 없습니다. 
         <button>(상세정보 추가하기)</button>
       </div>
+
       <h2>병원 태그</h2>
-      <div v-if="tags.length===0">병원 태그가 없습니다.</div>
+      <div v-if="hospitalTags.length===0 || createTags===false">병원 태그가 없습니다.<br> 
+      태그 추가<font-awesome-icon icon="plus-square" @click.prevent="createTags"/></div>
       <div v-else> 
-          <span v-for="tag in tags" :key="tag.postTagId">#<b>{{tag.tagName}}</b> 
+          <span v-for="tag in hospitalTags" :key="tag.postTagId"> #<b>{{tag.tagName}}</b> 
           <font-awesome-icon icon="trash-alt" @click.prevent="deleteTag(tag.postTagId)"/>   </span>
+          <br>태그 추가<font-awesome-icon icon="plus-square" @click.prevent="createTags"/>
      </div>
+
+    
+
       <h2>병원 리뷰</h2>
       <div v-if="reviews.length===0">병원 리뷰가 없습니다.</div>
       <div v-else> 
@@ -55,28 +66,48 @@
           </div>
       </div>
       <h2>병원 평가</h2>
-      <div v-if="estimations.length===0">병원 평가가 없습니다.</div>
-      <div v-else> </div>
+      <div v-if="estimations.length===0">병원 평가가 없습니다.<br>
+        평가 추가<font-awesome-icon icon="plus-square" @click.prevent="createEstimations"/>
+      </div>
+      <div v-else>
+          <span v-for="estimation in estimations" :key="estimation.estimationId"> 
+              평가 리스트:<b>{{estimation.estimationList}}</b> 평가 등급:{{estimation.distinctionGrade}}
+              <font-awesome-icon icon="trash-alt" @click.prevent="deleteEstimation(estimation.estimationId)"/><br>
+          </span>
+          <br>평가 추가<font-awesome-icon icon="plus-square" @click.prevent="createEstimations"/>
+      </div>
 
   </div>
   
 </template>
 
 <script>
-import {adminViewHospital,adminDeleteHospitalTag,adminDeleteReview} from '@/api/admin';
+import {adminViewHospital,adminDeleteHospitalTag,adminDeleteReview,adminDeleteHospitalEstimation} from '@/api/admin';
+import AdminCreateTagModal from '@/components/admin/hospital/AdminCreateTagModal.vue'
+import AdminCreateEstimationModal from '@/components/admin/hospital/AdminCreateEstimationModal.vue'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faTrashAlt);
+library.add(faPlusSquare);
 export default {
-
+    components:{
+        AdminCreateTagModal,
+        AdminCreateEstimationModal,
+    },
     data() {
         return {
             hospital: [],
-            tags:[],
+
+            hospitalTags:[],
             reviews:[],
             estimations:[],
+            hospitalEstimationInfo:{},
+
             hospitalId:'',
+            isCreateTags:false,
+            isCreateEstimatons:false,
         }
     },
     methods:{
@@ -87,11 +118,18 @@ export default {
                this.adminLoadHospital();
             }
         },
+        async deleteEstimation(estimationId){
+            if(confirm('정말로 해당 평가를 삭제하시겠습니까?')){
+               await adminDeleteHospitalEstimation(estimationId);
+               this.adminLoadHospital();
+            }
+        },
+        //병원 정보 불러오기
         async adminLoadHospital(){
             const detailedHosInfoId = this.$route.query.detailedHosInfoId;
             const staffHosInfoId = this.$route.query.staffHosInfoId;
             const {data} = await adminViewHospital(this.hospitalId, detailedHosInfoId, staffHosInfoId);
-            this.tags=data.hospitalTags;
+            this.hospitalTags=data.hospitalTags;
             this.reviews=data.reviewHospitals;
             this.estimations=data.estimations;  
         },
@@ -101,6 +139,22 @@ export default {
                this.adminLoadHospital();
             }
         },
+
+        //모달창.
+        createTags(){
+            this.isCreateTags = true;
+        },
+        //태그 모달창 닫기
+        cancelTagModal(){
+            this.isCreateTags= false;
+        },
+        //평가 모달창 열기
+        createEstimations(){
+            this.isCreateEstimatons = true;
+        },
+        cancelEstimationModal(){
+            this.isCreateEstimatons = false;
+        }
     },
     async created(){
         this.hospitalId = this.$route.query.hospitalId;
@@ -108,9 +162,15 @@ export default {
         const staffHosInfoId = this.$route.query.staffHosInfoId;
         const {data} = await adminViewHospital(this.hospitalId,detailedHosInfoId,staffHosInfoId);
         this.hospital = data;
-        this.tags=data.hospitalTags;
+        this.hospitalTags=data.hospitalTags;
         this.reviews=data.reviewHospitals;
         this.estimations=data.estimations;
+
+        //병원 평가 등록을 위해 등록한 정보.
+        this.hospitalEstimationInfo={
+            cityName:this.hospital.cityName,
+            hospitalName:this.hospital.hospitalName
+        };
     },
 }
 </script>

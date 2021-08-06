@@ -113,6 +113,22 @@ function adminDeleteHospitalTag(postTagId){
     return admin.delete('/hospital/tag/delete/'+postTagId);
 }
 
+//관리자 병원 태그 연결
+function adminLinkHospitalTag(request){
+    return admin.post('/hospital/tag/link',request);
+}
+
+//관리자 병원 평가 등록
+function adminCreateHospitalEstimation(request){
+    return admin.post('/estimation/register',request);
+}
+
+//관리자 병원 평가 삭제
+function adminDeleteHospitalEstimation(estimationId){
+    return admin.delete('/estimation/delete/'+estimationId);
+}
+
+
 
 
 /* 리뷰 관리 */
@@ -210,7 +226,8 @@ export {
     adminViewHospital, adminModifyHospital,
     adminDeleteHospital,adminRegisterStaffHospitalInfo,
     adminViewStaffHospitalInfo,adminModifyStaffHosInfo,adminDeleteStaffHosInfo,
-    adminDeleteHospitalTag,
+    adminDeleteHospitalTag,adminLinkHospitalTag, adminCreateHospitalEstimation,
+    adminDeleteHospitalEstimation,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,

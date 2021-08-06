@@ -44,7 +44,7 @@ export default {
        pageNum: 0,
        totalPageNum:'',
 
-       //질문 데이터
+       //태그 데이터
        tags: [],
        //검색 조건 default = memberIdName로 한다. 
        searchCondition:'tagName',
