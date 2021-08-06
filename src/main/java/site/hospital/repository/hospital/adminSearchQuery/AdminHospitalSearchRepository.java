@@ -22,23 +22,6 @@ public class AdminHospitalSearchRepository {
 
     public AdminHospitalSearchRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
 
-    public Page<AdminSearchHospitalDto> adminHospitals(Pageable pageable){
-        QueryResults<AdminSearchHospitalDto> result = queryFactory
-                .select(new QAdminSearchHospitalDto(hospital.id, detailedHosInformation.id,
-                        staffHosInformation.id, hospital.hospitalName,hospital.businessCondition,
-                        hospital.cityName,hospital.phoneNumber))
-                .from(hospital)
-                .leftJoin(hospital.detailedHosInformation, detailedHosInformation)
-                .leftJoin(hospital.staffHosInformation, staffHosInformation)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-
-        List<AdminSearchHospitalDto> content = result.getResults();
-        Long total = result.getTotal();
-
-        return new PageImpl<>(content,pageable,total);
-    }
 
     public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition, Pageable pageable){
         QueryResults<AdminSearchHospitalDto> result = queryFactory

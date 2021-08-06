@@ -148,12 +148,6 @@ public class HospitalService {
         return hospitalViewRepository.viewHospital(hospitalId);
     }
 
-
-    //관리자 병원 조회
-    public Page<AdminSearchHospitalDto> adminHospitals(Pageable pageable){
-        return adminHospitalSearchRepository.adminHospitals(pageable);
-    }
-
     //관리자 병원 검색
     public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition, Pageable pageable){
         return adminHospitalSearchRepository.adminSearchHospitals(condition, pageable);

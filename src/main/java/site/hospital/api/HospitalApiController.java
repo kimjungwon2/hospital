@@ -46,13 +46,6 @@ public class HospitalApiController {
         return hospitalService.viewHospital(hospitalId);
     }
 
-
-    //관리자 병원 조회
-    @GetMapping("/admin/hospitals")
-    public Page<AdminSearchHospitalDto> adminHospitals(Pageable pageable){
-        return hospitalService.adminHospitals(pageable);
-    }
-
     //관리자 병원 검색
     @GetMapping("/admin/hospital/search")
     public Page<AdminSearchHospitalDto> adminSearchHospitals(@RequestParam(value="hospitalId",required = false) Long hospitalId,
