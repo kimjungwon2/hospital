@@ -53,7 +53,8 @@ public class QuestionService {
     //QandA 수정
     @Transactional
     public Long modifyQandA(Long qanda_id, String content){
-        Question question = questionRepository.findById(qanda_id).orElse(null);
+        Question question = questionRepository.findById(qanda_id)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 질문이 존재하지 않습니다."));
         question.modifyQandA(content);
 
         return question.getId();

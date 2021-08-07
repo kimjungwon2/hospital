@@ -122,10 +122,9 @@ public class HospitalApiController {
     @PutMapping("/admin/hospital/modify/{hospitalId}")
     public AdminUpdateHospitalResponse updateHospital(@PathVariable("hospitalId") Long hospitalId,
                                                       @RequestBody @Validated AdminModifyHospitalRequest request){
-        hospitalService.adminUpdateHospital(hospitalId,request);
-        Hospital findHospital = hospitalService.findOne(hospitalId);
+        Long findId = hospitalService.adminUpdateHospital(hospitalId, request);
 
-        return new AdminUpdateHospitalResponse(findHospital.getId());
+        return new AdminUpdateHospitalResponse(findId);
     }
 
     //관리자 병원 삭제
@@ -135,9 +134,28 @@ public class HospitalApiController {
         hospitalService.adminDeleteHospital(hospitalId, staffHosInfoId);
     }
 
+    //관리자 병원 상세 정보 삭제
+    @DeleteMapping("/admin/detailedHos/delete/{hospitalId}")
+    public void deleteDetailedHospitalInformation(@PathVariable("hospitalId") Long detailedHosInfoId){
+        hospitalService.deleteDetailHospitalInformation(detailedHosInfoId);
+    }
+
+    //관리자 상세 정보 등록
+    @PostMapping("/admin/hospital/register/detailed")
+    public AdminCreateDetailedHosReponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
+        DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
+                .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
+                .numberHealthcareProvider(request.getNumberHealthcareProvider())
+                .hospitalLocation(request.getHospitalLocation()).hospitalAddress(request.getHospitalAddress()).build();
+
+        Long detailedHosId = hospitalService.registerDetailHospitalInformation(detailedHosInformation, request.getHospitalId());
+
+        return new AdminCreateDetailedHosReponse(detailedHosId);
+    }
+
     //관리자 병원 추가 정보 등록
     @PostMapping("/admin/hospital/register/staff")
-    public AdminCreateStaffHosResponse adminCreateStaffHosResponse(@RequestBody @Validated AdminCreateStaffHosRequest request){
+    public AdminCreateStaffHosResponse adminCreateStaffHosInfo(@RequestBody @Validated AdminCreateStaffHosRequest request){
 
         StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
                 .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).build();
@@ -188,6 +206,12 @@ public class HospitalApiController {
     }
 
     @Data
+    private static class AdminCreateDetailedHosReponse {
+        long id;
+        public AdminCreateDetailedHosReponse(long id){ this.id = id; }
+    }
+
+    @Data
     private static class CreateStaffHospitalRequest{
         Long hospitalId;
         String introduction;
@@ -215,6 +239,17 @@ public class HospitalApiController {
         private HospitalLocation hospitalLocation;
         private HospitalAddress hospitalAddress;
 
+    }
+
+    @Data
+    private static class CreateDetailedHospitalInformationRequest{
+        private Long hospitalId;
+        private Integer numberHealthcareProvider;
+        private Integer numberWard;
+        private Integer numberPatientRoom;
+
+        private HospitalLocation hospitalLocation;
+        private HospitalAddress hospitalAddress;
     }
 
     @Data

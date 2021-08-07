@@ -34,7 +34,8 @@ public class DoctorService {
     //doctor 수정
     @Transactional
     public Long registerDoctor(Long staffHosInfoId, Doctor doctor){
-        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosInfoId).orElse(null);
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosInfoId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 의사가 존재하지 않습니다."));
         doctorRepository.save(doctor);
 
         return doctor.getId();
@@ -43,7 +44,8 @@ public class DoctorService {
     //의사 수정
     @Transactional
     public Long modifyDoctor(Long doctorId, Doctor modifyDoctor){
-        Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 의사가 존재하지 않습니다."));
         doctor.modifyDoctor(modifyDoctor);
 
         return doctor.getId();

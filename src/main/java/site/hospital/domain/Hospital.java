@@ -98,6 +98,11 @@ public class Hospital extends BaseEntity {
         this.staffHosInformation = null;
     }
 
+    //fk 제거를 위해서 DetailedHos 지우기
+    public void deleteDetailedHosId(){
+        this.detailedHosInformation = null;
+    }
+
 
     public void updateHospital(String licensingDate, String hospitalName, String phoneNumber,
                                String distinguishedName, String medicalSubjectInformation,

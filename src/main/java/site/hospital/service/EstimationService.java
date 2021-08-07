@@ -55,6 +55,15 @@ public class EstimationService {
         estimationRepository.deleteById(estimationId);
     }
 
+    //평가 수정하기
+    @Transactional
+    public void adminModifyEstimation(Long estimationId, Estimation estimation){
+        Estimation findEstimation = estimationRepository.findById(estimationId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 평가가 존재하지 않습니다."));
+
+        findEstimation.modifyEstimation(estimation);
+    }
+
 
 
     //평가 전체 보기(관리자)

@@ -38,6 +38,16 @@ public class EstimationApiController {
         estimationService.adminDeleteEstimation(estimationId);
     }
 
+    //관리자 평가 수정하기
+    @PutMapping("/admin/estimation/modify/{estimationId}")
+    public void adminModifyMember(@PathVariable("estimationId") Long estimationId,
+                                  @RequestBody @Validated AdminModifyEstimationRequest request){
+        Estimation estimation = Estimation.builder().distinctionGrade(request.getDistinctionGrade()).
+        estimationList(request.getEstimationList()).build();
+
+        estimationService.adminModifyEstimation(estimationId, estimation);
+    }
+
 
 
     /* DTO */
@@ -55,6 +65,12 @@ public class EstimationApiController {
         private Long hospitalId;
         private String cityName;
         private String hospitalName;
+        private String distinctionGrade;
+        private String estimationList;
+    }
+
+    @Data
+    private static class AdminModifyEstimationRequest{
         private String distinctionGrade;
         private String estimationList;
     }

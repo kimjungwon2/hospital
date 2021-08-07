@@ -71,7 +71,7 @@ public class DetailedHosInformation extends BaseEntity {
 
 
     //비즈니스 메서드
-    public void updateDetailedHosInformation(int numberWard, int numberHealthcareProvider, int numberPatientRoom,
+    public void updateDetailedHosInformation(Integer numberWard, Integer numberHealthcareProvider, Integer numberPatientRoom,
                                              HospitalAddress hospitalAddress, HospitalLocation hospitalLocation){
         this.numberHealthcareProvider = numberHealthcareProvider;
         this.numberWard = numberWard;

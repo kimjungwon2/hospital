@@ -53,7 +53,8 @@ public class ReviewService {
     //리뷰 인증 승인(관리자)
     @Transactional
     public void approval(Long reviewId){
-        Review review = reviewRepository.findById(reviewId).orElse(null);
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
         review.approve();
     }
 

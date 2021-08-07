@@ -34,9 +34,9 @@ public class Estimation extends BaseEntity {
         hospital.getEstimations().add(this);
     }
 
+    //평가 수정하기
     public void modifyEstimation(Estimation estimation){
-        this.cityName = estimation.getCityName();
-        this.hospitalName = estimation.getHospitalName();
+        this.estimationList = estimation.getEstimationList();
         this.distinctionGrade = estimation.getDistinctionGrade();
     }
 

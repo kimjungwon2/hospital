@@ -45,8 +45,10 @@ public class BookmarkService {
 
         //북마크 여부가 없으면 북마크 저장
         else {
-            Member member = memberRepository.findById(memberId).orElse(null);
-            Hospital hospital = hospitalRepository.findById(hospitalId).orElse(null);
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+            Hospital hospital = hospitalRepository.findById(hospitalId)
+                    .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
             Bookmark bookmark = Bookmark.createBookmark(member, hospital);
             bookmarkRepository.save(bookmark);
         }
