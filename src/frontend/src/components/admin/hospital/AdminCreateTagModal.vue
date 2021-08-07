@@ -38,7 +38,7 @@ library.add(faPlusSquare);
 
 export default {
     props: {
-        estimations: {
+        hospitalTags: {
             type:Array,
             required: true,
         },

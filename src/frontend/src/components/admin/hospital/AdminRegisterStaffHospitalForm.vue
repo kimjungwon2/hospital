@@ -13,9 +13,6 @@
             <input id="abnormality" type="text" required v-model="abnormality">
         </div>
         <h2>의사 {{doctorNumber}}</h2>
-        doctors:{{doctors}}<br>
-        name:{{name}}<br>
-        history:{{history}}
         <div v-if="doctorNumber!==0">
             <div v-for="n in doctorNumber" :key="n">
                 <p>의사 {{n}}</p>
@@ -31,7 +28,7 @@
         </div>
         <button @click.prevent="addDoctor">의사 추가하기</button><br>
         <button v-if="doctorNumber>0" @click.prevent="minusDoctor">의사 제거</button><br>
-        <button type="submit">추가하기</button>
+        <button type="submit">정보 등록하기</button>
     </form>
 </template>
 

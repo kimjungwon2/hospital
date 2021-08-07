@@ -5,6 +5,8 @@
       <AdminCreateEstimationModal :estimations="estimations" :hospitalEstimationInfo="hospitalEstimationInfo"
       v-if ="isCreateEstimatons===true"
       @estimationCancel="cancelEstimationModal" @estimationLoad="adminLoadHospital"/>
+      <AdminModifyEstimationModal :estimations="estimations" v-if ="isModifyEstimations===true"
+      @modifyEstimationCancel="cancelModifyEstimationModal" @estimationLoad="adminLoadHospital"/>
       <h1>병원 정보</h1>
       <li>병원 번호: {{hospital.hospitalId}}</li>
       <li>병원 이름: {{hospital.hospitalName}}</li>
@@ -74,6 +76,7 @@
               평가 리스트:<b>{{estimation.estimationList}}</b> 평가 등급:{{estimation.distinctionGrade}}
               <font-awesome-icon icon="trash-alt" @click.prevent="deleteEstimation(estimation.estimationId)"/><br>
           </span>
+          <br>평가 수정<font-awesome-icon icon="plus-square" @click.prevent="modifyEstimations"/>
           <br>평가 추가<font-awesome-icon icon="plus-square" @click.prevent="createEstimations"/>
       </div>
 
@@ -85,6 +88,7 @@
 import {adminViewHospital,adminDeleteHospitalTag,adminDeleteReview,adminDeleteHospitalEstimation} from '@/api/admin';
 import AdminCreateTagModal from '@/components/admin/hospital/AdminCreateTagModal.vue'
 import AdminCreateEstimationModal from '@/components/admin/hospital/AdminCreateEstimationModal.vue'
+import AdminModifyEstimationModal from '@/components/admin/hospital/AdminModifyEstimationModal.vue'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
@@ -95,6 +99,7 @@ export default {
     components:{
         AdminCreateTagModal,
         AdminCreateEstimationModal,
+        AdminModifyEstimationModal,
     },
     data() {
         return {
@@ -108,6 +113,7 @@ export default {
             hospitalId:'',
             isCreateTags:false,
             isCreateEstimatons:false,
+            isModifyEstimations:false,
         }
     },
     methods:{
@@ -154,7 +160,13 @@ export default {
         },
         cancelEstimationModal(){
             this.isCreateEstimatons = false;
-        }
+        },
+        modifyEstimations(){
+            this.isModifyEstimations = true;
+        },
+        cancelModifyEstimationModal(){
+            this.isModifyEstimations = false;
+        },
     },
     async created(){
         this.hospitalId = this.$route.query.hospitalId;

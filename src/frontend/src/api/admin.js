@@ -128,6 +128,26 @@ function adminDeleteHospitalEstimation(estimationId){
     return admin.delete('/estimation/delete/'+estimationId);
 }
 
+//관리자 병원 평가 수정
+function adminModifyHospitalEstimation(estimationId,estimationData){
+    return admin.put('/estimation/modify/'+estimationId, estimationData);
+}
+
+//관리자 병원 의사 등록
+function adminCreateDoctor(request){
+    return admin.post('/doctor/register',request);
+}
+
+//관리자 병원 의사 삭제
+function adminDeleteDoctor(doctorId){
+    return admin.delete('/doctor/delete/'+doctorId);
+}
+
+//관리자 병원 의사 수정
+function adminModifyDoctor(doctorId,doctorData){
+    return admin.put('/doctor/modify/'+doctorId, doctorData);
+}
+
 
 
 
@@ -227,7 +247,8 @@ export {
     adminDeleteHospital,adminRegisterStaffHospitalInfo,
     adminViewStaffHospitalInfo,adminModifyStaffHosInfo,adminDeleteStaffHosInfo,
     adminDeleteHospitalTag,adminLinkHospitalTag, adminCreateHospitalEstimation,
-    adminDeleteHospitalEstimation,
+    adminDeleteHospitalEstimation,adminModifyHospitalEstimation,adminDeleteDoctor,
+    adminModifyDoctor,adminCreateDoctor,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,
