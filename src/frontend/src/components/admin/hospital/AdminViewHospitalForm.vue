@@ -1,12 +1,22 @@
 <template>
   <div>
+      <AdminModifyHospitalModal :hospital="hospital" v-if ="isModifyHospital===true" 
+      @hospitalCancel="cancelModifyHospital" @hospitalLoad="adminLoadHospital"/>
+
+      <AdminCreateDetailedHosModal v-if="isCreateDetailed==true"
+      @createDetailedCancel="cancelCreateDetailed" @detailedHospitalLoad="adminCreateDetailedLoadHospital"/>
+
       <AdminCreateTagModal :hospitalTags="hospitalTags" v-if ="isCreateTags===true" 
       @tagCancel="cancelTagModal" @tagLoad="adminLoadHospital"/>
+
       <AdminCreateEstimationModal :estimations="estimations" :hospitalEstimationInfo="hospitalEstimationInfo"
       v-if ="isCreateEstimatons===true"
       @estimationCancel="cancelEstimationModal" @estimationLoad="adminLoadHospital"/>
+
       <AdminModifyEstimationModal :estimations="estimations" v-if ="isModifyEstimations===true"
       @modifyEstimationCancel="cancelModifyEstimationModal" @estimationLoad="adminLoadHospital"/>
+
+      <br>병원 수정<font-awesome-icon icon="plus-square" @click.prevent="modifyHospital"/>
       <h1>병원 정보</h1>
       <li>병원 번호: {{hospital.hospitalId}}</li>
       <li>병원 이름: {{hospital.hospitalName}}</li>
@@ -31,9 +41,10 @@
            <li>y 좌표: {{ hospital.y_coordination}}</li>
            <li>위도: {{ hospital.latitude}}</li>
            <li>경도: {{ hospital.longitude}}</li>
+           상세 정보 삭제<font-awesome-icon icon="trash-alt" @click.prevent="deleteDetailedHosInfo(hospital.detailedHosInfoId)"/>
       </div>
       <div v-else>상세 정보가 없습니다. 
-        <button>(상세정보 추가하기)</button>
+        <button @click.prevent="createDetailedHospital">(상세정보 추가하기)</button>
       </div>
 
       <h2>병원 태그</h2>
@@ -44,8 +55,6 @@
           <font-awesome-icon icon="trash-alt" @click.prevent="deleteTag(tag.postTagId)"/>   </span>
           <br>태그 추가<font-awesome-icon icon="plus-square" @click.prevent="createTags"/>
      </div>
-
-    
 
       <h2>병원 리뷰</h2>
       <div v-if="reviews.length===0">병원 리뷰가 없습니다.</div>
@@ -85,10 +94,13 @@
 </template>
 
 <script>
-import {adminViewHospital,adminDeleteHospitalTag,adminDeleteReview,adminDeleteHospitalEstimation} from '@/api/admin';
-import AdminCreateTagModal from '@/components/admin/hospital/AdminCreateTagModal.vue'
-import AdminCreateEstimationModal from '@/components/admin/hospital/AdminCreateEstimationModal.vue'
-import AdminModifyEstimationModal from '@/components/admin/hospital/AdminModifyEstimationModal.vue'
+import {adminViewHospital,adminDeleteHospitalTag,adminDeleteReview,adminDeleteHospitalEstimation,
+        adminDeleteDetailedHosInfo,} from '@/api/admin';
+import AdminCreateTagModal from '@/components/admin/hospital/AdminCreateTagModal.vue';
+import AdminCreateEstimationModal from '@/components/admin/hospital/AdminCreateEstimationModal.vue';
+import AdminModifyEstimationModal from '@/components/admin/hospital/AdminModifyEstimationModal.vue';
+import AdminModifyHospitalModal from '@/components/admin/hospital/AdminModifyHospitalModal.vue';
+import AdminCreateDetailedHosModal from '@/components/admin/hospital/AdminCreateDetailedHosModal.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
@@ -97,6 +109,8 @@ library.add(faTrashAlt);
 library.add(faPlusSquare);
 export default {
     components:{
+        AdminCreateDetailedHosModal,
+        AdminModifyHospitalModal,
         AdminCreateTagModal,
         AdminCreateEstimationModal,
         AdminModifyEstimationModal,
@@ -111,12 +125,21 @@ export default {
             hospitalEstimationInfo:{},
 
             hospitalId:'',
+            isCreateDetailed:false,
             isCreateTags:false,
             isCreateEstimatons:false,
             isModifyEstimations:false,
+            isModifyHospital:false,
         }
     },
     methods:{
+        //상세 정보 삭제
+        async deleteDetailedHosInfo(detailedHosInfoId){
+            if(confirm('정말로 상세 정보를 삭제하시겠습니까?')){
+               await adminDeleteDetailedHosInfo(detailedHosInfoId);
+               this.adminDeleteDetailedLoadHospital();
+            }
+        },
         //태그 삭제
         async deleteTag(postTagId){
             if(confirm('정말로 해당 태그를 삭제하시겠습니까?')){
@@ -129,6 +152,27 @@ export default {
                await adminDeleteHospitalEstimation(estimationId);
                this.adminLoadHospital();
             }
+        },
+        //병원 정보 불러오기(삭제한 상세 정보)
+        async adminDeleteDetailedLoadHospital(){
+            const detailedHosInfoId = '';
+            const staffHosInfoId = this.$route.query.staffHosInfoId;
+            this.$router.push({name:'adminHospitalView',
+            query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
+            }); 
+            const {data} = await adminViewHospital(this.hospitalId, detailedHosInfoId, staffHosInfoId);
+            this.hospital = data;
+        },
+        //병원 정보 불러오기(생성한 상세 정보)
+        async adminCreateDetailedLoadHospital(detailedHosId){
+            const detailedHosInfoId = detailedHosId;
+            const staffHosInfoId = this.$route.query.staffHosInfoId;
+            this.$router.push({name:'adminHospitalView',
+            query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
+            }); 
+            
+            const {data} = await adminViewHospital(this.hospitalId, detailedHosInfoId, staffHosInfoId);
+            this.hospital = data;
         },
         //병원 정보 불러오기
         async adminLoadHospital(){
@@ -147,6 +191,21 @@ export default {
         },
 
         //모달창.
+        modifyHospital(){
+            this.isModifyHospital = true;
+        },
+        cancelModifyHospital(){
+            this.isModifyHospital = false;
+        },
+        //Detailed 정보 생성
+        createDetailedHospital(){
+            this.isCreateDetailed = true;
+        },
+        cancelCreateDetailed(){
+            this.isCreateDetailed = false;
+        },
+
+        //태그 생성
         createTags(){
             this.isCreateTags = true;
         },
@@ -154,6 +213,7 @@ export default {
         cancelTagModal(){
             this.isCreateTags= false;
         },
+
         //평가 모달창 열기
         createEstimations(){
             this.isCreateEstimatons = true;
@@ -161,6 +221,7 @@ export default {
         cancelEstimationModal(){
             this.isCreateEstimatons = false;
         },
+
         modifyEstimations(){
             this.isModifyEstimations = true;
         },

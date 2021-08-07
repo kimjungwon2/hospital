@@ -88,6 +88,16 @@ function adminDeleteHospital(hospitalId,staffHosInfoId){
     });
 }
 
+//관리자 상세 정보 삭제
+function adminDeleteDetailedHosInfo(detailedHosId){
+    return admin.delete('/detailedHos/delete/'+detailedHosId);
+}
+
+//관리자 상세 정보 등록
+function adminRegisterDetailedHosInfo(detailedHosInfo){
+    return admin.post('/hospital/register/detailed',detailedHosInfo);
+}
+
 //관리자 추가 정보 등록
 function adminRegisterStaffHospitalInfo(staffHosInfo){
     return admin.post('/hospital/register/staff',staffHosInfo);
@@ -248,7 +258,8 @@ export {
     adminViewStaffHospitalInfo,adminModifyStaffHosInfo,adminDeleteStaffHosInfo,
     adminDeleteHospitalTag,adminLinkHospitalTag, adminCreateHospitalEstimation,
     adminDeleteHospitalEstimation,adminModifyHospitalEstimation,adminDeleteDoctor,
-    adminModifyDoctor,adminCreateDoctor,
+    adminModifyDoctor,adminCreateDoctor,adminRegisterDetailedHosInfo,
+    adminDeleteDetailedHosInfo,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,

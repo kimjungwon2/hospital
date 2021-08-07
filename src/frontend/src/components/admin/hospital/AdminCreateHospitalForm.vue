@@ -158,11 +158,12 @@ export default {
              this.zipCode ===''){
                this.$alert('상세 정보를 모두 기입해주세요.');
              }
-
-            await adminCreateHospital(hospitalData);
-            this.$alert("병원 등록이 완료되었습니다.")
-            this.initForm();
-            this.$router.push('/admin/hospitals').catch(error=>error);
+            else{
+                await adminCreateHospital(hospitalData);
+                this.$alert("병원 등록이 완료되었습니다.")
+                this.initForm();
+                this.$router.push('/admin/hospitals').catch(error=>error);
+            }
           } 
           //상세 정보 없이 등록
           else{
