@@ -1,4 +1,15 @@
 import { user } from './index';
+
+//유저 정보 상세 보기
+function viewUserInformation(memberId){
+    return user.get(memberId+'/view');
+}
+
+//유저 정보 수정하기
+function modifyUserInformation(memberId, request){
+    return user.put(memberId+'/modify',request);
+}
+
 //북마크 여부 확인
 function isUserBookmark(memberId, hospitalId){
     return user.get(memberId+'/bookmark/hospital/'+hospitalId);
@@ -7,6 +18,11 @@ function isUserBookmark(memberId, hospitalId){
 function userRegisterBookmark(data){
     return user.post('/hospital/bookmark/register',data);
 }
+//질문 등록
+function registerUserQuestion(data){
+    return user.post('/hospital/question/register',data);
+}
+
 //유저가 등록한 북마크 보기
 function viewUserBookmarks(memberId){
     return user.get(memberId+'/bookmarks');
@@ -28,6 +44,6 @@ function viewUserQuestions(memberId){
 }
 
 
-export{ isUserBookmark, userRegisterBookmark, 
+export{ viewUserInformation,isUserBookmark, userRegisterBookmark, registerUserQuestion,modifyUserInformation,
     viewUserBookmarks,viewUserReviews,registerUserReview,
     viewUserAppointments,viewUserQuestions };

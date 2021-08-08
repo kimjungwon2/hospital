@@ -8,7 +8,7 @@
         
           <ul class="navbar_menu" v-if="isLogin">
               <li><router-link to="/user/activity">나의 활동</router-link></li>
-              <li><router-link to="/user/info">정보 수정</router-link></li>
+              <li @click.prevent="routerUser">정보 수정</li>
           </ul>
 
           <ul class="navbar_menu" v-if="isAdmin">
@@ -64,6 +64,10 @@ export default {
        deleteCookie('token');
       this.$router.push('/');
     },
+    routerUser(){
+       const memberId= this.$store.getters.getMemberId;
+       this.$router.push('/user/'+memberId+'/info');
+    },
   },
 };
 </script>
@@ -98,6 +102,7 @@ header{
 }
 
 .navbar_menu li{
+  color:white;
   padding:8px 12px;
 }
 

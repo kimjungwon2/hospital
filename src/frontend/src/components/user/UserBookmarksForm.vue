@@ -2,7 +2,13 @@
   <div>
       <ul v-for="contentItem in contentItems" :key="contentItem.bookmarkId">
         <li @click="routeViewHospital(contentItem)">
-            {{ contentItem.hospitalName }} | {{contentItem.hospitalId}}
+            {{ contentItem.hospitalName }} | 상태: {{contentItem.businessCondition}}
+        </li>
+        <li>
+            진료 과목:{{contentItem.medicalSubjectInformation}}
+        </li>
+        <li>
+            등록일: {{contentItem.createTime|formatDate}}
         </li>
        </ul>
   </div>

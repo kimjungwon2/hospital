@@ -25,6 +25,11 @@ const router =  new VueRouter({
            meta: { login: true},
        },
        {
+          path:'/user/:userId/info',
+          component:() => import('@/views/user/UserInformationPage.vue'),
+          meta: { login: true},
+       },
+       {
            path:'/user/:id/bookmarks',
            component: ()=> import('@/views/user/UserBookmarksPage.vue'),
            meta: { login: true},
@@ -47,6 +52,11 @@ const router =  new VueRouter({
        {
            path:'/user/hospital/:hospitalId/register/review',
            component: ()=> import('@/views/user/UserRegisterReviewPage.vue'),
+           meta: { login: true},
+       },
+       {
+           path:'/user/hospital/:hospitalId/register/question',
+           component: ()=> import('@/views/user/UserRegisterQuestionPage.vue'),
            meta: { login: true},
        },
        {

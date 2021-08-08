@@ -21,7 +21,7 @@
     </template>
     <template v-if="isDetailed" ><ViewDetailedInfoForm :staffHosInfoId="staffHosInfoId"></ViewDetailedInfoForm></template>
     <template v-if="isReview" ><ViewHospitalReviewForm></ViewHospitalReviewForm></template>
-    <template v-if="isQandA" ><ViewQandAForm></ViewQandAForm></template>    
+    <template v-if="isQandA" ><ViewQandAForm :staffHosInfoId="staffHosInfoId"></ViewQandAForm></template>    
   </div>
 
 </template>
