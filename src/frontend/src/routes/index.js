@@ -45,6 +45,11 @@ const router =  new VueRouter({
            meta: { login: true},
        },
        {
+           path:'/user/hospital/:hospitalId/register/review',
+           component: ()=> import('@/views/user/UserRegisterReviewPage.vue'),
+           meta: { login: true},
+       },
+       {
             path:'/main',
             component: () => import('@/views/MainPage.vue'),
        },
@@ -135,7 +140,7 @@ const router =  new VueRouter({
 });
 
 router.beforeEach((to, from, next ) => {
-     if(to.meta.login && !store.getters.isLogin){
+     if(to.meta.login && !store.getters.isLogin && !store.getters.isAdmin){
           alert('로그인이 필요합니다.');
           next('/login');
           return;

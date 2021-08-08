@@ -2,6 +2,10 @@ function saveSearchNameToCookie(value){
     document.cookie = `search_name=${value}`;
 }
 
+function saveMemberIdToCookie(value){
+    document.cookie = `member_id=${value}`;
+}
+
 function saveNickNameToCookie(value){
     document.cookie = `nick_name=${value}`;
 }
@@ -17,6 +21,13 @@ function saveMemberStatusToCookie(value){
 function getSearchNameFromCookie() {
   return document.cookie.replace(
     /(?:(?:^|.*;\s*)search_name\s*=\s*([^;]*).*$)|^.*$/,
+    '$1',
+  );
+}
+
+function getMemberIdFromCookie(){
+    return document.cookie.replace(
+    /(?:(?:^|.*;\s*)member_id\s*=\s*([^;]*).*$)|^.*$/,
     '$1',
   );
 }
@@ -48,10 +59,12 @@ function deleteCookie(value) {
 }
 
 export{
+    saveMemberIdToCookie,
     saveSearchNameToCookie,
     saveNickNameToCookie,
     saveTokenToCookie,
     saveMemberStatusToCookie,
+    getMemberIdFromCookie,
     getSearchNameFromCookie,
     getNickNameFromCookie,
     getTokenFromCookie,

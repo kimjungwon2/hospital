@@ -11,23 +11,27 @@
 export default {
     methods:{
         routeBookmark(){
-            const id = 1;
+            const id = this.memberId;
             this.$router.push(`/user/${id}/bookmarks`);
         },
         routeAppointment(){
-            const id = 1;
+            const id = this.memberId;
             this.$router.push(`/user/${id}/appointments`);
         },
         routeQuestion(){
-            const id = 1;
+            const id = this.memberId;
             this.$router.push(`/user/${id}/questions`);
         },
         routeReview(){
-            const id = 1;
+            const id = this.memberId;
             this.$router.push(`/user/${id}/reviews`);
         },
     },
-
+    data() {
+        return {
+            memberId: this.$store.getters.getMemberId
+        }
+    },
 }
 </script>
 
