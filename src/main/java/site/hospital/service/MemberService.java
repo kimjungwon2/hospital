@@ -69,10 +69,18 @@ public class MemberService {
             throw new IllegalStateException("이미 존재하는 회원.");
         }
     }
-
     //멤버 수정하기
     @Transactional
     public void modifyMember(Long memberId, Member modifyMember){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        member.modifyMember(modifyMember);
+    }
+
+    //멤버 수정하기
+    @Transactional
+    public void adminModifyMember(Long memberId, Member modifyMember){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
@@ -116,7 +124,7 @@ public class MemberService {
             memberAuthorityRepository.save(managerAuthority);
         }
 
-        member.modifyMember(modifyMember);
+        member.adminModifyMember(modifyMember);
     }
 
 

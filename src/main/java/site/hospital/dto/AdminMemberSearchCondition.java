@@ -2,7 +2,7 @@ package site.hospital.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import site.hospital.domain.member.Authorization;
+import site.hospital.domain.member.MemberStatus;
 
 @Data
 public class AdminMemberSearchCondition {
@@ -14,13 +14,13 @@ public class AdminMemberSearchCondition {
     private String nickName;
     private String userName;
     private String phoneNumber;
-    private Authorization authorizationStatus;
+    private MemberStatus memberStatus;
     private Long hospitalNumber;
 
     @Builder
     public AdminMemberSearchCondition(String allSearch, Long memberId, String memberIdName,
                                       String nickName, String userName,
-                                      String phoneNumber, Authorization authorizationStatus,
+                                      String phoneNumber, MemberStatus memberStatus,
                                       Long hospitalNumber) {
         this.allSearch = allSearch;
         this.memberId = memberId;
@@ -28,7 +28,7 @@ public class AdminMemberSearchCondition {
         this.nickName = nickName;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
-        this.authorizationStatus = authorizationStatus;
+        this.memberStatus = memberStatus;
         this.hospitalNumber = hospitalNumber;
     }
 }

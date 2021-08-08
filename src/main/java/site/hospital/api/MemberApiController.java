@@ -51,7 +51,7 @@ public class MemberApiController {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-            return new ResponseEntity<>(new LoginMemberResponse(member.getNickName(), member.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(new LoginMemberResponse(member.getId(),member.getNickName(), member.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
 
     }
 
@@ -69,6 +69,26 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
+    //유저 정보 상세 보기
+    @GetMapping("/user/{memberId}/view")
+    public ViewMemberInformation userViewInformation(@PathVariable("memberId") Long memberId){
+        Member member = memberService.viewMember(memberId);
+        ViewMemberInformation viewMemberInformation =new ViewMemberInformation(member);
+
+        return viewMemberInformation;
+    }
+
+
+    //유저 정보 수정하기
+    @PutMapping("/user/{memberId}/modify")
+    public void userModifyInformation(@PathVariable("memberId") Long memberId,
+                                  @RequestBody @Validated UserModifyRequest request){
+        Member member = Member.builder().phoneNumber(request.getPhoneNumber()).nickName(request.getNickName())
+                .userName(request.getUserName()).build();
+
+        memberService.modifyMember(memberId, member);
+    }
+
     //관리자 유저 검색
     @GetMapping("/admin/user/search")
     public Page<MemberSearchResult> adminSearchMembers(@RequestParam(value="allSearch",required = false) String allSearch,
@@ -77,14 +97,14 @@ public class MemberApiController {
                                                        @RequestParam(value="nickName",required = false) String nickName,
                                                        @RequestParam(value="userName",required = false) String userName,
                                                        @RequestParam(value="phoneNumber",required = false) String phoneNumber,
-                                                       @RequestParam(value="authorizationStatus",required = false) Authorization authorizationStatus,
+                                                       @RequestParam(value="authorizationStatus",required = false) MemberStatus memberStatus,
                                                        @RequestParam(value="hospitalNumber",required = false) Long hospitalNumber,
                                                        Pageable pageable){
 
         //받은 값들 생성자로 생성.
         AdminMemberSearchCondition condition = AdminMemberSearchCondition.builder()
                 .allSearch(allSearch).memberId(memberId).memberIdName(memberIdName).nickName(nickName)
-        .userName(userName).phoneNumber(phoneNumber).authorizationStatus(authorizationStatus).hospitalNumber(hospitalNumber).build();
+        .userName(userName).phoneNumber(phoneNumber).memberStatus(memberStatus).hospitalNumber(hospitalNumber).build();
 
         Page<Member> members = memberService.adminSearchMembers(condition, pageable);
         List<MemberSearchResult> result = members.stream()
@@ -133,7 +153,7 @@ public class MemberApiController {
         Member member = Member.builder().phoneNumber(request.getPhoneNumber()).memberStatus(request.getMemberStatus()).nickName(request.getNickName())
                 .userName(request.getUserName()).build();
 
-        memberService.modifyMember(memberId, member);
+        memberService.adminModifyMember(memberId, member);
     }
 
     //관리자 멤버 권한 부여하기.
@@ -177,11 +197,13 @@ public class MemberApiController {
 
     @Data
     private static class LoginMemberResponse{
+        Long memberId;
         String nickName;
         MemberStatus memberStatus;
         String token;
 
-        public LoginMemberResponse(String nickName, MemberStatus memberStatus, String token) {
+        public LoginMemberResponse(Long memberId, String nickName, MemberStatus memberStatus, String token) {
+            this.memberId = memberId;
             this.nickName = nickName;
             this.memberStatus = memberStatus;
             this.token = token;
@@ -202,6 +224,25 @@ public class MemberApiController {
             this.userName = member.getUserName();
             this.memberStatus = member.getMemberStatus();
             this.hospitalNumber = member.getHospitalNumber();
+        }
+    }
+
+    @Data
+    private static class ViewMemberInformation{
+        private Long id;
+        private String memberIdName;
+        private String userName;
+        private String nickName;
+        private String phoneNumber;
+        private MemberStatus memberStatus;
+
+        public ViewMemberInformation(Member member) {
+            this.id = member.getId();
+            this.memberIdName = member.getMemberIdName();
+            this.userName = member.getUserName();
+            this.nickName = member.getNickName();
+            this.phoneNumber = member.getPhoneNumber();
+            this.memberStatus = member.getMemberStatus();
         }
     }
 
@@ -229,6 +270,13 @@ public class MemberApiController {
     }
 
     @Data
+    private static class UserModifyRequest{
+        private String nickName;
+        private String phoneNumber;
+        private String userName;
+    }
+
+    @Data
     private static class AdminModifyMemberRequest{
         @NotNull(message="권한을 넣어주세요.")
         private MemberStatus memberStatus;
@@ -236,7 +284,6 @@ public class MemberApiController {
         private String phoneNumber;
         private String userName;
     }
-
 
     @Data
     private static class AdminCreateMemberRequest {

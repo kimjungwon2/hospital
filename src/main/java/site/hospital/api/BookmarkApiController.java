@@ -18,13 +18,13 @@ public class BookmarkApiController {
     private final BookmarkService bookmarkService;
 
     //북마크 등록 + 삭제
-    @PostMapping("/hospital/bookmark/register")
+    @PostMapping("/user/hospital/bookmark/register")
     public void saveBookmark(@RequestBody @Validated CreateBookmarkRequest request){
-        bookmarkService.bookmark(request.getMemberId(), request.hospitalId);
+        bookmarkService.bookmark(request.getMemberId(), request.getHospitalId());
     }
 
     //북마크 여부 확인.
-    @GetMapping(value ={"/hospital/{hospitalId}/bookmark/{memberId}"})
+    @GetMapping(value ={"/user/{memberId}/bookmark/hospital/{hospitalId}"})
     public IsBookmark isNullBookmark(@PathVariable("memberId") Long memberId,
                                      @PathVariable("hospitalId") Long hospitalId){
         Boolean isBookmark = false;

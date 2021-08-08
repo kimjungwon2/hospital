@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.member.MemberAuthority;
+import site.hospital.domain.member.MemberStatus;
 import site.hospital.dto.AdminMemberSearchCondition;
 
 import static site.hospital.domain.member.QMember.member;
@@ -97,6 +98,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                             ,(memberUserNameEq(condition.getUserName()))
                             ,(memberPhoneNumberEq(condition.getPhoneNumber()))
                             ,(memberHospitalNumberEq(condition.getHospitalNumber()))
+                            ,(memberStatusEq(condition.getMemberStatus()))
                     )
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -127,6 +129,9 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
     private BooleanExpression memberHospitalNumberEq(Long hospitalNumber){
         return hospitalNumber == null? null: member.hospitalNumber.eq(hospitalNumber);
+    }
+    private BooleanExpression memberStatusEq(MemberStatus memberStatus){
+        return memberStatus == null? null: member.memberStatus.eq(memberStatus);
     }
 
 }

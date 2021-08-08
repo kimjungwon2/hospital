@@ -24,7 +24,7 @@ public class QuestionApiController {
     private final QuestionService questionService;
 
     //Question 생성
-    @PostMapping("/hospital/question/register")
+    @PostMapping("/user/hospital/question/register")
     public CreateQuestionResponse createQuestion(@RequestBody @Validated CreateQuestionRequest request){
         Long id = questionService.questionCreate(request.getMemberId(),request.getHospitalId(),request.getContent());
         return new CreateQuestionResponse(id);
@@ -66,7 +66,7 @@ public class QuestionApiController {
     /* DTO */
     @Data
     private static class CreateQuestionResponse{
-        Long id;
+        private Long id;
         public CreateQuestionResponse(long id) {
             this.id = id;
         }
@@ -74,8 +74,8 @@ public class QuestionApiController {
 
     @Data
     private static class CreateQuestionRequest{
-        Long hospitalId;
-        Long memberId;
+        private Long hospitalId;
+        private Long memberId;
         private String content;
     }
 

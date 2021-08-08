@@ -78,6 +78,7 @@ public class ReviewApiController {
         return result;
     }
 
+    //리뷰 검색하기
     @PostMapping("/search/review")
     public Page<ReviewSearchDto> searchReview(@RequestBody @Validated ReviewSearchCondition condition, Pageable pageable){
         return reviewService.searchReview(condition, pageable);
@@ -171,10 +172,22 @@ public class ReviewApiController {
     private static class ReviewHospitalDto{
         private String content;
         private String disease;
+        private Integer sumPrice;
+        private Integer kindness;
+        private Integer symptomRelief;
+        private Integer cleanliness;
+        private Integer waitTime;
+        private Double averageRate;
 
         public ReviewHospitalDto(ReviewHospital reviewHospital) {
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
+            this.sumPrice = reviewHospital.getEvCriteria().getSumPrice();
+            this.kindness = reviewHospital.getEvCriteria().getKindness();
+            this.symptomRelief = reviewHospital.getEvCriteria().getSymptomRelief();
+            this.cleanliness = reviewHospital.getEvCriteria().getCleanliness();
+            this.waitTime = reviewHospital.getEvCriteria().getWaitTime();
+            this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
         }
     }
 
