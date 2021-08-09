@@ -46,7 +46,22 @@ public class MemberApiController {
 
             Member member = memberService.logIn(request.getMemberIdName(), request.getPassword());
 
-            String jwt = tokenProvider.createToken(authentication, member.getPhoneNumber());
+            String jwt;
+
+            //멤버 권한이 STAFF 전용 토큰 만들기
+            if(member.getMemberStatus() == MemberStatus.STAFF){
+                jwt = tokenProvider.createStaffToken(authentication,
+                        member.getPhoneNumber(),member.getHospitalNumber());
+            }
+            //멤버 권한이 관리자나, 일반 유저라면
+            else  {
+                jwt = tokenProvider.createToken(authentication, member.getPhoneNumber());
+            }
+
+            //토큰 null 체크.
+            if(jwt == null){
+                throw new IllegalStateException("토큰 값이 null 입니다.");
+            }
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);

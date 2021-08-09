@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static site.hospital.domain.QReviewLike.reviewLike;
 import static site.hospital.domain.review.QReview.review;
 import static site.hospital.domain.member.QMember.member;
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -28,8 +29,8 @@ public class ReviewSearchRepository {
 
     public ReviewSearchRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
 
-    public Page<ReviewSearchDto> searchReview(ReviewSearchCondition condition, Pageable pageable){
-        Page<ReviewSearchDto> result = findReviews(condition, pageable);
+    public Page<ReviewSearchDto> searchReview(String searchName, Pageable pageable){
+        Page<ReviewSearchDto> result = findReviews(searchName, pageable);
 
         List<Long> reviewIds = result.stream().map(r->r.getReviewId()).collect(Collectors.toList());
 
@@ -37,7 +38,7 @@ public class ReviewSearchRepository {
                 queryFactory
                 .select(new QReviewHospitalDTO2(review.id
                         ,reviewHospital.content,reviewHospital.disease,
-                        reviewHospital.evCriteria.averageRate
+                        reviewHospital.evCriteria.averageRate,hospital.id
                         ,hospital.hospitalName))
                 .from(reviewHospital)
                 .join(reviewHospital.review, review)
@@ -50,18 +51,30 @@ public class ReviewSearchRepository {
 
         result.forEach(r->r.setReviewHospitals(reviewHospitalMap.get(r.getReviewId())));
 
-        return result;
+        List<ReviewLikeSearchDTO> reviewLikeSearchDTO =
+                queryFactory
+                        .select(new QReviewLikeSearchDTO(reviewLike.id, reviewLike.review.id))
+                        .from(reviewLike)
+                        .join(reviewLike.review, review)
+                        .where(reviewLike.review.id.in(reviewIds))
+                        .fetch();
 
+        Map<Long, List<ReviewLikeSearchDTO>> reviewLikeMap = reviewLikeSearchDTO.stream()
+                .collect(Collectors.groupingBy(ReviewLikeSearchDTO->ReviewLikeSearchDTO.getReviewId()));
+
+        result.forEach(r->r.setReviewLikes(reviewLikeMap.get(r.getReviewId())));
+
+        return result;
     }
 
-    private Page<ReviewSearchDto> findReviews(ReviewSearchCondition condition, Pageable pageable){
+    private Page<ReviewSearchDto> findReviews(String searchName, Pageable pageable){
         List<ReviewSearchDto> content = queryFactory
                 .select(new QReviewSearchDto(review.id, member.nickName,review.createdDate, review.authenticationStatus))
                 .from(review)
                 .join(review.member, member)
                 .where(
-                        reviewHospitalContent(condition.getSearchName())
-                .or(reviewHospitalDisease(condition.getSearchName()))
+                        reviewHospitalContent(searchName)
+                .or(reviewHospitalDisease(searchName))
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -71,8 +84,8 @@ public class ReviewSearchRepository {
                 .selectFrom(review)
                 .join(review.member, member)
                 .where(
-                        reviewHospitalContent(condition.getSearchName())
-                                .or(reviewHospitalDisease(condition.getSearchName()))
+                        reviewHospitalContent(searchName)
+                                .or(reviewHospitalDisease(searchName))
                 );
 
         return PageableExecutionUtils.getPage(content,pageable,()->countQuery.fetchCount());

@@ -1,4 +1,4 @@
-package site.hospital.domain.reviewLike;
+package site.hospital.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +27,24 @@ public class ReviewLike extends BaseTimeEntity {
     @JoinColumn(name="member_id")
     private Member member;
 
-    @Enumerated(EnumType.STRING)
-    private LikeCheck likeCheck;
+    //== 연관 관계 메서드 ==/
+    public void changeMember(Member member){
+        this.member = member;
+        member.getReviewLikes().add(this);
+    }
+
+    public void changeReview(Review review){
+        this.review = review;
+        review.getReviewLikes().add(this);
+    }
+
+    //생성 메서드
+    public static ReviewLike createReviewLike(Member member, Review review){
+        ReviewLike reviewLike = new ReviewLike();
+        reviewLike.changeMember(member);
+        reviewLike.changeReview(review);
+
+        return reviewLike;
+    }
 
 }

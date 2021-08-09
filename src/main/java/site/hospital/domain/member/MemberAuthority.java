@@ -27,6 +27,9 @@ public class MemberAuthority {
     @JoinColumn(name="authority_id")
     private Authority authority;
 
+    //병원 번호
+    private Long hospitalNumber;
+
     @Builder
     public MemberAuthority(Member member, Authority authority) {
         this.member = member;

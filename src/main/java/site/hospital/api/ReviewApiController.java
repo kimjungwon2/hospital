@@ -12,8 +12,8 @@ import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.domain.reviewHospital.EvaluationCriteria;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
+import site.hospital.domain.ReviewLike;
 import site.hospital.dto.AdminReviewSearchCondition;
-import site.hospital.repository.review.query.ReviewSearchCondition;
 import site.hospital.repository.review.query.ReviewSearchDto;
 import site.hospital.service.ReviewService;
 
@@ -78,10 +78,29 @@ public class ReviewApiController {
         return result;
     }
 
+    //리뷰 좋아요 + 취소하기
+    @PostMapping("/user/hospital/review/like")
+    public void likeReview(@RequestBody @Validated ReviewLikeRequest request){
+        reviewService.likeReview(request.getMemberId(), request.getReviewId());
+    }
+
+    //리뷰 좋아요 여부 확인.
+    @GetMapping(value ={"/user/{memberId}/hospital/review/{reviewId}"})
+    public IsLikeReview isNullLike(@PathVariable("memberId") Long memberId,
+                                   @PathVariable("reviewId") Long reviewId){
+        Boolean isLikeReview = false;
+        ReviewLike reviewLike = reviewService.isLikeReview(memberId, reviewId);
+
+        //좋아요가 있으면 true 반환
+        if(reviewLike !=null) isLikeReview =true;
+
+        return new IsLikeReview(isLikeReview);
+    }
+
     //리뷰 검색하기
-    @PostMapping("/search/review")
-    public Page<ReviewSearchDto> searchReview(@RequestBody @Validated ReviewSearchCondition condition, Pageable pageable){
-        return reviewService.searchReview(condition, pageable);
+    @GetMapping("/search/review/{searchName}")
+    public Page<ReviewSearchDto> searchReview(@PathVariable("searchName") String searchName, Pageable pageable){
+        return reviewService.searchReview(searchName, pageable);
     }
 
     //관리자 리뷰 검색
@@ -155,6 +174,7 @@ public class ReviewApiController {
         private LocalDateTime createdDate;
         private String nickName;
         private List<ReviewHospitalDto> reviewHospitals;
+        private List<ReviewLikeDTO> reviewLikes;
 
 
         public HospitalReviewResponse(Review reviews) {
@@ -165,6 +185,20 @@ public class ReviewApiController {
             this.reviewHospitals = reviews.getReviewHospitals().stream()
                     .map(reviewHospital -> new ReviewHospitalDto(reviewHospital))
                     .collect(Collectors.toList());
+            this.reviewLikes = reviews.getReviewLikes().stream()
+                    .map(reviewLike -> new ReviewLikeDTO(reviewLike))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    private static class ReviewLikeDTO{
+        Long likeId;
+        Long memberId;
+
+        public ReviewLikeDTO(ReviewLike reviewLike) {
+            this.likeId = reviewLike.getId();
+            this.memberId = reviewLike.getMember().getId();
         }
     }
 
@@ -189,6 +223,12 @@ public class ReviewApiController {
             this.waitTime = reviewHospital.getEvCriteria().getWaitTime();
             this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
         }
+    }
+
+    @Data
+    private static class ReviewLikeRequest{
+        private Long memberId;
+        private Long reviewId;
     }
 
     @Data
@@ -246,6 +286,7 @@ public class ReviewApiController {
         private String nickName;
         private List<ReviewViewDto> reviewHospitals;
 
+
         public ReviewViewResponse(Review reviews) {
             this.reviewId = reviews.getId();
             this.authenticationStatus = reviews.getAuthenticationStatus();
@@ -301,6 +342,15 @@ public class ReviewApiController {
             this.reviewHospitals = reviews.getReviewHospitals().stream()
                     .map(reviewHospital -> new AdminReviewDto(reviewHospital))
                     .collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    private static class IsLikeReview{
+        private Boolean isReviewLike;
+
+        public IsLikeReview(Boolean isReviewLike) {
+            this.isReviewLike = isReviewLike;
         }
     }
 

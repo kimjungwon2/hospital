@@ -32,6 +32,7 @@ public class TokenProvider implements Serializable {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String NICKNAME_KEY = "nickName";
     private static final String PHONE_KEY = "phoneNumber";
+    private static final String HOSPITAL_NUMBER_KEY = "hospitalNumber";
 
 
     //토큰 생성
@@ -47,6 +48,25 @@ public class TokenProvider implements Serializable {
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(PHONE_KEY, phoneNumber)
+                .signWith(SignatureAlgorithm.HS512,secret)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    //STAFF 토큰 생성
+    public String createStaffToken(Authentication authentication, String phoneNumber, Long hospitalNumber) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.JWT_TOKEN_VALIDITY);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim(PHONE_KEY, phoneNumber)
+                .claim(HOSPITAL_NUMBER_KEY, hospitalNumber)
                 .signWith(SignatureAlgorithm.HS512,secret)
                 .setExpiration(validity)
                 .compact();

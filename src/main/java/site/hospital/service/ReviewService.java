@@ -8,14 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.*;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.review.ReviewAuthentication;
-import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.review.Review;
 import site.hospital.domain.reviewHospital.ReviewHospital;
+import site.hospital.domain.ReviewLike;
 import site.hospital.dto.AdminReviewSearchCondition;
+import site.hospital.repository.reviewLike.ReviewLikeRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.review.ReviewRepository;
-import site.hospital.repository.review.query.ReviewSearchCondition;
 import site.hospital.repository.review.query.ReviewSearchDto;
 import site.hospital.repository.review.query.ReviewSearchRepository;
 
@@ -27,6 +27,7 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewLikeRepository reviewLikeRepository;
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
     private final ReviewSearchRepository reviewSearchRepository;
@@ -50,6 +51,41 @@ public class ReviewService {
         return review.getId();
     }
 
+    //리뷰 좋아요 여부 확인.
+    public ReviewLike isLikeReview(Long memberId, Long reviewId){
+        ReviewLike isLikeReview = reviewLikeRepository.isLikeReview(memberId, reviewId);
+
+        return isLikeReview;
+    }
+
+    //리뷰 좋아요 + 취소하기
+    @Transactional
+    public void likeReview(Long memberId, Long reviewId){
+        Boolean existence = false;
+
+        //리뷰에 좋아요 있는지 확인.
+        ReviewLike isLike = reviewLikeRepository.isLikeReview(memberId,reviewId);
+
+        //리뷰에 좋아요 존재 시, true
+        if(isLike!=null) existence = true;
+
+        //좋아요가 있으면 삭제.
+        if(existence== true) {
+            reviewLikeRepository.delete(isLike);
+        }
+        //좋아요 데이터가 없으면 저장.
+        else {
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+            Review review = reviewRepository.findById(reviewId)
+                    .orElseThrow(()->new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
+
+            ReviewLike reviewLike = ReviewLike.createReviewLike(member, review);
+            reviewLikeRepository.save(reviewLike);
+        }
+
+    }
+
     //리뷰 인증 승인(관리자)
     @Transactional
     public void approval(Long reviewId){
@@ -69,8 +105,8 @@ public class ReviewService {
     }
 
     //리뷰 전체 검색
-    public Page<ReviewSearchDto> searchReview(ReviewSearchCondition condition, Pageable pageable){
-        return reviewSearchRepository.searchReview(condition, pageable);
+    public Page<ReviewSearchDto> searchReview(String searchName, Pageable pageable){
+        return reviewSearchRepository.searchReview(searchName, pageable);
     }
 
     //관리자 리뷰 검색
@@ -96,7 +132,6 @@ public class ReviewService {
     public void deleteReview(Long reviewId){
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
-
 
         reviewRepository.deleteById(reviewId);
     }

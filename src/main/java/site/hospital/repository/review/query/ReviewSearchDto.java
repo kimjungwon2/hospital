@@ -14,6 +14,7 @@ public class ReviewSearchDto {
     private LocalDateTime createdDate;
     private ReviewAuthentication authenticationStatus;
     private List<ReviewHospitalDTO2> reviewHospitals;
+    private List<ReviewLikeSearchDTO> reviewLikes;
 
     @QueryProjection
     public ReviewSearchDto(Long reviewId, String nickName, LocalDateTime createdDate, ReviewAuthentication authenticationStatus) {
