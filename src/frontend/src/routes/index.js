@@ -16,6 +16,10 @@ const router =  new VueRouter({
            component: () => import('@/views/LoginPage.vue'),
        },
        {
+            path:'/main',
+            component: () => import('@/views/MainPage.vue'),
+       },
+       {
            path: '/signup',
            component: () => import('@/views/SignupPage.vue'),
        },
@@ -60,8 +64,9 @@ const router =  new VueRouter({
            meta: { login: true},
        },
        {
-            path:'/main',
-            component: () => import('@/views/MainPage.vue'),
+          path:'/staff/:userId/hospital',
+          component: ()=> import('@/views/staff/StaffViewHospitalPage.vue'),
+          meta: { staff: true},
        },
        {
             path:'/admin',
@@ -154,9 +159,14 @@ const router =  new VueRouter({
 });
 
 router.beforeEach((to, from, next ) => {
-     if(to.meta.login && !store.getters.isLogin && !store.getters.isAdmin){
+     if(to.meta.login && !store.getters.isLogin && !store.getters.isStaff && !store.getters.isAdmin){
           alert('로그인이 필요합니다.');
           next('/login');
+          return;
+     }
+     if(to.meta.staff && !store.getters.isStaff && !store.getters.isAdmin){
+          alert('병원 관계자가 아닙니다.');
+          next('/main');
           return;
      }
      if(to.meta.admin && !store.getters.isAdmin){

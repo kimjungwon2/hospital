@@ -12,7 +12,7 @@
           </ul>
 
           <ul class="navbar_menu" v-if="isStaff">
-              <li><router-link to="/main">병원 관리 페이지</router-link></li>
+              <li @click.prevent="routerStaffManage">병원 관리 페이지</li>
           </ul>
 
           <ul class="navbar_menu" v-if="isAdmin">
@@ -73,6 +73,10 @@ export default {
        deleteCookie('nick_name');
        deleteCookie('token');
       this.$router.push('/');
+    },
+    routerStaffManage(){
+       const memberId= this.$store.getters.getMemberId;
+       this.$router.push('/staff/'+memberId+'/hospital');
     },
     routerUser(){
        const memberId= this.$store.getters.getMemberId;

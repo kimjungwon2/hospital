@@ -87,7 +87,7 @@ export default {
             hospitalTags:[],
             estimations:[],
 
-            hospitalId:'',
+            userId:'',
             isCreateDetailed:false,
             isCreateTags:false,
             isCreateEstimatons:false,
@@ -117,7 +117,7 @@ export default {
             this.$router.push({name:'staffHospitalView',
             query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
             }); 
-            const {data} = await staffViewHospital(this.hospitalId, detailedHosInfoId, staffHosInfoId);
+            const {data} = await staffViewHospital(this.userId);
             this.hospital = data;
         },
         //병원 정보 불러오기(생성한 상세 정보)
@@ -128,14 +128,14 @@ export default {
             query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
             }); 
             
-            const {data} = await staffViewHospital(this.hospitalId, detailedHosInfoId, staffHosInfoId);
+            const {data} = await staffViewHospital(this.userId);
             this.hospital = data;
         },
         //병원 정보 불러오기
         async staffLoadHospital(){
             const detailedHosInfoId = this.$route.query.detailedHosInfoId;
             const staffHosInfoId = this.$route.query.staffHosInfoId;
-            const {data} = await staffViewHospital(this.hospitalId, detailedHosInfoId, staffHosInfoId);
+            const {data} = await staffViewHospital(this.userId);
             this.hospitalTags=data.hospitalTags;
             this.estimations=data.estimations;  
         },
@@ -165,10 +165,8 @@ export default {
 
     },
     async created(){
-        this.hospitalId = this.$route.query.hospitalId;
-        const detailedHosInfoId = this.$route.query.detailedHosInfoId;
-        const staffHosInfoId = this.$route.query.staffHosInfoId;
-        const {data} = await staffViewHospital(this.hospitalId,detailedHosInfoId,staffHosInfoId);
+        this.userId = this.$route.params.userId;
+        const {data} = await staffViewHospital(this.userId);
         this.hospital = data;
         this.hospitalTags=data.hospitalTags;
         this.estimations=data.estimations;

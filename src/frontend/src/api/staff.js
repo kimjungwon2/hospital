@@ -1,15 +1,8 @@
 import { staff} from './index';
 
 //병원 관계자 병원보기
-function staffViewHospital(hospitalId, detailedHosInfoId, staffHosInfoId){
-    return staff.get('/hospital/view',
-    {
-        params:{
-            hospitalId:hospitalId,
-            detailedHosInfoId: detailedHosInfoId,
-            staffHosInfoId: staffHosInfoId,
-        },
-    });
+function staffViewHospital(userId){
+    return staff.get(userId+'/hospital/view');
 } 
 
 //병원 관계자 병원 정보 수정

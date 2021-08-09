@@ -1,9 +1,9 @@
 <template>
   <div>
     <div>
-      <button v-if="!isLogin && !isAdmin" @click.prevent="routeLogin">리뷰 작성</button>
+      <button v-if="!isLogin && !isStaff && !isAdmin" @click.prevent="routeLogin">리뷰 작성</button>
       <button v-else @click.prevent="routeRegisterReview">리뷰 작성</button>
-      <font-awesome-icon v-if="!isLogin && !isAdmin" :icon="['far', 'heart']" @click.prevent="routeLogin"/>
+      <font-awesome-icon v-if="!isLogin && !isStaff && !isAdmin " :icon="['far', 'heart']" @click.prevent="routeLogin"/>
       <font-awesome-icon v-else-if="bookmark===false" :icon="['far', 'heart']" @click.prevent="registerBookmark"/>
       <font-awesome-icon v-else-if="bookmark===true" :icon="['fas', 'heart']" @click.prevent="registerBookmark"/>
     </div>
@@ -61,6 +61,9 @@ export default {
   computed:{
     isLogin(){
       return this.$store.getters.isLogin;
+    },
+    isStaff(){
+      return this.$store.getters.isStaff;
     },
     isAdmin(){
       return this.$store.getters.isAdmin;
@@ -121,7 +124,7 @@ export default {
   async created(){
     this.hospitalId = this.$route.params.id;
 
-    if(this.isLogin || this.isAdmin){
+    if(this.isLogin || this.isStaff ||this.isAdmin){
       this.loadBookmark();
     }
   },
