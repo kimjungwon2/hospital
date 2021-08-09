@@ -11,12 +11,16 @@
               <li @click.prevent="routerUser">정보 수정</li>
           </ul>
 
+          <ul class="navbar_menu" v-if="isStaff">
+              <li><router-link to="/main">병원 관리 페이지</router-link></li>
+          </ul>
+
           <ul class="navbar_menu" v-if="isAdmin">
               <li><router-link to="/admin">관리 페이지</router-link></li>
           </ul>
 
 
-          <ul class="navbar_user" v-if="isLogin||isAdmin">
+          <ul class="navbar_user" v-if="isLogin||isStaff||isAdmin">
               <li><span>{{ $store.state.nickName }}</span></li>
               <li><a href="javacript:;" @click="logoutUser">로그아웃</a></li>
           </ul>
@@ -41,11 +45,17 @@ export default {
     isLogin(){
       return this.$store.getters.isLogin;
     },
+    isStaff(){
+      return this.$store.getters.isStaff;
+    },
     isAdmin(){
       return this.$store.getters.isAdmin;
     },
     logoLink(){
       if(this.$store.getters.isLogin){
+        return '/main';
+      }
+      else if(this.$store.getters.isStaff){
         return '/main';
       }
       else if(this.$store.getters.isAdmin){

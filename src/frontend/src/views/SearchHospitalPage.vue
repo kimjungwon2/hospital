@@ -41,7 +41,7 @@ export default {
                     this.page+=1;
                     this.contentItems.push(...data.content);
                     $state.loaded();
-            }
+                }
             else $state.complete();
             }).catch(error=>{
                 console.error(error);

@@ -28,6 +28,9 @@ export default new Vuex.Store({
         isLogin(state){
             return state.memberStatus === 'NORMAL';
         },
+        isStaff(state){
+            return state.memberStatus === 'STAFF';
+        },
         isAdmin(state){
             return state.memberStatus === 'ADMIN';
         }

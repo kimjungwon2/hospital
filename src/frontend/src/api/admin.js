@@ -1,4 +1,4 @@
-import { admin, hospital } from './index';
+import { admin} from './index';
 
 /* 멤버 관리 */
 //관리자 멤버 리스트 검색
