@@ -36,12 +36,22 @@ function loginUser(userData){
     return instance.post('login',userData);
 }
 
-function searchHospital(searchName){
-    return instance.get(`search/hospital/${searchName}`);
+function searchHospital(searchName,page){
+    return instance.get(`search/hospital/${searchName}`,
+        {
+        params:{
+            page:page,
+        },
+    });
 }
 
-function searchReview(searchName){
-    return instance.get(`search/review/${searchName}`)
+function searchReview(searchName, page){
+    return instance.get(`search/review/${searchName}`,
+        {
+        params:{
+            page:page,
+        },
+    });
 }
 
-export { signupUser, loginUser, searchHospital };
+export { signupUser, loginUser, searchHospital, searchReview };

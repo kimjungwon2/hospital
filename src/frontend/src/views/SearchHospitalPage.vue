@@ -19,7 +19,7 @@
 import SearchHospitalItem from '@/components/hospitals/SearchHospitalItem.vue';
 import SearchHospitalMenuItem from '@/components/hospitals/SearchHospitalMenuItem.vue';
 import InfiniteLoading from 'vue-infinite-loading';
-import axios from 'axios';
+import {searchHospital} from '@/api/index';
 
 export default {
     components:{
@@ -35,13 +35,8 @@ export default {
     },
     methods: {
         infiniteHandler($state){
-            const url = process.env.VUE_APP_API_URL+`search/hospital/${this.$route.params.searchName}`;
-
-            axios.get(url,{
-                params:{
-                    page: this.page,
-                },
-            }).then(({ data }) => {
+            searchHospital(this.$route.params.searchName, this.page)
+            .then(({ data }) => {
                  if(data.content.length){
                     this.page+=1;
                     this.contentItems.push(...data.content);

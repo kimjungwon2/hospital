@@ -19,7 +19,7 @@
 import SearchReviewItem from '@/components/hospitals/SearchReviewItem.vue';
 import SearchReviewMenuItem from '@/components/hospitals/SearchReviewMenuItem.vue';
 import InfiniteLoading from 'vue-infinite-loading';
-import axios from 'axios';
+import {searchReview} from '@/api/index';
 
 export default {
     components:{
@@ -35,12 +35,8 @@ export default {
     },
     methods:{
         infiniteHandler($state){
-            const url = process.env.VUE_APP_API_URL+`search/review/${this.$route.params.searchName}`;
-            axios.get(url,{
-                params:{
-                    page: this.page,
-                },
-            }).then(({ data }) => {
+            searchReview(this.$route.params.searchName, this.page)
+            .then(({ data }) => {
                  if(data.content.length){
                     this.page+=1;
                     this.contentItems.push(...data.content);
