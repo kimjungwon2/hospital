@@ -19,7 +19,7 @@ import static site.hospital.domain.review.QReview.review;
 import static site.hospital.domain.member.QMember.member;
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 
 @Repository
 public class ReviewSearchRepository {

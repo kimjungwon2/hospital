@@ -3,6 +3,7 @@ package site.hospital.repository.hospital.viewQuery;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import site.hospital.domain.StaffHosInformation;
+import site.hospital.domain.hospital.BusinessCondition;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,7 +18,7 @@ public class ViewHospitalDTO {
     private String phoneNumber;
     private String distinguishedName;
     private String medicalSubjectInformation;
-    private String businessCondition;
+    private BusinessCondition businessCondition;
     private String cityName;
 
 
@@ -44,7 +45,7 @@ public class ViewHospitalDTO {
     @QueryProjection
     public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId, String licensingDate, String hospitalName,
                            String phoneNumber, String distinguishedName,
-                           String medicalSubjectInformation, String businessCondition,
+                           String medicalSubjectInformation, BusinessCondition businessCondition,
                            String cityName, String landLotBasedSystem,
                            String roadBaseAddress, Integer numberHealthcareProvider,
                            Integer numberWard, Integer numberPatientRoom,

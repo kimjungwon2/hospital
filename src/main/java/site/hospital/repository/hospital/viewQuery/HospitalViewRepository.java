@@ -4,8 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
-import static site.hospital.domain.QEstimation.estimation;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.estimation.QEstimation.estimation;
+import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.QPostTag.postTag;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Bookmark;
+import site.hospital.domain.hospital.BusinessCondition;
 import site.hospital.service.BookmarkService;
 
 import java.time.LocalDateTime;
@@ -93,7 +94,7 @@ public class BookmarkApiController {
         private Long hospitalId;
         private Long memberId;
         private String medicalSubjectInformation;
-        private String businessCondition;
+        private BusinessCondition businessCondition;
         private String cityName;
         private String userName;
         private String hospitalName;
@@ -116,7 +117,7 @@ public class BookmarkApiController {
     private static class SearchMemberBookmarkResponse{
         private Long hospitalId;
         private String medicalSubjectInformation;
-        private String businessCondition;
+        private BusinessCondition businessCondition;
         private String cityName;
         private String hospitalName;
         private LocalDateTime createTime;

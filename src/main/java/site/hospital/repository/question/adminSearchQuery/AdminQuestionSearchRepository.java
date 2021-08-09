@@ -14,7 +14,7 @@ import site.hospital.dto.AdminQuestionSearchCondition;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.QQuestion.question;
 import static site.hospital.domain.member.QMember.member;
 import static site.hospital.domain.QAnswer.answer;

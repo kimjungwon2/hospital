@@ -1,8 +1,8 @@
 package site.hospital.repository.hospital;
 
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 
 public interface HospitalRepositoryCustom {
-    Hospital adminViewHospital(Long hospitalId);
+    Hospital viewHospital(Long hospitalId);
     Hospital findByStaffHosId(Long staffHosId);
 }

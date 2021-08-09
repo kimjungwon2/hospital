@@ -1,7 +1,7 @@
 package site.hospital.repository.postTag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.PostTag;
 import site.hospital.domain.Tag;
 

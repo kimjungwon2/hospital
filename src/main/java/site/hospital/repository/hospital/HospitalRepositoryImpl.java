@@ -2,12 +2,11 @@ package site.hospital.repository.hospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import site.hospital.domain.Hospital;
-import site.hospital.repository.hospital.adminSearchQuery.QAdminSearchHospitalDto;
+import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.EntityManager;
 
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 
@@ -19,12 +18,12 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public Hospital adminViewHospital(Long hospitalId){
+    public Hospital viewHospital(Long hospitalId){
         Hospital result = queryFactory
                 .select(hospital)
                 .from(hospital)
-                .leftJoin(hospital.detailedHosInformation, detailedHosInformation)
-                .leftJoin(hospital.staffHosInformation, staffHosInformation)
+                .leftJoin(hospital.detailedHosInformation, detailedHosInformation).fetchJoin()
+                .leftJoin(hospital.staffHosInformation, staffHosInformation).fetchJoin()
                 .where(hospitalIdEq(hospitalId))
                 .fetchOne();
         return result;

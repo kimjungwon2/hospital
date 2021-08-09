@@ -1,12 +1,11 @@
-package site.hospital.domain;
+package site.hospital.domain.estimation;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseEntity;
-import site.hospital.domain.baseEntity.BaseTimeEntity;
-import site.hospital.domain.member.Member;
+import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.*;
 
@@ -25,8 +24,10 @@ public class Estimation extends BaseEntity {
 
     private String cityName;
     private String hospitalName;
+
     private String distinctionGrade;
-    private String estimationList;
+    @Enumerated(EnumType.STRING)
+    private EstimationList estimationList;
 
     //== 연관 관계 메서드 ==/
     public void changeHospital(Hospital hospital){
@@ -42,7 +43,7 @@ public class Estimation extends BaseEntity {
 
     @Builder
     public Estimation(String cityName, String hospitalName,
-                      String distinctionGrade, String estimationList) {
+                      String distinctionGrade, EstimationList estimationList) {
         this.cityName = cityName;
         this.hospitalName = hospitalName;
         this.distinctionGrade = distinctionGrade;

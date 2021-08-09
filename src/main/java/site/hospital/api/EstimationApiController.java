@@ -4,7 +4,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import site.hospital.domain.Estimation;
+import site.hospital.domain.estimation.Estimation;
+import site.hospital.domain.estimation.EstimationList;
 import site.hospital.service.EstimationService;
 
 @RestController
@@ -66,13 +67,13 @@ public class EstimationApiController {
         private String cityName;
         private String hospitalName;
         private String distinctionGrade;
-        private String estimationList;
+        private EstimationList estimationList;
     }
 
     @Data
     private static class AdminModifyEstimationRequest{
         private String distinctionGrade;
-        private String estimationList;
+        private EstimationList estimationList;
     }
 
 }

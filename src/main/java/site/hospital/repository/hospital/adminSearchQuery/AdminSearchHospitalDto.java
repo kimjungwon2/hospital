@@ -2,6 +2,7 @@ package site.hospital.repository.hospital.adminSearchQuery;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class AdminSearchHospitalDto {
@@ -9,13 +10,13 @@ public class AdminSearchHospitalDto {
     Long detailedHosId;
     Long staffHosInformationId;
     String hospitalName;
-    String businessCondition;
+    BusinessCondition businessCondition;
     String cityName;
     String phoneNumber;
 
     @QueryProjection
     public AdminSearchHospitalDto(Long hospitalId, Long detailedHosId, Long staffHosInformationId,
-                                  String hospitalName, String businessCondition,
+                                  String hospitalName, BusinessCondition businessCondition,
                                   String cityName, String phoneNumber) {
         this.hospitalId = hospitalId;
         this.detailedHosId = detailedHosId;

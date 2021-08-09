@@ -3,12 +3,11 @@ package site.hospital.repository.review;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.review.Review;
 import site.hospital.dto.AdminReviewSearchCondition;
 

@@ -89,4 +89,9 @@ public class Member extends BaseTimeEntity {
         this.memberStatus = memberStatus;
     }
 
+    //STAFF 병원 번호 주기
+    public void giveHospitalNumber(Long hospitalNumber){
+        this.hospitalNumber = hospitalNumber;
+    }
+
 }

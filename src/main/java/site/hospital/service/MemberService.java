@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.*;
 import site.hospital.dto.AdminMemberSearchCondition;
 import site.hospital.repository.AuthorityRepository;
 import site.hospital.repository.MemberAuthorityRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final HospitalRepository hospitalRepository;
     private final AuthorityRepository authorityRepository;
     private final MemberAuthorityRepository memberAuthorityRepository;
     private final PasswordEncoder passwordEncoder;
@@ -201,13 +204,12 @@ public class MemberService {
 
         //멤버 권리부터 삭제.
         memberRepository.adminDeleteMemberAuthority(member);
-
         memberRepository.deleteById(memberId);
     }
 
     //관리자 멤버 권한주기
     @Transactional
-    public void adminGiveAuthority(Long memberId, MemberStatus memberStatus){
+    public void adminGiveAuthority(Long memberId, MemberStatus memberStatus, Long hospitalNumber){
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
@@ -218,18 +220,33 @@ public class MemberService {
            Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
            if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
 
-           //manager 권한 주기
-           MemberAuthority managerAuthority = MemberAuthority.builder()
-                   .member(member).authority(authority_STAFF).build();
-           memberAuthorityRepository.save(managerAuthority);
+           //병원 관계자에게 manager 권한 주기
+           if(memberStatus == MemberStatus.STAFF) {
+               if(hospitalNumber==null) throw new IllegalStateException("병원 관계자에게 주는 병원 번호가 존재하지 않습니다.");
+
+               Hospital hospital = hospitalRepository.findById(hospitalNumber)
+                       .orElseThrow(()->new IllegalStateException("해당 번호에 속하는 병원이 존재하지 않습니다."));
+
+               MemberAuthority managerAuthority = MemberAuthority.builder()
+                       .member(member).authority(authority_STAFF).hospitalNo(hospitalNumber).build();
+               memberAuthorityRepository.save(managerAuthority);
+           }
+           //관리자는 병원 번호를 안 준다.
+           else if(memberStatus == MemberStatus.ADMIN){
+               MemberAuthority managerAuthority = MemberAuthority.builder()
+                       .member(member).authority(authority_STAFF).build();
+               memberAuthorityRepository.save(managerAuthority);
+           }
        }
 
-        //멤버의 staff 권한 주기
+        //staff 권한 주기
        if(memberStatus == MemberStatus.STAFF){
            member.giveAuthority(MemberStatus.STAFF);
+           member.giveHospitalNumber(hospitalNumber);
        }
         //admin 권한 주기
        else if(memberStatus == MemberStatus.ADMIN){
+
             Authority authority_ADMIN = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_ADMIN);
             if(authority_ADMIN == null) throw new IllegalStateException("ADMIN 권한 데이터가 없습니다.");
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 import static site.hospital.domain.QAnswer.answer;
 import static site.hospital.domain.QQuestion.question;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.member.QMember.member;
 
 @Repository

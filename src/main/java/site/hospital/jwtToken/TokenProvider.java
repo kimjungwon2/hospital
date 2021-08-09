@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,11 +22,10 @@ import java.util.stream.Collectors;
 public class TokenProvider implements Serializable {
 
     private static final long serialVersionUID = -798416586417070603L;
-    private static final long JWT_TOKEN_VALIDITY = 30 * 60 * 1000;
+    private static final long JWT_TOKEN_VALIDITY = 60 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String secret;
-
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
@@ -70,6 +70,23 @@ public class TokenProvider implements Serializable {
                 .signWith(SignatureAlgorithm.HS512,secret)
                 .setExpiration(validity)
                 .compact();
+
+    }
+
+    //STAFF 병원 번호 반환
+    public Long getHospitalNumber(String token){
+        Claims claims = Jwts
+                .parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+
+        if(claims.get(HOSPITAL_NUMBER_KEY) == null)
+            throw new AccessDeniedException("병원 번호가 존재하지 않는 계정");
+
+        String hospitalNumber = claims.get(HOSPITAL_NUMBER_KEY).toString();
+
+        return Long.parseLong(hospitalNumber);
     }
 
     //Authentication 반환.

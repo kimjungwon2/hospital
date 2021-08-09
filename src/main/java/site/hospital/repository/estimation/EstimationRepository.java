@@ -1,10 +1,7 @@
 package site.hospital.repository.estimation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import site.hospital.domain.Estimation;
-import site.hospital.domain.Hospital;
-
-import java.util.List;
+import site.hospital.domain.estimation.Estimation;
 
 public interface EstimationRepository extends JpaRepository<Estimation,Long>,EstimationRepositoryCustom {
 

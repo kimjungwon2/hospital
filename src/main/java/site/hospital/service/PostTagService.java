@@ -3,7 +3,7 @@ package site.hospital.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.PostTag;
 import site.hospital.domain.Tag;
 import site.hospital.repository.hospital.HospitalRepository;

@@ -2,7 +2,7 @@ package site.hospital.repository.review;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.review.Review;
 import site.hospital.dto.AdminReviewSearchCondition;
 

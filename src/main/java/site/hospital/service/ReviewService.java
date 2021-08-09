@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.domain.*;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.domain.review.Review;

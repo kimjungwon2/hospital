@@ -12,16 +12,21 @@ import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
 import site.hospital.domain.detailedHosInformation.HospitalLocation;
 
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.BusinessCondition;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.dto.AdminHospitalSearchCondition;
 import site.hospital.dto.AdminModifyHospitalRequest;
 import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.hospital.admin.AdminHospitalView;
+import site.hospital.dto.hospital.staff.StaffHospitalView;
 import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 import site.hospital.service.HospitalService;
 
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,11 +51,31 @@ public class HospitalApiController {
         return hospitalService.viewHospital(hospitalId);
     }
 
+    //병원 관계자 병원 보기
+    @GetMapping("/staff/{memberId}/hospital/view")
+    public StaffHospitalView viewHospital(ServletRequest servletRequest, @PathVariable("memberId") Long memberId){
+        Hospital hospital = hospitalService.staffViewHospital(servletRequest, memberId);
+
+        //NullPointerException 방지.
+        Long detailedHosId;
+        Long staffHosId;
+
+        if(hospital.getDetailedHosInformation() == null) detailedHosId = null;
+        else detailedHosId = hospital.getDetailedHosInformation().getId();
+
+        if(hospital.getStaffHosInformation() == null) staffHosId = null;
+        else staffHosId = hospital.getStaffHosInformation().getId();
+
+        StaffHospitalView staffHospitalView = new StaffHospitalView(hospital, detailedHosId, staffHosId);
+
+        return staffHospitalView;
+    }
+
     //관리자 병원 검색
     @GetMapping("/admin/hospital/search")
     public Page<AdminSearchHospitalDto> adminSearchHospitals(@RequestParam(value="hospitalId",required = false) Long hospitalId,
                                                              @RequestParam(value="hospitalName",required = false) String hospitalName,
-                                                             @RequestParam(value="businessCondition",required = false) String businessCondition,
+                                                             @RequestParam(value="businessCondition",required = false) BusinessCondition businessCondition,
                                                              @RequestParam(value="cityName",required = false) String cityName,
                                                              Pageable pageable){
         AdminHospitalSearchCondition condition = AdminHospitalSearchCondition.builder()
@@ -142,7 +167,7 @@ public class HospitalApiController {
 
     //관리자 상세 정보 등록
     @PostMapping("/admin/hospital/register/detailed")
-    public AdminCreateDetailedHosReponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
+    public AdminCreateDetailedHosResponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
         DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
                 .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
                 .numberHealthcareProvider(request.getNumberHealthcareProvider())
@@ -150,7 +175,7 @@ public class HospitalApiController {
 
         Long detailedHosId = hospitalService.registerDetailHospitalInformation(detailedHosInformation, request.getHospitalId());
 
-        return new AdminCreateDetailedHosReponse(detailedHosId);
+        return new AdminCreateDetailedHosResponse(detailedHosId);
     }
 
     //관리자 병원 추가 정보 등록
@@ -206,9 +231,9 @@ public class HospitalApiController {
     }
 
     @Data
-    private static class AdminCreateDetailedHosReponse {
+    private static class AdminCreateDetailedHosResponse {
         long id;
-        public AdminCreateDetailedHosReponse(long id){ this.id = id; }
+        public AdminCreateDetailedHosResponse(long id){ this.id = id; }
     }
 
     @Data
@@ -227,7 +252,7 @@ public class HospitalApiController {
         private String phoneNumber;
         private String distinguishedName;
         private String medicalSubjectInformation;
-        private String businessCondition;
+        private BusinessCondition businessCondition;
         private String cityName;
 
         private Boolean detailedInfoCheck;

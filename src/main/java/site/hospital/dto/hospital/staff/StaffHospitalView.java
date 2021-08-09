@@ -1,4 +1,4 @@
-package site.hospital.dto.hospital.admin;
+package site.hospital.dto.hospital.staff;
 
 import lombok.Data;
 import site.hospital.domain.hospital.BusinessCondition;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class AdminHospitalView {
+public class StaffHospitalView {
 
     private Long hospitalId;
 
@@ -36,11 +36,10 @@ public class AdminHospitalView {
 
     private Long staffHosInfoId;
 
-    private List<AdminHospitalTagDTO> hospitalTags;
-    private List<AdminReviewHospitalDTO> reviewHospitals;
-    private List<AdminHospitalEstimationDTO> estimations;
+    private List<StaffHospitalTagDTO> hospitalTags;
+    private List<StaffHospitalEstimationDTO> estimations;
 
-    public AdminHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId) {
+    public StaffHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId) {
         this.hospitalId = hospital.getId();
         this.licensingDate = hospital.getLicensingDate();
         this.hospitalName = hospital.getHospitalName();
@@ -49,6 +48,7 @@ public class AdminHospitalView {
         this.medicalSubjectInformation = hospital.getMedicalSubjectInformation();
         this.businessCondition = hospital.getBusinessCondition();
         this.cityName = hospital.getCityName();
+
         if(detailedHosInfoId != null) {
             this.detailedHosInfoId = hospital.getDetailedHosInformation().getId();
             this.numberHealthcareProvider = hospital.getDetailedHosInformation().getNumberHealthcareProvider();;
@@ -62,15 +62,14 @@ public class AdminHospitalView {
             this.latitude = hospital.getDetailedHosInformation().getHospitalLocation().getLatitude();
             this.longitude = hospital.getDetailedHosInformation().getHospitalLocation().getLongitude();
         }
+
         if(staffHosInfoId != null) {
             this.staffHosInfoId = hospital.getStaffHosInformation().getId();
         }
 
-        this.hospitalTags = hospital.getPostTags().stream().map(h-> new AdminHospitalTagDTO(h))
+        this.hospitalTags = hospital.getPostTags().stream().map(h-> new StaffHospitalTagDTO(h))
                 .collect(Collectors.toList());
-        this.reviewHospitals = hospital.getReviewHospitals().stream().map(r->new AdminReviewHospitalDTO(r))
-                .collect(Collectors.toList());
-        this.estimations = hospital.getEstimations().stream().map(e->new AdminHospitalEstimationDTO(e))
+        this.estimations = hospital.getEstimations().stream().map(e->new StaffHospitalEstimationDTO(e))
                 .collect(Collectors.toList());
     }
 }

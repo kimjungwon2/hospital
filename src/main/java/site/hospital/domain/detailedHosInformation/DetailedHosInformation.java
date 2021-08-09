@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseEntity;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.*;
 

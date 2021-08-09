@@ -3,6 +3,7 @@ package site.hospital.dto;
 import lombok.Data;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
 import site.hospital.domain.detailedHosInformation.HospitalLocation;
+import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class ModifyHospitalRequest {
@@ -13,7 +14,7 @@ public class ModifyHospitalRequest {
     private String phoneNumber;
     private String distinguishedName;
     private String medicalSubjectInformation;
-    private String businessCondition;
+    private BusinessCondition businessCondition;
     private String cityName;
 
     private int numberHealthcareProvider;

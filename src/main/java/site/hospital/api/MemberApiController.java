@@ -175,8 +175,9 @@ public class MemberApiController {
     @PutMapping("/admin/user/authority/{memberId}")
     public void adminGiveAuthorityMember(@PathVariable("memberId") Long memberId,
                                   @RequestBody @Validated AdminMemberAuthorizeRequest request){
-        memberService.adminGiveAuthority(memberId,request.getMemberStatus());
+        memberService.adminGiveAuthority(memberId,request.getMemberStatus(),request.getHospitalNumber());
     }
+
 
     /* DTO */
     @Data
@@ -282,6 +283,7 @@ public class MemberApiController {
     @Data
     private static class AdminMemberAuthorizeRequest{
         private MemberStatus memberStatus;
+        private Long hospitalNumber;
     }
 
     @Data

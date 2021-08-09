@@ -1,13 +1,14 @@
-package site.hospital.domain;
+package site.hospital.domain.hospital;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.hospital.domain.*;
 import site.hospital.domain.appointment.Appointment;
 import site.hospital.domain.baseEntity.BaseEntity;
-import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
+import site.hospital.domain.estimation.Estimation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 
 import javax.persistence.*;
@@ -30,7 +31,7 @@ public class Hospital extends BaseEntity {
     @OneToMany(mappedBy = "hospital")
     private List<Appointment> appointments = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
-    private List<Bookmark> bookmarks = new ArrayList<>();
+    private List<Bookmark> bookmarks = new   ArrayList<>();
     @OneToMany(mappedBy = "hospital")
     private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
@@ -50,8 +51,9 @@ public class Hospital extends BaseEntity {
     private String phoneNumber;
     private String distinguishedName;
     private String medicalSubjectInformation;
-    private String businessCondition;
     private String cityName;
+    @Enumerated(EnumType.STRING)
+    private BusinessCondition businessCondition;
 
 
     //== 연관 관계 메서드 ==//
@@ -82,7 +84,7 @@ public class Hospital extends BaseEntity {
     @Builder
     public Hospital(Long id, String licensingDate, String hospitalName,
                     String phoneNumber, String distinguishedName,
-                    String medicalSubjectInformation, String businessCondition, String cityName) {
+                    String medicalSubjectInformation, BusinessCondition businessCondition, String cityName) {
         this.id = id;
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
@@ -106,7 +108,7 @@ public class Hospital extends BaseEntity {
 
     public void updateHospital(String licensingDate, String hospitalName, String phoneNumber,
                                String distinguishedName, String medicalSubjectInformation,
-                               String businessCondition, String cityName) {
+                               BusinessCondition businessCondition, String cityName) {
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
         this.phoneNumber = phoneNumber;

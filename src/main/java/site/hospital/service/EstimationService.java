@@ -3,8 +3,8 @@ package site.hospital.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.domain.Estimation;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.estimation.Estimation;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.repository.estimation.EstimationRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 

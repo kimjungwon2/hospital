@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Member;
 
 import javax.persistence.*;

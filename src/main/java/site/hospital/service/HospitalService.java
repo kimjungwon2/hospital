@@ -3,15 +3,21 @@ package site.hospital.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
+import site.hospital.domain.member.Authorization;
+import site.hospital.domain.member.Member;
+import site.hospital.domain.member.MemberAuthority;
 import site.hospital.dto.AdminHospitalSearchCondition;
 import site.hospital.dto.AdminModifyHospitalRequest;
 import site.hospital.dto.ModifyHospitalRequest;
+import site.hospital.jwtToken.JwtGetHospitalNumber;
+import site.hospital.jwtToken.TokenProvider;
 import site.hospital.repository.DetailedHosRepository;
 import site.hospital.repository.estimation.EstimationRepository;
 import site.hospital.repository.hospital.HospitalRepository;
@@ -22,9 +28,11 @@ import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchRepository;
 import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
+import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.question.QuestionRepository;
 import site.hospital.repository.review.ReviewRepository;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 
 @Service
@@ -41,6 +49,8 @@ public class HospitalService {
     private final ReviewRepository reviewRepository;
     private final QuestionRepository questionRepository;
     private final EstimationRepository estimationRepository;
+    private final TokenProvider tokenProvider;
+    private final MemberRepository memberRepository;
 
 
     //병원 + 상세 정보등록
@@ -61,10 +71,34 @@ public class HospitalService {
         return hospital.getId();
     }
 
-
     //병원 검색
     public Page<HospitalSearchDto> searchHospital(String searchName,Pageable pageable){
         return hospitalSearchRepository.searchHospital(searchName,pageable);
+    }
+
+    //병원 관계자 병원 보기
+    public Hospital staffViewHospital(ServletRequest servletRequest, Long memberId) {
+        Member member =memberRepository.findById(memberId)
+                .orElseThrow(()-> new IllegalStateException("해당 계정은 존재하지 않습니다."));
+
+        JwtGetHospitalNumber jwtGetHospitalNumber = new JwtGetHospitalNumber(tokenProvider);
+        //토큰의 병원 번호
+        Long JwtHospitalId = jwtGetHospitalNumber.getJwtHospitalNumber(servletRequest);
+        //멤버 권한의 병원 번호
+        MemberAuthority findMemberManager = memberRepository.findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
+
+        if(findMemberManager == null){
+            throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");
+        }
+        else if(findMemberManager.getHospitalNo() == 0){
+            throw new AccessDeniedException("병원 번호가 존재하지 않습니다.");
+        }
+        //토큰 번호와 정보가 같지 않으면 인증 오류
+        else if(JwtHospitalId !=findMemberManager.getHospitalNo()){
+            throw new AccessDeniedException("병원 번호가 일치하지 않습니다.");
+        }
+
+        return hospitalRepository.viewHospital(JwtHospitalId);
     }
 
 
@@ -171,7 +205,7 @@ public class HospitalService {
 
     //관리자 병원 보기
     public Hospital adminViewHospital(Long hospitalId){
-        return hospitalRepository.adminViewHospital(hospitalId);
+        return hospitalRepository.viewHospital(hospitalId);
     }
 
     //관리자 병원 삭제하기

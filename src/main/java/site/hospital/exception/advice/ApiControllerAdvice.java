@@ -69,6 +69,13 @@ public class ApiControllerAdvice {
         return new ErrorResponse("BAD_REQUEST",e.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler
+    public ErrorResponse BadCredentialsException(org.springframework.security.access.AccessDeniedException e){
+        log.error("AccessDeniedException:",e);
+        return new ErrorResponse("FORBIDDEN",e.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ErrorResponse ServletException(javax.servlet.ServletException e){

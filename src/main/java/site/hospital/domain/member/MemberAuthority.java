@@ -28,12 +28,17 @@ public class MemberAuthority {
     private Authority authority;
 
     //병원 번호
-    private Long hospitalNumber;
+    private long hospitalNo;
 
     @Builder
-    public MemberAuthority(Member member, Authority authority) {
+    public MemberAuthority(Member member, Authority authority, long hospitalNo) {
         this.member = member;
         this.authority = authority;
+        this.hospitalNo = hospitalNo;
+    }
+
+    public void giveHospitalNumber(Long hospitalNo){
+        this.hospitalNo = hospitalNo;
     }
 
     //권한을 주기

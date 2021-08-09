@@ -2,7 +2,7 @@ package site.hospital.repository.question;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.Question;
 
 import java.util.List;

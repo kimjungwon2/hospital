@@ -3,6 +3,7 @@ package site.hospital.repository.hospital.searchQuery;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+import site.hospital.domain.hospital.BusinessCondition;
 
 import java.util.List;
 
@@ -11,14 +12,14 @@ public class HospitalSearchDto {
 
     private Long hospitalId;
     private String hospitalName;
-    private String businessCondition;
+    private BusinessCondition businessCondition;
     private String medicalSubjectInformation;
     private String roadBaseAddress;
     private List<PostTagDto> postTagDtos;
     private List<ReviewHospitalDto> reviewHospitals;
 
     @QueryProjection
-    public HospitalSearchDto(Long hospitalId, String hospitalName, String businessCondition,
+    public HospitalSearchDto(Long hospitalId, String hospitalName, BusinessCondition businessCondition,
                              String medicalSubjectInformation,
                              String roadBaseAddress) {
         this.hospitalId = hospitalId;

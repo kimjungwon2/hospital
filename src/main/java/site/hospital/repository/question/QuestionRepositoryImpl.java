@@ -6,16 +6,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.Question;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static site.hospital.domain.QAnswer.answer;
-import static site.hospital.domain.QEstimation.estimation;
 import static site.hospital.domain.QQuestion.question;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.member.QMember.member;
 
 public class QuestionRepositoryImpl implements QuestionRepositoryCustom {

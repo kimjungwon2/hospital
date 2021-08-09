@@ -2,18 +2,19 @@ package site.hospital.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class AdminHospitalSearchCondition {
     Long hospitalId;
     String hospitalName;
-    String businessCondition;
+    BusinessCondition businessCondition;
     String cityName;
 
 
     @Builder
     public AdminHospitalSearchCondition(Long hospitalId, String hospitalName,
-                                        String businessCondition, String cityName) {
+                                        BusinessCondition businessCondition, String cityName) {
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;
         this.businessCondition = businessCondition;

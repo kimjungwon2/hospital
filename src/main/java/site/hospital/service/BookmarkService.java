@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Bookmark;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Member;
 import site.hospital.repository.bookmark.BookmarkRepository;
 import site.hospital.repository.hospital.HospitalRepository;

@@ -9,7 +9,7 @@ import java.util.List;
 
 import static site.hospital.domain.QPostTag.postTag;
 import static site.hospital.domain.QTag.tag;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 
 
 public class PostTagRepositoryImpl implements PostTagRepositoryCustom{

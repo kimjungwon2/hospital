@@ -7,9 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import site.hospital.domain.hospital.BusinessCondition;
 import site.hospital.dto.AdminHospitalSearchCondition;
 
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
 
@@ -55,7 +56,7 @@ public class AdminHospitalSearchRepository {
     private BooleanExpression hospitalNameLike(String hospitalName){
         return hospitalName==null?  null: hospital.hospitalName.contains(hospitalName);
     }
-    private BooleanExpression businessConditionEq(String businessCondition){
+    private BooleanExpression businessConditionEq(BusinessCondition businessCondition){
         return businessCondition==null?  null: hospital.businessCondition.eq(businessCondition);
     }
     private BooleanExpression cityNameEq(String cityName){

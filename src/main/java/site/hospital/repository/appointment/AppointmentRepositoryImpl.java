@@ -10,7 +10,7 @@ import java.util.List;
 
 import static site.hospital.domain.appointment.QAppointment.appointment;
 import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 
 
 

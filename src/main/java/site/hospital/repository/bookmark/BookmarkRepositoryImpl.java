@@ -9,7 +9,7 @@ import java.util.List;
 
 import static site.hospital.domain.QBookmark.bookmark;
 import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 
 public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
 

@@ -17,5 +17,4 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         //필요한 권한이 없이 접근하려 할때 403
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
-
 }

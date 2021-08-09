@@ -41,6 +41,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetch();
     }
 
+
     //STAFF 권한 유무 확인권한 찾기
     @Override
     public MemberAuthority findMemberStaffAuthority(Long memberId, Authorization authorization){
@@ -54,13 +55,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetchOne();
     }
 
+
+    //권한 삭제.
+    @Override
     public void adminDeleteMemberAuthority(Member member){
         queryFactory.delete(memberAuthority)
                 .where(memberAuthority.member.eq(member))
                 .execute();
     }
-
-
 
 
     @Override

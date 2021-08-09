@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import site.hospital.domain.Hospital;
+import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
-import static site.hospital.domain.QHospital.hospital;
+import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.QPostTag.postTag;
 import static site.hospital.domain.QTag.tag;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
