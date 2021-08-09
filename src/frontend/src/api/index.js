@@ -40,4 +40,8 @@ function searchHospital(searchName){
     return instance.get(`search/hospital/${searchName}`);
 }
 
+function searchReview(searchName){
+    return instance.get(`search/review/${searchName}`)
+}
+
 export { signupUser, loginUser, searchHospital };

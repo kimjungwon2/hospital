@@ -18,6 +18,17 @@ function isUserBookmark(memberId, hospitalId){
 function userRegisterBookmark(data){
     return user.post('/hospital/bookmark/register',data);
 }
+
+//리뷰 좋아요 여부 확인
+function isLikeReview(memberId, reviewId){
+    return user.get(memberId+'/hospital/review/'+reviewId);
+}
+
+//리뷰 좋아요
+function likeReview(data){
+    return user.post('/hospital/review/like',data);
+}
+
 //질문 등록
 function registerUserQuestion(data){
     return user.post('/hospital/question/register',data);
@@ -44,6 +55,7 @@ function viewUserQuestions(memberId){
 }
 
 
-export{ viewUserInformation,isUserBookmark, userRegisterBookmark, registerUserQuestion,modifyUserInformation,
+export{ viewUserInformation,isUserBookmark, userRegisterBookmark, isLikeReview,
+    likeReview,registerUserQuestion,modifyUserInformation,
     viewUserBookmarks,viewUserReviews,registerUserReview,
     viewUserAppointments,viewUserQuestions };

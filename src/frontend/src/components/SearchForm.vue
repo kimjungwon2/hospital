@@ -20,7 +20,7 @@ export default {
         };
     },
     methods: {
-        async searchForm(){
+        searchForm(){
             if(this.searchName==='') alert('검색어를 입력하세요.');
             else this.$router.push(`/search/view/${this.searchName}`);
         },

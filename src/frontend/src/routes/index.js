@@ -138,6 +138,10 @@ const router =  new VueRouter({
             path:'/search/view/:searchName',
             component: () => import('@/views/SearchHospitalPage.vue'),
        },
+      {
+            path:'/search/review/:searchName',
+            component: () => import('@/views/SearchReviewPage.vue'),
+       },
        {
             path:'/hospital/view/:id',
             component: () => import('@/views/ViewHospitalPage.vue'),
