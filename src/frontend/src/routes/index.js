@@ -64,8 +64,19 @@ const router =  new VueRouter({
            meta: { login: true},
        },
        {
-          path:'/staff/:userId/hospital',
+          path:'/staff/view/hospital',
           component: ()=> import('@/views/staff/StaffViewHospitalPage.vue'),
+          meta: { staff: true},
+       },
+       {
+          path:'/staff/register/:hospitalId/staffHosInfo',
+          component: ()=> import('@/views/staff/StaffRegisterStaffHosInfoPage.vue'),
+          meta: { staff: true},
+       },
+       {
+          path:'/staff/staffHosInfo',
+          component: ()=> import('@/views/staff/StaffViewStaffHosInfoPage.vue'),
+          name:'staffViewStaffViewHospital',
           meta: { staff: true},
        },
        {
@@ -132,7 +143,7 @@ const router =  new VueRouter({
        {
             path:'/admin/tags',
             component: () => import('@/views/admin/ManageTagsPage.vue'),
-            meta: { ladminogin: true},
+            meta: { admin: true},
        },
        {
             path:'/admin/create/tag',
@@ -164,7 +175,12 @@ router.beforeEach((to, from, next ) => {
           next('/login');
           return;
      }
-     if(to.meta.staff && !store.getters.isStaff && !store.getters.isAdmin){
+     if(to.meta.staff && store.getters.isAdmin){
+          alert('관리자는 관리자 페이지를 이용해주세요.');
+          next('/main');
+          return;
+     }
+     else if(to.meta.staff && !store.getters.isStaff && !store.getters.isAdmin){
           alert('병원 관계자가 아닙니다.');
           next('/main');
           return;

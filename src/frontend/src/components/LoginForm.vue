@@ -23,6 +23,7 @@
 
 <script>
 import { validateEmail } from '@/utils/validation';
+import { deleteCookie } from '@/utils/cookies';
 
 
 export default {
@@ -40,14 +41,26 @@ export default {
     },
     methods:{
         async submitForm(){
+            if(this.$store.getters.getMemberId !=='' ){
+                deleteCookie('member_status');
+                deleteCookie('nick_name');
+                deleteCookie('token');
+                deleteCookie('member_id');
+                this.$alert('기존 로그인된 계정을 로그아웃 했습니다.');
+                this.$router.push('/').catch(err => {
+                if (
+                    err.name !== 'NavigationDuplicated' &&
+                    !err.message.includes('Avoided redundant navigation to current location')
+                ) {alert(err);}}
+                );
+            }
+
             try {
                 const userData ={
                      memberIdName: this.memberIdName,
                      password: this.password,
                 }; 
-                
                await this.$store.dispatch('login',userData);
-
                this.$router.push('/main').catch(error=>error);
             } catch (error) {
                 this.logMessage = error.response.data;

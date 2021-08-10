@@ -12,7 +12,7 @@
           </ul>
 
           <ul class="navbar_menu" v-if="isStaff">
-              <li @click.prevent="routerStaffManage">병원 관리 페이지</li>
+              <li><router-link to="/staff/view/hospital">병원 관리 페이지</router-link></li>
           </ul>
 
           <ul class="navbar_menu" v-if="isAdmin">
@@ -22,7 +22,7 @@
 
           <ul class="navbar_user" v-if="isLogin||isStaff||isAdmin">
               <li><span>{{ $store.state.nickName }}</span></li>
-              <li><a href="javacript:;" @click="logoutUser">로그아웃</a></li>
+              <li><a @click="logoutUser">로그아웃</a></li>
           </ul>
           <ul class="navbar_user" v-else>
               <li><router-link to="/login">Login</router-link></li>
@@ -72,11 +72,13 @@ export default {
        deleteCookie('member_status');
        deleteCookie('nick_name');
        deleteCookie('token');
-      this.$router.push('/');
-    },
-    routerStaffManage(){
-       const memberId= this.$store.getters.getMemberId;
-       this.$router.push('/staff/'+memberId+'/hospital');
+       deleteCookie('member_id');
+      this.$router.push('/').catch(err => {
+                if (
+                    err.name !== 'NavigationDuplicated' &&
+                    !err.message.includes('Avoided redundant navigation to current location')
+                ) {alert(err);}}
+                );
     },
     routerUser(){
        const memberId= this.$store.getters.getMemberId;

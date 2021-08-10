@@ -1,8 +1,8 @@
 import { staff} from './index';
 
 //병원 관계자 병원보기
-function staffViewHospital(userId){
-    return staff.get(userId+'/hospital/view');
+function staffViewHospital(){
+    return staff.get('/hospital/view');
 } 
 
 //병원 관계자 병원 정보 수정
@@ -22,7 +22,7 @@ function staffDeleteDetailedHosInfo(detailedHosId){
 
 //관리자 추가 정보 등록
 function staffRegisterStaffHospitalInfo(staffHosInfo){
-    return staff.post('/hospital/register/staff',staffHosInfo);
+    return staff.post('/hospital/register/staffHosInfo',staffHosInfo);
 }
 
 //병원 관계자 추가 정보 보기
@@ -31,8 +31,8 @@ function staffViewStaffHospitalInfo(staffHosInfoId){
 } 
 
 //병원 관계자 추가 정보 삭제
-function staffDeleteStaffHosInfo(staffHosId){
-    return staff.delete('/staffHosInfo/delete/'+staffHosId);
+function staffDeleteStaffHosInfo(memberId,staffHosId){
+    return staff.delete(+memberId+'/staffHosInfo/delete/'+staffHosId);
 } 
 
 //관리자 태그 생성

@@ -37,6 +37,7 @@ import {staffRegisterStaffHospitalInfo} from '@/api/staff';
 export default {
     data() {
         return {
+            hospitalId:'',
             introduction:'',
             consultationHour:'',
             abnormality:'',
@@ -49,21 +50,31 @@ export default {
     },
     methods:{
         async submitForm(){
-            for(let i=0; i<this.doctorNumber; i++){
-                this.doctors.push({name:this.name[i],history:this.history[i]});
+            if(this.hospitalId===null){
+                this.$alert("병원 번호가 없어서 등록할 수 없습니다.");
+                this.$router.push('/');
             }
+            else {
+                //의사 데이터 list에 넣기.
+                for(let i=0; i<this.doctorNumber; i++){
+                    this.doctors.push({name:this.name[i],history:this.history[i]});
+                }
 
-            const hospitalData = {
-                hospitalId:this.$route.query.hospitalId,
-                introduction: this.introduction,
-                consultationHour: this.consultationHour,
-                abnormality: this.abnormality,
-                doctors:this.doctors,
+                const hospitalData = {
+                    hospitalId:this.hospitalId,
+                    memberId:this.$store.getters.getMemberId,
+                    introduction: this.introduction,
+                    consultationHour: this.consultationHour,
+                    abnormality: this.abnormality,
+                    doctors:this.doctors,
+                }
+                const staffHosInfoId = await staffRegisterStaffHospitalInfo(hospitalData);
+                this.initForm();
+                this.$alert("추가 정보 등록이 정상적으로 이뤄졌습니다.");
+                this.$router.push({name:'staffViewStaffViewHospital',
+                    query: {staffHosInfoId:staffHosInfoId.data.id}
+                }); 
             }
-            await staffRegisterStaffHospitalInfo(hospitalData);
-            this.initForm();
-            this.$alert("추가 정보 등록이 정상적으로 이뤄졌습니다.");
-            this.$router.push('/staff/hospital');
         },
         initForm(){
             this.introduction='';
@@ -82,7 +93,10 @@ export default {
             }
         },
     },
-
+    created(){
+        this.hospitalId =  this.$route.params.hospitalId;
+        console.log(this.hospitalId);
+    },
 }
 </script>
 

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="staff__hospital__categories">
+        <button class="hospital__category__btn"> 병원 정보 </button>
+        <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
+    </div>
       <StaffModifyHospitalModal :hospital="hospital" v-if ="isModifyHospital===true" 
       @hospitalCancel="cancelModifyHospital" @hospitalLoad="staffLoadHospital"/>
 
@@ -96,6 +100,13 @@ export default {
         }
     },
     methods:{
+        //병원 추가 정보 보기
+        viewStaffHospital(){
+            this.$router.push({name:'staffViewStaffViewHospital',
+                query: {hospitalId:this.hospital.hospitalId,
+                    staffHosInfoId:this.hospital.staffHosInfoId}
+            }); 
+        },
         //상세 정보 삭제
         async deleteDetailedHosInfo(detailedHosInfoId){
             if(confirm('정말로 상세 정보를 삭제하시겠습니까?')){
@@ -114,7 +125,7 @@ export default {
         async staffDeleteDetailedLoadHospital(){
             const detailedHosInfoId = '';
             const staffHosInfoId = this.$route.query.staffHosInfoId;
-            this.$router.push({name:'staffHospitalView',
+            this.$router.push({name:'staffViewStaffViewHospital',
             query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
             }); 
             const {data} = await staffViewHospital(this.userId);
@@ -124,7 +135,7 @@ export default {
         async staffCreateDetailedLoadHospital(detailedHosId){
             const detailedHosInfoId = detailedHosId;
             const staffHosInfoId = this.$route.query.staffHosInfoId;
-            this.$router.push({name:'staffHospitalView',
+            this.$router.push({name:'staffViewStaffViewHospital',
             query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
             }); 
             
@@ -162,15 +173,13 @@ export default {
         cancelTagModal(){
             this.isCreateTags= false;
         },
-
     },
+
     async created(){
-        this.userId = this.$route.params.userId;
-        const {data} = await staffViewHospital(this.userId);
+        const {data} = await staffViewHospital();
         this.hospital = data;
         this.hospitalTags=data.hospitalTags;
         this.estimations=data.estimations;
-
     },
 }
 </script>

@@ -1,10 +1,7 @@
 <template>
   <div v-if="staffHosInfoId===null">
-      <template v-if="isCreate===false">
         등록된 추가 정보가 없습니다. 
         <br>추가 정보 등록하기<font-awesome-icon icon="edit" @click.prevent="createHospital"/>
-      </template>
-      <template v-if="isCreate"><StaffCreateStaffHosInfoForm></StaffCreateStaffHosInfoForm></template>
   </div>
   <div v-else>
       추가 정보 ID: {{staffHosInfoId}}<br>
@@ -29,7 +26,6 @@
 </template>
 
 <script>
-import StaffCreateStaffHosInfoForm from '@/components/staff/hospital/StaffCreateStaffHosInfoForm.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -40,12 +36,9 @@ library.add(faEdit)
 library.add(faTrashAlt)
 
 export default {
-  components:{
-    StaffCreateStaffHosInfoForm,
-  },
    data() {
       return {
-        isCreate:false,
+        hospitalId:'',
         staffHosInfoId:'',
         staffHosInfo:[],
         doctors:[],
@@ -53,26 +46,36 @@ export default {
   },
   methods:{
     createHospital(){
-      this.isCreate=true;
+      this.$router.push('/staff/register/'+this.hospitalId+'/staffHosInfo');
     },
     async deleteStaffHospitalInfo(){
       if(confirm('정말로 추가 정보를 삭제하시겠습니까?')){
-          await staffDeleteStaffHosInfo(this.staffHosInfoId);
-          this.isCreate=false;
-          this.$router.push('/admin/hospitals');
+          await staffDeleteStaffHosInfo(this.$store.getters.getMemberId,this.staffHosInfoId);
+          this.loadDeleteStaffHosInfo();
         }
     },
     editStaffHospitalInfo(){
       this.$router.push('/admin/staffHospital/edit/'+this.staffHosInfoId);
     },
+    loadDeleteStaffHosInfo(){
+         this.staffHosInfoId = null;
+         this.staffHosInfo = null;
+         this.doctors = null;
+         this.$router.push({name:'staffViewStaffViewHospital',
+                query: {hospitaId:this.hospitalId, staffHosInfoId:this.staffHosInfoId}
+        }); 
+    }
   },
   async created(){
     this.staffHosInfoId = this.$route.query.staffHosInfoId;
+    this.hospitalId = this.$route.query.hospitalId;
+
     if(this.staffHosInfoId!==null){
          const {data} = await staffViewStaffHospitalInfo(this.staffHosInfoId);
          this.staffHosInfo = data;
          this.doctors = data.doctors;
     }
+
   }
 
 }
