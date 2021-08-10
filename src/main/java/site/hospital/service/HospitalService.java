@@ -3,21 +3,15 @@ package site.hospital.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
-import site.hospital.domain.member.Authorization;
-import site.hospital.domain.member.Member;
-import site.hospital.domain.member.MemberAuthority;
 import site.hospital.dto.AdminHospitalSearchCondition;
 import site.hospital.dto.AdminModifyHospitalRequest;
 import site.hospital.dto.ModifyHospitalRequest;
-import site.hospital.jwtToken.JwtGetHospitalNumber;
-import site.hospital.jwtToken.TokenProvider;
 import site.hospital.repository.DetailedHosRepository;
 import site.hospital.repository.estimation.EstimationRepository;
 import site.hospital.repository.hospital.HospitalRepository;
@@ -28,7 +22,6 @@ import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchRepository;
 import site.hospital.repository.hospital.viewQuery.HospitalViewRepository;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
-import site.hospital.repository.member.MemberRepository;
 import site.hospital.repository.question.QuestionRepository;
 import site.hospital.repository.review.ReviewRepository;
 
@@ -49,8 +42,7 @@ public class HospitalService {
     private final ReviewRepository reviewRepository;
     private final QuestionRepository questionRepository;
     private final EstimationRepository estimationRepository;
-    private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
+    private final JwtStaffAccessService jwtStaffAccessService;
 
 
     //병원 + 상세 정보등록
@@ -77,28 +69,54 @@ public class HospitalService {
     }
 
     //병원 관계자 병원 보기
-    public Hospital staffViewHospital(ServletRequest servletRequest, Long memberId) {
-        Member member =memberRepository.findById(memberId)
-                .orElseThrow(()-> new IllegalStateException("해당 계정은 존재하지 않습니다."));
-
-        JwtGetHospitalNumber jwtGetHospitalNumber = new JwtGetHospitalNumber(tokenProvider);
-        //토큰의 병원 번호
-        Long JwtHospitalId = jwtGetHospitalNumber.getJwtHospitalNumber(servletRequest);
-        //멤버 권한의 병원 번호
-        MemberAuthority findMemberManager = memberRepository.findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
-
-        if(findMemberManager == null){
-            throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");
-        }
-        else if(findMemberManager.getHospitalNo() == 0){
-            throw new AccessDeniedException("병원 번호가 존재하지 않습니다.");
-        }
-        //토큰 번호와 정보가 같지 않으면 인증 오류
-        else if(JwtHospitalId !=findMemberManager.getHospitalNo()){
-            throw new AccessDeniedException("병원 번호가 일치하지 않습니다.");
-        }
+    public Hospital staffViewHospital(ServletRequest servletRequest) {
+        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
 
         return hospitalRepository.viewHospital(JwtHospitalId);
+    }
+
+    //병원 관계자 병원 추가정보 + 의사 등록
+    @Transactional
+    public Long staffRegisterStaffHosInformation(ServletRequest servletRequest, Long memberId, Long hospitalId,
+                                                 StaffHosInformation staffHosInformation,
+                                                 List<Doctor> doctors){
+
+        jwtStaffAccessService.staffAccessFunction(servletRequest, memberId, hospitalId);
+
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
+
+        //병원 테이블 추가정보 유무 확인
+        if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
+
+        staffHosInformation.createStaffHosInformation(staffHosInformation, doctors);
+        staffHosRepository.save(staffHosInformation);
+
+        //양방향 연관관계
+        hospital.changeStaffHosInformation(staffHosInformation);
+
+        return staffHosInformation.getId();
+    }
+
+    //병원 관계자 병원 추가정보만 등록.
+    @Transactional
+    public Long staffRegisterStaffHosInfo(ServletRequest servletRequest, Long memberId, Long hospitalId,
+                                          StaffHosInformation staffHosInformation){
+
+        jwtStaffAccessService.staffAccessFunction(servletRequest, memberId, hospitalId);
+
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
+
+        //병원 테이블 추가정보 유무 확인
+        if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
+
+        staffHosRepository.save(staffHosInformation);
+
+        //양방향 연관관계
+        hospital.changeStaffHosInformation(staffHosInformation);
+
+        return staffHosInformation.getId();
     }
 
 
@@ -117,7 +135,6 @@ public class HospitalService {
 
         //양방향 연관관계
         hospital.changeStaffHosInformation(staffHosInformation);
-        hospitalRepository.save(hospital);
 
         return staffHosInformation.getId();
     }
@@ -128,11 +145,13 @@ public class HospitalService {
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
 
+        //병원 테이블 추가정보 유무 확인
+        if(hospital.getStaffHosInformation() !=null) throw new IllegalStateException("이미 추가 정보가 있습니다.");
+
         staffHosRepository.save(staffHosInformation);
 
         //양방향 연관관계
         hospital.changeStaffHosInformation(staffHosInformation);
-        hospitalRepository.save(hospital);
 
         return staffHosInformation.getId();
     }
@@ -180,6 +199,10 @@ public class HospitalService {
                                                     ,Long hospitalId){
         Hospital hospital = hospitalRepository.findById(hospitalId).
                 orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+
+        //병원 테이블 추가정보 유무 확인
+        if(hospital.getDetailedHosInformation() !=null) throw new IllegalStateException("이미 상세 정보가 있습니다.");
+
 
         hospital.changeDetailedHosInformation(detailedHosInformation);
         detailedHosRepository.save(detailedHosInformation);

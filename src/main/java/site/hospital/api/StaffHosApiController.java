@@ -11,6 +11,7 @@ import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
 import site.hospital.dto.staffHosInfo.AdminModifyStaffHosRequest;
 import site.hospital.service.StaffHosService;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,21 @@ public class StaffHosApiController {
         StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
 
         return staffHosInfoView;
+    }
+
+    //병원 관계자 추가 정보 보기
+    @GetMapping("/staff/staffHosInfo/{staffHosId}")
+    public StaffHosInfoView staffViewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
+        StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
+        StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
+
+        return staffHosInfoView;
+    }
+
+    //병원 관계자 추가 정보 삭제하기
+    @DeleteMapping("/staff/{memberId}/staffHosInfo/delete/{staffHosId}")
+    public void staffDeleteStaffHosInfo(ServletRequest servletRequest, @PathVariable("memberId") Long memberId, @PathVariable("staffHosId") Long staffHosId){
+        staffHosService.staffDeleteStaffHosInfo(servletRequest, memberId, staffHosId);
     }
 
     //관리자 병원 추가 정보 보기

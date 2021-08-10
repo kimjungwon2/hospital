@@ -26,6 +26,7 @@ import site.hospital.service.HospitalService;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,9 +53,9 @@ public class HospitalApiController {
     }
 
     //병원 관계자 병원 보기
-    @GetMapping("/staff/{memberId}/hospital/view")
-    public StaffHospitalView viewHospital(ServletRequest servletRequest, @PathVariable("memberId") Long memberId){
-        Hospital hospital = hospitalService.staffViewHospital(servletRequest, memberId);
+    @GetMapping("/staff/hospital/view")
+    public StaffHospitalView viewHospital(ServletRequest servletRequest){
+        Hospital hospital = hospitalService.staffViewHospital(servletRequest);
 
         //NullPointerException 방지.
         Long detailedHosId;
@@ -70,6 +71,27 @@ public class HospitalApiController {
 
         return staffHospitalView;
     }
+
+    //관리자 병원 추가 정보 등록
+    @PostMapping("/staff/hospital/register/staffHosInfo")
+    public CreateStaffHosResponse staffCreateStaffHosInfo(ServletRequest servletRequest, @RequestBody @Validated StaffCreateStaffHosRequest request){
+
+        StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
+                .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).build();
+
+        //의사 정보가 있어야지 의사 추가.
+        if(request.getDoctors()!=null) {
+            List<Doctor> doctors = request.getDoctors().stream().map(d -> new Doctor(d)).collect(Collectors.toList());
+            Long id = hospitalService.staffRegisterStaffHosInformation(servletRequest, request.getMemberId(),request.getHospitalId(), staffHosInformation, doctors);
+            return new CreateStaffHosResponse(id);
+        }
+        //추가 정보만 추가.
+        else {
+            Long id = hospitalService.staffRegisterStaffHosInfo(servletRequest, request.getMemberId(), request.getHospitalId(), staffHosInformation);
+            return new CreateStaffHosResponse(id);
+        }
+    }
+
 
     //관리자 병원 검색
     @GetMapping("/admin/hospital/search")
@@ -180,7 +202,7 @@ public class HospitalApiController {
 
     //관리자 병원 추가 정보 등록
     @PostMapping("/admin/hospital/register/staff")
-    public AdminCreateStaffHosResponse adminCreateStaffHosInfo(@RequestBody @Validated AdminCreateStaffHosRequest request){
+    public CreateStaffHosResponse adminCreateStaffHosInfo(@RequestBody @Validated CreateStaffHosRequest request){
 
         StaffHosInformation staffHosInformation = StaffHosInformation.builder().abnormality(request.getAbnormality())
                 .consultationHour(request.getConsultationHour()).introduction(request.getIntroduction()).build();
@@ -189,11 +211,11 @@ public class HospitalApiController {
         if(request.getDoctors()!=null) {
             List<Doctor> doctors = request.getDoctors().stream().map(d -> new Doctor(d)).collect(Collectors.toList());
             Long id = hospitalService.adminRegisterStaffHosInformation(request.getHospitalId(),staffHosInformation, doctors);
-            return new AdminCreateStaffHosResponse(id);
+            return new CreateStaffHosResponse(id);
         }
         //추가 정보만 추가.
         Long id = hospitalService.adminRegisterStaffHosInfo(request.getHospitalId(), staffHosInformation);
-        return new AdminCreateStaffHosResponse(id);
+        return new CreateStaffHosResponse(id);
     }
 
 
@@ -208,10 +230,9 @@ public class HospitalApiController {
     }
 
     @Data
-    private static class AdminCreateStaffHosResponse{
+    private static class CreateStaffHosResponse{
         Long id;
-
-        public AdminCreateStaffHosResponse(Long id) {
+        public CreateStaffHosResponse(Long id) {
             this.id = id;
         }
     }
@@ -278,8 +299,18 @@ public class HospitalApiController {
     }
 
     @Data
-    private static class AdminCreateStaffHosRequest{
+    private static class CreateStaffHosRequest{
         private Long hospitalId;
+        private String introduction;
+        private String consultationHour;
+        private String abnormality;
+        private List<CreateDoctorRequest> doctors;
+    }
+
+    @Data
+    private static class StaffCreateStaffHosRequest{
+        private Long hospitalId;
+        private Long memberId;
         private String introduction;
         private String consultationHour;
         private String abnormality;

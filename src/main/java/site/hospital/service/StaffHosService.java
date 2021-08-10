@@ -1,6 +1,7 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,7 @@ import site.hospital.repository.HospitalImageRepository;
 import site.hospital.repository.StaffHosRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 
+import javax.servlet.ServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class StaffHosService {
     private final HospitalRepository hospitalRepository;
     private final HospitalImageService hospitalImageService;
     private final HospitalImageRepository hospitalImageRepository;
+    private final JwtStaffAccessService jwtStaffAccessService;
 
     //병원 추가 정보 보기(고객)
     public StaffHosInformation viewStaffHosInfo(Long staffHosId){
@@ -30,6 +33,24 @@ public class StaffHosService {
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         return staffHosInformation;
+    }
+
+    //병원 관계자 추가 정보 삭제
+    @Transactional
+    public void staffDeleteStaffHosInfo(ServletRequest servletRequest, Long memberId, Long staffHosId){
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
+
+        //병원 검색
+        Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
+
+        //토큰의 권한과 authority의 병원 번호가 일치한지 확인.
+        jwtStaffAccessService.staffAccessFunction(servletRequest, memberId, hospital.getId());
+
+        //외래키 삭제
+        hospital.deleteStaffHosId();
+
+        staffHosRepository.deleteById(staffHosId);
     }
 
     //병원 추가 정보 삭제
