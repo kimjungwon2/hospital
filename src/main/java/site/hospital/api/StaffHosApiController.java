@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
+import site.hospital.dto.hospital.staff.StaffModifyStaffHosRequest;
 import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
 import site.hospital.dto.staffHosInfo.AdminModifyStaffHosRequest;
 import site.hospital.service.StaffHosService;
@@ -38,6 +39,13 @@ public class StaffHosApiController {
         StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
 
         return staffHosInfoView;
+    }
+
+    //병원 관계자 추가 정보 수정하기
+    @PutMapping("/staff/staffHosInfo/modify/{staffHosId}")
+    public void staffModifyStaffHosInfo(ServletRequest servletRequest, @PathVariable("staffHosId") Long staffHosId,
+                                   @RequestBody @Validated StaffModifyStaffHosRequest request){
+        staffHosService.staffModifyStaffHosInfo(servletRequest, staffHosId, request);
     }
 
     //병원 관계자 추가 정보 삭제하기

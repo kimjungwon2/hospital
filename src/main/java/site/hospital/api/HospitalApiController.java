@@ -15,19 +15,17 @@ import site.hospital.domain.detailedHosInformation.HospitalLocation;
 import site.hospital.domain.hospital.BusinessCondition;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.dto.AdminHospitalSearchCondition;
-import site.hospital.dto.AdminModifyHospitalRequest;
+import site.hospital.dto.hospital.admin.AdminModifyHospitalRequest;
 import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.hospital.admin.AdminHospitalView;
 import site.hospital.dto.hospital.staff.StaffHospitalView;
+import site.hospital.dto.hospital.staff.StaffModifyHospitalRequest;
 import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto;
 import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 import site.hospital.service.HospitalService;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,12 +43,12 @@ public class HospitalApiController {
         return hospitalService.searchHospital(searchName, pageable);
     }
 
-
     //병원 정보 보기(고객)
     @GetMapping("/hospital/view/{hospitalId}")
     public ViewHospitalDTO viewsHospital(@PathVariable("hospitalId") Long hospitalId){
         return hospitalService.viewHospital(hospitalId);
     }
+
 
     //병원 관계자 병원 보기
     @GetMapping("/staff/hospital/view")
@@ -72,7 +70,31 @@ public class HospitalApiController {
         return staffHospitalView;
     }
 
-    //관리자 병원 추가 정보 등록
+    //병원 관계자 병원 수정
+    @PutMapping("/staff/hospital/modify/{hospitalId}")
+    public StaffUpdateHospitalResponse staffUpdateHospital(ServletRequest servletRequest, @PathVariable("hospitalId") Long hospitalId,
+                                                      @RequestBody @Validated StaffModifyHospitalRequest request){
+        Long findId = hospitalService.staffUpdateHospital(servletRequest, request.getMemberId(),hospitalId, request);
+
+        return new StaffUpdateHospitalResponse(findId);
+    }
+
+    //병원 관계자 상세 정보 등록
+    @PostMapping("/staff/hospital/register/detailed")
+    public CreateDetailedHosResponse staffCreateDetailedHosInfo(ServletRequest servletRequest,
+                                                                     @RequestBody @Validated StaffCreateDetailedHospitalInfoRequest request){
+        DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
+                .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
+                .numberHealthcareProvider(request.getNumberHealthcareProvider())
+                .hospitalLocation(request.getHospitalLocation()).hospitalAddress(request.getHospitalAddress()).build();
+
+        Long detailedHosId = hospitalService.staffRegisterDetailHospitalInformation(servletRequest, request.getMemberId(),
+                detailedHosInformation, request.getHospitalId());
+
+        return new CreateDetailedHosResponse(detailedHosId);
+    }
+
+    //병원 관계자 병원 추가 정보 등록
     @PostMapping("/staff/hospital/register/staffHosInfo")
     public CreateStaffHosResponse staffCreateStaffHosInfo(ServletRequest servletRequest, @RequestBody @Validated StaffCreateStaffHosRequest request){
 
@@ -92,6 +114,11 @@ public class HospitalApiController {
         }
     }
 
+    //병원 관계자 상세 정보 삭제
+    @DeleteMapping("/staff/{memberId}/detailedHos/delete/{detailedHosInfoId}")
+    public void deleteDetailedHospitalInformation(ServletRequest servletRequest, @PathVariable("memberId") Long memberId, @PathVariable("detailedHosInfoId") Long detailedHosInfoId){
+        hospitalService.staffDeleteDetailHospitalInformation(servletRequest, memberId, detailedHosInfoId);
+    }
 
     //관리자 병원 검색
     @GetMapping("/admin/hospital/search")
@@ -182,14 +209,14 @@ public class HospitalApiController {
     }
 
     //관리자 병원 상세 정보 삭제
-    @DeleteMapping("/admin/detailedHos/delete/{hospitalId}")
-    public void deleteDetailedHospitalInformation(@PathVariable("hospitalId") Long detailedHosInfoId){
+    @DeleteMapping("/admin/detailedHos/delete/{detailedHosInfoId}")
+    public void deleteDetailedHospitalInformation(@PathVariable("detailedHosInfoId") Long detailedHosInfoId){
         hospitalService.deleteDetailHospitalInformation(detailedHosInfoId);
     }
 
     //관리자 상세 정보 등록
     @PostMapping("/admin/hospital/register/detailed")
-    public AdminCreateDetailedHosResponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
+    public CreateDetailedHosResponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
         DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
                 .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
                 .numberHealthcareProvider(request.getNumberHealthcareProvider())
@@ -197,7 +224,7 @@ public class HospitalApiController {
 
         Long detailedHosId = hospitalService.registerDetailHospitalInformation(detailedHosInformation, request.getHospitalId());
 
-        return new AdminCreateDetailedHosResponse(detailedHosId);
+        return new CreateDetailedHosResponse(detailedHosId);
     }
 
     //관리자 병원 추가 정보 등록
@@ -229,6 +256,16 @@ public class HospitalApiController {
         }
     }
 
+    /* DTO */
+    @Data
+    private static class StaffUpdateHospitalResponse{
+        Long id;
+
+        public StaffUpdateHospitalResponse(Long id) {
+            this.id = id;
+        }
+    }
+
     @Data
     private static class CreateStaffHosResponse{
         Long id;
@@ -252,9 +289,9 @@ public class HospitalApiController {
     }
 
     @Data
-    private static class AdminCreateDetailedHosResponse {
+    private static class CreateDetailedHosResponse {
         long id;
-        public AdminCreateDetailedHosResponse(long id){ this.id = id; }
+        public CreateDetailedHosResponse(long id){ this.id = id; }
     }
 
     @Data
@@ -290,6 +327,18 @@ public class HospitalApiController {
     @Data
     private static class CreateDetailedHospitalInformationRequest{
         private Long hospitalId;
+        private Integer numberHealthcareProvider;
+        private Integer numberWard;
+        private Integer numberPatientRoom;
+
+        private HospitalLocation hospitalLocation;
+        private HospitalAddress hospitalAddress;
+    }
+
+    @Data
+    private static class StaffCreateDetailedHospitalInfoRequest{
+        private Long hospitalId;
+        private Long memberId;
         private Integer numberHealthcareProvider;
         private Integer numberWard;
         private Integer numberPatientRoom;

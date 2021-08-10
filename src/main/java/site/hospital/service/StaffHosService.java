@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.HospitalImage;
 import site.hospital.domain.StaffHosInformation;
+import site.hospital.dto.hospital.staff.StaffModifyStaffHosRequest;
 import site.hospital.dto.staffHosInfo.AdminModifyStaffHosRequest;
 import site.hospital.repository.HospitalImageRepository;
 import site.hospital.repository.StaffHosRepository;
@@ -33,6 +34,24 @@ public class StaffHosService {
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         return staffHosInformation;
+    }
+
+    //병원 관계자 추가 정보 수정
+    @Transactional
+    public void staffModifyStaffHosInfo(ServletRequest servletRequest, Long staffHosId, StaffModifyStaffHosRequest request){
+        StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
+
+        //해당 id 값을 가지고 있는 병원 검색
+        Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
+
+        jwtStaffAccessService.staffAccessFunction(servletRequest, request.getMemberId(), hospital.getId());
+
+        StaffHosInformation modifyStaffHosInformation = StaffHosInformation.builder()
+                .abnormality(request.getAbnormality()).consultationHour(request.getConsultationHour())
+                .introduction(request.getIntroduction()).build();
+
+        staffHosInformation.modifyStaffHosInformation(modifyStaffHosInformation);
     }
 
     //병원 관계자 추가 정보 삭제
@@ -73,7 +92,6 @@ public class StaffHosService {
                 .introduction(request.getIntroduction()).build();
 
         staffHosInformation.modifyStaffHosInformation(modifyStaffHosInformation);
-
     }
 
     @Transactional

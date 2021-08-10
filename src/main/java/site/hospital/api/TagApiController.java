@@ -23,6 +23,30 @@ public class TagApiController {
     private final TagService tagService;
     private final PostTagService postTagService;
 
+    //관계자 태그 생성
+    @PostMapping("/staff/tag/create")
+    public CreateTagResponse staffSaveTag(@RequestBody @Validated CreateTagRequest request){
+        Tag tag = Tag.builder().
+                name(request.getTagName()).build();
+
+        Long id = tagService.tagCreate(tag);
+
+        return new CreateTagResponse(id);
+    }
+
+    //관계자 태그 검색
+    @GetMapping("/staff/tag/search/{tagName}")
+    public Page staffSearchTagName(@PathVariable("tagName") String tagName,Pageable pageable){
+        Page<Tag> findTags = tagService.searchTagName(tagName, pageable);
+        List<ResponseSearchTagName> responseSearchTagName = findTags.stream()
+                .map(t-> new ResponseSearchTagName(t))
+                .collect(Collectors.toList());
+        Long total = findTags.getTotalElements();
+
+        return new PageImpl<>(responseSearchTagName, pageable, total);
+    }
+
+    //관리자 태그 생성
     @PostMapping("/admin/tag/create")
     public CreateTagResponse saveTag(@RequestBody @Validated CreateTagRequest request){
         Tag tag = Tag.builder().
@@ -32,12 +56,13 @@ public class TagApiController {
         return new CreateTagResponse(id);
     }
 
-
+    //관리자 태그 삭제
     @DeleteMapping("/admin/tag/delete/{tagId}")
     public void deleteTag(@PathVariable("tagId") Long tagId){
         tagService.tagDelete(tagId);
     }
 
+    //관리자 태그 보기
     @GetMapping("/admin/tags")
     public Page allSearchTag(Pageable pageable){
         Page<Tag> allTags = tagService.allSearchTag(pageable);
@@ -50,6 +75,7 @@ public class TagApiController {
         return new PageImpl<>(collect, pageable,total);
     }
 
+    //관리자 태그 검색
     @GetMapping("/admin/tag/search/{tagName}")
     public Page searchTagName(@PathVariable("tagName") String tagName,Pageable pageable){
         Page<Tag> findTags = tagService.searchTagName(tagName, pageable);

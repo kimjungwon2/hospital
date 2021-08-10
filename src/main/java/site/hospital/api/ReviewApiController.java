@@ -379,8 +379,8 @@ public class ReviewApiController {
         }
     }
 
-        @Data
-        private static class AdminReviewsResponse{
+    @Data
+    private static class AdminReviewsResponse {
         private Long reviewId;
         private ReviewAuthentication reviewAuthentication;
         private String memberIdName;
@@ -397,17 +397,18 @@ public class ReviewApiController {
                     .map(reviewHospital -> new AdminReviewsHospitalDto(reviewHospital))
                     .collect(Collectors.toList());
         }
+    }
 
-        @Data
-        private static class AdminReviewsHospitalDto{
-            private String hospitalName;
-            private Double averageRate;
+    @Data
+    private static class AdminReviewsHospitalDto{
+        private String hospitalName;
+        private Double averageRate;
 
-            public AdminReviewsHospitalDto(ReviewHospital reviewHospital) {
-                this.hospitalName = reviewHospital.getHospital().getHospitalName();
-                this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
-            }
+        public AdminReviewsHospitalDto(ReviewHospital reviewHospital) {
+            this.hospitalName = reviewHospital.getHospital().getHospitalName();
+            this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
         }
     }
+
 
 }
