@@ -55,9 +55,14 @@
 import {staffRegisterDetailedHosInfo} from '@/api/staff';
 
 export default {
+    props: {
+        hospitalId: {
+            type: Number,
+            required: true,
+        },
+    },
     data() {
         return {
-            hospitalId:'',
             detailedHosId:'',
 
             numberHealthcareProvider:'',
@@ -85,6 +90,7 @@ export default {
             if(confirm('상세 정보를 추가하시겠습니까?')){
                 const detailedData = {
                     hospitalId:this.hospitalId,
+                    memberId:this.$store.getters.getMemberId,
                     numberHealthcareProvider:this.numberHealthcareProvider,
                     numberWard:this.numberWard,
                     numberPatientRoom:this.numberPatientRoom,
@@ -123,9 +129,6 @@ export default {
             this.zipCode='';
         },
     },
-    async created(){
-        this.hospitalId = this.$route.query.hospitalId;
-    }
 }
 </script>
 

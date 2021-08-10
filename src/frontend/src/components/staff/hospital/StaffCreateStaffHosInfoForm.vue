@@ -71,8 +71,8 @@ export default {
                 const staffHosInfoId = await staffRegisterStaffHospitalInfo(hospitalData);
                 this.initForm();
                 this.$alert("추가 정보 등록이 정상적으로 이뤄졌습니다.");
-                this.$router.push({name:'staffViewStaffViewHospital',
-                    query: {staffHosInfoId:staffHosInfoId.data.id}
+                this.$router.push({name:'StaffViewHospital',
+                    query: {hospitalId:this.hospitalId, staffHosInfoId:staffHosInfoId.data.id,}
                 }); 
             }
         },

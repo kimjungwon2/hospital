@@ -42,11 +42,14 @@ export default {
             type:Array,
             required: true,
         },
+        hospitalId: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
             //태그 데이터
-            hospitalId:'',
             tags: [],
              //검색 조건 default = memberIdName로 한다. 
             searchCondition:'tagName',
@@ -68,6 +71,7 @@ export default {
         async registerTag(tagId){
             if(confirm(this.tagName+' 태그를 병원에 등록하시겠습니까?')){
                 const data={
+                    memberId:this.$store.getters.getMemberId,
                     tagId:tagId,
                     hospitalId:this.hospitalId
                 };
@@ -87,10 +91,6 @@ export default {
             }
         },
     },
-    created(){
-        this.hospitalId = this.$route.query.hospitalId;
-    }
-
 }
 </script>
 

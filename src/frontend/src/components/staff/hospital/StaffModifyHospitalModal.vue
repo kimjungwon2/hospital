@@ -105,12 +105,15 @@ export default {
             type:Object,
             required: true,
         },
+        hospitalId: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
             //추가 정보 수정 유무
             detailedModifyCheck:false,
-            hospitalId:'',   
             //log
             logMessage:'',
         };
@@ -125,6 +128,7 @@ export default {
           if(this.detailedModifyCheck===true){
             
             const hospitalData = {
+                memberId: this.$store.getters.getMemberId,
                 hospitalName: this.hospital.hospitalName,
                 licensingDate: this.hospital.licensingDate,
                 phoneNumber: this.hospital.phoneNumber,
@@ -171,6 +175,7 @@ export default {
           //상세 정보 없이 등록
           else{
               const hospitalData = {
+                memberId: this.$store.getters.getMemberId,
                 hospitalName: this.hospital.hospitalName,
                 licensingDate: this.hospital.licensingDate,
                 phoneNumber: this.hospital.phoneNumber,
@@ -193,9 +198,6 @@ export default {
             this.detailedModifyCheck=false;
         },
     },
-    created(){
-        this.hospitalId = this.$route.query.hospitalId;
-    }
 
 }
 </script>

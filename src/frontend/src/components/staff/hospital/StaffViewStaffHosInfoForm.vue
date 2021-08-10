@@ -55,13 +55,15 @@ export default {
         }
     },
     editStaffHospitalInfo(){
-      this.$router.push('/admin/staffHospital/edit/'+this.staffHosInfoId);
+      this.$router.push({name:'staffEditStaffHospital',
+                query: {hospitalId:this.hospitalId, staffHosInfoId:this.staffHosInfoId}
+        }); 
     },
     loadDeleteStaffHosInfo(){
          this.staffHosInfoId = null;
          this.staffHosInfo = null;
          this.doctors = null;
-         this.$router.push({name:'staffViewStaffViewHospital',
+         this.$router.push({name:'StaffViewHospital',
                 query: {hospitaId:this.hospitalId, staffHosInfoId:this.staffHosInfoId}
         }); 
     }

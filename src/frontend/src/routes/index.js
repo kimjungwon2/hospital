@@ -76,7 +76,13 @@ const router =  new VueRouter({
        {
           path:'/staff/staffHosInfo',
           component: ()=> import('@/views/staff/StaffViewStaffHosInfoPage.vue'),
-          name:'staffViewStaffViewHospital',
+          name:'StaffViewHospital',
+          meta: { staff: true},
+       },
+       {
+          path:'/staff/staffHospital/edit',
+          component: ()=> import('@/views/staff/StaffModifyStaffHospitalInfoPage.vue'),
+          name:'staffEditStaffHospital',
           meta: { staff: true},
        },
        {

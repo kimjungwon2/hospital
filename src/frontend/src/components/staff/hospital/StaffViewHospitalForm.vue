@@ -4,18 +4,18 @@
         <button class="hospital__category__btn"> 병원 정보 </button>
         <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
     </div>
-      <StaffModifyHospitalModal :hospital="hospital" v-if ="isModifyHospital===true" 
+      <StaffModifyHospitalModal :hospitalId="hospital.hospitalId" :hospital="hospital" v-if ="isModifyHospital===true" 
       @hospitalCancel="cancelModifyHospital" @hospitalLoad="staffLoadHospital"/>
 
-      <StaffCreateDetailedHosModal v-if="isCreateDetailed==true"
+      <StaffCreateDetailedHosModal :hospitalId="hospital.hospitalId" v-if="isCreateDetailed==true"
       @createDetailedCancel="cancelCreateDetailed" @detailedHospitalLoad="staffCreateDetailedLoadHospital"/>
 
-      <StaffCreateTagModal :hospitalTags="hospitalTags" v-if ="isCreateTags===true" 
+      <StaffCreateTagModal :hospitalId="hospital.hospitalId" :hospitalTags="hospitalTags" v-if ="isCreateTags===true" 
       @tagCancel="cancelTagModal" @tagLoad="staffLoadHospital"/>
 
       <br>병원 수정<font-awesome-icon icon="plus-square" @click.prevent="modifyHospital"/>
       <h1>병원 정보</h1>
-      <li>병원 번호: {{hospital.hospitalId}}</li>
+      <li>병원 번호: {{hospital.hospitalId}}</li>   
       <li>병원 이름: {{hospital.hospitalName}}</li>
       <li>개업일: {{hospital.licensingDate}}</li>
       <li>전화번호: {{hospital.phoneNumber}}</li>
@@ -92,6 +92,7 @@ export default {
             estimations:[],
 
             userId:'',
+            memberId:'',
             isCreateDetailed:false,
             isCreateTags:false,
             isCreateEstimatons:false,
@@ -102,7 +103,7 @@ export default {
     methods:{
         //병원 추가 정보 보기
         viewStaffHospital(){
-            this.$router.push({name:'staffViewStaffViewHospital',
+            this.$router.push({name:'StaffViewHospital',
                 query: {hospitalId:this.hospital.hospitalId,
                     staffHosInfoId:this.hospital.staffHosInfoId}
             }); 
@@ -110,43 +111,34 @@ export default {
         //상세 정보 삭제
         async deleteDetailedHosInfo(detailedHosInfoId){
             if(confirm('정말로 상세 정보를 삭제하시겠습니까?')){
-               await staffDeleteDetailedHosInfo(detailedHosInfoId);
+               await staffDeleteDetailedHosInfo(this.memberId, detailedHosInfoId);
                this.staffDeleteDetailedLoadHospital();
             }
         },
         //태그 삭제
         async deleteTag(postTagId){
             if(confirm('정말로 해당 태그를 삭제하시겠습니까?')){
-               await staffDeleteHospitalTag(postTagId);
+               await staffDeleteHospitalTag(this.memberId,postTagId);
                this.staffLoadHospital();
             }
         },
         //병원 정보 불러오기(삭제한 상세 정보)
         async staffDeleteDetailedLoadHospital(){
-            const detailedHosInfoId = '';
-            const staffHosInfoId = this.$route.query.staffHosInfoId;
-            this.$router.push({name:'staffViewStaffViewHospital',
-            query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
-            }); 
             const {data} = await staffViewHospital(this.userId);
             this.hospital = data;
+            this.hospitalTags=data.hospitalTags;
+            this.estimations=data.estimations;
         },
         //병원 정보 불러오기(생성한 상세 정보)
         async staffCreateDetailedLoadHospital(detailedHosId){
-            const detailedHosInfoId = detailedHosId;
-            const staffHosInfoId = this.$route.query.staffHosInfoId;
-            this.$router.push({name:'staffViewStaffViewHospital',
-            query: {hospitalId:this.hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
-            }); 
-            
-            const {data} = await staffViewHospital(this.userId);
+            const {data} = await staffViewHospital();
             this.hospital = data;
+            this.hospitalTags=data.hospitalTags;
+            this.estimations=data.estimations;
         },
         //병원 정보 불러오기
         async staffLoadHospital(){
-            const detailedHosInfoId = this.$route.query.detailedHosInfoId;
-            const staffHosInfoId = this.$route.query.staffHosInfoId;
-            const {data} = await staffViewHospital(this.userId);
+            const {data} = await staffViewHospital();
             this.hospitalTags=data.hospitalTags;
             this.estimations=data.estimations;  
         },
@@ -178,6 +170,7 @@ export default {
     async created(){
         const {data} = await staffViewHospital();
         this.hospital = data;
+        this.memberId = this.$store.getters.getMemberId;
         this.hospitalTags=data.hospitalTags;
         this.estimations=data.estimations;
     },
