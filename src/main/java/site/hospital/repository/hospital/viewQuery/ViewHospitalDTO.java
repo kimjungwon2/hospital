@@ -38,7 +38,7 @@ public class ViewHospitalDTO {
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    private List<HospitalReviewDTO> hospitalReviews;
+    private Long hospitalReviewCount;
     private List<HospitalTagDTO> hospitalTags;
     private List<HospitalEstimationDTO> hospitalEstimations;
 

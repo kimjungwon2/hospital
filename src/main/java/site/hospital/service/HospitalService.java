@@ -261,7 +261,10 @@ public class HospitalService {
 
     //병원 정보 상세 보기
     public ViewHospitalDTO viewHospital(Long hospitalId){
-        return hospitalViewRepository.viewHospital(hospitalId);
+        ViewHospitalDTO hospital = hospitalViewRepository.viewHospital(hospitalId);
+        if(hospital == null) throw new IllegalStateException("해당 병원은 존재하지 않습니다.");
+
+        return hospital;
     }
 
     //상세 정보 등록하기

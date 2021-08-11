@@ -52,7 +52,6 @@ public class AdminHospitalSearchRepository {
     private BooleanExpression hospitalIdEq(Long hospitalId){
         return hospitalId==null?  null: hospital.id.eq(hospitalId);
     }
-
     private BooleanExpression hospitalNameLike(String hospitalName){
         return hospitalName==null?  null: hospital.hospitalName.contains(hospitalName);
     }

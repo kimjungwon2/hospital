@@ -6,11 +6,9 @@ import lombok.Data;
 @Data
 public class HospitalReviewDTO {
     private Long hospitalId;
-    private Long reviewCount;
 
     @QueryProjection
-    public HospitalReviewDTO(Long hospitalId, Long reviewCount) {
+    public HospitalReviewDTO(Long hospitalId) {
         this.hospitalId = hospitalId;
-        this.reviewCount = reviewCount;
     }
 }

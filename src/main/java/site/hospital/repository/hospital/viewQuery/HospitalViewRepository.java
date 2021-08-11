@@ -24,6 +24,8 @@ public class HospitalViewRepository {
     public ViewHospitalDTO viewHospital(Long hospitalId){
         ViewHospitalDTO result = findHospital(hospitalId);
 
+        if(result==null) return null;
+
         //병원 아이디
         Long hosId = result.getHospitalId();
 
@@ -38,15 +40,14 @@ public class HospitalViewRepository {
         result.setHospitalEstimations(hospitalEstimationDTOS);
 
         //리뷰 개수 넣기
-        List<HospitalReviewDTO> hospitalReviewDTOS = queryFactory
-                .select(new QHospitalReviewDTO(reviewHospital.hospital.id, reviewHospital.count()))
+        Long reviewCount = queryFactory
+                .select(new QHospitalReviewDTO(reviewHospital.hospital.id))
                 .from(reviewHospital)
                 .join(reviewHospital.hospital, hospital)
-                .groupBy(reviewHospital.hospital.id)
                 .where(reviewHospital.hospital.id.in(hosId))
-                .fetch();
+                .fetchCount();
 
-        result.setHospitalReviews(hospitalReviewDTOS);
+        result.setHospitalReviewCount(reviewCount);
 
         //태그 넣기
         List<HospitalTagDTO> hospitalTagDTOS = queryFactory
