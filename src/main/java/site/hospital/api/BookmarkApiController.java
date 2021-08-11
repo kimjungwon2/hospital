@@ -2,12 +2,18 @@ package site.hospital.api;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Bookmark;
+import site.hospital.domain.Question;
 import site.hospital.domain.hospital.BusinessCondition;
+import site.hospital.dto.StaffBookmarkSearchCondition;
 import site.hospital.service.BookmarkService;
 
+import javax.servlet.ServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +42,27 @@ public class BookmarkApiController {
         if(bookmark != null) isBookmark = true;
 
         return new IsBookmark(isBookmark);
+    }
+
+    //병원 관계자 즐겨찾기한 유저 검색
+    @GetMapping("/staff/bookmark/search/user")
+    public Page staffSearchBookmarkUsers(ServletRequest servletRequest,
+                                     @RequestParam(value="nickName",required = false) String nickName,
+                                     @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                     @RequestParam(value="phoneNumber",required = false) String phoneNumber,
+                                     Pageable pageable){
+        StaffBookmarkSearchCondition condition = StaffBookmarkSearchCondition.builder()
+                .nickName(nickName).memberIdName(memberIdName).phoneNumber(phoneNumber).build();
+
+        Page<Bookmark> bookmarks = bookmarkService.staffSearchBookmarkUsers(servletRequest, condition, pageable);
+
+        List<SearchBookmarkUsersResponse> result = bookmarks.stream()
+                .map(b->new SearchBookmarkUsersResponse(b))
+                .collect(Collectors.toList());
+
+        Long total = bookmarks.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
     }
 
     //즐겨찾기 목록 전체 조회(관리자)
@@ -129,6 +156,22 @@ public class BookmarkApiController {
             this.cityName = bookmark.getHospital().getCityName();
             this.hospitalName = bookmark.getHospital().getHospitalName();
             this.createTime = bookmark.getCreatedDate();
+        }
+    }
+
+    @Data
+    private static class SearchBookmarkUsersResponse{
+        private Long bookmarkId;
+        private String memberIdName;
+        private String nickName;
+        private String phoneNumber;
+
+
+        public SearchBookmarkUsersResponse(Bookmark bookmark) {
+            this.bookmarkId = bookmark.getId();
+            this.memberIdName = bookmark.getMember().getMemberIdName();
+            this.nickName = bookmark.getMember().getNickName();
+            this.phoneNumber = bookmark.getMember().getPhoneNumber();
         }
     }
 

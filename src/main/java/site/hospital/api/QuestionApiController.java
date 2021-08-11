@@ -9,11 +9,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.Question;
 import site.hospital.dto.AdminQuestionSearchCondition;
+import site.hospital.dto.StaffQuestionSearchCondition;
 import site.hospital.repository.question.adminSearchQuery.AdminSearchQuestionDto;
 import site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO;
 import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
 import site.hospital.service.QuestionService;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +42,54 @@ public class QuestionApiController {
     @GetMapping("/user/{memberId}/questions")
     public List<SearchUserQuestionDTO>  searchUserQuestion(@PathVariable("memberId") Long memberId){
         return questionService.searchUserQuestion(memberId);
+    }
+
+    //병원 관계자 Questions 검색
+    @GetMapping("/staff/question/search")
+    public Page staffSearchQuestions(ServletRequest servletRequest,
+                                               @RequestParam(value="nickName",required = false) String nickName,
+                                               @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                               Pageable pageable){
+        StaffQuestionSearchCondition condition = StaffQuestionSearchCondition.builder()
+                .nickName(nickName).memberIdName(memberIdName).build();
+
+        Page<Question> questions = questionService.staffSearchHospitalQuestion(servletRequest,condition,pageable);
+
+        List<SearchHospitalQuestionResponse> result = questions.stream()
+                .map(q->new SearchHospitalQuestionResponse(q))
+                .collect(Collectors.toList());
+
+        Long total = questions.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
+    }
+
+    //병원 관계자 답변 없는 Questions 검색
+    @GetMapping("/staff/question/noAnswer/search")
+    public Page staffSearchNoQuestion(ServletRequest servletRequest,
+                                     @RequestParam(value="nickName",required = false) String nickName,
+                                     @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                     Pageable pageable){
+        StaffQuestionSearchCondition condition = StaffQuestionSearchCondition.builder()
+                .nickName(nickName).memberIdName(memberIdName).build();
+
+        Page<Question> questions = questionService.staffSearchNoQuestion(servletRequest,condition,pageable);
+
+        List<SearchHospitalQuestionResponse> result = questions.stream()
+                .map(q->new SearchHospitalQuestionResponse(q))
+                .collect(Collectors.toList());
+
+        Long total = questions.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
+    }
+
+    //병원 관계자 미답변 question 수 받아오기
+    @GetMapping("/staff/question/count")
+    public Long staffQuestionNoAnswer(ServletRequest servletRequest){
+        Long questionCount = questionService.staffQuestionNoAnswer(servletRequest);
+
+        return questionCount;
     }
 
     //관리자 Questions 검색
@@ -82,19 +132,22 @@ public class QuestionApiController {
     @Data
     private static class SearchHospitalQuestionResponse{
         private Long reviewId;
+        private String memberIdName;
         private String nickName;
         private String content;
         private Long answerId;
         private String answerContent;
 
         public SearchHospitalQuestionResponse(Question question) {
+            this.memberIdName = question.getMember().getMemberIdName();
             this.reviewId = question.getId();
             this.nickName = question.getMember().getNickName();
             this.content = question.getContent();
 
-            this.answerId = question.getAnswer().getId();
-            this.answerContent = question.getAnswer().getAnswerContent();
-
+            if(question.getAnswer() !=null) {
+                this.answerId = question.getAnswer().getId();
+                this.answerContent = question.getAnswer().getAnswerContent();
+            }
         }
     }
 

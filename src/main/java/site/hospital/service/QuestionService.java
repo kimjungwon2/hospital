@@ -10,6 +10,7 @@ import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.Question;
 import site.hospital.domain.member.Member;
 import site.hospital.dto.AdminQuestionSearchCondition;
+import site.hospital.dto.StaffQuestionSearchCondition;
 import site.hospital.repository.AnswerRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.question.QuestionRepository;
@@ -21,6 +22,7 @@ import site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO;
 import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
 import site.hospital.repository.question.userQuery.UserQuestionRepository;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 
 @Service
@@ -35,6 +37,7 @@ public class QuestionService {
     private final UserQuestionRepository userQuestionRepository;
     private final AdminQuestionSearchRepository adminQuestionSearchRepository;
     private final AnswerRepository answerRepository;
+    private final JwtStaffAccessService jwtStaffAccessService;
 
     //Question 작성
     @Transactional
@@ -80,9 +83,30 @@ public class QuestionService {
 
     //멤버 자신의 Question 조회
     public Page<Question> searchMemberQuestion(Long memberId, Pageable pageable){
-        Page<Question> question = questionRepository.searchQuestion(memberId, null, pageable);
+        Page<Question> question = questionRepository.searchQuestion(memberId, pageable);
 
         return question;
+    }
+
+    //병원 관계자 Question 검색
+    public Page<Question> staffSearchHospitalQuestion(ServletRequest servletRequest, StaffQuestionSearchCondition condition, Pageable pageable){
+        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+
+        return questionRepository.staffSearchHospitalQuestion(JwtHospitalId, condition, pageable);
+    }
+
+    //병원 관계자 미답변 Question 검색
+    public Page<Question> staffSearchNoQuestion(ServletRequest servletRequest, StaffQuestionSearchCondition condition, Pageable pageable){
+        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+
+        return questionRepository.staffSearchNoQuestion(JwtHospitalId, condition, pageable);
+    }
+
+    //병원 관계자 미답변 question 갯수 확인
+    public Long staffQuestionNoAnswer(ServletRequest servletRequest){
+        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+
+        return questionRepository.staffQuestionNoAnswer(JwtHospitalId);
     }
 
     //관리자 병원 Question 검색

@@ -14,9 +14,12 @@ import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.ReviewLike;
 import site.hospital.dto.AdminReviewSearchCondition;
+import site.hospital.dto.StaffReviewSearchCondition;
+import site.hospital.dto.review.StaffSearchReviewDTO;
 import site.hospital.repository.review.query.ReviewSearchDto;
 import site.hospital.service.ReviewService;
 
+import javax.servlet.ServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,6 +104,24 @@ public class ReviewApiController {
     @GetMapping("/search/review/{searchName}")
     public Page<ReviewSearchDto> searchReview(@PathVariable("searchName") String searchName, Pageable pageable){
         return reviewService.searchReview(searchName, pageable);
+    }
+
+    //관리자 리뷰 검색
+    @GetMapping("/staff/review/search")
+    public Page<AdminReviewsResponse> staffSearchReviews(ServletRequest servletRequest, @RequestParam(value="nickName",required = false) String nickName,
+                                                         @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                                         Pageable pageable){
+        //받은 값들 생성자로 생성.
+        StaffReviewSearchCondition condition = StaffReviewSearchCondition.builder()
+                .nickName(nickName).memberIdName(memberIdName).build();
+
+        Page<Review> reviews = reviewService.staffSearchReviews(servletRequest, condition, pageable);
+        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
+                .collect(Collectors.toList());
+
+        Long total = reviews.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
     }
 
     //관리자 리뷰 검색
@@ -386,6 +407,7 @@ public class ReviewApiController {
         private String memberIdName;
         private String nickName;
         private List<AdminReviewsHospitalDto> reviewHospitals;
+        private List<AdminReviewLikesDto> reviewLike;
 
 
         public AdminReviewsResponse(Review review) {
@@ -393,9 +415,21 @@ public class ReviewApiController {
             this.reviewAuthentication = review.getAuthenticationStatus();
             this.memberIdName = review.getMember().getMemberIdName();
             this.nickName = review.getMember().getNickName();
+            this.reviewLike = review.getReviewLikes().stream()
+                    .map(reviewLike -> new AdminReviewLikesDto(reviewLike))
+                    .collect(Collectors.toList());
             this.reviewHospitals = review.getReviewHospitals().stream()
                     .map(reviewHospital -> new AdminReviewsHospitalDto(reviewHospital))
                     .collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    private static class AdminReviewLikesDto{
+        private Long reviewLikeId;
+
+        public AdminReviewLikesDto(ReviewLike ReviewLike) {
+            this.reviewLikeId = ReviewLike.getId();
         }
     }
 
@@ -409,6 +443,4 @@ public class ReviewApiController {
             this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
         }
     }
-
-
 }

@@ -1,15 +1,19 @@
 package site.hospital.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Bookmark;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Member;
+import site.hospital.dto.StaffBookmarkSearchCondition;
 import site.hospital.repository.bookmark.BookmarkRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 
 @Service
@@ -20,6 +24,7 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
+    private final JwtStaffAccessService jwtStaffAccessService;
 
     //북마크 여부 확인.
     public Bookmark isBookmark(Long memberId, Long hospitalId){
@@ -54,21 +59,28 @@ public class BookmarkService {
         }
     }
 
-    //관리자 예약 조회
+    //병원 관계자 즐겨찾기 검색
+    public Page<Bookmark> staffSearchBookmarkUsers(ServletRequest servletRequest, StaffBookmarkSearchCondition condition, Pageable pageable){
+        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+
+        return bookmarkRepository.staffSearchBookmark(JwtHospitalId, condition, pageable);
+    }
+
+    //관리자 즐겨찾기 조회
     public List<Bookmark> searchAdminBookmark(){
         List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(null,null);
 
         return Bookmark;
     }
 
-    //멤버 예약 조회
+    //멤버 즐겨찾기 조회
     public List<Bookmark> searchMemberBookmark(Long memberId){
         List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(memberId,null);
 
         return Bookmark;
     }
 
-    //병원 예약 조회
+    //병원 즐겨찾기 조회
     public List<Bookmark> searchHospitalBookmark(Long hospitalId){
         List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(null, hospitalId);
 

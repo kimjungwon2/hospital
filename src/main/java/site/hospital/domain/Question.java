@@ -19,7 +19,7 @@ public class Question extends BaseTimeEntity {
     @Column(name= "question_id")
     private long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "answer_id")
     private Answer answer;
 

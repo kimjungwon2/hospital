@@ -53,7 +53,7 @@ public class ReviewSearchRepository {
 
         List<ReviewLikeSearchDTO> reviewLikeSearchDTO =
                 queryFactory
-                        .select(new QReviewLikeSearchDTO(reviewLike.id, reviewLike.review.id))
+                        .select(new QReviewLikeSearchDTO(reviewLike.id, review.id))
                         .from(reviewLike)
                         .join(reviewLike.review, review)
                         .where(reviewLike.review.id.in(reviewIds))

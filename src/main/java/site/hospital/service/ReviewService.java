@@ -12,6 +12,7 @@ import site.hospital.domain.review.Review;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.ReviewLike;
 import site.hospital.dto.AdminReviewSearchCondition;
+import site.hospital.dto.StaffReviewSearchCondition;
 import site.hospital.repository.reviewLike.ReviewLikeRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.member.MemberRepository;
@@ -19,6 +20,7 @@ import site.hospital.repository.review.ReviewRepository;
 import site.hospital.repository.review.query.ReviewSearchDto;
 import site.hospital.repository.review.query.ReviewSearchRepository;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 
 @Service
@@ -31,6 +33,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
     private final ReviewSearchRepository reviewSearchRepository;
+    private final JwtStaffAccessService jwtStaffAccessService;
 
     //리뷰 등록
     @Transactional
@@ -104,9 +107,15 @@ public class ReviewService {
         return reviewRepository.hospitalReviewSearch(null,memberId);
     }
 
-    //리뷰 전체 검색
+    //병원 리뷰 전체 검색
     public Page<ReviewSearchDto> searchReview(String searchName, Pageable pageable){
         return reviewSearchRepository.searchReview(searchName, pageable);
+    }
+
+    //병원 관계자 리뷰 검색
+    public Page<Review> staffSearchReviews(ServletRequest servletRequest, StaffReviewSearchCondition condition, Pageable pageable){
+        Long hospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+        return reviewRepository.staffSearchReviews(hospitalId, condition, pageable);
     }
 
     //관리자 리뷰 검색

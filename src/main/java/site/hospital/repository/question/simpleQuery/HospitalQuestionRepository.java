@@ -29,6 +29,7 @@ public class HospitalQuestionRepository {
                 .join(question.member, member)
                 .leftJoin(question.answer, answer)
                 .where(hospitalIdEq(hospitalId))
+                .orderBy(answer.id.asc().nullsLast())
                 .fetch();
         return result;
     }

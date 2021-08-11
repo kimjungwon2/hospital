@@ -1,8 +1,13 @@
 package site.hospital.repository.bookmark;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import site.hospital.domain.Bookmark;
+import site.hospital.dto.StaffBookmarkSearchCondition;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -30,7 +35,28 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
         return result;
     }
 
-    public List<Bookmark> searchBookmark(Long memberId,Long hospitalId){
+    //병원 관계자 북마크 확인.
+    public Page<Bookmark> staffSearchBookmark(Long hospitalId, StaffBookmarkSearchCondition condition,
+                                              Pageable pageable){
+        QueryResults<Bookmark> result = queryFactory
+                .select(bookmark)
+                .from(bookmark)
+                .join(bookmark.member, member).fetchJoin()
+                .where(hospitalIdEq(hospitalId),
+                        memberIdNameLike(condition.getMemberIdName()),
+                        nickNameEq(condition.getNickName()),
+                        phoneNumberLike(condition.getPhoneNumber())
+                        )
+                .fetchResults();
+
+        List<Bookmark> content = result.getResults();
+
+        long total = result.getTotal();
+
+        return new PageImpl<>(content,pageable,total);
+    }
+
+    public List<Bookmark> searchBookmark(Long memberId, Long hospitalId){
         List<Bookmark> result = queryFactory
                 .select(bookmark)
                 .from(bookmark)
@@ -40,6 +66,17 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
                 .fetch();
 
         return result;
+    }
+
+    private BooleanExpression memberIdNameLike(String memberIdName){
+        return memberIdName==null?  null: member.memberIdName.contains(memberIdName);
+    }
+
+    private BooleanExpression nickNameEq(String nickName){
+        return nickName==null?  null: member.nickName.eq(nickName);
+    }
+    private BooleanExpression phoneNumberLike(String phoneNumber){
+        return phoneNumber==null?  null: member.phoneNumber.contains(phoneNumber);
     }
 
     private BooleanExpression memberIdEq(Long id){

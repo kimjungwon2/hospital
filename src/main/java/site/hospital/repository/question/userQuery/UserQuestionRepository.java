@@ -28,6 +28,7 @@ public class UserQuestionRepository {
                 .join(question.member, member)
                 .join(question.hospital, hospital)
                 .leftJoin(question.answer, answer)
+                .orderBy(answer.id.asc().nullsFirst())
                 .where(hospitalIdEq(memberId))
                 .fetch();
         return result;

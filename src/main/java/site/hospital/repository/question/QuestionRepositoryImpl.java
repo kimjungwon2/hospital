@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.Question;
+import site.hospital.dto.StaffQuestionSearchCondition;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -25,25 +26,18 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<Question> searchHospitalQuestion(Long hospitalId){
-        List<Question> result = queryFactory
-                .select(question)
-                .from(question)
-                .join(question.member, member).fetchJoin()
-                .leftJoin(question.answer, answer).fetchJoin()
-                .where(hospitalIdEq(hospitalId))
-                .fetch();
 
-        return result;
-    }
-
-    public Page<Question> searchQuestion(Long memberId, Long hospitalId, Pageable pageable){
+    @Override
+    public Page<Question> staffSearchHospitalQuestion(Long hospitalId, StaffQuestionSearchCondition condition, Pageable pageable){
         QueryResults<Question> result = queryFactory
                 .select(question)
                 .from(question)
                 .join(question.member, member).fetchJoin()
-                .join(question.hospital, hospital).fetchJoin()
-                .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
+                .leftJoin(question.answer, answer).fetchJoin()
+                .where(hospitalIdEq(hospitalId),
+                        memberIdNameLike(condition.getMemberIdName()),
+                        nickNameEq(condition.getNickName()))
+                .orderBy(answer.id.asc().nullsFirst())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -54,13 +48,47 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         return new PageImpl<>(content,pageable,total);
     }
 
-    public Page<Question> adminSearchQuestion(Long memberId, Long hospitalId, Pageable pageable){
+    //답변이 없는 경우 질문의 수
+    @Override
+    public Long staffQuestionNoAnswer(Long hospitalId){
+
+        return queryFactory.select(question)
+                .from(question)
+                .where(hospitalIdEq(hospitalId), question.answer.isNull())
+                .fetchCount();
+    }
+
+    @Override
+    public Page<Question> staffSearchNoQuestion(Long hospitalId, StaffQuestionSearchCondition condition, Pageable pageable){
+        QueryResults<Question> result = queryFactory
+                .select(question)
+                .from(question)
+                .join(question.member, member).fetchJoin()
+                .leftJoin(question.answer, answer).fetchJoin()
+                .where(hospitalIdEq(hospitalId), question.answer.isNull(),
+                        memberIdNameLike(condition.getMemberIdName()),
+                        nickNameEq(condition.getNickName()))
+                .orderBy(answer.id.asc().nullsFirst())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Question> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content,pageable,total);
+    }
+
+    @Override
+    public Page<Question> searchQuestion(Long memberId, Pageable pageable){
         QueryResults<Question> result = queryFactory
                 .select(question)
                 .from(question)
                 .join(question.member, member).fetchJoin()
                 .join(question.hospital, hospital).fetchJoin()
-                .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
+                .leftJoin(question.answer, answer).fetchJoin()
+                .where(memberIdEq(memberId))
+                .orderBy(answer.id.asc().nullsFirst())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -78,11 +106,19 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .execute();
     }
 
+    private BooleanExpression memberIdNameLike(String memberIdName){
+        return memberIdName==null?  null: member.memberIdName.contains(memberIdName);
+    }
+
+    private BooleanExpression nickNameEq(String nickName){
+        return nickName==null?  null: member.nickName.eq(nickName);
+    }
+
+
     private BooleanExpression memberIdEq(Long id){
         return id == null? null:question.member.id.eq(id);
     }
     private BooleanExpression hospitalIdEq(Long id){
         return id == null? null:question.hospital.id.eq(id);
     }
-
 }

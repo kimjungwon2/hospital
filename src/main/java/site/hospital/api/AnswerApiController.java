@@ -9,15 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 import site.hospital.domain.Answer;
 import site.hospital.service.AnswerService;
 
+import javax.servlet.ServletRequest;
+
 @RestController
 @RequiredArgsConstructor
 public class AnswerApiController {
     private final AnswerService answerService;
 
     @PostMapping("/staff/question/answer")
-    public CreateAnswerResponse registerAnswer(@RequestBody @Validated CreateAnswerRequest request){
+    public CreateAnswerResponse registerAnswer(ServletRequest servletRequest, @RequestBody @Validated CreateAnswerRequest request){
         Answer answer = Answer.builder().answerContent(request.getAnswerContent()).build();
-        Long id = answerService.registerAnswer(request.getMemberId(),request.getQuestionId(),answer);
+        Long id = answerService.registerAnswer(servletRequest, request.getMemberId(), request.getQuestionId(), answer);
 
         return new CreateAnswerResponse(id);
     }

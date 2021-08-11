@@ -4,11 +4,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.Question;
+import site.hospital.dto.StaffQuestionSearchCondition;
 
 import java.util.List;
 
 public interface QuestionRepositoryCustom {
-    List<Question> searchHospitalQuestion(Long hospitalId);
-    Page<Question> searchQuestion(Long memberId, Long hospitalId, Pageable pageable);
+    Page<Question> searchQuestion(Long memberId, Pageable pageable);
     void adminDeleteQuestion(Hospital hospital);
+    Page<Question> staffSearchHospitalQuestion(Long hospitalId, StaffQuestionSearchCondition condition, Pageable pageable);
+    Page<Question> staffSearchNoQuestion(Long hospitalId, StaffQuestionSearchCondition condition, Pageable pageable);
+    Long staffQuestionNoAnswer(Long hospitalId);
 }

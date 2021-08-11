@@ -3,6 +3,7 @@ package site.hospital.repository.review;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,10 +11,14 @@ import org.springframework.data.domain.Pageable;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.review.Review;
 import site.hospital.dto.AdminReviewSearchCondition;
+import site.hospital.dto.StaffReviewSearchCondition;
+import site.hospital.dto.review.QStaffSearchReviewDTO;
+import site.hospital.dto.review.StaffSearchReviewDTO;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static site.hospital.domain.QReviewLike.reviewLike;
 import static site.hospital.domain.review.QReview.review;
 import static site.hospital.domain.member.QMember.member;
 import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
@@ -50,6 +55,27 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
         return result;
     }
+
+    @Override
+    public Page<Review> staffSearchReviews(Long hospitalId, StaffReviewSearchCondition condition, Pageable pageable){
+        QueryResults<Review> result = queryFactory
+                .select(review)
+                .from(review)
+                .join(review.member, member).fetchJoin()
+                .where(
+                        hospitalIdEq(hospitalId),
+                        nickNameEq(condition.getNickName()),
+                        memberIdNameLike(condition.getMemberIdName()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Review> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
 
     @Override
     public void adminDeleteReviewHospital(Hospital hospital){
@@ -100,7 +126,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     private BooleanExpression hospitalIdEq(Long id){
         return id == null? null: review.reviewHospitals.any().hospital.id.eq(id);
     }
-    private BooleanExpression nickNameEq(String nickName){ return nickName == null? null: review.member.nickName.eq(nickName);}
+    private BooleanExpression nickNameEq(String nickName){ return nickName == null? null: member.nickName.eq(nickName);}
     private BooleanExpression hospitalNameLike(String hospitalName){ return hospitalName == null? null: review.reviewHospitals.any().hospital.hospitalName.contains(hospitalName);}
-    private BooleanExpression memberIdNameLike(String memberIdName){ return memberIdName == null? null: review.member.memberIdName.contains(memberIdName);}
+    private BooleanExpression memberIdNameLike(String memberIdName){ return memberIdName == null? null: member.memberIdName.contains(memberIdName);}
 }
