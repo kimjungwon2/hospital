@@ -41,7 +41,7 @@ public class HospitalViewRepository {
         List<HospitalReviewDTO> hospitalReviewDTOS = queryFactory
                 .select(new QHospitalReviewDTO(reviewHospital.hospital.id, reviewHospital.count()))
                 .from(reviewHospital)
-                .join(reviewHospital.hospital,hospital)
+                .join(reviewHospital.hospital, hospital)
                 .groupBy(reviewHospital.hospital.id)
                 .where(reviewHospital.hospital.id.in(hosId))
                 .fetch();

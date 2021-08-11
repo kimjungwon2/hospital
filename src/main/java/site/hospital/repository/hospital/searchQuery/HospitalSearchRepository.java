@@ -104,6 +104,7 @@ public class HospitalSearchRepository {
         return PageableExecutionUtils.getPage(content, pageable, ()-> countQuery.fetchCount());
     }
 
+
     private BooleanExpression hospitalNameLike(String name){
         return isEmpty(name)?  null: hospital.hospitalName.contains(name);
     }

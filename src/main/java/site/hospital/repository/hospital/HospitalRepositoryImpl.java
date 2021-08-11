@@ -32,7 +32,7 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom{
     public Hospital findByStaffHosId(Long staffHosId){
         Hospital result = queryFactory
                 .selectFrom(hospital)
-                .where(hospital.staffHosInformation.id.eq(staffHosId))
+                .where(staffHosInEq(staffHosId))
                 .fetchOne();
         return result;
     }
@@ -40,13 +40,19 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom{
     public Hospital findByDoctorId(Long doctorId){
         Hospital result = queryFactory
                 .selectFrom(hospital)
-                .where(hospital.staffHosInformation.doctors.any().id.eq(doctorId))
+                .where(doctorIdEq(doctorId))
                 .fetchOne();
+
         return result;
     }
 
+    private BooleanExpression staffHosInEq(Long id){
+        return id==null? null: hospital.staffHosInformation.id.eq(id);
+    }
+    private BooleanExpression doctorIdEq(Long id){
+        return id==null? null: hospital.staffHosInformation.doctors.any().id.eq(id);
+    }
     private BooleanExpression hospitalIdEq(Long id){
         return id != null? hospital.id.eq(id): null;
     }
-
 }

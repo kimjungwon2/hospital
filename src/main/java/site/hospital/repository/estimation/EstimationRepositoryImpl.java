@@ -29,10 +29,9 @@ public class EstimationRepositoryImpl implements EstimationRepositoryCustom{
     @Override
     public void adminDeleteEstimation(Hospital hospital){
         queryFactory.delete(estimation)
-                .where(estimation.hospital.eq(hospital))
+                .where(hospitalEq(hospital))
                 .execute();
     }
-
 
     private BooleanExpression hospitalEq(Hospital hospital){
         return hospital == null ? null: estimation.hospital.eq(hospital);
