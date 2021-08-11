@@ -24,7 +24,7 @@ public class HospitalQuestionRepository {
 
         List<SearchHospitalQuestionDTO> result = queryFactory
                 .select(new QSearchHospitalQuestionDTO(question.id,member.nickName,
-                        question.content, question.answer.id,question.answer.answerContent))
+                        question.content, question.answer.id, answer.answerContent))
                 .from(question)
                 .join(question.member, member)
                 .leftJoin(question.answer, answer)

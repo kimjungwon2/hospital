@@ -51,7 +51,7 @@ public class HospitalViewRepository {
 
         //태그 넣기
         List<HospitalTagDTO> hospitalTagDTOS = queryFactory
-                .select(new QHospitalTagDTO(postTag.hospital.id, postTag.tag.name))
+                .select(new QHospitalTagDTO(postTag.hospital.id, tag.name))
                 .from(postTag)
                 .join(postTag.tag, tag)
                 .where(postTag.hospital.id.in(hosId))

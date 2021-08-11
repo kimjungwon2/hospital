@@ -32,13 +32,17 @@ public class ReviewSearchRepository {
     public Page<ReviewSearchDto> searchReview(String searchName, Pageable pageable){
         Page<ReviewSearchDto> result = findReviews(searchName, pageable);
 
+        //비어있으면 바로 반환.
+        if(result.getContent().isEmpty()) return result;
+
         List<Long> reviewIds = result.stream().map(r->r.getReviewId()).collect(Collectors.toList());
 
         List<ReviewHospitalDTO2> reviewHospitalDto =
                 queryFactory
                 .select(new QReviewHospitalDTO2(review.id
                         ,reviewHospital.content,reviewHospital.disease,
-                        reviewHospital.evCriteria.averageRate,hospital.id
+                        reviewHospital.evCriteria.averageRate,
+                        hospital.id
                         ,hospital.hospitalName))
                 .from(reviewHospital)
                 .join(reviewHospital.review, review)

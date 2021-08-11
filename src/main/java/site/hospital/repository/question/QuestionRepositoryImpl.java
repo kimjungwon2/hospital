@@ -102,12 +102,16 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     @Override
     public void adminDeleteQuestion(Hospital hospital){
         queryFactory.delete(question)
-                .where(question.hospital.eq(hospital))
+                .where(hospitalEq(hospital))
                 .execute();
     }
 
     private BooleanExpression memberIdNameLike(String memberIdName){
         return memberIdName==null?  null: member.memberIdName.contains(memberIdName);
+    }
+
+    private BooleanExpression hospitalEq(Hospital hospital){
+        return hospital==null?  null: question.hospital.eq(hospital);
     }
 
     private BooleanExpression nickNameEq(String nickName){

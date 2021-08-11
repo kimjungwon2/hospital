@@ -37,7 +37,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .from(memberAuthority)
                 .join(memberAuthority.member, member)
                 .join(memberAuthority.authority, authority).fetchJoin()
-                .where(memberAuthority.member.memberIdName.eq(memberIdName))
+                .where(memberIdNameEq(memberIdName))
                 .fetch();
     }
 
@@ -50,8 +50,10 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .from(memberAuthority)
                 .join(memberAuthority.member, member)
                 .join(memberAuthority.authority, authority)
-                .where(memberAuthority.member.id.eq(memberId)
-                ,memberAuthority.authority.authorizationStatus.eq(authorization))
+                .where(
+                        memberIdEq(memberId),
+                        authorizationStatusEq(authorization)
+                )
                 .fetchOne();
     }
 
@@ -60,7 +62,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     @Override
     public void adminDeleteMemberAuthority(Member member){
         queryFactory.delete(memberAuthority)
-                .where(memberAuthority.member.eq(member))
+                .where(memberEq(member))
                 .execute();
     }
 
@@ -114,6 +116,15 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     }
 
+    private BooleanExpression memberEq(Member member){
+        return member == null? null: memberAuthority.member.eq(member);
+    }
+    private BooleanExpression memberIdNameEq(String memberIdName){
+        return memberIdName == null? null: member.memberIdName.eq(memberIdName);
+    }
+    private BooleanExpression authorizationStatusEq(Authorization authorization){
+        return authorization == null? null: authority.authorizationStatus.eq(authorization);
+    }
     private BooleanExpression memberIdEq(Long id){
         return id == null? null: member.id.eq(id);
     }

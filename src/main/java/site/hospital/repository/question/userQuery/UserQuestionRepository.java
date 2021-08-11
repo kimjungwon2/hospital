@@ -23,7 +23,7 @@ public class UserQuestionRepository {
 
         List<SearchUserQuestionDTO> result = queryFactory
                 .select(new QSearchUserQuestionDTO(question.id, hospital.id, hospital.hospitalName, member.nickName,
-                        question.content, question.answer.id,question.answer.answerContent))
+                        question.content, question.answer.id, answer.answerContent))
                 .from(question)
                 .join(question.member, member)
                 .join(question.hospital, hospital)

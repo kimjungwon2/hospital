@@ -36,7 +36,8 @@ public class AdminQuestionSearchRepository {
                 .leftJoin(question.answer, answer)
                 .join(question.hospital, hospital)
                 .where(memberIdNameLike(condition.getMemberIdName()),
-                        nickNameEq(condition.getNickName()),hospitalNameLike(condition.getHospitalName()))
+                        nickNameEq(condition.getNickName()),
+                        hospitalNameLike(condition.getHospitalName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();

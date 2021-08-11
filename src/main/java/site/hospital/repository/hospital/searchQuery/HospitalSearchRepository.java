@@ -33,8 +33,10 @@ public class HospitalSearchRepository {
     public Page<HospitalSearchDto> searchHospital(String searchName,Pageable pageable){
         Page<HospitalSearchDto> result = findHospitals(searchName, pageable);
 
-        if(result == null) return null;
+        //비어있으면 바로 반환.
+        if(result.getContent().isEmpty()) return result;
 
+        //병원 id 모음.
         List<Long> hospitalIds = result.stream()
                 .map(h-> h.getHospitalId())
                 .collect(Collectors.toList());
@@ -58,7 +60,7 @@ public class HospitalSearchRepository {
         //태그 넣기
         List<PostTagDto> postTagDtos =
                 queryFactory
-                        .select(new QPostTagDto(postTag.hospital.id, tag.id, postTag.tag.name))
+                        .select(new QPostTagDto(postTag.hospital.id, tag.id, tag.name))
                         .from(postTag)
                         .join(postTag.tag, tag)
                         .where(postTag.hospital.id.in(hospitalIds))
