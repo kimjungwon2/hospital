@@ -12,7 +12,8 @@
           </ul>
 
           <ul class="navbar_menu" v-if="isStaff">
-              <li><router-link to="/staff/view/hospital">병원 관리 페이지</router-link></li>
+              <li><router-link to="/staff/view/hospital">내 병원 관리</router-link></li>
+              <li><router-link to="/staff">병원 활동</router-link></li>
           </ul>
 
           <ul class="navbar_menu" v-if="isAdmin">
@@ -68,11 +69,11 @@ export default {
   },
   methods:{
     logoutUser(){
+      deleteCookie('member_status');
+      deleteCookie('nick_name');
+      deleteCookie('token');
+      deleteCookie('member_id');
       this.$store.commit('clearUserInfo');
-       deleteCookie('member_status');
-       deleteCookie('nick_name');
-       deleteCookie('token');
-       deleteCookie('member_id');
       this.$router.push('/').catch(err => {
                 if (
                     err.name !== 'NavigationDuplicated' &&

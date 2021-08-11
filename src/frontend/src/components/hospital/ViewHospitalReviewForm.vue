@@ -11,7 +11,7 @@
                   작성일: {{review.createdDate|formatDate}} 
               </div>
               <div>
-                    <font-awesome-icon v-if="!isLogin && !isAdmin" :icon="['far', 'heart']" @click.prevent="routeLogin"/>
+                    <font-awesome-icon v-if="!isLogin && !isStaff &&!isAdmin" :icon="['far', 'heart']" @click.prevent="routeLogin"/>
                     <font-awesome-icon v-else-if="reviewLike[i]===false" :icon="['far', 'heart']" @click.prevent="like(review.reviewId,i)"/>
                     <font-awesome-icon v-else-if="reviewLike[i]===true" :icon="['fas', 'heart']" @click.prevent="like(review.reviewId,i)"/>
                     좋아요 수: {{review.reviewLikes.length}}
@@ -66,6 +66,9 @@ export default {
         isLogin(){
           return this.$store.getters.isLogin;
         },
+        isStaff(){
+          return this.$store.getters.isStaff;
+        },
         isAdmin(){
           return this.$store.getters.isAdmin;
         },
@@ -113,7 +116,7 @@ export default {
         const {data} = await viewHospitalReview(id);
         this.reviews = data;
 
-        if(this.isLogin || this.isAdmin){
+        if(this.isLogin || this.isStaff || this.isAdmin){
             await this.loadReviewAllLike(this.reviews.length);
         }
     }

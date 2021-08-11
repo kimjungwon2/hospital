@@ -16,7 +16,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state:{
-        memberId: getMemberIdFromCookie()||'',
+        memberId: getMemberIdFromCookie() ||'',
         nickName: getNickNameFromCookie() || '',
         memberStatus: getMemberStatusFromCookie() || '',
         token: getTokenFromCookie() || '',

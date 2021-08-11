@@ -64,24 +64,44 @@ const router =  new VueRouter({
            meta: { login: true},
        },
        {
+          path:'/staff',
+          component: ()=> import('@/views/staff/StaffPage.vue'),
+          meta: { staff: true},
+       },
+       {
+          path:'/staff/reviews',
+          component: ()=> import('@/views/staff/StaffViewReviewsPage.vue'),
+          meta: { staff: true},
+       },
+       {
+          path:'/staff/Q&A',
+          component: ()=> import('@/views/staff/StaffManageQuestionPage.vue'),
+          meta: { staff: true},
+       },
+       {
+          path:'/staff/bookmark/users',
+          component: ()=> import('@/views/staff/StaffViewReviewsPage.vue'),
+          meta: { staff: true},
+       },
+       {
           path:'/staff/view/hospital',
-          component: ()=> import('@/views/staff/StaffViewHospitalPage.vue'),
+          component: ()=> import('@/views/staff/hospital/StaffViewHospitalPage.vue'),
           meta: { staff: true},
        },
        {
           path:'/staff/register/:hospitalId/staffHosInfo',
-          component: ()=> import('@/views/staff/StaffRegisterStaffHosInfoPage.vue'),
+          component: ()=> import('@/views/staff/hospital/StaffRegisterStaffHosInfoPage.vue'),
           meta: { staff: true},
        },
        {
           path:'/staff/staffHosInfo',
-          component: ()=> import('@/views/staff/StaffViewStaffHosInfoPage.vue'),
+          component: ()=> import('@/views/staff/hospital/StaffViewStaffHosInfoPage.vue'),
           name:'StaffViewHospital',
           meta: { staff: true},
        },
        {
           path:'/staff/staffHospital/edit',
-          component: ()=> import('@/views/staff/StaffModifyStaffHospitalInfoPage.vue'),
+          component: ()=> import('@/views/staff/hospital/StaffModifyStaffHospitalInfoPage.vue'),
           name:'staffEditStaffHospital',
           meta: { staff: true},
        },

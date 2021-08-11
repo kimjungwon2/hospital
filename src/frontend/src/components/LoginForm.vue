@@ -41,12 +41,15 @@ export default {
     },
     methods:{
         async submitForm(){
+            //기존 로그인 계정이 있으면 로그인 정보 삭제.
             if(this.$store.getters.getMemberId !=='' ){
                 deleteCookie('member_status');
                 deleteCookie('nick_name');
                 deleteCookie('token');
                 deleteCookie('member_id');
+                this.$store.commit('clearUserInfo');
                 this.$alert('기존 로그인된 계정을 로그아웃 했습니다.');
+                
                 this.$router.push('/').catch(err => {
                 if (
                     err.name !== 'NavigationDuplicated' &&
