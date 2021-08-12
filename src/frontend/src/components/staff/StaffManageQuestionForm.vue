@@ -49,7 +49,6 @@
 <script>
 import { staffSearchQuestionLists, staffRegisterAnswer} from '@/api/staff';
 
-
 export default {
    data() {
      return {
@@ -136,6 +135,7 @@ export default {
       }
       await staffRegisterAnswer(data);
       this.loadQuestionData();
+      this.$store.commit('minusAnswerCount',this.count);
     }
 
    },

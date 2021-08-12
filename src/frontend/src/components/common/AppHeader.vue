@@ -24,7 +24,7 @@
           <ul class="navbar_user" v-if="isLogin||isStaff||isAdmin">
               <li v-if="isStaff">
                 <router-link to="/staff/questions">
-                  <font-awesome-icon icon="bell" /><span> {{getNoAnswerCount}}</span>
+                  <font-awesome-icon icon="bell" /><span v-if="getNoAnswerCount!==0"> {{getNoAnswerCount}}</span>
                 </router-link>
               </li>
               <li><span>{{ $store.state.nickName }}</span></li>
@@ -104,6 +104,7 @@ export default {
     async getAnswerCount(){
       const data = await staffNoAnswerCount();
       this.count = data.data;
+      this.$store.commit('setNoAnswerCount',this.count);
       saveNoAnswerCountToCookie(this.count);
     }
   },

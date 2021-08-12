@@ -139,6 +139,7 @@ export default {
       }
       await staffRegisterAnswer(data);
       this.loadQuestionData();
+      this.$store.commit('minusAnswerCount',this.count);
     }
    },
 

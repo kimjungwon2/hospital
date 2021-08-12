@@ -10,6 +10,7 @@ import {
     saveNickNameToCookie, 
     saveTokenToCookie, 
     saveMemberStatusToCookie,
+    saveNoAnswerCountToCookie
 } from '@/utils/cookies';
 import { loginUser } from '@/api/index';
 
@@ -56,12 +57,15 @@ export default new Vuex.Store({
         },
         setNoAnswerCount(state, noAnswerCount){
             state.noAnswerCount = noAnswerCount;
-        }
+        },
+        minusAnswerCount(state){
+            state.noAnswerCount -=1;
+            saveNoAnswerCountToCookie(state.noAnswerCount);
+        },
     },
     actions:{
         async login({commit}, userData){
             const { data } = await loginUser(userData);
-            console.log("memberId 쿠키"+getMemberIdFromCookie());
             commit('setUser', data);
 
             //쿠키 저장.
