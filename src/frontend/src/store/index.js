@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import {
+    getNoAnswerCountFromCookie,
     getMemberIdFromCookie, 
     getMemberStatusFromCookie, 
     getNickNameFromCookie, 
@@ -8,7 +9,7 @@ import {
     saveMemberIdToCookie,
     saveNickNameToCookie, 
     saveTokenToCookie, 
-    saveMemberStatusToCookie 
+    saveMemberStatusToCookie,
 } from '@/utils/cookies';
 import { loginUser } from '@/api/index';
 
@@ -20,10 +21,14 @@ export default new Vuex.Store({
         nickName: getNickNameFromCookie() || '',
         memberStatus: getMemberStatusFromCookie() || '',
         token: getTokenFromCookie() || '',
+        noAnswerCount: getNoAnswerCountFromCookie()||'',
     },
     getters:{
         getMemberId(state){
             return state.memberId;
+        },
+        getNoAnswerCount(state){
+            return state.noAnswerCount;
         },
         isLogin(state){
             return state.memberStatus === 'NORMAL';
@@ -47,18 +52,25 @@ export default new Vuex.Store({
             state.nickName='';
             state.memberStatus='';
             state.token='';
+            state.noAnswerCount='';
         },
+        setNoAnswerCount(state, noAnswerCount){
+            state.noAnswerCount = noAnswerCount;
+        }
     },
     actions:{
         async login({commit}, userData){
             const { data } = await loginUser(userData);
+            console.log("memberId 쿠키"+getMemberIdFromCookie());
             commit('setUser', data);
+
             //쿠키 저장.
             saveMemberIdToCookie(data.memberId);
             saveTokenToCookie(data.token);
             saveNickNameToCookie(data.nickName);
             saveMemberStatusToCookie(data.memberStatus);
+            
             return data;
-        }
+        },
     }
 });

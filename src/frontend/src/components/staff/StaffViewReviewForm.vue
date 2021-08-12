@@ -20,21 +20,14 @@
         <h1>평균 점수</h1>
         평균 점수: {{evaluationCriteria.averageRate}}
     </div>
-    <div><font-awesome-icon icon="check-circle" @click.prevent="approveReview(review.reviewId)"/></div>
-
   </div>
   
 </template>
 
 <script>
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { adminViewReview, adminApproveReview} from '@/api/admin';
-
-library.add(faCheckCircle)
+import {staffViewReview } from '@/api/staff';
 
 export default {
-
     data() {
         return {
             review: [],
@@ -43,19 +36,9 @@ export default {
         }
     },
     methods:{
-    //권한 주기
-    async approveReview(reviewId){
-          if(confirm('영수증 인증을 승인하시겠습니까??')){
-              const data = {
-                reviewAuthentication: "CERTIFIED",
-             };
-                await adminApproveReview(reviewId, data);
-                this.loadReview();
-          }
-    },
     async loadReview(){
         const reviewId = this.$route.params.reviewId;
-        const {data} = await adminViewReview(reviewId);
+        const {data} = await staffViewReview(reviewId);
         this.review = data;
         this.reviewHospital = data.reviewHospitals[0];
         this.evaluationCriteria = this.reviewHospital.evaluationCriteria;

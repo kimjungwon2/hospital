@@ -74,13 +74,23 @@ const router =  new VueRouter({
           meta: { staff: true},
        },
        {
+            path:'/staff/review/view/:reviewId',
+            component:() => import('@/views/staff/StaffViewReviewPage.vue'),
+            meta: {staff: true},
+       },
+       {
           path:'/staff/Q&A',
-          component: ()=> import('@/views/staff/StaffManageQuestionPage.vue'),
+          component: ()=> import('@/views/staff/StaffManageQuestionsPage.vue'),
+          meta: { staff: true},
+       },
+       {
+          path:'/staff/questions',
+          component: ()=> import('@/views/staff/StaffManageNoAnswerQuestionsPage.vue'),
           meta: { staff: true},
        },
        {
           path:'/staff/bookmark/users',
-          component: ()=> import('@/views/staff/StaffViewReviewsPage.vue'),
+          component: ()=> import('@/views/staff/StaffViewBookmarkUsersPage.vue'),
           meta: { staff: true},
        },
        {

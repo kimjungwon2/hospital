@@ -22,6 +22,11 @@
 
 
           <ul class="navbar_user" v-if="isLogin||isStaff||isAdmin">
+              <li v-if="isStaff">
+                <router-link to="/staff/questions">
+                  <font-awesome-icon icon="bell" /><span> {{getNoAnswerCount}}</span>
+                </router-link>
+              </li>
               <li><span>{{ $store.state.nickName }}</span></li>
               <li><a @click="logoutUser">로그아웃</a></li>
           </ul>
@@ -35,13 +40,19 @@
 </template>
 
 <script>
+import {staffNoAnswerCount} from '@/api/staff';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faAmbulance } from '@fortawesome/free-solid-svg-icons'
-import { deleteCookie } from '@/utils/cookies'
+import { faAmbulance,faBell } from '@fortawesome/free-solid-svg-icons'
+import { deleteCookie, saveNoAnswerCountToCookie } from '@/utils/cookies'
 
-library.add(faAmbulance)
+library.add(faAmbulance, faBell)
 
 export default {
+  data() {
+    return {
+      count: '',
+    }
+  },
   computed:{
     isLogin(){
       return this.$store.getters.isLogin;
@@ -66,6 +77,9 @@ export default {
         return '/main';
       }
     },
+    getNoAnswerCount(){
+      return this.$store.getters.getNoAnswerCount;
+    }
   },
   methods:{
     logoutUser(){
@@ -73,19 +87,31 @@ export default {
       deleteCookie('nick_name');
       deleteCookie('token');
       deleteCookie('member_id');
+      deleteCookie('no_answer_count');
+      this.count='';
       this.$store.commit('clearUserInfo');
       this.$router.push('/').catch(err => {
                 if (
                     err.name !== 'NavigationDuplicated' &&
                     !err.message.includes('Avoided redundant navigation to current location')
                 ) {alert(err);}}
-                );
+      );
     },
     routerUser(){
        const memberId= this.$store.getters.getMemberId;
        this.$router.push('/user/'+memberId+'/info');
     },
+    async getAnswerCount(){
+      const data = await staffNoAnswerCount();
+      this.count = data.data;
+      saveNoAnswerCountToCookie(this.count);
+    }
   },
+  async created(){
+    if(this.$store.getters.isStaff){
+      await this.getAnswerCount();
+    }
+  }
 };
 </script>
 

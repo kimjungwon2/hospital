@@ -47,6 +47,7 @@ export default {
                 deleteCookie('nick_name');
                 deleteCookie('token');
                 deleteCookie('member_id');
+                deleteCookie('no_answer_count');
                 this.$store.commit('clearUserInfo');
                 this.$alert('기존 로그인된 계정을 로그아웃 했습니다.');
                 
@@ -68,6 +69,7 @@ export default {
             } catch (error) {
                 this.logMessage = error.response.data;
             } finally{
+                this.$router.go();
                 this.initForm();
             }
         },

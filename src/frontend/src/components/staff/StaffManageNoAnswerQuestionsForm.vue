@@ -1,5 +1,6 @@
 <template>
   <div>
+    미 답변 질문 수: {{questions.totalElements}}<br>
     <form @submit.prevent="submitForm">
             <select name="searchCondition" v-model="searchCondition">
                   <option value="nickName">닉네임</option>
@@ -27,7 +28,7 @@
                 <button type="submit">등록</button>
             </div>
           </form>
-        </div>
+      </div>
       <div v-else>
         <li>답변 내용: {{ question.answerContent}}</li>
       </div>
@@ -47,7 +48,7 @@
 </template>
 
 <script>
-import { staffSearchQuestionLists, staffRegisterAnswer} from '@/api/staff';
+import { staffSearchNoAnswerQuestions,staffRegisterAnswer} from '@/api/staff';
 
 
 export default {
@@ -57,9 +58,9 @@ export default {
        pageNum: 0,
        totalPageNum:'',
 
-       //답변 내용
+      //답변 내용
        answerContent:[],
-       //답변 추가 유무 확인
+      //답변 작성 여부 확인
        addAnswer:[],
 
        //질문 데이터
@@ -78,7 +79,7 @@ export default {
         let key = this.searchCondition;
         obj[key] = this.keyword;
 
-        const {data} = await staffSearchQuestionLists(obj);
+        const {data} = await staffSearchNoAnswerQuestions(obj);
         this.questions = data;
         this.totalPageNum = this.questions.totalPages;
     },
@@ -94,7 +95,7 @@ export default {
         //페이지 번호
         obj[page] = this.pageNum;
 
-        const {data} = await staffSearchQuestionLists(obj);
+        const {data} = await staffSearchNoAnswerQuestions(obj);
         this.questions = data;
         this.loadIsAnswerData();
     },
@@ -108,16 +109,18 @@ export default {
         obj[key] = this.keyword;
         obj[page] = this.pageNum;
 
-        const {data} = await staffSearchQuestionLists(obj);
+        const {data} = await staffSearchNoAnswerQuestions(obj);
         this.questions = data;
         this.loadIsAnswerData();
     },
     writeAnswer(questionId){
-      this.$set(this.addAnswer, questionId, true);
+      this.$set(this.addAnswer,questionId,true);
     },
     loadIsAnswerData(){
       for(let i in this.questions.content){
-        this.addAnswer[this.questions.content[i].questionId] = false;
+        if(this.questions.content[i].answerId ===null){
+          this.addAnswer[this.questions.content[i].questionId] = false;
+        }
       }
     },
     async loadQuestionData(){
@@ -125,7 +128,7 @@ export default {
         let page = "page";
         obj[page] = this.pageNum;
 
-        const {data} = await staffSearchQuestionLists(obj);
+        const {data} = await staffSearchNoAnswerQuestions(obj);
         this.questions = data;
     },
     async submitAnswer(questionId){
@@ -137,18 +140,18 @@ export default {
       await staffRegisterAnswer(data);
       this.loadQuestionData();
     }
-
    },
 
    async created(){
        const condition ={
             page: 0,
        }
-        const {data} = await staffSearchQuestionLists(condition);
+        const {data} = await staffSearchNoAnswerQuestions(condition);
         this.questions = data;
         this.totalPageNum = this.questions.totalPages;
         this.loadIsAnswerData();
     }
+
 }
 </script>
 

@@ -23,7 +23,6 @@ export default {
             const id = this.$route.params.id;
             const { data } = await viewUserAppointments(id);
             this.contentItems = data;
-            console.log(this.contentItems);
         },
         routeViewHospital(contentItem){
             const id = contentItem.hospitalId;

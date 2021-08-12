@@ -95,7 +95,6 @@ export default {
     },
     created(){
         this.hospitalId =  this.$route.params.hospitalId;
-        console.log(this.hospitalId);
     },
 }
 </script>

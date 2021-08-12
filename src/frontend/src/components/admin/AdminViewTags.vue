@@ -70,7 +70,6 @@ export default {
         this.pageNum = 0;
         const {data} = await adminSearchTags(this.tagName);
         this.tags = data;
-        console.log(this.tags);
     },
     //이전 페이지
     async prevPage(){

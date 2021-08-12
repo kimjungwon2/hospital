@@ -147,7 +147,6 @@ export default {
         this.memberId = this.$store.getters.getMemberId;
         const {data} = await staffViewStaffHospitalInfo(this.staffHosInfoId);
 
-        console.log(this.hospitalId);
         this.introduction = data.introduction;
         this.consultationHour = data.consultationHour;
         this.abnormality = data.abnormality;

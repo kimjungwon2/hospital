@@ -20,7 +20,7 @@
             </div>
           </li>
         </ul>
-        <button v-if="isLogin || isAdmin" @click.prevent="routeRegisterQuestion">질문 작성</button>
+        <button v-if="isLogin || isStaff || isAdmin" @click.prevent="routeRegisterQuestion">질문 작성</button>
     </div>
 
     <div v-else>
@@ -47,6 +47,9 @@ export default {
   computed:{
     isLogin(){
       return this.$store.getters.isLogin;
+    },
+    isStaff(){
+      return this.$store.getters.isStaff;
     },
     isAdmin(){
       return this.$store.getters.isAdmin;

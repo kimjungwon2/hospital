@@ -8,8 +8,8 @@
 
             제목: {{hospital.hospitalName}} | 발급일: {{licensingDate | formatYear}}
 
-              <div v-if= "countReviews !== 0">
-                  리뷰 개수: {{hospitalReviews[0].reviewCount}}
+              <div v-if= "countReview !== 0">
+                  리뷰 개수: {{countReview}}
                </div>
 
                <div v-if= "countTags !== 0">
@@ -27,9 +27,8 @@ export default {
         return {
             hospital:[],
             licensingDate:'',
-            
-            hospitalReviews: [],
-            countReviews:0,
+
+            countReview:0,
 
             tags:[],
             countTags:0,
@@ -70,8 +69,7 @@ export default {
         this.licensingDate = data.licensingDate;
 
         //List object
-        this.hospitalReviews = data.hospitalReviews;
-        this.countReviews = this.hospitalReviews.length;
+        this.countReview = this.hospital.hospitalReviewCount;
 
         //태그 생성
         this.tags = data.hospitalTags;

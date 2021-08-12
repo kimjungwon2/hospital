@@ -75,10 +75,85 @@ function staffModifyDoctor(doctorId,doctorData){
     return staff.put('/doctor/modify/'+doctorId, doctorData);
 }
 
+
+/*등록된 병원 검색 서비스*/
+
+function staffSearchBookmarkUsers(searchCondition){
+    return staff.get('/bookmark/search/user',
+    {
+        params:{
+            nickName: searchCondition.nickName,
+            memberIdName: searchCondition.memberIdName,
+            phoneNumber:searchCondition.phoneNumber,
+            page: searchCondition.page,
+        },
+    });
+}
+
+//리뷰 리스트 검색
+function staffSearchReviewLists(searchCondition){
+    return staff.get('/review/search',
+    {
+        params:{
+            nickName: searchCondition.nickName,
+            memberIdName: searchCondition.memberIdName,
+            page: searchCondition.page,
+        },
+    });
+}
+
+//리뷰 상세보기
+function staffViewReview(reviewId){
+    return staff.get('review/view/'+reviewId);
+}
+
+//답변하지 않은 질문 수 받아오기
+function staffNoAnswerCount(){
+    return staff.get('question/count');
+}
+
+//질문에 답변하기
+function staffRegisterAnswer(answerData){
+    return staff.post('question/answer',answerData);
+}
+
+//질문 리스트 검색
+function staffSearchQuestionLists(searchCondition){
+    return staff.get('/question/search',
+    {
+        params:{
+            nickName: searchCondition.nickName,
+            memberIdName: searchCondition.memberIdName,
+            page: searchCondition.page,
+        },
+    });
+}
+
+//답변이 없는 리스트 검색
+function staffSearchNoAnswerQuestions(searchCondition){
+    return staff.get('/question/noAnswer/search',
+    {
+        params:{
+            nickName: searchCondition.nickName,
+            memberIdName: searchCondition.memberIdName,
+            page: searchCondition.page,
+        },
+    });
+}
+
+
+
+
+
+
+
 export{
     staffRegisterDetailedHosInfo,staffRegisterStaffHospitalInfo,staffModifyStaffHosInfo,
     staffSearchTags, staffLinkHospitalTag, staffCreateTag,
     staffModifyHospital,staffViewHospital,staffDeleteHospitalTag,staffDeleteDetailedHosInfo,
     staffViewStaffHospitalInfo,staffDeleteStaffHosInfo,
-    staffCreateDoctor,staffDeleteDoctor,staffModifyDoctor
+    staffCreateDoctor,staffDeleteDoctor,staffModifyDoctor,
+
+    staffRegisterAnswer,staffNoAnswerCount,staffSearchBookmarkUsers,staffViewReview,
+    staffSearchReviewLists,staffSearchQuestionLists,staffSearchNoAnswerQuestions,
 }
