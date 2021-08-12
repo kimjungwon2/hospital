@@ -13,6 +13,7 @@ import {
     saveNoAnswerCountToCookie
 } from '@/utils/cookies';
 import { loginUser } from '@/api/index';
+import {staffNoAnswerCount} from '@/api/staff';
 
 Vue.use(Vuex);
 
@@ -59,8 +60,10 @@ export default new Vuex.Store({
             state.noAnswerCount = noAnswerCount;
         },
         minusAnswerCount(state){
-            state.noAnswerCount -=1;
-            saveNoAnswerCountToCookie(state.noAnswerCount);
+            if(state.noAnswerCount> 0){
+                state.noAnswerCount -=1;
+                saveNoAnswerCountToCookie(state.noAnswerCount);
+            }
         },
     },
     actions:{
@@ -73,6 +76,14 @@ export default new Vuex.Store({
             saveTokenToCookie(data.token);
             saveNickNameToCookie(data.nickName);
             saveMemberStatusToCookie(data.memberStatus);
+
+            //STAFF 권한이면 미답변 카운터 load하고 저장.
+            if(data.memberStatus === 'STAFF'){
+                const data = await staffNoAnswerCount();
+                const count = data.data;
+                commit('setNoAnswerCount',count);
+                saveNoAnswerCountToCookie(count);
+            }
             
             return data;
         },

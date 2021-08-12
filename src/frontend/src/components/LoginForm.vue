@@ -69,7 +69,6 @@ export default {
             } catch (error) {
                 this.logMessage = error.response.data;
             } finally{
-                this.$router.go();
                 this.initForm();
             }
         },

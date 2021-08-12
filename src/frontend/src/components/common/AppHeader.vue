@@ -24,7 +24,7 @@
           <ul class="navbar_user" v-if="isLogin||isStaff||isAdmin">
               <li v-if="isStaff">
                 <router-link to="/staff/questions">
-                  <font-awesome-icon icon="bell" /><span v-if="getNoAnswerCount!==0"> {{getNoAnswerCount}}</span>
+                  <font-awesome-icon icon="bell" /><span v-if="getNoAnswerCount!=0"> {{getNoAnswerCount}}</span>
                 </router-link>
               </li>
               <li><span>{{ $store.state.nickName }}</span></li>
@@ -40,19 +40,14 @@
 </template>
 
 <script>
-import {staffNoAnswerCount} from '@/api/staff';
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAmbulance,faBell } from '@fortawesome/free-solid-svg-icons'
-import { deleteCookie, saveNoAnswerCountToCookie } from '@/utils/cookies'
+import { deleteCookie} from '@/utils/cookies'
 
 library.add(faAmbulance, faBell)
 
 export default {
-  data() {
-    return {
-      count: '',
-    }
-  },
   computed:{
     isLogin(){
       return this.$store.getters.isLogin;
@@ -101,18 +96,7 @@ export default {
        const memberId= this.$store.getters.getMemberId;
        this.$router.push('/user/'+memberId+'/info');
     },
-    async getAnswerCount(){
-      const data = await staffNoAnswerCount();
-      this.count = data.data;
-      this.$store.commit('setNoAnswerCount',this.count);
-      saveNoAnswerCountToCookie(this.count);
-    }
   },
-  async created(){
-    if(this.$store.getters.isStaff){
-      await this.getAnswerCount();
-    }
-  }
 };
 </script>
 
