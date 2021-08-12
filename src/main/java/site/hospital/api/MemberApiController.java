@@ -65,7 +65,7 @@ public class MemberApiController {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-            return new ResponseEntity<>(new LoginMemberResponse(member.getId(),member.getNickName(), member.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(new LoginMemberResponse(member.getId(), member.getNickName(), member.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
 
     }
 

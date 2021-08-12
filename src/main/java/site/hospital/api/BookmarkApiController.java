@@ -87,16 +87,6 @@ public class BookmarkApiController {
         return result;
     }
 
-    //즐겨찾기 조회(병원 관계자)
-    @GetMapping("/staff/bookmark/search/{hospitalId}")
-    public List<SearchHospitalBookmarkResponse> searchHospitalBookmark(@PathVariable("hospitalId") Long hospitalId){
-        List<Bookmark> bookmarks = bookmarkService.searchHospitalBookmark(hospitalId);
-        List<SearchHospitalBookmarkResponse> result = bookmarks.stream()
-                .map(b->new SearchHospitalBookmarkResponse(b))
-                .collect(Collectors.toList());
-
-        return result;
-    }
 
     /* DTO */
 

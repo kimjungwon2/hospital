@@ -131,7 +131,7 @@ public class QuestionApiController {
 
     @Data
     private static class SearchHospitalQuestionResponse{
-        private Long reviewId;
+        private Long questionId;
         private String memberIdName;
         private String nickName;
         private String content;
@@ -140,7 +140,7 @@ public class QuestionApiController {
 
         public SearchHospitalQuestionResponse(Question question) {
             this.memberIdName = question.getMember().getMemberIdName();
-            this.reviewId = question.getId();
+            this.questionId = question.getId();
             this.nickName = question.getMember().getNickName();
             this.content = question.getContent();
 

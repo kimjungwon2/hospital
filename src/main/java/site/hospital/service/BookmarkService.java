@@ -79,11 +79,4 @@ public class BookmarkService {
 
         return Bookmark;
     }
-
-    //병원 즐겨찾기 조회
-    public List<Bookmark> searchHospitalBookmark(Long hospitalId){
-        List<Bookmark> Bookmark = bookmarkRepository.searchBookmark(null, hospitalId);
-
-        return Bookmark;
-    }
 }

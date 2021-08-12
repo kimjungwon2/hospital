@@ -106,7 +106,7 @@ public class ReviewApiController {
         return reviewService.searchReview(searchName, pageable);
     }
 
-    //관리자 리뷰 검색
+    //병원 관계자 리뷰 검색
     @GetMapping("/staff/review/search")
     public Page<AdminReviewsResponse> staffSearchReviews(ServletRequest servletRequest, @RequestParam(value="nickName",required = false) String nickName,
                                                          @RequestParam(value="memberIdName",required = false) String memberIdName,
@@ -122,6 +122,16 @@ public class ReviewApiController {
         Long total = reviews.getTotalElements();
 
         return new PageImpl<>(result, pageable, total);
+    }
+
+    //병원 관계자 상세보기
+    @GetMapping("/staff/review/view/{reviewId}")
+    public ReviewViewResponse staffViewReview(@PathVariable("reviewId") Long reviewId){
+
+        Review review = reviewService.viewHospitalReview(reviewId);
+        ReviewViewResponse result = new ReviewViewResponse(review);
+
+        return result;
     }
 
     //관리자 리뷰 검색
