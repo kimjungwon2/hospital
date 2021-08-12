@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="questions.totalElements!==0">
     미 답변 질문 수: {{questions.totalElements}}<br>
     <form @submit.prevent="submitForm">
             <select name="searchCondition" v-model="searchCondition">
@@ -44,6 +44,9 @@
         다음
       </button>
     </div>
+  </div>
+  <div v-else>
+    답변이 등록되지 않은 질문이 없습니다.
   </div>
 </template>
 
@@ -125,12 +128,14 @@ export default {
     },
     async loadQuestionData(){
         const obj ={};
+        
         let page = "page";
         obj[page] = this.pageNum;
-
         const {data} = await staffSearchNoAnswerQuestions(obj);
+
         this.questions = data;
     },
+
     async submitAnswer(questionId){
       const data ={
         memberId:this.$store.getters.getMemberId,
