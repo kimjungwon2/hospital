@@ -1,8 +1,10 @@
 spring:
+  profiles:
+    include:
+      - db
+      - jwt
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: raincar
     url: jdbc:mysql://localhost:3306/hospital?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
 
   jpa:
@@ -15,9 +17,6 @@ spring:
         default_batch_fetch_size: 500
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-
-jwt:
-  secret: dkjclvc
 
 logging.level:
   org.hibernate.SQL: debug

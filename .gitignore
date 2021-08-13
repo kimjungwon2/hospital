@@ -21,6 +21,8 @@ bin/
 
 ### IntelliJ IDEA ###
 .idea
+application-db.yml
+application-jwt.yml
 *.iws
 *.iml
 *.ipr

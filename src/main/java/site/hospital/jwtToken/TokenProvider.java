@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
+@PropertySource("classpath:application-jwt.yml")
 public class TokenProvider implements Serializable {
 
     private static final long serialVersionUID = -798416586417070603L;
