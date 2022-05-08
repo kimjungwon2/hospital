@@ -3,6 +3,7 @@ spring:
     include:
       - db
       - jwt
+      - aws
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/hospital?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul

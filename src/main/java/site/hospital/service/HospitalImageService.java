@@ -22,7 +22,6 @@ public class HospitalImageService {
 
     private final StaffHosRepository staffHosRepository;
 
-
     public List<HospitalImage> fileInfo(Long staffHosInfoId, List<MultipartFile> multipartFiles) throws Exception{
         StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosInfoId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
@@ -48,7 +47,6 @@ public class HospitalImageService {
         if(!file.exists()){
             file.mkdirs();
         }
-
 
         for (MultipartFile multipartFile : multipartFiles){
             // 파일이 비어 있지 않을 때 작업을 시작해야 오류가 나지 않는다
@@ -88,11 +86,9 @@ public class HospitalImageService {
 
                 // 저장된 파일로 변경하여 이를 보여주기 위함
                 file = new File(absolutePath + path + "/" + new_file_name);
-
                 multipartFile.transferTo(file);
             }
         }
-
         return fileList;
     }
 }
