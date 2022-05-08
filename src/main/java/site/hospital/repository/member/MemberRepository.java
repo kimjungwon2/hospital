@@ -6,7 +6,7 @@ import site.hospital.domain.member.Member;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member,Long>, MemberRepositoryCustom {
+public interface    MemberRepository extends JpaRepository<Member,Long>, MemberRepositoryCustom {
     //회원 이름 찾기
     List<Member> findByMemberIdName(String MemberIdName);
 

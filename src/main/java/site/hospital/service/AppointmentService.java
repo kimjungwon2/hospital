@@ -38,6 +38,7 @@ public class AppointmentService {
 
         return appointment.getId();
     }
+
     //관리자 전체 예약 조회
     public List<Appointment> searchAdminAppointment(){
         List<Appointment> appointments = appointmentRepository.searchAppointment(null,null);
