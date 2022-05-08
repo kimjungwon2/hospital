@@ -8,6 +8,6 @@ import site.hospital.repository.ReviewImageRepository;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ReviewImageService{
+public class ReviewImageService {
     private final ReviewImageRepository reviewImageRepository;
 }
