@@ -45,6 +45,10 @@ public class Hospital extends BaseEntity {
     @JoinColumn(name = "detailedHosInformation_id")
     private DetailedHosInformation detailedHosInformation;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospitalThumbnail_id")
+    private HospitalThumbnail hospitalThumbnail;
+
     //인허가 날짜
     private String licensingDate;
     private String hospitalName;
@@ -65,6 +69,11 @@ public class Hospital extends BaseEntity {
     public void changeDetailedHosInformation(DetailedHosInformation detailedHosInformation){
         this.detailedHosInformation = detailedHosInformation;
         detailedHosInformation.setHospital(this);
+    }
+
+    public void changeHospitalThumbnail(HospitalThumbnail hospitalThumbnail){
+        this.hospitalThumbnail = hospitalThumbnail;
+        hospitalThumbnail.setHospital(this);
     }
 
     //병원 수정

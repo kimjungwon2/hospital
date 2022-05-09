@@ -214,18 +214,6 @@ public class HospitalApiController {
         hospitalService.deleteDetailHospitalInformation(detailedHosInfoId);
     }
 
-    //관리자 상세 정보 등록
-    @PostMapping("/admin/hospital/register/detailed")
-    public CreateDetailedHosResponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
-        DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
-                .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
-                .numberHealthcareProvider(request.getNumberHealthcareProvider())
-                .hospitalLocation(request.getHospitalLocation()).hospitalAddress(request.getHospitalAddress()).build();
-
-        Long detailedHosId = hospitalService.registerDetailHospitalInformation(detailedHosInformation, request.getHospitalId());
-
-        return new CreateDetailedHosResponse(detailedHosId);
-    }
 
     //관리자 병원 추가 정보 등록
     @PostMapping("/admin/hospital/register/staff")
@@ -243,6 +231,31 @@ public class HospitalApiController {
         //추가 정보만 추가.
         Long id = hospitalService.adminRegisterStaffHosInfo(request.getHospitalId(), staffHosInformation);
         return new CreateStaffHosResponse(id);
+    }
+
+    //관리자 상세 정보 등록
+    @PostMapping("/admin/hospital/register/thumbnail")
+    public CreateDetailedHosResponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
+        DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
+                .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
+                .numberHealthcareProvider(request.getNumberHealthcareProvider())
+                .hospitalLocation(request.getHospitalLocation()).hospitalAddress(request.getHospitalAddress()).build();
+
+        Long detailedHosId = hospitalService.registerDetailHospitalInformation(detailedHosInformation, request.getHospitalId());
+
+        return new CreateDetailedHosResponse(detailedHosId);
+    }
+
+    //관리자 섬네일 등록
+    @PostMapping("/admin/hospital/register/detailed")
+    public CreateHospitalThumbnailResponse adminRegisterThumbnail(@RequestBody @Validated RegisterHospitalThumbnailRequest request){
+        HospitalThumbnail hospitalThumbnail = HospitalThumbnail.builder()
+                .originalName(request.getOriginalName())
+                .imageKey(request.getImageKey()).build();
+
+        Long hospitalThumbnailId = hospitalService.registerHospitalThumbnail(hospitalThumbnail, request.getHospitalId());
+
+        return new CreateHospitalThumbnailResponse(hospitalThumbnailId);
     }
 
 
@@ -295,6 +308,12 @@ public class HospitalApiController {
     }
 
     @Data
+    private static class CreateHospitalThumbnailResponse {
+        long id;
+        public CreateHospitalThumbnailResponse(long id){ this.id = id; }
+    }
+
+    @Data
     private static class CreateStaffHospitalRequest{
         Long hospitalId;
         String introduction;
@@ -333,6 +352,14 @@ public class HospitalApiController {
         private HospitalLocation hospitalLocation;
         private HospitalAddress hospitalAddress;
     }
+
+    @Data
+    private static class RegisterHospitalThumbnailRequest{
+        private Long hospitalId;
+        private String imageKey;
+        private String originalName;
+    }
+
 
     @Data
     private static class StaffCreateDetailedHospitalInfoRequest{

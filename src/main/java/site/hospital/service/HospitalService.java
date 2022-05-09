@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Doctor;
+import site.hospital.domain.HospitalThumbnail;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
@@ -14,6 +15,7 @@ import site.hospital.dto.hospital.admin.AdminModifyHospitalRequest;
 import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.dto.hospital.staff.StaffModifyHospitalRequest;
 import site.hospital.repository.DetailedHosRepository;
+import site.hospital.repository.HospitalThumbnailRepository;
 import site.hospital.repository.estimation.EstimationRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.StaffHosRepository;
@@ -40,6 +42,7 @@ public class HospitalService {
     private final HospitalViewRepository hospitalViewRepository;
     private final AdminHospitalSearchRepository adminHospitalSearchRepository;
     private final DetailedHosRepository detailedHosRepository;
+    private final HospitalThumbnailRepository hospitalThumbnailRepository;
     private final ReviewRepository reviewRepository;
     private final QuestionRepository questionRepository;
     private final EstimationRepository estimationRepository;
@@ -293,6 +296,21 @@ public class HospitalService {
         hospital.deleteDetailedHosId();
 
         detailedHosRepository.deleteById(detailedHosInfoId);
+    }
+
+    //병원 섬네일 등록하기
+    @Transactional
+    public Long registerHospitalThumbnail(HospitalThumbnail hospitalThumbnail, Long hospitalId){
+        Hospital hospital = hospitalRepository.findById(hospitalId).
+                orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+
+        //병원 섬네일 유무 확인
+        if(hospital.getDetailedHosInformation() !=null) throw new IllegalStateException("이미 섬네일이 있습니다.");
+
+        hospital.changeHospitalThumbnail(hospitalThumbnail);
+        hospitalThumbnailRepository.save(hospitalThumbnail);
+
+        return hospitalThumbnail.getId();
     }
 
     //관리자 병원 검색
