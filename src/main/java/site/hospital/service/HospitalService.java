@@ -298,21 +298,6 @@ public class HospitalService {
         detailedHosRepository.deleteById(detailedHosInfoId);
     }
 
-    //병원 섬네일 등록하기
-    @Transactional
-    public Long registerHospitalThumbnail(HospitalThumbnail hospitalThumbnail, Long hospitalId){
-        Hospital hospital = hospitalRepository.findById(hospitalId).
-                orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
-
-        //병원 섬네일 유무 확인
-        if(hospital.getDetailedHosInformation() !=null) throw new IllegalStateException("이미 섬네일이 있습니다.");
-
-        hospital.changeHospitalThumbnail(hospitalThumbnail);
-        hospitalThumbnailRepository.save(hospitalThumbnail);
-
-        return hospitalThumbnail.getId();
-    }
-
     //관리자 병원 검색
     public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition, Pageable pageable){
         return adminHospitalSearchRepository.adminSearchHospitals(condition, pageable);
@@ -381,5 +366,12 @@ public class HospitalService {
             detailedHosInformation.modifyDetailedHosInformation(modifyDetailedHosInformation);
         }
         return modifyHospital.getId();
+    }
+
+    //관리자 병원 섬네일 보기
+    public HospitalThumbnail viewThumbnail(Long thumbnailId){
+        HospitalThumbnail thumbnail = hospitalThumbnailRepository.findById(thumbnailId)
+                .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 썸네일이 존재하지 않습니다."));
+        return thumbnail;
     }
 }

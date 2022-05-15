@@ -22,6 +22,8 @@ public class AdminHospitalView {
     private String cityName;
 
     private Long detailedHosInfoId;
+    private Long staffHosInfoId;
+    private Long thumbnailId;
 
     private Integer numberHealthcareProvider;
     private Integer numberWard;
@@ -34,13 +36,11 @@ public class AdminHospitalView {
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    private Long staffHosInfoId;
-
     private List<AdminHospitalTagDTO> hospitalTags;
     private List<AdminReviewHospitalDTO> reviewHospitals;
     private List<AdminHospitalEstimationDTO> estimations;
 
-    public AdminHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId) {
+    public AdminHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId,Long thumbnailId) {
         this.hospitalId = hospital.getId();
         this.licensingDate = hospital.getLicensingDate();
         this.hospitalName = hospital.getHospitalName();
@@ -49,6 +49,7 @@ public class AdminHospitalView {
         this.medicalSubjectInformation = hospital.getMedicalSubjectInformation();
         this.businessCondition = hospital.getBusinessCondition();
         this.cityName = hospital.getCityName();
+
         if(detailedHosInfoId != null) {
             this.detailedHosInfoId = hospital.getDetailedHosInformation().getId();
             this.numberHealthcareProvider = hospital.getDetailedHosInformation().getNumberHealthcareProvider();;
@@ -64,6 +65,10 @@ public class AdminHospitalView {
         }
         if(staffHosInfoId != null) {
             this.staffHosInfoId = hospital.getStaffHosInformation().getId();
+        }
+
+        if(thumbnailId != null){
+            this.thumbnailId = hospital.getHospitalThumbnail().getId();
         }
 
         this.hospitalTags = hospital.getPostTags().stream().map(h-> new AdminHospitalTagDTO(h))

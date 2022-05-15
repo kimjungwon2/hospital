@@ -9,7 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.hospital.domain.HospitalThumbnail;
+import site.hospital.domain.hospital.Hospital;
+import site.hospital.repository.HospitalThumbnailRepository;
+import site.hospital.repository.hospital.HospitalRepository;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
@@ -26,16 +31,18 @@ import java.util.UUID;
 public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
+    private final HospitalRepository hospitalRepository;
+    private final HospitalThumbnailRepository hospitalThumbnailRepository;
 
     // S3 버킷 이름
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
 
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+    public String upload(MultipartFile multipartFile, String dirName, Long hospitalId) throws IOException {
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
 
-        return upload(uploadFile, dirName);
+        return upload(uploadFile, dirName, hospitalId);
     }
 
     //preSigned Upload
@@ -47,7 +54,7 @@ public class S3Uploader {
     }
 
     // S3로 파일 업로드하기
-    private String upload(File uploadFile, String dirName) {
+    private String upload(File uploadFile, String dirName, Long hospitalId) {
 
         //MimeType 찾기.
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
@@ -60,7 +67,30 @@ public class S3Uploader {
 
         String key = fileName.replace(dirName+"/",""); // 키 값 저장.
 
+        //DB에 정보 저장.
+        HospitalThumbnail hospitalThumbnail = HospitalThumbnail.builder()
+                .originalName(uploadFile.getName()) // 파일 원본 이름
+                .imageKey(key).build();
+
+        registerHospitalThumbnail(hospitalThumbnail,hospitalId);
+
         return uploadImageUrl;
+    }
+
+
+    //병원 섬네일 등록하기
+    @Transactional
+    private Long registerHospitalThumbnail(HospitalThumbnail hospitalThumbnail, Long hospitalId){
+        Hospital hospital = hospitalRepository.findById(hospitalId).
+                orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+
+        //병원 섬네일 유무 확인
+        if(hospital.getHospitalThumbnail() !=null) throw new IllegalStateException("이미 섬네일이 있습니다.");
+
+        hospital.changeHospitalThumbnail(hospitalThumbnail);
+        hospitalThumbnailRepository.save(hospitalThumbnail);
+
+        return hospitalThumbnail.getId();
     }
 
     // S3로 업로드

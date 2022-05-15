@@ -13,6 +13,7 @@ import site.hospital.dto.AdminHospitalSearchCondition;
 import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
+import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -28,13 +29,15 @@ public class AdminHospitalSearchRepository {
         QueryResults<AdminSearchHospitalDto> result = queryFactory
                 .select(new QAdminSearchHospitalDto(
                         hospital.id, detailedHosInformation.id,
-                        staffHosInformation.id, hospital.hospitalName,
+                        staffHosInformation.id, hospitalThumbnail.id,
+                        hospital.hospitalName,
                         hospital.businessCondition,
                         hospital.cityName,
                         hospital.phoneNumber))
                 .from(hospital)
                 .leftJoin(hospital.detailedHosInformation, detailedHosInformation)
                 .leftJoin(hospital.staffHosInformation, staffHosInformation)
+                .leftJoin(hospital.hospitalThumbnail, hospitalThumbnail)
                 .where(hospitalIdEq(condition.getHospitalId()),
                         hospitalNameLike(condition.getHospitalName()),
                         businessConditionEq(condition.getBusinessCondition()),

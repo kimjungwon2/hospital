@@ -66,7 +66,7 @@ public class HospitalViewRepository {
     private ViewHospitalDTO findHospital(Long hospitalId){
 
         ViewHospitalDTO result = queryFactory
-                .select(new QViewHospitalDTO(hospital.id, detailedHosInformation.id, hospital.staffHosInformation.id, hospital.licensingDate,hospital.hospitalName,
+                .select(new QViewHospitalDTO(hospital.id, detailedHosInformation.id, hospital.staffHosInformation.id, hospital.hospitalThumbnail.id, hospital.licensingDate,hospital.hospitalName,
                         hospital.phoneNumber, hospital.distinguishedName, hospital.medicalSubjectInformation,
                         hospital.businessCondition,hospital.cityName,
                         detailedHosInformation.hospitalAddress.landLotBasedSystem,

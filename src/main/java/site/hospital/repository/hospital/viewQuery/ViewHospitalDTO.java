@@ -13,6 +13,7 @@ public class ViewHospitalDTO {
     private Long hospitalId;
     private Long detailedHosId;
     private Long staffHosInfoId;
+    private Long hospitalThumbnailId;
     private String licensingDate;
     private String hospitalName;
     private String phoneNumber;
@@ -43,7 +44,7 @@ public class ViewHospitalDTO {
     private List<HospitalEstimationDTO> hospitalEstimations;
 
     @QueryProjection
-    public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId, String licensingDate, String hospitalName,
+    public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId, Long hospitalThumbnailId, String licensingDate, String hospitalName,
                            String phoneNumber, String distinguishedName,
                            String medicalSubjectInformation, BusinessCondition businessCondition,
                            String cityName, String landLotBasedSystem,
@@ -55,6 +56,7 @@ public class ViewHospitalDTO {
         this.hospitalId = hospitalId;
         this.detailedHosId = detailedHosId;
         this.staffHosInfoId = staffHosInfoId;
+        this.hospitalThumbnailId = hospitalThumbnailId;
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
         this.phoneNumber = phoneNumber;

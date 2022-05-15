@@ -24,7 +24,6 @@ import java.util.List;
 public class StaffHosService {
     private final StaffHosRepository staffHosRepository;
     private final HospitalRepository hospitalRepository;
-    private final HospitalImageService hospitalImageService;
     private final HospitalImageRepository hospitalImageRepository;
     private final JwtStaffAccessService jwtStaffAccessService;
 
@@ -94,19 +93,4 @@ public class StaffHosService {
         staffHosInformation.modifyStaffHosInformation(modifyStaffHosInformation);
     }
 
-    @Transactional
-    public void addHospitalPhoto(Long staffHosInfoId, List<MultipartFile> files) throws Exception{
-        List<HospitalImage> hospitalImages = hospitalImageService.fileInfo(staffHosInfoId,files);
-
-        //파일이 비어있으면 오류.
-        if(hospitalImages.isEmpty()){
-            throw new IllegalStateException("사진을 등록하세요");
-        }
-        else{
-            List<HospitalImage> hospitalBean = new ArrayList<>();
-            for(HospitalImage hospitalImage:hospitalImages){
-                hospitalImageRepository.save(hospitalImage);
-            }
-        }
-    }
 }

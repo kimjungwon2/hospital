@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.*;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
@@ -24,8 +25,10 @@ import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto
 import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 import site.hospital.service.HospitalService;
+import site.hospital.service.S3Uploader;
 
 import javax.servlet.ServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
 public class HospitalApiController {
 
     private final HospitalService hospitalService;
+    private final S3Uploader s3Uploader;
 
 
     //병원 전체 검색
@@ -185,9 +189,10 @@ public class HospitalApiController {
     @GetMapping("/admin/hospital/view")
     public AdminHospitalView viewHospital(@RequestParam(value="hospitalId",required = false) Long hospitalId,
                                           @RequestParam(value="detailedHosInfoId",required = false) Long detailedHosInfoId,
-                                          @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId){
+                                          @RequestParam(value="staffHosInfoId",required = false) Long staffHosInfoId,
+                                          @RequestParam(value="thumbnailId",required = false) Long thumbnailId){
         Hospital hospital = hospitalService.adminViewHospital(hospitalId);
-        AdminHospitalView adminHospitalView = new AdminHospitalView(hospital, detailedHosInfoId, staffHosInfoId);
+        AdminHospitalView adminHospitalView = new AdminHospitalView(hospital, detailedHosInfoId, staffHosInfoId, thumbnailId);
 
         return adminHospitalView;
     }
@@ -234,7 +239,7 @@ public class HospitalApiController {
     }
 
     //관리자 상세 정보 등록
-    @PostMapping("/admin/hospital/register/thumbnail")
+    @PostMapping("/admin/hospital/register/detailed")
     public CreateDetailedHosResponse adminCreateDetailedHosInfo(@RequestBody @Validated CreateDetailedHospitalInformationRequest request){
         DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
                 .numberPatientRoom(request.getNumberPatientRoom()).numberWard(request.getNumberWard())
@@ -247,17 +252,21 @@ public class HospitalApiController {
     }
 
     //관리자 섬네일 등록
-    @PostMapping("/admin/hospital/register/detailed")
-    public CreateHospitalThumbnailResponse adminRegisterThumbnail(@RequestBody @Validated RegisterHospitalThumbnailRequest request){
-        HospitalThumbnail hospitalThumbnail = HospitalThumbnail.builder()
-                .originalName(request.getOriginalName())
-                .imageKey(request.getImageKey()).build();
+    @PostMapping("/admin/hospital/register/thumbnail")
+    public String adminRegisterThumbnail(@RequestParam(value="imageFile", required=false) MultipartFile imageFile,
+                                         @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
+        String url =s3Uploader.upload(imageFile, "raw", hospitalId);
 
-        Long hospitalThumbnailId = hospitalService.registerHospitalThumbnail(hospitalThumbnail, request.getHospitalId());
-
-        return new CreateHospitalThumbnailResponse(hospitalThumbnailId);
+        return url;
     }
 
+    //관리자 섬네일 보기
+    @GetMapping("/admin/hospital/view/thumbnail")
+    public AdminViewThumbnail viewThumbnail(@RequestParam(value="thumbnailId",required = false) Long thumbnailId){
+        HospitalThumbnail hospitalThumbnail = hospitalService.viewThumbnail(thumbnailId);
+
+        return new AdminViewThumbnail(hospitalThumbnail);
+    }
 
     /* DTO */
     @Data
@@ -269,7 +278,6 @@ public class HospitalApiController {
         }
     }
 
-    /* DTO */
     @Data
     private static class StaffUpdateHospitalResponse{
         Long id;
@@ -307,11 +315,6 @@ public class HospitalApiController {
         public CreateDetailedHosResponse(long id){ this.id = id; }
     }
 
-    @Data
-    private static class CreateHospitalThumbnailResponse {
-        long id;
-        public CreateHospitalThumbnailResponse(long id){ this.id = id; }
-    }
 
     @Data
     private static class CreateStaffHospitalRequest{
@@ -354,12 +357,10 @@ public class HospitalApiController {
     }
 
     @Data
-    private static class RegisterHospitalThumbnailRequest{
+    private static class HospitalThumbnailRequest{
         private Long hospitalId;
-        private String imageKey;
-        private String originalName;
+        private MultipartFile multipartFile;
     }
-
 
     @Data
     private static class StaffCreateDetailedHospitalInfoRequest{
@@ -390,6 +391,15 @@ public class HospitalApiController {
         private String consultationHour;
         private String abnormality;
         private List<CreateDoctorRequest> doctors;
+    }
+
+    @Data
+    private static class AdminViewThumbnail{
+        private String imageKey;
+
+        public AdminViewThumbnail(HospitalThumbnail hospitalThumbnail) {
+            this.imageKey = hospitalThumbnail.getImageKey();
+        }
     }
 
 }

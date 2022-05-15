@@ -63,13 +63,6 @@ public class StaffHosApiController {
         return staffHosInfoView;
     }
 
-    //관리자 병원 추가 정보 사진 추가하기
-    @PostMapping("/admin/staffHosInfo/photo/register")
-    public void addHospitalPhotos(@RequestParam("staffHosInfoId") Long staffHosInfoId,
-                                  List<MultipartFile> files) throws Exception{
-        staffHosService.addHospitalPhoto(staffHosInfoId,files);
-    }
-
     //관리자 추가 정보 수정하기
     @PutMapping("/admin/staffHosInfo/modify/{staffHosId}")
     public void modifyStaffHosInfo(@PathVariable("staffHosId") Long staffHosId,

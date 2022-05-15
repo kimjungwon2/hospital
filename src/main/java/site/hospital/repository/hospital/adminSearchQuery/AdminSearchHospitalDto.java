@@ -9,6 +9,7 @@ public class AdminSearchHospitalDto {
     Long hospitalId;
     Long detailedHosId;
     Long staffHosInformationId;
+    Long thumbnailId;
     String hospitalName;
     BusinessCondition businessCondition;
     String cityName;
@@ -16,11 +17,13 @@ public class AdminSearchHospitalDto {
 
     @QueryProjection
     public AdminSearchHospitalDto(Long hospitalId, Long detailedHosId, Long staffHosInformationId,
+                                  Long thumbnailId,
                                   String hospitalName, BusinessCondition businessCondition,
                                   String cityName, String phoneNumber) {
         this.hospitalId = hospitalId;
         this.detailedHosId = detailedHosId;
         this.staffHosInformationId = staffHosInformationId;
+        this.thumbnailId = thumbnailId;
         this.hospitalName = hospitalName;
         this.businessCondition = businessCondition;
         this.cityName = cityName;
