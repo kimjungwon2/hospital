@@ -68,6 +68,7 @@ export default {
   },
   async created(){
     this.staffHosInfoId = this.$route.query.staffHosInfoId;
+
     if(this.staffHosInfoId!==null){
          const {data} = await adminViewStaffHospitalInfo(this.staffHosInfoId);
          this.staffHosInfo = data;

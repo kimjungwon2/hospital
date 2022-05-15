@@ -62,13 +62,14 @@ function adminCreateHospital(hospitalData){
 }
 
 //관리자 병원 상세 보기
-function adminViewHospital(hospitalId, detailedHosInfoId, staffHosInfoId){
+function adminViewHospital(hospitalId, detailedHosInfoId, staffHosInfoId,thumbnailId){
     return admin.get('/hospital/view',
     {
         params:{
             hospitalId:hospitalId,
             detailedHosInfoId: detailedHosInfoId,
             staffHosInfoId: staffHosInfoId,
+            thumbnailId:thumbnailId,
         },
     });
 }
@@ -107,6 +108,7 @@ function adminRegisterStaffHospitalInfo(staffHosInfo){
 function adminViewStaffHospitalInfo(staffHosInfoId){
     return admin.get('/staffHosInfo/'+staffHosInfoId);
 }
+
 
 //관리자 추가 병원 정보 수정
 function adminModifyStaffHosInfo(staffHosId, staffHosData){
@@ -156,6 +158,22 @@ function adminDeleteDoctor(doctorId){
 //관리자 병원 의사 수정
 function adminModifyDoctor(doctorId,doctorData){
     return admin.put('/doctor/modify/'+doctorId, doctorData);
+}
+
+//관리자 섬네일 등록하기
+function adminRegisterThumbnail(Data){
+    return admin.post('/hospital/register/thumbnail',Data);
+}
+
+
+//관리자 병원 섬네일 보기
+function adminViewThumbnail(thumbnailId){
+    return admin.get('/hospital/view/thumbnail',
+    {
+        params:{
+            thumbnailId:thumbnailId,
+        },
+    });
 }
 
 
@@ -252,14 +270,14 @@ export {
     adminAuthorizeMember,
 
     //병원
-    adminSearchHospitalLists,adminCreateHospital,
+    adminSearchHospitalLists,adminCreateHospital,adminViewThumbnail,
     adminViewHospital, adminModifyHospital,
     adminDeleteHospital,adminRegisterStaffHospitalInfo,
     adminViewStaffHospitalInfo,adminModifyStaffHosInfo,adminDeleteStaffHosInfo,
     adminDeleteHospitalTag,adminLinkHospitalTag, adminCreateHospitalEstimation,
     adminDeleteHospitalEstimation,adminModifyHospitalEstimation,adminDeleteDoctor,
     adminModifyDoctor,adminCreateDoctor,adminRegisterDetailedHosInfo,
-    adminDeleteDetailedHosInfo,
+    adminDeleteDetailedHosInfo,adminRegisterThumbnail,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,

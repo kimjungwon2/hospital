@@ -13,7 +13,7 @@
 
     <ul v-for="hospital in hospitals.content" :key="hospital.hospitalId" >
       <div>
-        <li @click="routeAdminViewHospital(hospital.hospitalId,hospital.detailedHosId,hospital.staffHosInformationId)">병원 번호: {{ hospital.hospitalId }} </li>
+        <li @click="routeAdminViewHospital(hospital.hospitalId,hospital.detailedHosId,hospital.staffHosInformationId,hospital.thumbnailId)">병원 번호: {{ hospital.hospitalId }} </li>
         <li v-if="hospital.detailedHosId!==null">상세 정보: {{ hospital.detailedHosId}}</li>
         <li v-else>상세 정보가 등록되지 않았습니다.</li>
         <li v-if="hospital.staffHosInformationId!==null">추가 정보: {{ hospital.staffHosInformationId }}</li>
@@ -70,9 +70,9 @@ export default {
         const {data} = await adminSearchHospitalLists(condition);
         this.hospitals = data;
     },
-    routeAdminViewHospital(hospitalId, detailedHosInfoId, staffHosInfoId){
+    routeAdminViewHospital(hospitalId, detailedHosInfoId, staffHosInfoId,thumbnailId){
       this.$router.push({name:'adminHospitalView',
-      query: {hospitalId:hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId}
+      query: {hospitalId:hospitalId, detailedHosInfoId:detailedHosInfoId, staffHosInfoId:staffHosInfoId,thumbnailId:thumbnailId}
       })
     },
     //병원 삭제

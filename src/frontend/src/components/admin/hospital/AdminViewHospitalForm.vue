@@ -233,7 +233,9 @@ export default {
         this.hospitalId = this.$route.query.hospitalId;
         const detailedHosInfoId = this.$route.query.detailedHosInfoId;
         const staffHosInfoId = this.$route.query.staffHosInfoId;
-        const {data} = await adminViewHospital(this.hospitalId,detailedHosInfoId,staffHosInfoId);
+        const thumbnailId = this.$route.query.thumbnailId;
+        const {data} = await adminViewHospital(this.hospitalId,detailedHosInfoId,staffHosInfoId,thumbnailId);
+
         this.hospital = data;
         this.hospitalTags=data.hospitalTags;
         this.reviews=data.reviewHospitals;

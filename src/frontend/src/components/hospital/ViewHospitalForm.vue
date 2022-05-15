@@ -6,7 +6,8 @@
       </ViewMapForm>
       <h1>병원 정보</h1>
 
-            제목: {{hospital.hospitalName}} | 발급일: {{licensingDate | formatYear}}
+            제목: {{hospital.hospitalName}} | 개업일: {{licensingDate | formatYear}} | 영업 상태 : {{hospital.businessCondition}} |
+            도시 이름: {{hospital.cityName}}
 
               <div v-if= "countReview !== 0">
                   리뷰 개수: {{countReview}}
@@ -15,6 +16,33 @@
                <div v-if= "countTags !== 0">
                  태그: {{hospitalTags}}
                </div>
+
+            <li>전화번호: {{hospital.phoneNumber}}</li>
+            <li>병원 종류: {{hospital.distinguishedName}}</li>
+            <li>과목: {{hospital.medicalSubjectInformation}}</li>
+            
+
+        <div v-if="hospital.detailedHosInfoId!==null">
+           <h4>상세 정보</h4>
+           <li>종업원 수: {{ hospital.numberHealthcareProvider}}</li>
+           <li>병실 수: {{ hospital.numberWard}}</li>
+           <li>환자실: {{ hospital.numberPatientRoom}}</li>
+            <h4>주소</h4>
+           <li>주소(번지): {{ hospital.landLotBasedSystem}}</li>
+           <li>도로명 주소: {{ hospital.roadBaseAddress}}</li>
+           <li>우편 번호: {{ hospital.zipCode}}</li>
+      </div>
+
+    <h2>병원 평가</h2>
+      <div v-if="hospitalEstimations.length===0">병원 평가가 없습니다.<br>
+      </div>
+      <div v-else>
+          <span v-for="estimation in estimations" :key="estimation.estimationId"> 
+              평가 리스트:<b>{{estimation.estimationList}}</b> 평가 등급:{{estimation.distinctionGrade}}
+              <font-awesome-icon icon="trash-alt" @click.prevent="deleteEstimation(estimation.estimationId)"/><br>
+          </span>
+      </div>
+
   </div>
 </template>
 
@@ -70,6 +98,7 @@ export default {
 
         //List object
         this.countReview = this.hospital.hospitalReviewCount;
+
 
         //태그 생성
         this.tags = data.hospitalTags;

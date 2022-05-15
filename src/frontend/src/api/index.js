@@ -55,4 +55,10 @@ function searchReview(searchName, page){
     });
 }
 
-export { signupUser, loginUser, searchHospital, searchReview };
+//관리자 이미지 업로드
+function uploadImage(data){
+    return instance.post(`admin/hospital/register/thumbnail`,
+    data);
+}
+
+export { signupUser, loginUser, searchHospital, searchReview, uploadImage };
