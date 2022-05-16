@@ -3,6 +3,7 @@
     <div class="staff__hospital__categories">
         <button class="hospital__category__btn"> 병원 정보 </button>
         <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
+        <button class="hospital__category__btn" @click.prevent="viewThumbnail"> 병원 섬네일 </button>
     </div>
       <StaffModifyHospitalModal :hospitalId="hospital.hospitalId" :hospital="hospital" v-if ="isModifyHospital===true" 
       @hospitalCancel="cancelModifyHospital" @hospitalLoad="staffLoadHospital"/>
@@ -59,7 +60,7 @@
       <div v-else>
           <span v-for="estimation in estimations" :key="estimation.estimationId"> 
               평가 리스트:<b>{{estimation.estimationList}}</b> 평가 등급:{{estimation.distinctionGrade}}
-              <font-awesome-icon icon="trash-alt" @click.prevent="deleteEstimation(estimation.estimationId)"/><br>
+              <br>
           </span>
       </div>
 
@@ -105,7 +106,16 @@ export default {
         viewStaffHospital(){
             this.$router.push({name:'StaffViewHospital',
                 query: {hospitalId:this.hospital.hospitalId,
-                    staffHosInfoId:this.hospital.staffHosInfoId}
+                    staffHosInfoId:this.hospital.staffHosInfoId,
+                    thumbnailId:this.hospital.thumbnailId}
+            }); 
+        },
+        //병원 섬네일 보기
+        viewThumbnail(){
+            this.$router.push({name:'staffThumbnail',
+                query: {hospitalId:this.hospital.hospitalId,
+                    staffHosInfoId:this.hospital.staffHosInfoId,
+                    thumbnailId:this.hospital.thumbnailId}
             }); 
         },
         //상세 정보 삭제
@@ -170,6 +180,7 @@ export default {
     async created(){
         const {data} = await staffViewHospital();
         this.hospital = data;
+
         this.memberId = this.$store.getters.getMemberId;
         this.hospitalTags=data.hospitalTags;
         this.estimations=data.estimations;

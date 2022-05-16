@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="staff__hospital__categories">
+        <button class="hospital__category__btn" @click.prevent=viewHospital> 병원 정보 </button>
+        <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
+        <button class="hospital__category__btn"> 병원 섬네일 </button>
+    </div>
      <h1>이미지 섬네일 업로드</h1>
 
     <!-- 섬네일이 없는 경우 -->
@@ -51,7 +56,7 @@
 
 <script>
 import {uploadImage} from '@/api/index';
-import {adminViewThumbnail, adminDeleteThumbnail} from '@/api/admin';
+import {staffViewThumbnail, staffDeleteThumbnail} from '@/api/staff';
 export default {
     data() {
         return {
@@ -64,6 +69,18 @@ export default {
         }
     },
     methods:{
+        //병원 정보 보기
+        viewHospital(){
+            this.$router.push(`/staff/view/hospital`); 
+        },
+        //병원 추가 정보 보기
+        viewStaffHospital(){
+            this.$router.push({name:'StaffViewHospital',
+                query: {hospitalId:this.$route.query.hospitalId,
+                    staffHosInfoId:this.$route.query.staffHosInfoId,
+                    thumbnailId:this.$route.query.thumbnailId}
+            }); 
+        },
         //이미지 등록 버튼
         onInputImage(event){
             this.hospitalImage = this.$refs.imageInput.files[0];
@@ -94,16 +111,16 @@ export default {
             console.log(`presigned:`+URL);
 
             //페이지 이동
-            this.$router.push('/admin/hospitals');
+            this.$router.push(`/staff/view/hospital`);
         },
 
         //섬네일 삭제 버튼
         async deleteThumbnail(thumbnailId){
             if(confirm('정말로 섬네일을 삭제하시겠습니까?')){
                 console.log(`섬네일 아이디:`+thumbnailId);
-                await adminDeleteThumbnail(thumbnailId);
+                await staffDeleteThumbnail(thumbnailId);
                 //페이지 이동
-                this.$router.push('/admin/hospitals');
+                this.$router.push(`/staff/view/hospital`);
             }
         }
 
@@ -113,9 +130,10 @@ export default {
         this.thumbnailId = this.$route.query.thumbnailId;
 
         if(this.thumbnailId!==null){
-            const {data} = await adminViewThumbnail(this.thumbnailId);
+            const {data} = await staffViewThumbnail(this.thumbnailId);
             this.imageKey = data.imageKey;
             this.imageUrl= this.imageUrl+this.imageKey;
+            console.log(`imageKey:`+this.imageKey);
             this.thumbnailId = data.thumbnailId;
         }
     }

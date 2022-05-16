@@ -1,9 +1,17 @@
 <template>
-  <div id="map" style="width:700px;height:500px;"></div>
+<div>
+  <div v-if="noMap" class="noImage" > <img src='@/assets/noMap.png'></div>
+  <div v-else class="map" id="map" style="width:700px;height:500px;"></div>
+</div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      noMap:false,
+    }
+  },
   props:{
       detailed:{
           type: Object,
@@ -27,6 +35,11 @@ export default {
   },
   methods: {
     initMap () {
+      if(this.detailed.latitude ===0 && this.detailed.longitude ===0){
+        this.noMap=true;
+        console.log('좌표 미등록');
+      }
+      else{
           const container = document.getElementById('map');
           const options = {
               center: new kakao.maps.LatLng(this.detailed.latitude, this.detailed.longitude),
@@ -38,17 +51,25 @@ export default {
           console.log('지도출력');
           const marker = new kakao.maps.Marker({
           position: markerPosition
-      });
+          });
            marker.setMap(map);
+      }
     },
   },
 }
 </script>
 
 <style>
+
 #map {
   position: relative;
   left:25%;
+}
+
+.noImage {
+  position:relative;
+  left:40%;
+  bottom:90%;
 }
 
 </style>

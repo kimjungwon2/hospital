@@ -76,6 +76,23 @@ function staffModifyDoctor(doctorId,doctorData){
 }
 
 
+//관계자 병원 섬네일 보기
+function staffViewThumbnail(thumbnailId){
+    return staff.get('/hospital/view/thumbnail',
+    {
+        params:{
+            thumbnailId:thumbnailId,
+        },
+    });
+}
+
+//관리자 섬네일 삭제하기
+function staffDeleteThumbnail(thumbnailId){
+    return staff.delete('/hospital/delete/thumbnail/'+thumbnailId);
+}
+
+
+
 /*등록된 병원 검색 서비스*/
 
 function staffSearchBookmarkUsers(searchCondition){
@@ -153,6 +170,7 @@ export{
     staffModifyHospital,staffViewHospital,staffDeleteHospitalTag,staffDeleteDetailedHosInfo,
     staffViewStaffHospitalInfo,staffDeleteStaffHosInfo,
     staffCreateDoctor,staffDeleteDoctor,staffModifyDoctor,
+    staffViewThumbnail,staffDeleteThumbnail,
 
     staffRegisterAnswer,staffNoAnswerCount,staffSearchBookmarkUsers,staffViewReview,
     staffSearchReviewLists,staffSearchQuestionLists,staffSearchNoAnswerQuestions,

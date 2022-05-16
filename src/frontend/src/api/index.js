@@ -61,4 +61,4 @@ function uploadImage(data){
     data);
 }
 
-export { signupUser, loginUser, searchHospital, searchReview, uploadImage };
+export { signupUser, loginUser, searchHospital, searchReview, uploadImage};

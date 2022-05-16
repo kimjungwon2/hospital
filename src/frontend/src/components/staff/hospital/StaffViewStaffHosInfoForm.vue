@@ -1,4 +1,11 @@
 <template>
+<div>
+  <div class="staff__hospital__categories">
+    <button class="hospital__category__btn" @click.prevent=viewHospital> 병원 정보 </button>
+    <button class="hospital__category__btn"> 추가 병원 정보 </button>
+    <button class="hospital__category__btn" @click.prevent="viewThumbnail"> 병원 섬네일 </button>
+  </div>
+
   <div v-if="staffHosInfoId===null">
         등록된 추가 정보가 없습니다. 
         <br>추가 정보 등록하기<font-awesome-icon icon="edit" @click.prevent="createHospital"/>
@@ -23,6 +30,7 @@
       수정하기<font-awesome-icon icon="edit" @click.prevent="editStaffHospitalInfo"/><br>
       삭제하기<font-awesome-icon icon="trash-alt" @click.prevent="deleteStaffHospitalInfo"/>
   </div>
+</div>
 </template>
 
 <script>
@@ -45,6 +53,18 @@ export default {
       }
   },
   methods:{
+    //병원 정보 보기
+    viewHospital(){
+            this.$router.push(`/staff/view/hospital`); 
+    },
+    //병원 섬네일 보기
+    viewThumbnail(){
+        this.$router.push({name:'staffThumbnail',
+            query: {hospitalId:this.$route.query.hospitalId,
+                staffHosInfoId:this.$route.query.staffHosInfoId,
+                thumbnailId:this.$route.query.thumbnailId}
+        }); 
+    },
     createHospital(){
       this.$router.push('/staff/register/'+this.hospitalId+'/staffHosInfo');
     },

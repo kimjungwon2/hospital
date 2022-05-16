@@ -160,11 +160,6 @@ function adminModifyDoctor(doctorId,doctorData){
     return admin.put('/doctor/modify/'+doctorId, doctorData);
 }
 
-//관리자 섬네일 등록하기
-function adminRegisterThumbnail(Data){
-    return admin.post('/hospital/register/thumbnail',Data);
-}
-
 
 //관리자 병원 섬네일 보기
 function adminViewThumbnail(thumbnailId){
@@ -174,6 +169,11 @@ function adminViewThumbnail(thumbnailId){
             thumbnailId:thumbnailId,
         },
     });
+}
+
+//관리자 섬네일 삭제하기
+function adminDeleteThumbnail(thumbnailId){
+    return admin.delete('/hospital/delete/thumbnail/'+thumbnailId);
 }
 
 
@@ -277,7 +277,7 @@ export {
     adminDeleteHospitalTag,adminLinkHospitalTag, adminCreateHospitalEstimation,
     adminDeleteHospitalEstimation,adminModifyHospitalEstimation,adminDeleteDoctor,
     adminModifyDoctor,adminCreateDoctor,adminRegisterDetailedHosInfo,
-    adminDeleteDetailedHosInfo,adminRegisterThumbnail,
+    adminDeleteDetailedHosInfo,adminDeleteThumbnail,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,

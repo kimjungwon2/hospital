@@ -99,6 +99,12 @@ const router =  new VueRouter({
           meta: { staff: true},
        },
        {
+            path:'/staff/thumbnail',
+            component:() => import('@/views/staff/hospital/StaffViewThumbnailPage.vue'),
+            name:'staffThumbnail',
+            meta: {staff: true},
+       },
+       {
           path:'/staff/register/:hospitalId/staffHosInfo',
           component: ()=> import('@/views/staff/hospital/StaffRegisterStaffHosInfoPage.vue'),
           meta: { staff: true},
