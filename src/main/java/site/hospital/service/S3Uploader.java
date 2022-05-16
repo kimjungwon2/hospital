@@ -2,7 +2,9 @@ package site.hospital.service;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
@@ -45,12 +47,12 @@ public class S3Uploader {
         return upload(uploadFile, dirName, hospitalId);
     }
 
-    //preSigned Upload
-    public String presignedUpload(MultipartFile multipartFile, String dirName) throws IOException {
+    // preSigned 받아오기
+    public String preSignedUpload(MultipartFile multipartFile, String dirName, Long hospitalId) throws IOException {
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
 
-        return getPreSignedURL(uploadFile, dirName);
+        return getPreSignedURL(uploadFile, dirName, hospitalId);
     }
 
     // S3로 파일 업로드하기
@@ -77,8 +79,74 @@ public class S3Uploader {
         return uploadImageUrl;
     }
 
+    //Presigned URL 획득
+    private String getPreSignedURL(File uploadFile, String dirName, Long hospitalId) {
+        String preSignedURL = "";
 
-    //병원 섬네일 등록하기
+        //MimeType 찾기.
+        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+        String firstType = fileTypeMap.getContentType(uploadFile.getName());
+        String mimeType = firstType.replace("image/","."); // mimeType(확장자 명)
+
+        // S3에 저장될 파일 이름
+        String fileName = dirName + "/" + UUID.randomUUID()+mimeType;
+
+        //유효기간 설정
+        Date expiration = new Date();
+        long expTimeMillis = expiration.getTime();
+        expTimeMillis += 1000 * 60 * 5; // 5분 설정.
+        expiration.setTime(expTimeMillis);
+
+        log.info(expiration.toString());
+
+        try {
+            GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                    new GeneratePresignedUrlRequest(bucket, fileName)
+                            .withMethod(HttpMethod.PUT)
+                            .withExpiration(expiration);
+
+            generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL,
+                    CannedAccessControlList.PublicRead.toString());
+
+            URL url = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
+
+            preSignedURL = url.toString();
+
+            log.info("Pre-Signed URL : " + url.toString());
+            removeNewFile(uploadFile); //로컬에 업로드 된 파일 삭제
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return preSignedURL;
+    }
+
+    //섬네일 삭제하기
+    public void deleteThumbnail(Long thumbnailId, String dirName){
+        HospitalThumbnail hospitalThumbnail = hospitalThumbnailRepository.findById(thumbnailId)
+                .orElseThrow(()->new IllegalStateException("등록되지 않은 섬네일입니다."));
+
+        //이미지 키 찾기
+        String imageKey = hospitalThumbnail.getImageKey();
+        String[] fileName = new String[3];
+
+        //3개의 파일 삭제
+        fileName[0] = dirName + "/" +imageKey; // 기존 폴더
+        fileName[1] = "w140" + "/" +imageKey; //w140 폴더
+        fileName[2] = "w600" + "/" +imageKey; //w600 폴더
+
+        //S3 이미지 연속해서 삭제.
+        for(int i = 0; i<3; i++){
+            DeleteObjectRequest request = new DeleteObjectRequest(bucket,fileName[i]);
+            amazonS3Client.deleteObject(request);
+        }
+
+        //이미지 DB 삭제
+        deleteHospitalThumbnail(thumbnailId,hospitalThumbnail);
+    }
+
+
+    //병원 섬네일 등록하기(DB)
     @Transactional
     private Long registerHospitalThumbnail(HospitalThumbnail hospitalThumbnail, Long hospitalId){
         Hospital hospital = hospitalRepository.findById(hospitalId).
@@ -92,6 +160,18 @@ public class S3Uploader {
 
         return hospitalThumbnail.getId();
     }
+
+    //병원 섬네일 삭제하기(DB)
+    @Transactional
+    private void deleteHospitalThumbnail(Long thumbnailId,HospitalThumbnail hospitalThumbnail){
+
+        Hospital hospital = hospitalRepository.findByHospitalThumbnail(hospitalThumbnail);
+        hospital.deleteHospitalThumbnailId();
+
+        //섬네일 DB 삭제
+        hospitalThumbnailRepository.deleteById(thumbnailId);
+    }
+
 
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {
@@ -119,33 +199,5 @@ public class S3Uploader {
         }
 
         return Optional.empty();
-    }
-
-    //Presigned URL 얻기
-    private String getPreSignedURL(File uploadFile, String dirName) {
-        String preSignedURL = "";
-        String fileName = dirName + "/" + uploadFile.getName();
-
-        Date expiration = new Date();
-        long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 5; // 5분 설정.
-        expiration.setTime(expTimeMillis);
-
-        log.info(expiration.toString());
-
-        try {
-            GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                    new GeneratePresignedUrlRequest(bucket, fileName)
-                            .withMethod(HttpMethod.GET)
-                            .withExpiration(expiration);
-            URL url = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
-            preSignedURL = url.toString();
-            log.info("Pre-Signed URL : " + url.toString());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return preSignedURL;
     }
 }

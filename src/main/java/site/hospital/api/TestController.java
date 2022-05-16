@@ -17,8 +17,8 @@ public class TestController {
 
 
     @PostMapping("/pre")
-        public String preSigned(@RequestParam(value = "images", required = false) MultipartFile multipartFile) throws IOException {
-        String preSignedInfo = s3Uploader.presignedUpload(multipartFile, "raw");
+        public String preSigned(@RequestParam(value = "images", required = false) MultipartFile multipartFile,Long hospitalId) throws IOException {
+        String preSignedInfo = s3Uploader.preSignedUpload(multipartFile, "raw", hospitalId);
 
         return preSignedInfo;
     }

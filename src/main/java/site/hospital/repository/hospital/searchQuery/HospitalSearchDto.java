@@ -12,6 +12,7 @@ public class HospitalSearchDto {
 
     private Long hospitalId;
     private String hospitalName;
+    private String imageKey;
     private BusinessCondition businessCondition;
     private String medicalSubjectInformation;
     private String roadBaseAddress;
@@ -19,11 +20,12 @@ public class HospitalSearchDto {
     private List<ReviewHospitalDto> reviewHospitals;
 
     @QueryProjection
-    public HospitalSearchDto(Long hospitalId, String hospitalName, BusinessCondition businessCondition,
+    public HospitalSearchDto(Long hospitalId, String hospitalName, String imageKey, BusinessCondition businessCondition,
                              String medicalSubjectInformation,
                              String roadBaseAddress) {
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;
+        this.imageKey = imageKey;
         this.businessCondition = businessCondition;
         this.medicalSubjectInformation = medicalSubjectInformation;
         this.roadBaseAddress = roadBaseAddress;

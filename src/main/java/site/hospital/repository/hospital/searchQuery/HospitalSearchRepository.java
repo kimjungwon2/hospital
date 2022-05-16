@@ -19,6 +19,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.QPostTag.postTag;
 import static site.hospital.domain.QTag.tag;
+import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
 
@@ -78,6 +79,7 @@ public class HospitalSearchRepository {
         List<HospitalSearchDto> content =  queryFactory
                 .select(new QHospitalSearchDto(hospital.id,
                         hospital.hospitalName,
+                        hospitalThumbnail.imageKey,
                         hospital.businessCondition,
                         hospital.medicalSubjectInformation,
                         detailedHosInformation.hospitalAddress.roadBaseAddress
@@ -85,6 +87,7 @@ public class HospitalSearchRepository {
                 )
                 .from(hospital)
                 .leftJoin(hospital.detailedHosInformation, detailedHosInformation)
+                .leftJoin(hospital.hospitalThumbnail, hospitalThumbnail)
                 .where( (hospitalNameLike(searchName)
                         .or(hospitalSubjectLike(searchName)
                         .or(tagNameLike(searchName))))

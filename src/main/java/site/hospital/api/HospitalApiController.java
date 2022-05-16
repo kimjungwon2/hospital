@@ -62,6 +62,7 @@ public class HospitalApiController {
         //NullPointerException 방지.
         Long detailedHosId;
         Long staffHosId;
+        Long hospitalThumbnailId;
 
         if(hospital.getDetailedHosInformation() == null) detailedHosId = null;
         else detailedHosId = hospital.getDetailedHosInformation().getId();
@@ -69,7 +70,10 @@ public class HospitalApiController {
         if(hospital.getStaffHosInformation() == null) staffHosId = null;
         else staffHosId = hospital.getStaffHosInformation().getId();
 
-        StaffHospitalView staffHospitalView = new StaffHospitalView(hospital, detailedHosId, staffHosId);
+        if(hospital.getHospitalThumbnail() == null) hospitalThumbnailId = null;
+        else hospitalThumbnailId = hospital.getHospitalThumbnail().getId();
+
+        StaffHospitalView staffHospitalView = new StaffHospitalView(hospital, detailedHosId, staffHosId,hospitalThumbnailId);
 
         return staffHospitalView;
     }
@@ -122,6 +126,29 @@ public class HospitalApiController {
     @DeleteMapping("/staff/{memberId}/detailedHos/delete/{detailedHosInfoId}")
     public void deleteDetailedHospitalInformation(ServletRequest servletRequest, @PathVariable("memberId") Long memberId, @PathVariable("detailedHosInfoId") Long detailedHosInfoId){
         hospitalService.staffDeleteDetailHospitalInformation(servletRequest, memberId, detailedHosInfoId);
+    }
+
+    //관계자 섬네일 등록
+    @PostMapping("/staff/hospital/register/thumbnail")
+    public String staffRegisterThumbnail(@RequestParam(value="imageFile", required=false) MultipartFile imageFile,
+                                         @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
+        String ImageURL = s3Uploader.upload(imageFile, "raw", hospitalId);
+
+        return ImageURL;
+    }
+
+    //관계자 섬네일 보기
+    @GetMapping("/staff/hospital/view/thumbnail")
+    public AdminViewThumbnail staffViewThumbnail(@RequestParam(value="thumbnailId",required = false) Long thumbnailId){
+        HospitalThumbnail hospitalThumbnail = hospitalService.viewThumbnail(thumbnailId);
+
+        return new AdminViewThumbnail(hospitalThumbnail);
+    }
+
+    //관계자 섬네일 삭제
+    @DeleteMapping("/staff/hospital/delete/thumbnail/{thumbnailId}")
+    public void staffDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId){
+        s3Uploader.deleteThumbnail(thumbnailId,"raw");
     }
 
     //관리자 병원 검색
@@ -255,9 +282,9 @@ public class HospitalApiController {
     @PostMapping("/admin/hospital/register/thumbnail")
     public String adminRegisterThumbnail(@RequestParam(value="imageFile", required=false) MultipartFile imageFile,
                                          @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
-        String url =s3Uploader.upload(imageFile, "raw", hospitalId);
+        String ImageURL = s3Uploader.upload(imageFile, "raw", hospitalId);
 
-        return url;
+        return ImageURL;
     }
 
     //관리자 섬네일 보기
@@ -266,6 +293,12 @@ public class HospitalApiController {
         HospitalThumbnail hospitalThumbnail = hospitalService.viewThumbnail(thumbnailId);
 
         return new AdminViewThumbnail(hospitalThumbnail);
+    }
+
+    //관리자 섬네일 삭제
+    @DeleteMapping("/admin/hospital/delete/thumbnail/{thumbnailId}")
+    public void adminDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId){
+        s3Uploader.deleteThumbnail(thumbnailId,"raw");
     }
 
     /* DTO */
@@ -395,9 +428,11 @@ public class HospitalApiController {
 
     @Data
     private static class AdminViewThumbnail{
+        private Long thumbnailId;
         private String imageKey;
 
         public AdminViewThumbnail(HospitalThumbnail hospitalThumbnail) {
+            this.thumbnailId = hospitalThumbnail.getId();
             this.imageKey = hospitalThumbnail.getImageKey();
         }
     }

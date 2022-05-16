@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 
 import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
+import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 
 public class HospitalRepositoryImpl implements HospitalRepositoryCustom{
@@ -24,6 +25,7 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom{
                 .from(hospital)
                 .leftJoin(hospital.detailedHosInformation, detailedHosInformation).fetchJoin()
                 .leftJoin(hospital.staffHosInformation, staffHosInformation).fetchJoin()
+                .leftJoin(hospital.hospitalThumbnail, hospitalThumbnail).fetchJoin()
                 .where(hospitalIdEq(hospitalId))
                 .fetchOne();
         return result;

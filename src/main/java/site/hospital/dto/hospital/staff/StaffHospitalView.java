@@ -35,11 +35,12 @@ public class StaffHospitalView {
     private BigDecimal longitude;
 
     private Long staffHosInfoId;
+    private Long thumbnailId;
 
     private List<StaffHospitalTagDTO> hospitalTags;
     private List<StaffHospitalEstimationDTO> estimations;
 
-    public StaffHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId) {
+    public StaffHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId, Long hospitalThumbnailId) {
         this.hospitalId = hospital.getId();
         this.licensingDate = hospital.getLicensingDate();
         this.hospitalName = hospital.getHospitalName();
@@ -65,6 +66,10 @@ public class StaffHospitalView {
 
         if(staffHosInfoId != null) {
             this.staffHosInfoId = hospital.getStaffHosInformation().getId();
+        }
+
+        if(hospitalThumbnailId != null) {
+            this.thumbnailId = hospital.getHospitalThumbnail().getId();
         }
 
         this.hospitalTags = hospital.getPostTags().stream().map(h-> new StaffHospitalTagDTO(h))

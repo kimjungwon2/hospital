@@ -35,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //허용 url
     private static final String[] PUBLIC_URI = {
             "/login","/signup","/search/hospital/**","/hospital/view/**","/images",
-            "/hospital/staffHosInfo/**","/hospital/review/**","/hospital/question/**","/admin/hospital/register/thumbnail/**"
+            "/hospital/staffHosInfo/**","/hospital/review/**",
+            "/hospital/question/**","/admin/hospital/register/thumbnail/**"
     };
 
     @Override

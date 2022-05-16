@@ -114,6 +114,10 @@ public class Hospital extends BaseEntity {
         this.detailedHosInformation = null;
     }
 
+    //fk 제거를 위해서 thumbnail 지우기
+    public void deleteHospitalThumbnailId(){
+        this.hospitalThumbnail = null;
+    }
 
     public void updateHospital(String licensingDate, String hospitalName, String phoneNumber,
                                String distinguishedName, String medicalSubjectInformation,
