@@ -26,9 +26,6 @@ public class StaffHosInformation extends BaseEntity {
 
     @OneToMany(mappedBy = "staffHosInformation", cascade = CascadeType.ALL)
     private List<Doctor> doctors = new ArrayList<>();
-    @OneToMany(mappedBy = "staffHosInformation", cascade = CascadeType.ALL)
-    private List<HospitalImage> hospitalImages = new ArrayList<>();
-
 
     private String introduction;
     private String consultationHour;
@@ -44,20 +41,6 @@ public class StaffHosInformation extends BaseEntity {
         doctors.add(doctor);
         doctor.setStaffHosInformation(this);
     }
-
-    public void addHospitalImages(HospitalImage hospitalImage){
-        hospitalImages.add(hospitalImage);
-        hospitalImage.setStaffHosInformation(this);
-    }
-
-    //사진 생성 메서드
-    public static StaffHosInformation createHospitalImage(StaffHosInformation staffHosInformation,List<HospitalImage> hospitalImages){
-        for(HospitalImage hospitalImage : hospitalImages){
-            staffHosInformation.addHospitalImages(hospitalImage);
-        }
-        return staffHosInformation;
-    }
-
 
     //생성 메서드
     public static StaffHosInformation createStaffHosInformation(StaffHosInformation staffHosInformation, List<Doctor> doctors){

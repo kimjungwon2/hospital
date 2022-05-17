@@ -45,6 +45,10 @@ public class Review extends BaseEntity {
         reviewHospitals.add(reviewHospital);
         reviewHospital.setReview(this);
     }
+    public void changeReviewImage(ReviewImage reviewImage){
+        this.reviewImage = reviewImage;
+        reviewImage.setReview(this);
+    }
 
     //리뷰 인증 승인
     public void approveCertification(ReviewAuthentication authenticationStatus){

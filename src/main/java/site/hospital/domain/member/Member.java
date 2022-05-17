@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.*;
-import site.hospital.domain.appointment.Appointment;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.review.Review;
 import site.hospital.domain.ReviewLike;
@@ -23,8 +22,6 @@ public class Member extends BaseTimeEntity {
     @Column(name= "member_id")
     private Long id;
 
-    @OneToMany(mappedBy = "member")
-    private List<Appointment> appointments = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "member")

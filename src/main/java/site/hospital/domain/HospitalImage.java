@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
+import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,33 +15,28 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalImage extends BaseEntity {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hospital_image_id")
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id")
-    StaffHosInformation staffHosInformation;
+    Hospital hospital;
 
-    @NotEmpty
-    private String fileName;
+    @Column(unique=true, nullable = false)
+    private String imageKey;
 
-    @NotEmpty
-    private String filePath;
-
-    private long fileSize;
+    private String originalName;
 
     //연관 관계 때문에 설정
-    public void setStaffHosInformation(StaffHosInformation staffHosInformation) {
-        this.staffHosInformation = staffHosInformation;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     @Builder
-    public HospitalImage(StaffHosInformation staffHosInformation, String fileName, String filePath, long fileSize) {
-        this.staffHosInformation = staffHosInformation;
-        this.fileName = fileName;
-        this.filePath = filePath;
-        this.fileSize = fileSize;
+    public HospitalImage(String originalName, String imageKey) {
+        this.originalName = originalName;
+        this.imageKey = imageKey;
     }
 }

@@ -25,7 +25,7 @@ import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto
 import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 import site.hospital.service.HospitalService;
-import site.hospital.service.S3Uploader;
+import site.hospital.service.ImageManagementService;
 
 import javax.servlet.ServletRequest;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class HospitalApiController {
 
     private final HospitalService hospitalService;
-    private final S3Uploader s3Uploader;
+    private final ImageManagementService imageManagementService;
 
 
     //병원 전체 검색
@@ -132,7 +132,7 @@ public class HospitalApiController {
     @PostMapping("/staff/hospital/register/thumbnail")
     public String staffRegisterThumbnail(@RequestParam(value="imageFile", required=false) MultipartFile imageFile,
                                          @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
-        String ImageURL = s3Uploader.upload(imageFile, "raw", hospitalId);
+        String ImageURL = imageManagementService.upload(imageFile, "raw", hospitalId);
 
         return ImageURL;
     }
@@ -148,7 +148,7 @@ public class HospitalApiController {
     //관계자 섬네일 삭제
     @DeleteMapping("/staff/hospital/delete/thumbnail/{thumbnailId}")
     public void staffDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId){
-        s3Uploader.deleteThumbnail(thumbnailId,"raw");
+        imageManagementService.deleteThumbnail(thumbnailId,"raw");
     }
 
     //관리자 병원 검색
@@ -282,7 +282,7 @@ public class HospitalApiController {
     @PostMapping("/admin/hospital/register/thumbnail")
     public String adminRegisterThumbnail(@RequestParam(value="imageFile", required=false) MultipartFile imageFile,
                                          @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
-        String ImageURL = s3Uploader.upload(imageFile, "raw", hospitalId);
+        String ImageURL = imageManagementService.upload(imageFile, "raw", hospitalId);
 
         return ImageURL;
     }
@@ -298,7 +298,7 @@ public class HospitalApiController {
     //관리자 섬네일 삭제
     @DeleteMapping("/admin/hospital/delete/thumbnail/{thumbnailId}")
     public void adminDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId){
-        s3Uploader.deleteThumbnail(thumbnailId,"raw");
+        imageManagementService.deleteThumbnail(thumbnailId,"raw");
     }
 
     /* DTO */

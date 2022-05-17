@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.*;
-import site.hospital.domain.appointment.Appointment;
 import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.estimation.Estimation;
@@ -29,13 +28,13 @@ public class Hospital extends BaseEntity {
     @OneToMany(mappedBy = "hospital")
     private List<PostTag> postTags = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
-    private List<Appointment> appointments = new ArrayList<>();
-    @OneToMany(mappedBy = "hospital")
     private List<Bookmark> bookmarks = new   ArrayList<>();
     @OneToMany(mappedBy = "hospital")
     private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "hospital")
     private List<ReviewHospital> reviewHospitals = new ArrayList<>();
+    @OneToMany(mappedBy = "hospital")
+    private List<HospitalImage> hospitalImages = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staffHosInformation_id")
@@ -74,6 +73,11 @@ public class Hospital extends BaseEntity {
     public void changeHospitalThumbnail(HospitalThumbnail hospitalThumbnail){
         this.hospitalThumbnail = hospitalThumbnail;
         hospitalThumbnail.setHospital(this);
+    }
+
+    public void changeHospitalImages(HospitalImage hospitalImage){
+        hospitalImages.add(hospitalImage);
+        hospitalImage.setHospital(this);
     }
 
     //병원 수정
