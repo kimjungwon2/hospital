@@ -185,6 +185,11 @@ function adminViewReviewLists(){
     return admin.get('/review');
 }
 
+//미승인 리뷰 갯수
+function adminUnapprovedReviewCount(){
+    return admin.get('/review/unapproved/count');
+}
+
 //리뷰 리스트 검색
 function adminSearchReviewLists(searchCondition){
     return admin.get('/review/search',
@@ -193,6 +198,16 @@ function adminSearchReviewLists(searchCondition){
             nickName: searchCondition.nickName,
             hospitalName: searchCondition.hospitalName,
             memberIdName: searchCondition.memberIdName,
+            page: searchCondition.page,
+        },
+    });
+}
+
+//리뷰 리스트 검색
+function adminSearchUnapprovedReviewLists(searchCondition){
+    return admin.get('/review/unapproved/search',
+    {
+        params:{
             page: searchCondition.page,
         },
     });
@@ -280,8 +295,8 @@ export {
     adminDeleteDetailedHosInfo,adminDeleteThumbnail,
 
     //리뷰
-    adminViewReviewLists, adminSearchReviewLists,
-    adminApproveReview, adminDeleteReview,adminViewReview,
+    adminViewReviewLists, adminSearchReviewLists,adminUnapprovedReviewCount,
+    adminApproveReview, adminDeleteReview,adminViewReview,adminSearchUnapprovedReviewLists,
 
     //태그
     adminViewTagsList, adminSearchTags, adminDeleteTag, adminCreateTag,

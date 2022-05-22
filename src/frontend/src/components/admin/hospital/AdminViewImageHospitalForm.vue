@@ -82,14 +82,11 @@ export default {
 
         //이미지 전송 버튼
         async submitForm(){
-            console.log(this.hospitalImage);
-            console.log("병원 이미지:"+this.hospitalImage, "병원 번호:"+this.$route.query.hospitalId);
             const data = new FormData();
             data.append("imageFile",this.hospitalImage);
             data.append("hospitalId",this.$route.query.hospitalId);
             
-
-            //Presigned 획득
+            
             const URL = await uploadImage(data);
             console.log(`presigned:`+URL);
 

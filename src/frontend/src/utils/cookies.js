@@ -22,6 +22,10 @@ function saveNoAnswerCountToCookie(value){
     document.cookie = `no_answer_count=${value}`;  
 }
 
+function saveUnapprovedReviewCountToCookie(value){
+    document.cookie = `review_count=${value}`;  
+}
+
 function getSearchNameFromCookie() {
   return document.cookie.replace(
     /(?:(?:^|.*;\s*)search_name\s*=\s*([^;]*).*$)|^.*$/,
@@ -42,6 +46,8 @@ function getMemberStatusFromCookie() {
     '$1',
   );
 }
+
+
 
 
 function getNickNameFromCookie() {
@@ -65,6 +71,13 @@ function getNoAnswerCountFromCookie() {
   );
 }
 
+function getUnapprovedReviewCountFromCookie() {
+  return document.cookie.replace(
+    /(?:(?:^|.*;\s*)review_count\s*=\s*([^;]*).*$)|^.*$/,
+    '$1',
+  );
+}
+
 function deleteCookie(value) {
   document.cookie = `${value}=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
 }
@@ -75,6 +88,7 @@ export{
     saveNickNameToCookie,
     saveTokenToCookie,
     saveNoAnswerCountToCookie,
+    saveUnapprovedReviewCountToCookie,
     saveMemberStatusToCookie,
     getMemberIdFromCookie,
     getSearchNameFromCookie,
@@ -82,5 +96,6 @@ export{
     getTokenFromCookie,
     getMemberStatusFromCookie,
     getNoAnswerCountFromCookie,
+    getUnapprovedReviewCountFromCookie,
     deleteCookie
 };

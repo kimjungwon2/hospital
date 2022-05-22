@@ -34,7 +34,7 @@
       </div>
 
     <h2>병원 평가</h2>
-      <div v-if="hospitalEstimations.length===0">병원 평가가 없습니다.<br>
+      <div v-if="estimations.length===0">병원 평가가 없습니다.<br>
       </div>
       <div v-else>
           <span v-for="estimation in estimations" :key="estimation.estimationId"> 
@@ -62,8 +62,7 @@ export default {
             countTags:0,
             hospitalTags:'',
 
-            hospitalEstimations:[],
-            countEstimations:0,
+            estimations:[],
             
             //부모에게 전달할 추가 병원 정보 ID
             detailed:{},
@@ -99,11 +98,13 @@ export default {
         //List object
         this.countReview = this.hospital.hospitalReviewCount;
 
-
         //태그 생성
         this.tags = data.hospitalTags;
         this.countTags = this.tags.length;
         this.createTags();
+
+        //병원 평가
+        this.estimations = this.hospital.hospitalEstimations;
 
         this.detailed = {
             landLotBasedSystem: this.hospital.landLotBasedSystem,

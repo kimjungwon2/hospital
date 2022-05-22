@@ -47,9 +47,6 @@ function registerUserReview(reviewData){
     return user.post('/review/register',reviewData);
 }
 
-function viewUserAppointments(memberId){
-    return user.get(memberId+'/appointments');
-}
 function viewUserQuestions(memberId){
     return user.get(memberId+'/questions');
 }
@@ -58,4 +55,4 @@ function viewUserQuestions(memberId){
 export{ viewUserInformation,isUserBookmark, userRegisterBookmark, isLikeReview,
     likeReview,registerUserQuestion,modifyUserInformation,
     viewUserBookmarks,viewUserReviews,registerUserReview,
-    viewUserAppointments,viewUserQuestions };
+    viewUserQuestions };

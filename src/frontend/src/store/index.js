@@ -6,14 +6,17 @@ import {
     getMemberStatusFromCookie, 
     getNickNameFromCookie, 
     getTokenFromCookie,
+    getUnapprovedReviewCountFromCookie,
     saveMemberIdToCookie,
     saveNickNameToCookie, 
     saveTokenToCookie, 
     saveMemberStatusToCookie,
-    saveNoAnswerCountToCookie
+    saveNoAnswerCountToCookie,
+    saveUnapprovedReviewCountToCookie
 } from '@/utils/cookies';
 import { loginUser } from '@/api/index';
 import {staffNoAnswerCount} from '@/api/staff';
+import {adminUnapprovedReviewCount} from '@/api/admin';
 
 Vue.use(Vuex);
 
@@ -24,6 +27,7 @@ export default new Vuex.Store({
         memberStatus: getMemberStatusFromCookie() || '',
         token: getTokenFromCookie() || '',
         noAnswerCount: getNoAnswerCountFromCookie()||'',
+        reviewCount: getUnapprovedReviewCountFromCookie()||'',
     },
     getters:{
         getMemberId(state){
@@ -31,6 +35,9 @@ export default new Vuex.Store({
         },
         getNoAnswerCount(state){
             return state.noAnswerCount;
+        },
+        getReviewCount(state){
+            return state.reviewCount;
         },
         isLogin(state){
             return state.memberStatus === 'NORMAL';
@@ -55,14 +62,24 @@ export default new Vuex.Store({
             state.memberStatus='';
             state.token='';
             state.noAnswerCount='';
+            state.reviewCount='';
         },
         setNoAnswerCount(state, noAnswerCount){
             state.noAnswerCount = noAnswerCount;
+        },
+        setUnapprovedReviewCount(state,reviewCount){
+            state.reviewCount = reviewCount;
         },
         minusAnswerCount(state){
             if(state.noAnswerCount> 0){
                 state.noAnswerCount -=1;
                 saveNoAnswerCountToCookie(state.noAnswerCount);
+            }
+        },
+        minusReviewCount(state){
+            if(state.reviewCount> 0){
+                state.reviewCount -=1;
+                saveUnapprovedReviewCountToCookie(state.reviewCount);
             }
         },
     },
@@ -83,6 +100,14 @@ export default new Vuex.Store({
                 const count = data.data;
                 commit('setNoAnswerCount',count);
                 saveNoAnswerCountToCookie(count);
+            }
+
+            //ADMIN 권한이면 미승인 리뷰 카운터 load하고 저장.
+            if(data.memberStatus === 'ADMIN'){
+                const data = await adminUnapprovedReviewCount();
+                const count = data.data;
+                commit('setUnapprovedReviewCount',count);
+                saveUnapprovedReviewCountToCookie(count);
             }
             
             return data;

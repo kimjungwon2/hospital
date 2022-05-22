@@ -91,6 +91,26 @@
                   <option value=1>1점</option>
             </select>
         </div>
+        
+        <!-- 이미지 업로드 -->
+         <div v-if="reviewReceipt==''" class="image-dropper">
+            병원 영수증 파일을 올려주세요
+            <input @change ='onInputImage' ref="imageInput" type="file" />
+         </div>
+        <!-- 이미지 업로드가 된 후, 미리보기 -->
+        <div v-else class = "file-upload-wrapper">
+                <div class="image-preview-container">
+                    <div class="image-preview-wrapper">
+                        <!-- 이미지 닫기-->
+                        <div class="image-delete-button" @click="imageDeleteButton">
+                                       x
+                        </div>
+                        <!--이미지 미리보기-->
+                        <img :src="uploadImage" />
+                    </div>
+                </div>
+        </div>
+
         <div class="button">
                    <button type="submit">리뷰 등록</button>
         </div>
@@ -114,22 +134,42 @@ export default {
             symptomRelief:1,
             cleanliness:1,
             waitTime:1,
+
+            reviewReceipt:'',
+            uploadImage:'',
         }
     },
     methods:{
+        //이미지 등록 버튼
+        onInputImage(event){
+            this.reviewReceipt = this.$refs.imageInput.files[0];
+
+            //이미지 미리보기
+            let input = event.target;
+            let reader = new FileReader(); 
+            reader.onload = (e) => { this.uploadImage = e.target.result; } 
+            reader.readAsDataURL(input.files[0]);
+        },
+
+        //이미지 삭제 버튼
+        imageDeleteButton(e) {
+            this.reviewReceipt = '';
+        },
+
         async submitForm(){
-            const reviewData ={
-                    hospitalId: this.hospitalId,
-                    memberId:this.memberId,
-                    disease:this.disease,
-                    content:this.content,
-                    recommendationStatus:this.recommendationStatus,
-                    sumPrice:this.sumPrice,
-                    kindness:this.kindness,
-                    symptomRelief:this.symptomRelief,
-                    cleanliness:this.cleanliness,
-                    waitTime:this.waitTime,
-            }
+
+            const reviewData = new FormData();
+            reviewData.append("hospitalId",this.hospitalId);
+            reviewData.append("memberId",this.memberId);
+            reviewData.append("disease",this.disease);
+            reviewData.append("content",this.content);
+            reviewData.append("recommendationStatus",this.recommendationStatus);
+            reviewData.append("sumPrice",this.sumPrice);
+            reviewData.append("kindness",this.kindness);
+            reviewData.append("symptomRelief",this.symptomRelief);
+            reviewData.append("cleanliness",this.cleanliness);
+            reviewData.append("waitTime",this.waitTime);
+            reviewData.append("imageFile",this.reviewReceipt);
 
             await registerUserReview(reviewData);
             this.$alert('리뷰 등록이 완료되었습니다.');
@@ -144,5 +184,111 @@ export default {
 </script>
 
 <style>
+
+.image-dropper{
+    border: 1px dashed green;
+    height: 200px;
+    background-color:darkseagreen;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display:flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-dropper input{
+    opacity:0;
+    width:100%;
+    height:100%;
+    position:absolute;
+    cursor:pointer;
+}
+
+.image-dropper:hover{
+    background-color:seagreen;
+    color:white;
+    transition:0.5s;
+}
+
+.image-button{
+    width:100%;
+    height:40px;
+    cursor: pointer;
+}
+
+.image-notice {
+    margin: 20px;
+    padding: 20px 40px;
+    border: 1px solid #dddddd;
+}
+
+.file-upload-wrapper {
+    margin: 20px;
+    border: 1px solid #dddddd;
+    background-color: #f4f4f4;
+    min-height: 350px;
+    font-size: 15px;
+    color: #888888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex-direction: row;
+}
+
+.image-preview-container{
+    display: flex;
+}
+
+
+.image-preview-wrapper {
+    padding: 10px;
+    position: relative;
+}
+
+.image-preview-wrapper>img {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    z-index: 10;
+}
+
+.image-preview-wrapper-upload {
+    margin: 10px;
+    padding-top: 20px;
+    background-color: #888888;
+    width: 300px;
+    height: 300px;
+    display:flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-preview-wrapper-upload input {
+    opacity:0;
+    width:100%;
+    height:100%;
+    position:relative;
+    cursor:pointer;
+}
+
+.image-delete-button {
+    position: absolute;
+    /* align-items: center; */
+    line-height: 18px;
+    z-index: 99;
+    font-size: 18px;
+    right: 5px;
+    top: 10px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #666666;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
 
 </style>

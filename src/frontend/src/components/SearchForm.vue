@@ -1,5 +1,5 @@
 <template>
-      <form @submit.prevent="searchForm">
+      <form class="searchHospital" @submit.prevent="searchForm">
         <div class="search">
             <label for="searchHospital"></label>
             <input id="searchHospital" type="text" v-model="searchName">

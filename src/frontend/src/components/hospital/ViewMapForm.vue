@@ -35,9 +35,8 @@ export default {
   },
   methods: {
     initMap () {
-      if(this.detailed.latitude ===0 && this.detailed.longitude ===0){
+      if((this.detailed.latitude ===0 && this.detailed.longitude ===0)||(this.detailed.latitude ==null)){
         this.noMap=true;
-        console.log('좌표 미등록');
       }
       else{
           const container = document.getElementById('map');
@@ -60,6 +59,10 @@ export default {
 </script>
 
 <style>
+img{
+  width:700px;
+  height:500px;
+}
 
 #map {
   position: relative;
@@ -68,7 +71,7 @@ export default {
 
 .noImage {
   position:relative;
-  left:40%;
+  left:25%;
   bottom:90%;
 }
 

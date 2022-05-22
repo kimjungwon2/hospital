@@ -49,11 +49,6 @@ const router =  new VueRouter({
            meta: { login: true},
        },
        {
-           path:'/user/:id/appointments',
-           component: ()=> import('@/views/user/UserAppointmentsPage.vue'),
-           meta: { login: true},
-       },
-       {
            path:'/user/hospital/:hospitalId/register/review',
            component: ()=> import('@/views/user/UserRegisterReviewPage.vue'),
            meta: { login: true},
@@ -127,11 +122,6 @@ const router =  new VueRouter({
             meta: { admin: true},
        },
        {
-            path:'/admin/appointments',
-            component: () => import('@/views/admin/ManageAppointmentsPage.vue'),
-            meta: { admin: true},
-       },
-       {
             path:'/admin/hospitals',
             component: () => import('@/views/admin/hospital/ManageHospitalsPage.vue'),
             meta: { admin: true},
@@ -160,6 +150,11 @@ const router =  new VueRouter({
        {
             path:'/admin/reviews',
             component: () => import('@/views/admin/review/ManageReviewsPage.vue'),
+            meta: { admin: true},
+       },
+       {
+            path:'/admin/reviews/unapproved',
+            component: () => import('@/views/admin/review/ViewUnapprovedReviewPage.vue'),
             meta: { admin: true},
        },
        {

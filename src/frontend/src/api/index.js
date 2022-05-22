@@ -61,4 +61,9 @@ function uploadImage(data){
     data);
 }
 
-export { signupUser, loginUser, searchHospital, searchReview, uploadImage};
+//사용자 리뷰 등록하기
+function registerUserReview(requestData){
+    return instance.post('/user/review/register',requestData);
+}
+
+export { signupUser, loginUser, searchHospital, searchReview, uploadImage, registerUserReview};
