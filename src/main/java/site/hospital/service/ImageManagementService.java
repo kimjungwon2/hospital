@@ -14,9 +14,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.HospitalThumbnail;
+import site.hospital.domain.ReviewImage;
 import site.hospital.domain.hospital.Hospital;
+import site.hospital.domain.review.Review;
+import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.repository.HospitalThumbnailRepository;
+import site.hospital.repository.ReviewImageRepository;
 import site.hospital.repository.hospital.HospitalRepository;
+import site.hospital.repository.review.ReviewRepository;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
@@ -35,16 +40,27 @@ public class ImageManagementService {
     private final AmazonS3Client amazonS3Client;
     private final HospitalRepository hospitalRepository;
     private final HospitalThumbnailRepository hospitalThumbnailRepository;
+    private final ReviewImageRepository reviewImageRepository;
+    private final ReviewRepository reviewRepository;
 
     // S3 버킷 이름
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
 
-    public String upload(MultipartFile multipartFile, String dirName, Long hospitalId) throws IOException {
+    //섬네일 파일 업로드
+    public String thumbnailUpload(MultipartFile multipartFile, String dirName, Long hospitalId) throws IOException {
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
 
-        return upload(uploadFile, dirName, hospitalId);
+        return thumbnailUpload(uploadFile, dirName, hospitalId);
+    }
+
+    //리뷰 영수증 이미지 업로드
+    public String reviewReceiptUpload(MultipartFile multipartFile, String dirName, Long reviewId) throws IOException {
+        File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
+                .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
+
+        return reviewImageUpload(uploadFile, dirName, reviewId);
     }
 
     // preSigned 받아오기
@@ -55,15 +71,22 @@ public class ImageManagementService {
         return getPreSignedURL(uploadFile, dirName, hospitalId);
     }
 
-    // S3로 파일 업로드하기
-    private String upload(File uploadFile, String dirName, Long hospitalId) {
+    // S3로 섬네일 파일 업로드하기
+    private String thumbnailUpload(File uploadFile, String dirName, Long hospitalId) {
 
-        //MimeType 찾기.
-        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
-        String firstType = fileTypeMap.getContentType(uploadFile.getName());
-        String mimeType = firstType.replace("image/","."); // mimeType
+        //확장자
+        String uploadName = uploadFile.getName();
+        String extension = uploadName.substring(uploadName.lastIndexOf(".")+1);
 
-        String fileName = dirName + "/" + UUID.randomUUID()+mimeType; // S3에 저장된 파일 이름
+        //이미지 파일 확장자가 아닌 경우 exception 발생.
+        if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")
+                &&!extension.equals("jpeg")
+                &&!extension.equals("jpg")&&!extension.equals("png") &&!extension.equals("gif")
+                &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
+            throw new IllegalStateException("이미지 확장자가 아닙니다.");
+        }
+
+        String fileName = dirName + "/" + UUID.randomUUID() + "." + extension; // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         removeNewFile(uploadFile);
 
@@ -78,6 +101,39 @@ public class ImageManagementService {
 
         return uploadImageUrl;
     }
+
+    // S3로 리뷰 영수증 업로드
+    private String reviewImageUpload(File uploadFile, String dirName, Long reviewId) {
+
+        //확장자 찾기
+        String uploadName = uploadFile.getName();
+        String extension = uploadName.substring(uploadName.lastIndexOf(".")+1);
+
+        //이미지 파일 확장자가 아닌 경우 exception 발생.
+        if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")
+                &&!extension.equals("jpeg")
+                &&!extension.equals("jpg")&&!extension.equals("png") &&!extension.equals("gif")
+                &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
+            throw new IllegalStateException("이미지 확장자가 아닙니다.");
+        }
+
+        String fileName = dirName + "/" + UUID.randomUUID()+ "." + extension; // S3에 저장된 파일 이름
+        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+        removeNewFile(uploadFile);
+
+        String key = fileName.replace(dirName+"/",""); // 키 값 저장.
+
+        //DB에 정보 저장.
+        ReviewImage reviewImage = ReviewImage.builder()
+                .originalName(uploadFile.getName()) // 파일 원본 이름
+                .imageKey(key).build();
+
+        registerReviewImage(reviewImage, reviewId);
+
+        return uploadImageUrl;
+    }
+
+
 
     //Presigned URL 획득
     private String getPreSignedURL(File uploadFile, String dirName, Long hospitalId) {
@@ -172,6 +228,30 @@ public class ImageManagementService {
         hospitalThumbnailRepository.deleteById(thumbnailId);
     }
 
+    //리뷰 영수증 저장(DB)
+    @Transactional
+    private Long registerReviewImage(ReviewImage reviewImage, Long reviewId){
+        Review review = reviewRepository.findById(reviewId).
+                orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+
+        //병원 섬네일 유무 확인
+        if(review.getReviewImage() !=null) throw new IllegalStateException("이미 리뷰 영수증 인증이 있습니다.");
+
+        //FK 설정
+        review.changeReviewImage(reviewImage);
+        //영수증 인증 대기
+        review.changeAuthenticationStatus(ReviewAuthentication.WAITING);
+
+        reviewImageRepository.save(reviewImage);
+
+        return reviewImage.getId();
+    }
+
+    //리뷰 영수증 사진 삭제하기(DB)
+    @Transactional
+    private void deleteReviewImage(Long reviewImageId){
+        reviewRepository.deleteById(reviewImageId);
+    }
 
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {

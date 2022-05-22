@@ -1,6 +1,8 @@
 package site.hospital.domain.review;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import site.hospital.domain.ReviewImage;
 import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.ReviewLike;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +53,12 @@ public class Review extends BaseEntity {
         reviewImage.setReview(this);
     }
 
+
+    //리뷰 인증 상태 변경
+    public void changeAuthenticationStatus(ReviewAuthentication authenticationStatus) {
+        this.authenticationStatus = authenticationStatus;
+    }
+
     //리뷰 인증 승인
     public void approveCertification(ReviewAuthentication authenticationStatus){
         this.authenticationStatus = authenticationStatus;
@@ -58,16 +67,13 @@ public class Review extends BaseEntity {
     /*
         생성 메서드
     */
-    public Review(ReviewImage reviewImage){
-        if(reviewImage == null) this.authenticationStatus = authenticationStatus.NONE;
-        else this.authenticationStatus = authenticationStatus.WAITING;
-    }
-
-    public Review(){
+    public Review(ReviewAuthentication authenticationStatus){
+        this.authenticationStatus = authenticationStatus;
     }
 
     public static Review createReview(Member member, ReviewHospital... reviewHospitals){
-        Review review = new Review();
+        //인증 상태 NONE으로 변경
+        Review review = new Review(ReviewAuthentication.NONE);
 
         review.changeMember(member);
 

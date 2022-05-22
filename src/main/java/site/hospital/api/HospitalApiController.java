@@ -132,7 +132,7 @@ public class HospitalApiController {
     @PostMapping("/staff/hospital/register/thumbnail")
     public String staffRegisterThumbnail(@RequestParam(value="imageFile", required=false) MultipartFile imageFile,
                                          @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
-        String ImageURL = imageManagementService.upload(imageFile, "raw", hospitalId);
+        String ImageURL = imageManagementService.thumbnailUpload(imageFile, "thumbnail", hospitalId);
 
         return ImageURL;
     }
@@ -148,7 +148,7 @@ public class HospitalApiController {
     //관계자 섬네일 삭제
     @DeleteMapping("/staff/hospital/delete/thumbnail/{thumbnailId}")
     public void staffDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId){
-        imageManagementService.deleteThumbnail(thumbnailId,"raw");
+        imageManagementService.deleteThumbnail(thumbnailId,"thumbnail");
     }
 
     //관리자 병원 검색
@@ -282,7 +282,7 @@ public class HospitalApiController {
     @PostMapping("/admin/hospital/register/thumbnail")
     public String adminRegisterThumbnail(@RequestParam(value="imageFile", required=false) MultipartFile imageFile,
                                          @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
-        String ImageURL = imageManagementService.upload(imageFile, "raw", hospitalId);
+        String ImageURL = imageManagementService.thumbnailUpload(imageFile, "thumbnail", hospitalId);
 
         return ImageURL;
     }
@@ -298,7 +298,7 @@ public class HospitalApiController {
     //관리자 섬네일 삭제
     @DeleteMapping("/admin/hospital/delete/thumbnail/{thumbnailId}")
     public void adminDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId){
-        imageManagementService.deleteThumbnail(thumbnailId,"raw");
+        imageManagementService.deleteThumbnail(thumbnailId,"thumbnail");
     }
 
     /* DTO */

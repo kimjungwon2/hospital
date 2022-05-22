@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.hospital.domain.review.Review;
 import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.domain.reviewHospital.EvaluationCriteria;
@@ -15,11 +16,12 @@ import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.ReviewLike;
 import site.hospital.dto.AdminReviewSearchCondition;
 import site.hospital.dto.StaffReviewSearchCondition;
-import site.hospital.dto.review.StaffSearchReviewDTO;
 import site.hospital.repository.review.query.ReviewSearchDto;
+import site.hospital.service.ImageManagementService;
 import site.hospital.service.ReviewService;
 
 import javax.servlet.ServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,24 +30,31 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReviewApiController {
     private final ReviewService reviewService;
+    private final ImageManagementService imageManagementService;
 
     //리뷰 등록
     @PostMapping("/user/review/register")
-    public CreateReviewResponse saveReview(@RequestBody @Validated CreateReviewRequest request){
+    public CreateReviewResponse saveReview(@RequestPart(value="imageFile", required=false) MultipartFile imageFile
+            ,@ModelAttribute @Validated CreateReviewRequest requestData) throws IOException {
         EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
-                .sumPrice(request.getSumPrice()).kindness(request.getKindness())
-                .symptomRelief(request.getSymptomRelief()).cleanliness(request.getCleanliness())
-                .waitTime(request.getWaitTime()).build();
+                .sumPrice(requestData.getSumPrice()).kindness(requestData.getKindness())
+                .symptomRelief(requestData.getSymptomRelief()).cleanliness(requestData.getCleanliness())
+                .waitTime(requestData.getWaitTime()).build();
 
         ReviewHospital reviewHospital = ReviewHospital.builder()
-                .content(request.getContent()).disease(request.getDisease())
-                .recommendationStatus(request.getRecommendationStatus()).evCriteria(evaluationCriteria)
+                .content(requestData.getContent()).disease(requestData.getDisease())
+                .recommendationStatus(requestData.getRecommendationStatus()).evCriteria(evaluationCriteria)
                 .build();
 
-        Long id= reviewService.reviewRegister(request.getMemberId(),request.getHospitalId(),
+        Long reviewId= reviewService.reviewRegister(requestData.getMemberId(),requestData.getHospitalId(),
                 reviewHospital);
 
-        return new CreateReviewResponse(id);
+        //영수증 파일 저장.
+        if(imageFile!=null) {
+            imageManagementService.reviewReceiptUpload(imageFile, "receipt", reviewId);
+        }
+
+        return new CreateReviewResponse(reviewId);
     }
 
     //병원에 등록된 리뷰 보기.
@@ -145,6 +154,27 @@ public class ReviewApiController {
                 .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
 
         Page<Review> reviews = reviewService.adminSearchReviews(condition,pageable);
+        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
+                .collect(Collectors.toList());
+
+        Long total = reviews.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
+    }
+
+    //관리자 미승인 리뷰 갯수
+    @GetMapping("/admin/review/unapproved/count")
+    public Long adminUnapprovedReviewCount(){
+        Long unapprovedCount = reviewService.adminUnapprovedReviewCount();
+
+        return unapprovedCount;
+    }
+
+    //관리자 미승인 리뷰 검색
+    @GetMapping("/admin/review/unapproved/search")
+    public Page<AdminReviewsResponse> adminSearchReviews(Pageable pageable){
+
+        Page<Review> reviews = reviewService.adminSearchUnapprovedReviews(pageable);
         List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
                 .collect(Collectors.toList());
 
@@ -316,6 +346,8 @@ public class ReviewApiController {
         private LocalDateTime createdDate;
         private String nickName;
         private List<ReviewViewDto> reviewHospitals;
+        private Long imageId;
+        private String imageKey;
 
 
         public ReviewViewResponse(Review reviews) {
@@ -326,6 +358,13 @@ public class ReviewApiController {
             this.reviewHospitals = reviews.getReviewHospitals().stream()
                     .map(reviewHospital -> new ReviewViewDto(reviewHospital))
                     .collect(Collectors.toList());
+
+            if(reviews.getReviewImage()!=null) {
+                this.imageId = reviews.getReviewImage().getId();
+            }
+            if(this.imageId != null) {
+                this.imageKey = reviews.getReviewImage().getImageKey();
+            }
         }
     }
 

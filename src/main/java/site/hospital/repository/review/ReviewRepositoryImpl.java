@@ -3,25 +3,24 @@ package site.hospital.repository.review;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.review.Review;
+import site.hospital.domain.review.ReviewAuthentication;
 import site.hospital.dto.AdminReviewSearchCondition;
 import site.hospital.dto.StaffReviewSearchCondition;
-import site.hospital.dto.review.QStaffSearchReviewDTO;
-import site.hospital.dto.review.StaffSearchReviewDTO;
+
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static site.hospital.domain.QReviewLike.reviewLike;
 import static site.hospital.domain.review.QReview.review;
 import static site.hospital.domain.member.QMember.member;
 import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.domain.QReviewImage.reviewImage;
 
 
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
@@ -50,6 +49,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
                 .select(review)
                 .from(review)
                 .join(review.member, member).fetchJoin()
+                .leftJoin(review.reviewImage, reviewImage).fetchJoin()
                 .where(reviewIdEq(reviewId))
                 .fetchOne();
 
@@ -107,6 +107,34 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
                         nickNameEq(condition.getNickName()),
                         hospitalNameLike(condition.getHospitalName()),
                         memberIdNameLike(condition.getMemberIdName()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Review> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    //미승인 리뷰의 갯수
+    @Override
+    public Long adminUnapprovedReviewCount(){
+        return queryFactory.select(review)
+                .from(review)
+                .where(review.authenticationStatus.eq(ReviewAuthentication.WAITING))
+                .fetchCount();
+    }
+
+    //미승인 리뷰만 보이기
+    @Override
+    public Page<Review> adminSearchUnapprovedReviews(Pageable pageable){
+        QueryResults<Review> result = queryFactory
+                .select(review)
+                .from(review)
+                .join(review.member, member).fetchJoin()
+                .where(
+                        review.authenticationStatus.eq(ReviewAuthentication.WAITING))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
