@@ -123,6 +123,16 @@ public class ReviewService {
         return reviewRepository.adminSearchReviews(condition, pageable);
     }
 
+    //관리자 미승인 리뷰 갯수
+    public Long adminUnapprovedReviewCount(){
+        return reviewRepository.adminUnapprovedReviewCount();
+    }
+
+    //관리자 승인 대기 리뷰 검색
+    public Page<Review> adminSearchUnapprovedReviews(Pageable pageable){
+        return reviewRepository.adminSearchUnapprovedReviews(pageable);
+    }
+
     //관리자 리뷰 승인해주기
     @Transactional
     public void approve(Long reviewId, ReviewAuthentication reviewAuthentication){

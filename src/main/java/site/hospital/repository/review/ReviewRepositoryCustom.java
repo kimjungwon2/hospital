@@ -16,5 +16,7 @@ public interface ReviewRepositoryCustom {
     Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable);
     Review viewHospitalReview(Long reviewId);
     Page<Review> staffSearchReviews(Long hospitalId, StaffReviewSearchCondition condition, Pageable pageable);
+    Page<Review> adminSearchUnapprovedReviews(Pageable pageable);
+    Long adminUnapprovedReviewCount();
     void adminDeleteReviewHospital(Hospital hospital);
 }
