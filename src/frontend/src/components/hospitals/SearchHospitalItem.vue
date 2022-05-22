@@ -1,39 +1,37 @@
 <template>
-    <div class="container" @click="routeViewHospital">
+    <div class="searchHospital__hospital" @click="routeViewHospital">
         <!-- 이미지 부분-->
-        <span class= "inner-image" v-if="contentItem.imageKey!=null">
-          <img :src='`http://d123wf46onsgyf.cloudfront.net/w140/${contentItem.imageKey}`'/>
-        </span>
+        <div class= "hospital__image" v-if="contentItem.imageKey!=null">
+          <img alt="thumbnail" class="image__thumbnail" :src='`http://d123wf46onsgyf.cloudfront.net/w140/${contentItem.imageKey}`'/>
+        </div>
 
-        <span class= "inner-image" v-else>
-          <img src='@/assets/noImage.gif'>
-        </span>
+        <div class= "hospital__image" v-else>
+          <img alt="thumbnail" class="image__thumbnail" src='@/assets/noImage.gif'>
+        </div>
 
-
-        <span class="inner-info"> 
+        <div class="hospital__info"> 
             <h3>{{ contentItem.hospitalName}}</h3>
               영업 상태: <b>{{ contentItem.businessCondition }}</b> 
-              <br>진료 과목: {{ contentItem.medicalSubjectInformation }}
+              <br><br>진료 과목: {{ contentItem.medicalSubjectInformation }}
               <p class="item item3" v-if="contentItem.roadBaseAddress!==null">
                 주소: {{ contentItem.roadBaseAddress }}
               </p>
     
               <p class="item item4" v-if= "contentItem.postTagDtos !== null" >
-                태그: {{tags}}
+                태그: {{tags}}0
               </p>
     
               <p class="item item4" v-else>
-                등록된 태그가 없습니다.
+                태그: 없음
               </p>
     
             <p class="item item5" v-if= "contentItem.reviewHospitals !== null">
-                리뷰 평가 : {{contentItem.reviewHospitals[0].averageRate}} & 등록된 리뷰 개수 : {{ contentItem.reviewHospitals[0].reviewCount }}
+                리뷰 평가 : {{contentItem.reviewHospitals[0].averageRate}} | 등록된 리뷰 개수 : {{ contentItem.reviewHospitals[0].reviewCount }}
             </p>
             <p class="item item5" v-else>
-              등록된 리뷰가 없습니다.
+              리뷰: 없음
             </p>
-        </span>
-
+        </div>
     </div>
 </template>
 
@@ -68,29 +66,29 @@ export default {
 </script>
 
 <style>
-img{
+.image__thumbnail{
+  position:relative;
+  top:20%;
   width:130px;
   height:130px;
+  border-radius: 50%;
 }
 
-.container{
-  height:250px;
-  display:block;
-  border: 5px solid black;
+.searchHospital__hospital{
+  display:flex;
+  border: 2px solid #0067A3;
+  border-radius: 10px;
+  margin-bottom:12px;
 }
 
-.inner-image{
-  position:relative;
-  height:50%;
-  height:130px;
+.hospital__image{
   width:130px;
+  line-height:130px;
 }
 
-.inner-info{
+.hospital__info{
   position:relative;
-  bottom:140px;
-  left:135px;
-  height:100%;
+  margin-left:10px;
 }
 
 </style>

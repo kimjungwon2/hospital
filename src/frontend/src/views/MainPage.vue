@@ -1,8 +1,11 @@
 <template>
-  <div>
-      <h1 class="mainFont">경기도 내 모든 병원</h1>
+
+  <section id="main">
+      <img src='@/assets/병원 로고.png' alt="gyeonggi do logo" class="main__logo"><br>
+      <h1 class="main__title">경기도 내 모든 병원</h1><br>
       <SearchForm></SearchForm>
-  </div>
+  </section>
+
 </template>
 
 <script>
@@ -15,7 +18,14 @@ export default {
 </script>
 
 <style>
-.mainFont {
+#main {
+  position:relative;
+  padding:40px;
+  text-align:center;
+  top:50px;
+}
+
+.main__title {
     position: relative;
     text-align: center;
     width: 600px;

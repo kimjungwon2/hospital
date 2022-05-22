@@ -1,18 +1,16 @@
 <template>
-<div>
-    <h1> 병원 검색 결과 페이지</h1>
+<section id="searchHospital">
     <SearchHospitalMenuItem></SearchHospitalMenuItem>
-     <ul>
-         <SearchHospitalItem
+    <SearchHospitalItem
             v-for="contentItem in contentItems" 
             :key="contentItem.hospitalId"
             :contentItem="contentItem"
-         ></SearchHospitalItem>
-         <infinite-loading @infinite="infiniteHandler" spinner="spiral">
-          <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
-        </infinite-loading>
-     </ul>
- </div>
+    ></SearchHospitalItem>
+
+    <infinite-loading @infinite="infiniteHandler" spinner="spiral">
+        <p slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</p>
+    </infinite-loading>
+ </section>
 </template>
 
 <script>

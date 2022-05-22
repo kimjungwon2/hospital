@@ -1,6 +1,6 @@
 <template>
-      <form class="searchHospital" @submit.prevent="searchForm">
-        <div class="search">
+      <form class="main__searchHospital" @submit.prevent="searchForm">
+        <div class="main__search">
             <label for="searchHospital"></label>
             <input id="searchHospital" type="text" v-model="searchName">
             <font-awesome-icon icon="search"  @click.prevent="searchForm"/>
@@ -29,13 +29,13 @@ export default {
 </script>
 
 <style>
-.search {
+.main__search {
     position: relative;
     text-align: center;
     width: 400px;
     margin: 0 auto;
 }
-.search input {
+.main__search input {
     width: 100%;
     border-radius: 20px;
     border: 1px solid #bbb;

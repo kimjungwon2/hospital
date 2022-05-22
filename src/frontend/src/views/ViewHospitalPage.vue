@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section id="viewHospital">
     <div>
       <button v-if="!isLogin && !isStaff && !isAdmin" @click.prevent="routeLogin">리뷰 작성</button>
       <button v-else @click.prevent="routeRegisterReview">리뷰 작성</button>
@@ -8,7 +8,7 @@
       <font-awesome-icon v-else-if="bookmark===true" :icon="['fas', 'heart']" @click.prevent="registerBookmark"/>
     </div>
 
-    <div class="hospital__categories">
+    <div class="viewHospital__categories">
         <button class="category__btn" @click.prevent="viewHospital"> 병원 정보 </button>
         <button class="category__btn" @click.prevent="viewDetailed" > 상세 정보 </button>
         <button class="category__btn" @click.prevent="viewReview" > 리뷰 </button>
@@ -22,7 +22,7 @@
     <template v-if="isDetailed" ><ViewDetailedInfoForm :staffHosInfoId="staffHosInfoId"></ViewDetailedInfoForm></template>
     <template v-if="isReview" ><ViewHospitalReviewForm></ViewHospitalReviewForm></template>
     <template v-if="isQandA" ><ViewQandAForm :staffHosInfoId="staffHosInfoId"></ViewQandAForm></template>    
-  </div>
+  </section>
 
 </template>
 
@@ -132,13 +132,18 @@ export default {
 </script>
 
 <style>
-.hospital__categories{
+#viewHospital{
+  text-align:center;
+}
+
+.viewHospital__categories{
   margin : 50px;
   position: relative;
   text-align: center;
 }
 
 .category__btn{
+  margin:5px;
   width: 20%;
   border: 2px solid black;
   font-size:14px;
