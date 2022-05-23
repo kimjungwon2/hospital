@@ -148,6 +148,7 @@ public class MemberApiController {
                 .userName(request.getUserName())
                 .memberStatus(request.getMemberStatus())
                 .phoneNumber(request.getPhoneNumber())
+                .hospitalNumber(request.getHospitalId())
                 .build();
         Long id = memberService.adminSignUp(member);
 
@@ -164,8 +165,12 @@ public class MemberApiController {
     @PutMapping("/admin/user/modify/{memberId}")
     public void adminModifyMember(@PathVariable("memberId") Long memberId,
                                   @RequestBody @Validated AdminModifyMemberRequest request){
-        Member member = Member.builder().phoneNumber(request.getPhoneNumber()).memberStatus(request.getMemberStatus()).nickName(request.getNickName())
-                .userName(request.getUserName()).build();
+        Member member = Member.builder().phoneNumber(request.getPhoneNumber())
+                .memberStatus(request.getMemberStatus())
+                .nickName(request.getNickName())
+                .hospitalNumber(request.getHospitalId())
+                .userName(request.getUserName())
+                .build();
 
         memberService.adminModifyMember(memberId, member);
     }
@@ -268,6 +273,7 @@ public class MemberApiController {
         private String userName;
         private String nickName;
         private String phoneNumber;
+        private Long hospitalNumber;
         private MemberStatus memberStatus;
 
         public adminViewMember(Member member) {
@@ -276,6 +282,7 @@ public class MemberApiController {
             this.userName = member.getUserName();
             this.nickName = member.getNickName();
             this.phoneNumber = member.getPhoneNumber();
+            this.hospitalNumber = member.getHospitalNumber();
             this.memberStatus = member.getMemberStatus();
         }
     }
@@ -299,6 +306,7 @@ public class MemberApiController {
         private String nickName;
         private String phoneNumber;
         private String userName;
+        private Long hospitalId;
     }
 
     @Data
@@ -318,5 +326,6 @@ public class MemberApiController {
         private String phoneNumber;
         @NotNull(message="권한을 넣어주세요.")
         private MemberStatus memberStatus;
+        private Long hospitalId;
     }
 }

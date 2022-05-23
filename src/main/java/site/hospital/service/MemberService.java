@@ -88,12 +88,13 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
         //권한이 같다면 권한 수정을 안 한다.
-        if (member.getMemberStatus() == modifyMember.getMemberStatus()) {
-
+        if (member.getMemberStatus() == modifyMember.getMemberStatus() &&
+                modifyMember.getMemberStatus() != MemberStatus.STAFF) {
         }
         //관리자는 권한 수정을 못 하게 한다.
         else if (modifyMember.getMemberStatus() == MemberStatus.ADMIN) {
-        } else if (modifyMember.getMemberStatus() == MemberStatus.NORMAL) {
+        }
+        else if (modifyMember.getMemberStatus() == MemberStatus.NORMAL) {
             //모든 권한 삭제
             memberRepository.adminDeleteMemberAuthority(member);
 
@@ -118,13 +119,21 @@ public class MemberService {
 
             memberAuthorityRepository.save(memberAuthority);
 
+            //병원 있는지 여부 찾기
+            Hospital hospital = hospitalRepository.findById(modifyMember.getHospitalNumber())
+                    .orElseThrow(()-> new IllegalStateException("해당 번호에 속하는 병원이 존재하지 않습니다."));
+
+
             Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
             if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
+
             MemberAuthority managerAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_STAFF).build();
+                    .member(member).authority(authority_STAFF).hospitalNo(modifyMember.getHospitalNumber()).build();
+
             memberAuthorityRepository.save(managerAuthority);
         }
 
+        //member 데이터 변환
         member.adminModifyMember(modifyMember);
     }
 
@@ -148,7 +157,7 @@ public class MemberService {
 
         validateDuplicateMember(memberDto);
 
-        Member member = Member.builder().userName(memberDto.getUserName())
+        Member member = Member.builder().userName(memberDto.getUserName()).hospitalNumber(memberDto.getHospitalNumber())
                 .nickName(memberDto.getNickName()).phoneNumber(memberDto.getPhoneNumber())
                 .memberIdName(memberDto.getMemberIdName()).memberStatus(memberDto.getMemberStatus())
                 .password(passwordEncoder.encode(memberDto.getPassword())).build();
@@ -169,8 +178,23 @@ public class MemberService {
             memberAuthorityRepository.save(userAuthority);
         }
 
-        //MANAGER 권한 주기(staff, admin 포함)
-        if (member.getMemberStatus() == MemberStatus.STAFF || member.getMemberStatus() == MemberStatus.ADMIN) {
+        //MANAGER 권한 주기(staff)
+        if (member.getMemberStatus() == MemberStatus.STAFF) {
+
+            //병원 번호 있는지 여부 찾기
+            Hospital hospital = hospitalRepository.findById(member.getHospitalNumber())
+                    .orElseThrow(()-> new IllegalStateException("해당 번호에 속하는 병원이 존재하지 않습니다."));
+
+            Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
+            if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
+
+            MemberAuthority managerAuthority = MemberAuthority.builder()
+                    .member(member).authority(authority_STAFF).hospitalNo(member.getHospitalNumber()).build();
+
+            memberAuthorityRepository.save(managerAuthority);
+        }
+        //MANAGER 권한 주기(관리자만)
+        if(member.getMemberStatus() == MemberStatus.ADMIN){
             Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
             if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
 
@@ -179,6 +203,7 @@ public class MemberService {
 
             memberAuthorityRepository.save(managerAuthority);
         }
+
         //ADMIN 권한 주기(관리자만)
         if (member.getMemberStatus() == MemberStatus.ADMIN) {
             Authority authority_ADMIN = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_ADMIN);

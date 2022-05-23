@@ -57,13 +57,14 @@ public class Member extends BaseTimeEntity {
     //회원 생성
     @Builder
     public Member(String memberIdName, String password, String userName, String nickName,
-                  String phoneNumber, MemberStatus memberStatus){
+                  String phoneNumber, MemberStatus memberStatus, Long hospitalNumber){
         this.memberIdName = memberIdName;
         this.password = password;
         this.userName = userName;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.memberStatus = memberStatus;
+        this.hospitalNumber =hospitalNumber;
     }
 
     //수정하기
@@ -72,6 +73,7 @@ public class Member extends BaseTimeEntity {
         this.phoneNumber=member.getPhoneNumber();
         this.userName = member.getUserName();
         this.memberStatus = member.getMemberStatus();
+        this.hospitalNumber = member.getHospitalNumber();
     }
 
     //수정하기
