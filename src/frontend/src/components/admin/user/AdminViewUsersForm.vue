@@ -8,7 +8,6 @@
         <li>유저 이름: {{ user.userName }}</li>
         <li>유저 상태: {{ user.memberStatus}}</li>
         <li v-if="isStaff(user.memberStatus)"> 병원 관리 번호: {{ user.hospitalNumber}}</li>
-        <div v-if="isNormal(user.memberStatus)"><font-awesome-icon icon="hospital-user" @click="authorityMember(user.memberId)"/></div>
         <div><font-awesome-icon icon="trash-alt" @click="deleteMember(user.memberId)"/></div>
       </div>
 
@@ -37,10 +36,6 @@ export default {
       if(data === "STAFF") return true;
       else return false;
     },
-    isNormal(data){
-      if(data === "NORMAL") return true;
-      else return false;
-    },
     routeAdminViewUser(memberId){
       this.$router.push('/admin/user/view/'+memberId)
     },
@@ -54,6 +49,7 @@ export default {
       if(confirm('STAFF 권한을 주시겠습니까?')){
             const data = {
               memberStatus:"STAFF",
+              hospitalNumber:1,
             };
 
             await adminAuthorizeMember(memberId, data);

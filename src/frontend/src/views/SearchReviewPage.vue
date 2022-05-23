@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section id="searchHospital">
     <h1>리뷰 검색 페이지</h1>
     <SearchReviewMenuItem></SearchReviewMenuItem>
     <ul>
@@ -12,7 +12,7 @@
           <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
         </infinite-loading>
      </ul>
-  </div>
+  </section>
 </template>
 
 <script>

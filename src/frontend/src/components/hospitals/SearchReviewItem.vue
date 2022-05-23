@@ -19,8 +19,11 @@
         <div class="item item4">
           리뷰 내용: {{ contentItem.reviewHospitals[0].content }}
         </div>
-        <div class="item item5">
+        <div class="item item5" v-if = "contentItem.reviewLikes !=null">
           <font-awesome-icon :icon="['far', 'heart']"/>{{contentItem.reviewLikes.length}} | 리뷰 평균 평점: {{ contentItem.reviewHospitals[0].averageRate }}
+        </div>
+        <div class="item item5" v-else>
+          <font-awesome-icon :icon="['far', 'heart']"/>{{0}} | 리뷰 평균 평점: {{ contentItem.reviewHospitals[0].averageRate }}
         </div>
     </div>
   </div>

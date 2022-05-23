@@ -21,7 +21,6 @@
         <li>유저 이름: {{ user.userName }}</li>
         <li>유저 상태: {{ user.memberStatus}}</li>
         <li v-if="isStaff(user.memberStatus)"> 병원 관리 번호: {{ user.hospitalNumber}}</li>
-        <div v-if="isNormal(user.memberStatus)"><font-awesome-icon icon="hospital-user" @click.prevent="authorityMember(user.memberId)"/></div>
         <div><font-awesome-icon icon="trash-alt" @click.prevent="deleteMember(user.memberId)"/></div>
       </div>
     </ul>
@@ -41,11 +40,10 @@
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
-import { adminSearchMemberLists, adminAuthorizeMember, adminDeleteMember } from '@/api/admin';
+
+import { adminSearchMemberLists, adminDeleteMember } from '@/api/admin';
 
 library.add(faTrashAlt)
-library.add(faHospitalUser)
 
 export default {
    data() {
@@ -74,15 +72,6 @@ export default {
     routeAdminViewUser(memberId){
       this.$router.push('/admin/user/view/'+memberId)
     },
-    //권한 주기
-    async authorityMember(memberId){
-      const request = {
-        MemberStatus:"STAFF"
-      }
-      await adminAuthorizeMember(memberId,request);
-      this.adminLoadMembers();
-    },
-
     //멤버 삭제
     async deleteMember(memberId){
       if(confirm('정말로 멤버를 삭제하시겠습니까?')){

@@ -1,11 +1,15 @@
 <template>
   <div>
-    번호 : {{member.id}}
-    아이디 : {{member.memberId}}
-    유저 이름 : {{member.userName}}
-    닉네임 : {{member.nickName}}
-    전화번호 : {{member.phoneNumber}}
-    권한 : {{member.memberStatus}}
+    <br>
+    번호 : {{member.id}}<br>
+    아이디 : {{member.memberIdName}}<br>
+    유저 이름 : {{member.userName}}<br>
+    닉네임 : {{member.nickName}}<br>
+    전화번호 : {{member.phoneNumber}}<br>
+    권한 : {{member.memberStatus}}<br>
+    <p v-if="member.memberStatus=='STAFF'">
+      관리 병원 번호: {{member.hospitalNumber}}
+    </p>
   </div>
   
 </template>

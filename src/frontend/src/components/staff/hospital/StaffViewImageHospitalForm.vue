@@ -99,8 +99,6 @@ export default {
 
         //이미지 전송 버튼
         async submitForm(){
-            console.log(this.hospitalImage);
-            console.log("병원 이미지:"+this.hospitalImage, "병원 번호:"+this.$route.query.hospitalId);
             const data = new FormData();
             data.append("imageFile",this.hospitalImage);
             data.append("hospitalId",this.$route.query.hospitalId);
@@ -108,7 +106,6 @@ export default {
 
             //Presigned 획득
             const URL = await uploadImage(data);
-            console.log(`presigned:`+URL);
 
             //페이지 이동
             this.$router.push(`/staff/view/hospital`);
@@ -117,7 +114,6 @@ export default {
         //섬네일 삭제 버튼
         async deleteThumbnail(thumbnailId){
             if(confirm('정말로 섬네일을 삭제하시겠습니까?')){
-                console.log(`섬네일 아이디:`+thumbnailId);
                 await staffDeleteThumbnail(thumbnailId);
                 //페이지 이동
                 this.$router.push(`/staff/view/hospital`);
@@ -133,7 +129,6 @@ export default {
             const {data} = await staffViewThumbnail(this.thumbnailId);
             this.imageKey = data.imageKey;
             this.imageUrl= this.imageUrl+this.imageKey;
-            console.log(`imageKey:`+this.imageKey);
             this.thumbnailId = data.thumbnailId;
         }
     }

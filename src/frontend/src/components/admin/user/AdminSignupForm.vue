@@ -1,4 +1,11 @@
 <template>
+    <div>
+        <template v-if ="isSearchHospital===true" >
+            <AdminSearchHospitalModal 
+            @hospitalCancel="cancelSearchHospital"
+            @selectHospital="getHospitalId"/>  
+        </template>
+
       <form @submit.prevent="submitForm">
         <div>
             <label for="memberIdName">회원 아이디(이메일):</label>
@@ -28,15 +35,30 @@
                   <option value="ADMIN">ADMIN</option>
             </select>
         </div>
+        <div v-if="memberStatus=='STAFF'">
+            <font-awesome-icon icon="hospital-user" @click.prevent="searchHospital"/>
+            병원 번호 : {{hospitalId}}
+        </div>
+
         <button type="submit">회원가입</button>
         <p>{{ logMessage }}</p>
     </form>
+
+    </div>
 </template>
 
 <script>
 import {adminCreateMember} from '@/api/admin'
+import AdminSearchHospitalModal from '@/components/admin/user/AdminSearchHospitalModal.vue'
+import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+library.add(faHospitalUser)
 
 export default {
+    components:{
+        AdminSearchHospitalModal,
+    },
     data() {
         return {
             memberIdName:'',
@@ -45,24 +67,45 @@ export default {
             nickName:'',
             phoneNumber:'',
             memberStatus:'',
+            hospitalId:'',
             //log
             logMessage:'',
+            isSearchHospital:false,
         };
     },
     methods:{
         async submitForm(){
-            const userData = {
-                memberIdName: this.memberIdName,
-                password: this.password,
-                userName: this.userName,
-                nickName: this.nickName,
-                phoneNumber: this.phoneNumber,
-                memberStatus: this.memberStatus,
+            if(this.memberStatus==="STAFF"){
+                const userData = {
+                    memberIdName: this.memberIdName,
+                    password: this.password,
+                    userName: this.userName,
+                    nickName: this.nickName,
+                    phoneNumber: this.phoneNumber,
+                    memberStatus: this.memberStatus,
+                    hospitalId:this.hospitalId
+                }
+                await adminCreateMember(userData);
+                this.$alert("회원 가입이 완료되었습니다.")
+                this.initForm();
+                this.$router.push('/admin/users').catch(error=>error);
             }
-            await adminCreateMember(userData);
-            this.$alert("회원 가입이 완료되었습니다.")
-            this.initForm();
-            this.$router.push('/admin/users').catch(error=>error);
+
+            else{
+                const userData = {
+                    memberIdName: this.memberIdName,
+                    password: this.password,
+                    userName: this.userName,
+                    nickName: this.nickName,
+                    phoneNumber: this.phoneNumber,
+                    memberStatus: this.memberStatus,
+                    hospitalId:null
+                }
+                await adminCreateMember(userData);
+                this.$alert("회원 가입이 완료되었습니다.")
+                this.initForm();
+                this.$router.push('/admin/users').catch(error=>error);
+            }
         },
         initForm(){
             this.memberIdName = '';
@@ -70,6 +113,15 @@ export default {
             this.userName = '';
             this.nickName = '';
             this.phoneNumber = '';
+        },
+        searchHospital(){
+            this.isSearchHospital = true;
+        },
+        cancelSearchHospital(){
+            this.isSearchHospital = false;
+        },
+        getHospitalId(value){
+            this.hospitalId = value;
         },
     }
 

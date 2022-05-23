@@ -88,7 +88,6 @@ export default {
             
             
             const URL = await uploadImage(data);
-            console.log(`presigned:`+URL);
 
             //페이지 이동
             this.$router.push('/admin/hospitals');
@@ -97,7 +96,6 @@ export default {
         //섬네일 삭제 버튼
         async deleteThumbnail(thumbnailId){
             if(confirm('정말로 섬네일을 삭제하시겠습니까?')){
-                console.log(`섬네일 아이디:`+thumbnailId);
                 await adminDeleteThumbnail(thumbnailId);
                 //페이지 이동
                 this.$router.push('/admin/hospitals');
