@@ -14,7 +14,7 @@
                     <li @click="routeReview">내가 등록한 리뷰</li>
                 </ul>
               </li>
-              <li @click.prevent="routerUser">정보 수정</li>
+              <li @click.prevent="routerUser">내 정보 수정</li>
           </ul>
 
           <ul id = "main-menu" class="navbar_menu" v-if="isStaff">

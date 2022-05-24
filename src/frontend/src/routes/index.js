@@ -54,11 +54,6 @@ const router =  new VueRouter({
            meta: { login: true},
        },
        {
-          path:'/staff',
-          component: ()=> import('@/views/staff/StaffPage.vue'),
-          meta: { staff: true},
-       },
-       {
           path:'/staff/reviews',
           component: ()=> import('@/views/staff/StaffViewReviewsPage.vue'),
           meta: { staff: true},
@@ -110,11 +105,6 @@ const router =  new VueRouter({
           component: ()=> import('@/views/staff/hospital/StaffModifyStaffHospitalInfoPage.vue'),
           name:'staffEditStaffHospital',
           meta: { staff: true},
-       },
-       {
-            path:'/admin',
-            component: () => import('@/views/admin/AdminPage.vue'),
-            meta: { admin: true},
        },
        {
             path:'/admin/hospitals',

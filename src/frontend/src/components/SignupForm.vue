@@ -1,7 +1,7 @@
 <template>
-    <div class="signup_container">
+    <section class="signup_container">
         <form @submit.prevent="submitForm">  
-            <div class="title">Registration</div> 
+        <div class="title">Registration</div> 
            <div class="user-details"> 
                <div class="input-box">
                    <label class="details" for="memberIdName">회원 아이디(이메일)</label>
@@ -33,7 +33,7 @@
             </div>
             <p>{{ logMessage }}</p>
         </form>
-    </div>
+    </section>
 
 </template>
 
@@ -84,7 +84,6 @@ export default {
 </script>
 
 <style>
-
 .signup_container{
     display: flex;
     position:absolute;
