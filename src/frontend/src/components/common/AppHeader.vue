@@ -137,7 +137,7 @@ export default {
 
 <style>
 header{
-  z-index:5;
+  z-index:1;
   margin: 0;
 }
 
@@ -211,6 +211,7 @@ a.router-link-exact-active {
   background: #0a5a3e;
   opacity:0;
   visibility: hidden;
+  z-index:2;
 }
 
 #sub-menu>li{

@@ -1,66 +1,65 @@
 <template>
-  <div>
+  <section id="hospitalInformation">
       <ViewMapForm v-if= "this.hospital.detailedHosId !==null"
       :detailed="this.detailed"
       >
       </ViewMapForm>
-      <h1>병원 정보</h1>
+      <div class="hospitalInformation__location">
+        <div class="location__info">
+            <font-awesome-icon icon="map-marker-alt"/>  (번지) {{ hospital.landLotBasedSystem}}
+        </div>
+        <div class="location__info">
+            <font-awesome-icon icon="map-marker"/>  (도로명) {{ hospital.roadBaseAddress}}
+        </div>
+        <div class="location__info">
+            <font-awesome-icon icon="phone-alt"/>  {{hospital.phoneNumber}}
+        </div>
+      </div>
 
-            제목: {{hospital.hospitalName}} | 개업일: {{licensingDate | formatYear}} | 영업 상태 : {{hospital.businessCondition}} |
-            도시 이름: {{hospital.cityName}}
+      <div class="hospitalInformation__info">
+          <h1>병원정보</h1>
+          병원 종류: {{hospital.distinguishedName}}<br>
+          과목: {{hospital.medicalSubjectInformation}}<br>
+          개업일: {{licensingDate | formatYear}}<br>
+          
+          <!-- 상세 정보-->
+          <div v-if="hospital.detailedHosInfoId!==null">
+            우편 번호: {{hospital.zipCode}}<br>
+            종업원 수: {{ hospital.numberHealthcareProvider}}<br>
+            병실 수: {{ hospital.numberWard}} <br>
+            환자실: {{ hospital.numberPatientRoom}}
+          </div>
+      </div>
 
-              <div v-if= "countReview !== 0">
-                  리뷰 개수: {{countReview}}
-               </div>
+      <div class="hospitalInformation__estimation" v-if="estimations.length===0">
+          <h1>병원평가</h1>
+          병원 평가가 없습니다.
+      </div>
 
-               <div v-if= "countTags !== 0">
-                 태그: {{hospitalTags}}
-               </div>
-
-            <li>전화번호: {{hospital.phoneNumber}}</li>
-            <li>병원 종류: {{hospital.distinguishedName}}</li>
-            <li>과목: {{hospital.medicalSubjectInformation}}</li>
+      <div class="hospitalInformation__estimation" v-else>
+          <h1>병원평가</h1>
+        <span v-for="estimation in estimations" :key="estimation.estimationId"> 
+              <b>{{estimation.estimationList}}</b> :{{estimation.distinctionGrade}}<br>
+        </span>
+      </div>
             
-
-        <div v-if="hospital.detailedHosInfoId!==null">
-           <h4>상세 정보</h4>
-           <li>종업원 수: {{ hospital.numberHealthcareProvider}}</li>
-           <li>병실 수: {{ hospital.numberWard}}</li>
-           <li>환자실: {{ hospital.numberPatientRoom}}</li>
-            <h4>주소</h4>
-           <li>주소(번지): {{ hospital.landLotBasedSystem}}</li>
-           <li>도로명 주소: {{ hospital.roadBaseAddress}}</li>
-           <li>우편 번호: {{ hospital.zipCode}}</li>
-      </div>
-
-    <h2>병원 평가</h2>
-      <div v-if="estimations.length===0">병원 평가가 없습니다.<br>
-      </div>
-      <div v-else>
-          <span v-for="estimation in estimations" :key="estimation.estimationId"> 
-              평가 리스트:<b>{{estimation.estimationList}}</b> 평가 등급:{{estimation.distinctionGrade}}
-              <font-awesome-icon icon="trash-alt" @click.prevent="deleteEstimation(estimation.estimationId)"/><br>
-          </span>
-      </div>
-
-  </div>
+  </section>
 </template>
 
 <script>
 import {viewHospital} from '@/api/hospital';
 import ViewMapForm from '@/components/hospital/ViewMapForm.vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faMapMarkerAlt,faMapMarker,faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faMapMarkerAlt,faMapMarker,faPhoneAlt);
 
 export default {
     data() {
         return {
             hospital:[],
             licensingDate:'',
-
-            countReview:0,
-
             tags:[],
-            countTags:0,
-            hospitalTags:'',
 
             estimations:[],
             
@@ -71,13 +70,6 @@ export default {
     },
     components:{
         ViewMapForm,
-    },
-    methods:{
-        createTags(){
-            for(let tag in this.tags){
-                this.hospitalTags += `#${this.tags[tag].tagName}`;
-            }
-        },
     },
     filters:{
         formatYear(value){
@@ -95,14 +87,6 @@ export default {
         this.hospital = data;
         this.licensingDate = data.licensingDate;
 
-        //List object
-        this.countReview = this.hospital.hospitalReviewCount;
-
-        //태그 생성
-        this.tags = data.hospitalTags;
-        this.countTags = this.tags.length;
-        this.createTags();
-
         //병원 평가
         this.estimations = this.hospital.hospitalEstimations;
 
@@ -114,11 +98,56 @@ export default {
 
         //스태프 정보 부모 컴포넌트에 전달
         this.staffHosInfoId = this.hospital.staffHosInfoId;
+
+        //병원 정보 부모 컴포넌트에 전달
+        const hospitalInfo = {
+            title:this.hospital.hospitalName,
+            cityName:this.hospital.cityName,
+            businessCondition:this.hospital.businessCondition,
+            tags:this.hospital.hospitalTags,
+            countReview:this.hospital.hospitalReviewCount,
+        }
+        
         this.$emit("child-event", this.staffHosInfoId);
+        this.$emit("hospitalInfo",hospitalInfo);
     },
 }
 </script>
 
 <style>
+.hospitalInformation__location{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+  margin-top:10px;
+  border-top: 1px solid #dee2e6!important;
+  border-bottom: 1px solid #dee2e6!important;
+}
+
+.location__info{
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.hospitalInformation__info{
+    position:relative;
+    text-align:left;
+    left:12%;
+    width:73%;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.hospitalInformation__estimation{
+    margin-top:10px;
+    border-top: 1px solid #dee2e6!important;
+    position:relative;
+    text-align:left;
+    left:12%;
+    width:73%;
+    font-size: 16px;
+    font-weight: 500;
+}
 
 </style>

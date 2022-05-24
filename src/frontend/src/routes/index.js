@@ -24,11 +24,6 @@ const router =  new VueRouter({
            component: () => import('@/views/SignupPage.vue'),
        },
        {
-           path: '/user/activity',
-           component:() => import('@/views/user/UserActivityPage.vue'),
-           meta: { login: true},
-       },
-       {
           path:'/user/:userId/info',
           component:() => import('@/views/user/UserInformationPage.vue'),
           meta: { login: true},

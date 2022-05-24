@@ -1,8 +1,6 @@
 <template>
-<div>
-  <div v-if="noMap" class="noImage" > <img src='@/assets/noMap.png'></div>
+  <div v-if="noMap" class="map" > <img src='@/assets/noMap.png' alt="no map img" class="map__image"></div>
   <div v-else class="map" id="map" style="width:700px;height:500px;"></div>
-</div>
 </template>
 
 <script>
@@ -58,20 +56,12 @@ export default {
 </script>
 
 <style>
-img{
+.map__image img{
   width:700px;
   height:500px;
 }
-
-#map {
-  position: relative;
-  left:25%;
-}
-
-.noImage {
-  position:relative;
-  left:25%;
-  bottom:90%;
+.map{
+  margin:auto;
 }
 
 </style>

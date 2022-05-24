@@ -18,7 +18,7 @@
               </p>
     
               <p class="item item4" v-if= "contentItem.postTagDtos !== null" >
-                태그: {{tags}}0
+                태그: {{tags}}
               </p>
     
               <p class="item item4" v-else>

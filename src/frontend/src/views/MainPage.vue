@@ -19,7 +19,6 @@ export default {
 
 <style>
 #main {
-  position:relative;
   padding:40px;
   text-align:center;
   top:50px;
