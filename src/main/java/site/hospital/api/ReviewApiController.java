@@ -237,7 +237,6 @@ public class ReviewApiController {
         private List<ReviewHospitalDto> reviewHospitals;
         private List<ReviewLikeDTO> reviewLikes;
 
-
         public HospitalReviewResponse(Review reviews) {
             this.reviewId = reviews.getId();
             this.authenticationStatus = reviews.getAuthenticationStatus();
@@ -273,6 +272,7 @@ public class ReviewApiController {
         private Integer cleanliness;
         private Integer waitTime;
         private Double averageRate;
+        private Recommendation recommendationStatus;
 
         public ReviewHospitalDto(ReviewHospital reviewHospital) {
             this.content = reviewHospital.getContent();
@@ -283,6 +283,7 @@ public class ReviewApiController {
             this.cleanliness = reviewHospital.getEvCriteria().getCleanliness();
             this.waitTime = reviewHospital.getEvCriteria().getWaitTime();
             this.averageRate = reviewHospital.getEvCriteria().getAverageRate();
+            this.recommendationStatus = reviewHospital.getRecommendationStatus();
         }
     }
 

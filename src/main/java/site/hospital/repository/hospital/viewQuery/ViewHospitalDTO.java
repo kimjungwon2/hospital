@@ -27,6 +27,7 @@ public class ViewHospitalDTO {
     //주소
     private String landLotBasedSystem;
     private String roadBaseAddress;
+    private String zipCode;
 
     private Integer numberHealthcareProvider;
     private Integer numberWard;
@@ -47,7 +48,7 @@ public class ViewHospitalDTO {
     public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId, Long hospitalThumbnailId, String licensingDate, String hospitalName,
                            String phoneNumber, String distinguishedName,
                            String medicalSubjectInformation, BusinessCondition businessCondition,
-                           String cityName, String landLotBasedSystem,
+                           String cityName, String landLotBasedSystem,String zipCode,
                            String roadBaseAddress, Integer numberHealthcareProvider,
                            Integer numberWard, Integer numberPatientRoom,
                            BigDecimal x_coordination, BigDecimal y_coordination,
@@ -67,6 +68,7 @@ public class ViewHospitalDTO {
 
         this.landLotBasedSystem = landLotBasedSystem;
         this.roadBaseAddress = roadBaseAddress;
+        this.zipCode = zipCode;
         this.numberHealthcareProvider = numberHealthcareProvider;
         this.numberWard = numberWard;
         this.numberPatientRoom = numberPatientRoom;

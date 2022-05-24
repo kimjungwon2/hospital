@@ -70,6 +70,7 @@ public class HospitalViewRepository {
                         hospital.phoneNumber, hospital.distinguishedName, hospital.medicalSubjectInformation,
                         hospital.businessCondition,hospital.cityName,
                         detailedHosInformation.hospitalAddress.landLotBasedSystem,
+                        detailedHosInformation.hospitalAddress.zipCode,
                         detailedHosInformation.hospitalAddress.roadBaseAddress,
                         detailedHosInformation.numberHealthcareProvider,
                         detailedHosInformation.numberWard,
