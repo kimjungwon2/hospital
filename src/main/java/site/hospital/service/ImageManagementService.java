@@ -79,9 +79,10 @@ public class ImageManagementService {
         String extension = uploadName.substring(uploadName.lastIndexOf(".")+1);
 
         //이미지 파일 확장자가 아닌 경우 exception 발생.
-        if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")
-                &&!extension.equals("jpeg")
-                &&!extension.equals("jpg")&&!extension.equals("png") &&!extension.equals("gif")
+        if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")&&!extension.equals("BMP")
+                &&!extension.equals("jpeg")&&!extension.equals("JPEG")&&!extension.equals("JPG")
+                &&!extension.equals("jpg")&&!extension.equals("png")&&!extension.equals("PNG") &&!extension.equals("gif")
+                &&!extension.equals("GIF")
                 &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
             throw new IllegalStateException("이미지 확장자가 아닙니다.");
         }
@@ -110,9 +111,10 @@ public class ImageManagementService {
         String extension = uploadName.substring(uploadName.lastIndexOf(".")+1);
 
         //이미지 파일 확장자가 아닌 경우 exception 발생.
-        if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")
-                &&!extension.equals("jpeg")
-                &&!extension.equals("jpg")&&!extension.equals("png") &&!extension.equals("gif")
+        if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")&&!extension.equals("BMP")
+                &&!extension.equals("jpeg")&&!extension.equals("JPEG")&&!extension.equals("JPG")
+                &&!extension.equals("jpg")&&!extension.equals("png")&&!extension.equals("PNG") &&!extension.equals("gif")
+                &&!extension.equals("GIF")
                 &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
             throw new IllegalStateException("이미지 확장자가 아닙니다.");
         }
@@ -144,9 +146,10 @@ public class ImageManagementService {
             String extension = uploadName.substring(uploadName.lastIndexOf(".")+1);
 
             //이미지 파일 확장자가 아닌 경우 exception 발생.
-            if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")
-                    &&!extension.equals("jpeg")
-                    &&!extension.equals("jpg")&&!extension.equals("png") &&!extension.equals("gif")
+            if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")&&!extension.equals("BMP")
+                    &&!extension.equals("jpeg")&&!extension.equals("JPEG")&&!extension.equals("JPG")
+                    &&!extension.equals("jpg")&&!extension.equals("png")&&!extension.equals("PNG") &&!extension.equals("gif")
+                    &&!extension.equals("GIF")
                     &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
                 throw new IllegalStateException("이미지 확장자가 아닙니다.");
             }
