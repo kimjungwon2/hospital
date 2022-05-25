@@ -287,6 +287,15 @@ public class HospitalApiController {
         return ImageURL;
     }
 
+    //관리자 이미지 등록
+    @PostMapping("/admin/hospital/register/images")
+    public List<String> adminRegisterHospitalImages(@RequestParam(value="imageFiles", required=false) List<MultipartFile> imageFiles,
+                                         @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
+        List<String> ImageURLS = imageManagementService.hospitalImageUpload(imageFiles, "hospitalImage", hospitalId);
+
+        return ImageURLS;
+    }
+
     //관리자 섬네일 보기
     @GetMapping("/admin/hospital/view/thumbnail")
     public AdminViewThumbnail viewThumbnail(@RequestParam(value="thumbnailId",required = false) Long thumbnailId){

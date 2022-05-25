@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //허용 url
     private static final String[] PUBLIC_URI = {
             "/login","/signup","/search/hospital/**","/search/review/**","/hospital/view/**",
-            "/hospital/staffHosInfo/**","/hospital/review/**",
-            "/hospital/question/**","/admin/hospital/register/thumbnail/**"
+            "/hospital/staffHosInfo/**","/hospital/review/**","/admin/hospital/register/images/**",
+            "/hospital/question/**"
     };
 
     @Override
@@ -45,14 +45,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
 
+                //exception 추가
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
 
+                //세션을 설정 안 해서 추가.
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
                 // 리소스 별 허용 범위 설정
                 .authorizeRequests()
                 .antMatchers(PUBLIC_URI).permitAll()
@@ -61,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
 
+                //만들었던 JwtFilter 적용.
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
     }
@@ -89,6 +93,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 
 }

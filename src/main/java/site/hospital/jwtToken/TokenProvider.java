@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class TokenProvider implements Serializable {
 
     private static final long serialVersionUID = -798416586417070603L;
-    private static final long JWT_TOKEN_VALIDITY = 60 * 60 * 1000;
+    private static final long JWT_TOKEN_VALIDITY = 60 * 60 * 3000;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -91,14 +91,17 @@ public class TokenProvider implements Serializable {
         return Long.parseLong(hospitalNumber);
     }
 
-    //Authentication 반환.
+    //Token 정보를 이용해 Authentication 반환.
     public Authentication getAuthentication(String token) {
+
+        //클레임 생성
         Claims claims = Jwts
                 .parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
 
+        //클레임에서 권한 정보들을 얻기
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -115,6 +118,7 @@ public class TokenProvider implements Serializable {
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            //문제가 없으면 true
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             logger.info("잘못된 JWT 서명입니다.");

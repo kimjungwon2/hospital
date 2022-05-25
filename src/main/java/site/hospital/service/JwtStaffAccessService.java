@@ -49,7 +49,6 @@ public class JwtStaffAccessService {
         else if(findMemberManager.getHospitalNo() != existingHospitalId) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
-
     }
 
     //token 병원 정보 얻기

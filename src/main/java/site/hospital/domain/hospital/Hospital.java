@@ -75,10 +75,12 @@ public class Hospital extends BaseEntity {
         hospitalThumbnail.setHospital(this);
     }
 
-    public void changeHospitalImages(HospitalImage hospitalImage){
+    //연관 관계 메서드
+    public void addHospitalImage(HospitalImage hospitalImage){
         hospitalImages.add(hospitalImage);
         hospitalImage.setHospital(this);
     }
+
 
     //병원 수정
     public void modifyHospital(Hospital hospital) {

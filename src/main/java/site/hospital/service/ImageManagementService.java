@@ -1,11 +1,8 @@
 package site.hospital.service;
 
-import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,22 +10,23 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.hospital.domain.HospitalImage;
 import site.hospital.domain.HospitalThumbnail;
 import site.hospital.domain.ReviewImage;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.review.Review;
 import site.hospital.domain.review.ReviewAuthentication;
+import site.hospital.repository.HospitalImageRepository;
 import site.hospital.repository.HospitalThumbnailRepository;
 import site.hospital.repository.ReviewImageRepository;
 import site.hospital.repository.hospital.HospitalRepository;
 import site.hospital.repository.review.ReviewRepository;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,6 +40,7 @@ public class ImageManagementService {
     private final HospitalThumbnailRepository hospitalThumbnailRepository;
     private final ReviewImageRepository reviewImageRepository;
     private final ReviewRepository reviewRepository;
+    private final HospitalImageRepository hospitalImageRepository;
 
     // S3 버킷 이름
     @Value("${cloud.aws.s3.bucket}")
@@ -63,13 +62,14 @@ public class ImageManagementService {
         return reviewImageUpload(uploadFile, dirName, reviewId);
     }
 
-    // preSigned 받아오기
-    public String preSignedUpload(MultipartFile multipartFile, String dirName, Long hospitalId) throws IOException {
-        File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
-                .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
+    //병원 이미지 파일 업로드
+    public List<String> hospitalImageUpload(List<MultipartFile> multiparFile, String dirName, Long hospitalId) throws IOException{
+        List<File> uploadFile = multipleConvert(multiparFile);
 
-        return getPreSignedURL(uploadFile, dirName, hospitalId);
+        return hospitalsImageUpload(uploadFile, dirName, hospitalId);
     }
+
+
 
     // S3로 섬네일 파일 업로드하기
     private String thumbnailUpload(File uploadFile, String dirName, Long hospitalId) {
@@ -133,48 +133,35 @@ public class ImageManagementService {
         return uploadImageUrl;
     }
 
+    //S3 병원 이미지 업로드(다수)
+    private List<String> hospitalsImageUpload(List<File> uploadFiles, String dirName, Long hospitalId) {
 
+        List<String> uploadImageUrls = new ArrayList<>();
 
-    //Presigned URL 획득
-    private String getPreSignedURL(File uploadFile, String dirName, Long hospitalId) {
-        String preSignedURL = "";
+        for(File uploadFile : uploadFiles){
+            //확장자 찾기
+            String uploadName = uploadFile.getName();
+            String extension = uploadName.substring(uploadName.lastIndexOf(".")+1);
 
-        //MimeType 찾기.
-        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
-        String firstType = fileTypeMap.getContentType(uploadFile.getName());
-        String mimeType = firstType.replace("image/","."); // mimeType(확장자 명)
+            //이미지 파일 확장자가 아닌 경우 exception 발생.
+            if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")
+                    &&!extension.equals("jpeg")
+                    &&!extension.equals("jpg")&&!extension.equals("png") &&!extension.equals("gif")
+                    &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
+                throw new IllegalStateException("이미지 확장자가 아닙니다.");
+            }
 
-        // S3에 저장될 파일 이름
-        String fileName = dirName + "/" + UUID.randomUUID()+mimeType;
+            String fileName = dirName + "/" + UUID.randomUUID()+ "." + extension; // S3에 저장된 파일 이름
+            String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+            removeNewFile(uploadFile);
 
-        //유효기간 설정
-        Date expiration = new Date();
-        long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 5; // 5분 설정.
-        expiration.setTime(expTimeMillis);
+            uploadImageUrls.add(uploadImageUrl);
 
-        log.info(expiration.toString());
+            String key = fileName.replace(dirName+"/",""); // 키 값 저장.
 
-        try {
-            GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                    new GeneratePresignedUrlRequest(bucket, fileName)
-                            .withMethod(HttpMethod.PUT)
-                            .withExpiration(expiration);
-
-            generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL,
-                    CannedAccessControlList.PublicRead.toString());
-
-            URL url = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
-
-            preSignedURL = url.toString();
-
-            log.info("Pre-Signed URL : " + url.toString());
-            removeNewFile(uploadFile); //로컬에 업로드 된 파일 삭제
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            registerHospitalImage(uploadFile.getName(),key, hospitalId);
         }
-        return preSignedURL;
+        return uploadImageUrls;
     }
 
     //섬네일 삭제하기
@@ -199,6 +186,30 @@ public class ImageManagementService {
 
         //이미지 DB 삭제
         deleteHospitalThumbnail(thumbnailId,hospitalThumbnail);
+    }
+
+    //병원 이미지 삭제하기
+    public void deleteHospitalImages(Long hospitalImageId, String dirName){
+        HospitalImage hospitalImage = hospitalImageRepository.findById(hospitalImageId)
+                .orElseThrow(()->new IllegalStateException("등록되지 않은 병원 이미지입니다."));
+
+        //이미지 키 찾기
+        String imageKey = hospitalImage.getImageKey();
+        String[] fileName = new String[3];
+
+        //3개의 파일 삭제
+        fileName[0] = dirName + "/" +imageKey; // 기존 폴더
+        fileName[1] = "w140" + "/" +imageKey; //w140 폴더
+        fileName[2] = "w600" + "/" +imageKey; //w600 폴더
+
+        //S3 이미지 연속해서 삭제.
+        for(int i = 0; i<3; i++){
+            DeleteObjectRequest request = new DeleteObjectRequest(bucket,fileName[i]);
+            amazonS3Client.deleteObject(request);
+        }
+
+        //이미지 DB 삭제
+        deleteHospitalImage(hospitalImageId);
     }
 
 
@@ -228,6 +239,7 @@ public class ImageManagementService {
         hospitalThumbnailRepository.deleteById(thumbnailId);
     }
 
+
     //리뷰 영수증 저장(DB)
     @Transactional
     private Long registerReviewImage(ReviewImage reviewImage, Long reviewId){
@@ -251,6 +263,33 @@ public class ImageManagementService {
     @Transactional
     private void deleteReviewImage(Long reviewImageId){
         reviewRepository.deleteById(reviewImageId);
+    }
+
+    //병원 이미지 등록하기(DB)
+    @Transactional
+    private Long registerHospitalImage(String originalName, String key, Long hospitalId){
+        Hospital hospital = hospitalRepository.findById(hospitalId).
+                orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+
+        //DB에 정보 저장.
+        HospitalImage hospitalImage = HospitalImage.builder()
+                .originalName(originalName) // 파일 원본 이름
+                .imageKey(key).hospital(hospital).build();
+
+        hospitalImageRepository.save(hospitalImage);
+
+        return hospitalImage.getId();
+    }
+
+    //병원 이미지 삭제하기(DB)
+    @Transactional
+    private void deleteHospitalImage(Long hospitalImageId){
+
+        HospitalImage hospitalImage = hospitalImageRepository.
+                findById(hospitalImageId).orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 이미지가 존재하지 않습니다."));
+
+        //병원 이미지 DB 삭제
+        hospitalImageRepository.deleteById(hospitalImageId);
     }
 
     // S3로 업로드
@@ -277,7 +316,23 @@ public class ImageManagementService {
             }
             return Optional.of(convertFile);
         }
-
         return Optional.empty();
+    }
+
+    // 로컬에 다중 파일 업로드 하기
+    private List<File> multipleConvert(List<MultipartFile> files) throws IOException {
+        List<File> convertFiles = new ArrayList<>();
+
+        for(MultipartFile file : files) {
+            File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
+            if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
+                try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
+                    fos.write(file.getBytes());
+                }
+                convertFiles.add(convertFile);
+            }
+        }
+
+        return convertFiles;
     }
 }

@@ -5,11 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseEntity;
-import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Getter
@@ -29,14 +27,15 @@ public class HospitalImage extends BaseEntity {
 
     private String originalName;
 
-    //연관 관계 때문에 설정
+    //연관 관계 때문에 설정.
     public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
 
     @Builder
-    public HospitalImage(String originalName, String imageKey) {
+    public HospitalImage(String originalName, String imageKey, Hospital hospital) {
         this.originalName = originalName;
         this.imageKey = imageKey;
+        this.hospital = hospital;
     }
 }
