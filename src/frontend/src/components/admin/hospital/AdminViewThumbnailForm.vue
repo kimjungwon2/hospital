@@ -45,13 +45,11 @@
         <img :src="imageUrl"/>
         <button @click.prevent="deleteThumbnail(thumbnailId)">이미지 삭제</button>
     </div>
-
   </div>
 </template>
 
 <script>
-import {uploadImage} from '@/api/index';
-import {adminViewThumbnail, adminDeleteThumbnail} from '@/api/admin';
+import {adminViewThumbnail, adminCreateThumbnail, adminDeleteThumbnail} from '@/api/admin';
 export default {
     data() {
         return {
@@ -86,8 +84,7 @@ export default {
             data.append("imageFile",this.hospitalImage);
             data.append("hospitalId",this.$route.query.hospitalId);
             
-            
-            const URL = await uploadImage(data);
+            const URL = await adminCreateThumbnail(data);
 
             //페이지 이동
             this.$router.push('/admin/hospitals');

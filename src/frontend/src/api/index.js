@@ -55,15 +55,10 @@ function searchReview(searchName, page){
     });
 }
 
-//관리자 이미지 업로드
-function uploadImage(data){
-    return instance.post(`admin/hospital/register/thumbnail`,
-    data);
-}
 
 //사용자 리뷰 등록하기
 function registerUserReview(requestData){
     return instance.post('/user/review/register',requestData);
 }
 
-export { signupUser, loginUser, searchHospital, searchReview, uploadImage, registerUserReview};
+export { signupUser, loginUser, searchHospital, searchReview, registerUserReview};

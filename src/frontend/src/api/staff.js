@@ -86,6 +86,12 @@ function staffViewThumbnail(thumbnailId){
     });
 }
 
+//관계자 섬네일 등록하기
+function staffCreateThumbnail(data){
+    return staff.post(`/hospital/register/thumbnail`,data);
+}
+
+
 //관리자 섬네일 삭제하기
 function staffDeleteThumbnail(thumbnailId){
     return staff.delete('/hospital/delete/thumbnail/'+thumbnailId);
@@ -170,7 +176,7 @@ export{
     staffModifyHospital,staffViewHospital,staffDeleteHospitalTag,staffDeleteDetailedHosInfo,
     staffViewStaffHospitalInfo,staffDeleteStaffHosInfo,
     staffCreateDoctor,staffDeleteDoctor,staffModifyDoctor,
-    staffViewThumbnail,staffDeleteThumbnail,
+    staffViewThumbnail,staffDeleteThumbnail,staffCreateThumbnail,
 
     staffRegisterAnswer,staffNoAnswerCount,staffSearchBookmarkUsers,staffViewReview,
     staffSearchReviewLists,staffSearchQuestionLists,staffSearchNoAnswerQuestions,

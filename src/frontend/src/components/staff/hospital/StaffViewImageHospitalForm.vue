@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import {uploadImage} from '@/api/index';
+import {staffCreateThumbnail} from '@/api/staff';
 import {staffViewThumbnail, staffDeleteThumbnail} from '@/api/staff';
 export default {
     data() {
@@ -105,7 +105,7 @@ export default {
             
 
             //Presigned 획득
-            const URL = await uploadImage(data);
+            const URL = await staffCreateThumbnail(data);
 
             //페이지 이동
             this.$router.push(`/staff/view/hospital`);

@@ -171,12 +171,30 @@ function adminViewThumbnail(thumbnailId){
     });
 }
 
+//관리자 섬네일 업로드
+function adminCreateThumbnail(data){
+    return admin.post(`/hospital/register/thumbnail`,data);
+}
+
 //관리자 섬네일 삭제하기
 function adminDeleteThumbnail(thumbnailId){
     return admin.delete('/hospital/delete/thumbnail/'+thumbnailId);
 }
 
+//관리자 병원 이미지 업로드
+function adminCreateHospitalImage(data){
+    return admin.post(`/hospital/register/images`,data);
+}
 
+//관리자 병원 이미지들 보기
+function adminViewHospitalImages(hospitalId){
+    return admin.get('/hospital/view/hospitalImages',
+    {
+        params:{
+            hospitalId:hospitalId,
+        },
+    });
+}
 
 
 /* 리뷰 관리 */
@@ -292,7 +310,8 @@ export {
     adminDeleteHospitalTag,adminLinkHospitalTag, adminCreateHospitalEstimation,
     adminDeleteHospitalEstimation,adminModifyHospitalEstimation,adminDeleteDoctor,
     adminModifyDoctor,adminCreateDoctor,adminRegisterDetailedHosInfo,
-    adminDeleteDetailedHosInfo,adminDeleteThumbnail,
+    adminDeleteDetailedHosInfo,adminDeleteThumbnail,adminCreateThumbnail,
+    adminCreateHospitalImage,adminViewHospitalImages,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,adminUnapprovedReviewCount,
