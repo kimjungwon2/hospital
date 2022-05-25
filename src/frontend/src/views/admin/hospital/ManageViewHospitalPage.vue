@@ -3,7 +3,7 @@
     <div class="admin__hospital__categories">
         <button class="hospital__category__btn" @click.prevent="viewHospital"> 병원 정보 </button>
         <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
-        <button class="hospital__category__btn" @click.prevent="viewImageHospital">병원 이미지 업로드</button>
+        <button class="hospital__category__btn" @click.prevent="viewImageHospital">병원 섬네일 업로드</button>
     </div>
 
       <template v-if="isHospital"><AdminViewHospitalForm></AdminViewHospitalForm></template>

@@ -48,6 +48,8 @@ export default {
                 deleteCookie('token');
                 deleteCookie('member_id');
                 deleteCookie('no_answer_count');
+                deleteCookie('review_count');
+                deleteCookie('search_name');
                 this.$store.commit('clearUserInfo');
                 this.$alert('기존 로그인된 계정을 로그아웃 했습니다.');
                 
@@ -57,6 +59,8 @@ export default {
                     !err.message.includes('Avoided redundant navigation to current location')
                 ) {alert(err);}}
                 );
+                    //새로고침하기
+                    this.$router.go();
             }
 
             try {

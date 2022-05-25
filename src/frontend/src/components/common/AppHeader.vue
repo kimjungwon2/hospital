@@ -19,7 +19,7 @@
 
           <ul id = "main-menu" class="navbar_menu" v-if="isStaff">
               <li><router-link to="/staff/view/hospital">내 병원 관리</router-link></li>
-              <li><router-link to="/staff">병원 활동</router-link>
+              <li>병원 활동
                 <ul id="sub-menu">
                     <li><router-link to="/staff/reviews">리뷰 보기</router-link></li>
                     <li><router-link to="/staff/Q&A">Q&A 관리</router-link></li>
@@ -29,7 +29,7 @@
           </ul>
 
           <ul id = "main-menu" class="navbar_menu" v-if="isAdmin">
-              <li><router-link to="/admin">관리 페이지</router-link>
+              <li>관리 페이지
                 <ul id="sub-menu">
                   <li><router-link to="/admin/users">유저 관리</router-link></li>
                   <li><router-link to="/admin/hospitals">병원 관리</router-link></li>
@@ -106,6 +106,7 @@ export default {
       deleteCookie('member_id');
       deleteCookie('no_answer_count');
       deleteCookie('review_count');
+      deleteCookie('search_name');
       this.count='';
       this.$store.commit('clearUserInfo');
       this.$router.push('/').catch(err => {
@@ -114,21 +115,23 @@ export default {
                     !err.message.includes('Avoided redundant navigation to current location')
                 ) {alert(err);}}
       );
+      //새로고침하기
+      this.$router.go();
     },
     routerUser(){
        const memberId= this.$store.getters.getMemberId;
        this.$router.push('/user/'+memberId+'/info');
     },
     routeBookmark(){
-       const id = this.memberId;
+       const id = this.$store.getters.getMemberId;
        this.$router.push(`/user/${id}/bookmarks`);
     },
     routeQuestion(){
-        const id = this.memberId;
+        const id = this.$store.getters.getMemberId;
         this.$router.push(`/user/${id}/questions`);
     },
     routeReview(){
-        const id = this.memberId;
+        const id = this.$store.getters.getMemberId;
         this.$router.push(`/user/${id}/reviews`);
     },
   },

@@ -48,8 +48,6 @@ function getMemberStatusFromCookie() {
 }
 
 
-
-
 function getNickNameFromCookie() {
   return document.cookie.replace(
     /(?:(?:^|.*;\s*)nick_name\s*=\s*([^;]*).*$)|^.*$/,

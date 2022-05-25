@@ -26,7 +26,7 @@
         등록된 영수증이 없습니다.
     </div>
     <div v-else>
-        <img :src='`http://d123wf46onsgyf.cloudfront.net/receipt/${imageKey}`'/>
+        <img :src='`http://d123wf46onsgyf.cloudfront.net/w600/${imageKey}`'/>
     </div>
 
 
