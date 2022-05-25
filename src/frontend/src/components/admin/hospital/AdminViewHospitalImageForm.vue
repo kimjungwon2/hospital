@@ -1,15 +1,23 @@
 <template>
   <section id="imageUpload">
       <div v-if="uploadedImages.length!==0" class="imageUpload__images" >
-
+          <hooper class="images_array">
+              <slide class ="slide" v-for="image in uploadedImages" :key="image.hospitalImageId">
+                <span class="slide__delete-button" @click="deleteImageHospital(image.hospitalImageId)">
+                    <img src='@/assets/delete.png' alt="delete" class="delete__button">
+                </span>
+                <img alt="hospitalImage" class="image__hospital" 
+                            :src='`http://d123wf46onsgyf.cloudfront.net/w600/${image.imageKey}`'/>
+              </slide>
+              <hooper-navigation slot="hooper-addons"></hooper-navigation>
+          </hooper>
       </div>
 
      
      <div v-else class="imageUpload__image-notice">
         <ul class="imageUpload__image-wrapper">
-            <li>
-                너무 사이즈가 큰 사진은 지양해주세요. (가로 사이즈 최소 800px)
-            </li>
+            <li>가로 사이즈는 600px, 세로 사이즈는 200px인 사진을 권고합니다.</li>
+            <li>최대 높이는 200px로 나옵니다.</li>
             <li>사진 용량은 사진 한 장당 10MB 까지 등록이 가능합니다.</li>
         </ul>
     </div>
@@ -46,8 +54,15 @@
 </template>
 
 <script>
-import {adminCreateHospitalImage,adminViewHospitalImages} from '@/api/admin';
+import {adminCreateHospitalImage,adminViewHospitalImages,adminDeleteHospitalImage} from '@/api/admin';
+import {Hooper,Slide,Navigation as HooperNavigation} from 'hooper';
+import 'hooper/dist/hooper.css';
 export default {
+    components:{
+        Hooper,
+        Slide,
+        HooperNavigation,
+    },
     data() {
         return {
             //병원 데이터 받아오기
@@ -107,7 +122,7 @@ export default {
             this.hospitalImages = this.hospitalImages.filter(data => data.number !== Number(name));
         },
 
-        //이미지 전송 버튼
+        //이미지 등록 버튼
         async submitForm(){
             const data = new FormData();
 
@@ -116,10 +131,28 @@ export default {
             }
             data.append("hospitalId",this.$route.query.hospitalId);
             await adminCreateHospitalImage(data);
+            this.$router.go();
+        },
 
-            //페이지 이동
-            this.$router.push('/admin/hospitals');
+        //병원 이미지 삭제 버튼
+        async deleteImageHospital(hospitalImageId){
+            if(confirm('정말로 병원 이미지를 삭제하시겠습니까?')){
+                await adminDeleteHospitalImage(hospitalImageId);
+                this.loadInofo();
+            }
+        },
+        //데이터 로딩
+        async loadInofo(){
+            this.hospitalImages=[];
+            this.imageIndex=0;
+
+            this.hospitalId = this.$route.query.hospitalId;
+            if(this.hospitalId!==null){
+                const {data} = await adminViewHospitalImages(this.hospitalId);
+                this.uploadedImages = data;
+            }
         }
+
     },
     //초기 병원 이미지들 불러오기
     async created(){
@@ -136,6 +169,22 @@ export default {
 <style>
 .image__hospital{
     width:600px;
+    height:200px;
+}
+
+.imageUpload__images{
+    margin-bottom:20px;
+}
+
+.images_array{
+    text-align:center;
+}
+
+.slide__delete-button{
+    position:relative;
+    bottom:188px;
+    left:598px;
+    cursor: pointer;
 }
 
 .imageUpload__image-dropper{

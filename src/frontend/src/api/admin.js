@@ -196,6 +196,11 @@ function adminViewHospitalImages(hospitalId){
     });
 }
 
+//관리자 병원 이미지 삭제
+function adminDeleteHospitalImage(hospitalImageId){
+    return admin.delete('/hospital/delete/hospitalImages/'+hospitalImageId);
+}
+
 
 /* 리뷰 관리 */
 
@@ -311,7 +316,7 @@ export {
     adminDeleteHospitalEstimation,adminModifyHospitalEstimation,adminDeleteDoctor,
     adminModifyDoctor,adminCreateDoctor,adminRegisterDetailedHosInfo,
     adminDeleteDetailedHosInfo,adminDeleteThumbnail,adminCreateThumbnail,
-    adminCreateHospitalImage,adminViewHospitalImages,
+    adminCreateHospitalImage,adminViewHospitalImages,adminDeleteHospitalImage,
 
     //리뷰
     adminViewReviewLists, adminSearchReviewLists,adminUnapprovedReviewCount,
