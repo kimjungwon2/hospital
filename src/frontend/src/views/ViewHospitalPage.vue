@@ -1,21 +1,34 @@
 <template>
+  <!-- 이미지 부분-->
   <section id="viewHospital">
-    <div class="viewHospital__title">
+    <section class="viewHospital__images" v-if="hospitalImages.length==0">
+    </section>
+    <section class="viewHospital__images" v-else>
+        <hooper :autoPlay="true" :playSpeed="2000" class="images_array">
+            <slide class ="slide" v-for="image in hospitalImages" :key="image.hospitalImageId">
+                  <img alt="hospitalImage" class="image__hospital" 
+                            :src='`http://d123wf46onsgyf.cloudfront.net/w600/${image.imageKey}`'/>
+            </slide>
+            <hooper-navigation slot="hooper-addons"></hooper-navigation>
+        </hooper>
+    </section>
+
+    <section class="viewHospital__title">
       <p class="title__city">{{cityName}}</p>
       <h1 class="title__hospital">{{hospitalTitle}} ({{businessCondition}})</h1>
-    </div>
+    </section>
 
     <!-- 태그 -->
-    <div class="viewHospital__tagBox" v-if = "tags.length==0">
+    <section class="viewHospital__tagBox" v-if = "tags.length==0">
       <div class="tagBox__notag">
         등록된 태그가 없습니다.
       </div>
-    </div>
-    <div class="viewHospital__tagBox" v-else >
+    </section>
+    <section class="viewHospital__tagBox" v-else >
       <div class="tagBox__tagName" v-for="tag in tags" :key="tag.tagName">
         #{{tag.tagName}}
       </div>
-    </div>
+    </section>
 
     <div class="viewHospital__functionBox">
       <button class="functionBox__writeReview" v-if="!isLogin && !isStaff && !isAdmin" @click.prevent="routeLogin"><font-awesome-icon icon="pen"/> 리뷰 작성</button>
@@ -63,6 +76,9 @@ import ViewDetailedInfoForm from '@/components/hospital/ViewDetailedInfoForm.vue
 import ViewHospitalReviewForm from '@/components/hospital/ViewHospitalReviewForm.vue';
 import ViewQandAForm from '@/components/hospital/ViewQandAForm.vue';
 
+import {Hooper,Slide,Navigation as HooperNavigation} from 'hooper';
+import 'hooper/dist/hooper.css';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPen, faHeart as faSolideHeart  } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
@@ -76,6 +92,7 @@ export default {
       ViewDetailedInfoForm,
       ViewHospitalReviewForm,
       ViewQandAForm,
+      Hooper,Slide,HooperNavigation,
   },
   data() {
     return {
@@ -96,6 +113,7 @@ export default {
       cityName:'',
       businessCondition:'',
       tags:'',
+      hospitalImages:'',
     }
   },
   computed:{
@@ -166,6 +184,7 @@ export default {
       this.businessCondition =hospitalInfo.businessCondition;
       this.tags = hospitalInfo.tags;
       this.countReview = hospitalInfo.countReview;
+      this.hospitalImages = hospitalInfo.hospitalImages;
     }
   },
   async created(){
@@ -183,10 +202,24 @@ export default {
   text-align:center;
 }
 
+.viewHospital__images{
+  margin-top:20px;
+}
+
+.viewHospital__images .image__hospital{
+    width:600px;
+    height:200px;
+}
+
+.viewHospital__images .images_array{
+    text-align:center;
+}
+
 .viewHospital__title{
   position:relative;
   text-align:left;
   left:12%;
+  width:73%;
 }
 
 .title__city{
@@ -230,6 +263,7 @@ export default {
   text-align:left;
   left:12%;
   display:flex;
+  width:500px;
 }
 
 .functionBox__writeReview{
