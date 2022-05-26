@@ -8,6 +8,7 @@ import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -22,11 +23,15 @@ public class Estimation extends BaseEntity {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
+    @NotNull
     private String cityName;
+    @NotNull
     private String hospitalName;
 
+    @NotNull
     private String distinctionGrade;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private EstimationList estimationList;
 
     //== 연관 관계 메서드 ==/

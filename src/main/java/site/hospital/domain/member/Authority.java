@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -21,6 +22,7 @@ public class Authority {
     //회원 권한 부여 상태. [USER, MANAGER, ADMIN]
     @Column(unique=true, nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Authorization authorizationStatus;
 
     public Authority(Authorization authorizationStatus) {

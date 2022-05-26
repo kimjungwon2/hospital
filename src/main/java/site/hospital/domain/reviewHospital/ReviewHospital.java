@@ -9,6 +9,7 @@ import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.review.Review;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -27,15 +28,20 @@ public class ReviewHospital extends BaseTimeEntity {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
+    @Column(length = 5000)
+    @NotNull
     private String content;
+    @NotNull
     private String disease;
 
     //평가 항목
     @Embedded
+    @NotNull
     private EvaluationCriteria evCriteria;
 
     //병원 추천 비추천 상태 [RECOMMENDATION, DECOMMENDATION]
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Recommendation recommendationStatus;
 
     /*연관관계 때문에 set 설정*/

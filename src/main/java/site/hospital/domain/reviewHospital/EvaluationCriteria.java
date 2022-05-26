@@ -6,17 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EvaluationCriteria {
 
+    @NotNull
     private int sumPrice;
+    @NotNull
     private int kindness;
+    @NotNull
     private int symptomRelief;
+    @NotNull
     private int cleanliness;
+    @NotNull
     private int waitTime;
+    @NotNull
     private double averageRate;
 
     @Builder

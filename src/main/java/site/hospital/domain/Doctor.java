@@ -10,6 +10,7 @@ import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -24,7 +25,9 @@ public class Doctor extends BaseEntity {
     @JoinColumn(name = "staffHosInformation_id")
     private StaffHosInformation staffHosInformation;
 
+    @NotNull
     private String name;
+    @NotNull
     private String history;
 
 

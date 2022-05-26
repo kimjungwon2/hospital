@@ -8,6 +8,7 @@ import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +28,11 @@ public class StaffHosInformation extends BaseEntity {
     @OneToMany(mappedBy = "staffHosInformation", cascade = CascadeType.ALL)
     private List<Doctor> doctors = new ArrayList<>();
 
+    @NotNull
     private String introduction;
+    @NotNull
     private String consultationHour;
+    @NotNull
     private String abnormality;
 
     //연관관계 때문에 set 설정

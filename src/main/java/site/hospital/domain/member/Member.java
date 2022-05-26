@@ -10,6 +10,7 @@ import site.hospital.domain.review.Review;
 import site.hospital.domain.ReviewLike;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,18 +38,25 @@ public class Member extends BaseTimeEntity {
 
     //회원 아이디
     @Column(unique=true, nullable = false)
+    @NotNull
     private String memberIdName;
+    @NotNull
     private String password;
+    @NotNull
     private String nickName;
     //회원 이름
+    @NotNull
     private String userName;
+    @NotNull
     private String phoneNumber;
 
     //병원 번호
+    @NotNull
     private Long hospitalNumber;
 
     //멤버 권한.
     @Enumerated(EnumType.STRING)
+    @NotNull
     MemberStatus memberStatus;
 
     /*

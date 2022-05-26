@@ -9,6 +9,7 @@ import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -31,6 +32,8 @@ public class Question extends BaseTimeEntity {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
+    @Column(length = 1000)
+    @NotNull
     private String content;
 
 

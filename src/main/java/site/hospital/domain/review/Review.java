@@ -10,6 +10,7 @@ import site.hospital.domain.reviewHospital.ReviewHospital;
 import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Review extends BaseEntity {
 
     //인증 상태[NONE, WAITING,CERTIFIED]
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ReviewAuthentication authenticationStatus;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

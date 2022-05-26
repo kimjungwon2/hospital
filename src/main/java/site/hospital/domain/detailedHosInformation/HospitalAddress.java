@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 @Getter
@@ -13,7 +14,9 @@ import javax.persistence.Embeddable;
 public class HospitalAddress  {
 
     //지번주소
+    @NotNull
     private String landLotBasedSystem;
+    @NotNull
     private String roadBaseAddress;
     private String zipCode;
 

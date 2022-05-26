@@ -49,4 +49,11 @@ public class MemberApiControllerAdvice {
         log.error("InternalServerException:",e);
         return new ErrorResponse("SERVER_ERROR",e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResponse illegalStateHandle(IllegalStateException e){
+        log.error("IllegalStateException:",e);
+        return new ErrorResponse("BAD_REQUEST",e.getMessage());
+    }
 }

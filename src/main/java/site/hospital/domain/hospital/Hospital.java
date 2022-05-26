@@ -11,6 +11,7 @@ import site.hospital.domain.estimation.Estimation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,13 +50,20 @@ public class Hospital extends BaseEntity {
     private HospitalThumbnail hospitalThumbnail;
 
     //인허가 날짜
+    @NotNull
     private String licensingDate;
+    @NotNull
     private String hospitalName;
+    @NotNull
     private String phoneNumber;
+    @NotNull
     private String distinguishedName;
+    @NotNull
     private String medicalSubjectInformation;
+    @NotNull
     private String cityName;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private BusinessCondition businessCondition;
 
 

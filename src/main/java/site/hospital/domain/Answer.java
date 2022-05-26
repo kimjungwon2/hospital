@@ -8,6 +8,7 @@ import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.member.Member;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -25,6 +26,8 @@ public class Answer extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(length = 1000)
+    @NotNull
     private String answerContent;
 
 

@@ -8,6 +8,7 @@ import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.hospital.Hospital;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -21,12 +22,16 @@ public class DetailedHosInformation extends BaseEntity {
     @OneToOne(mappedBy = "detailedHosInformation", fetch = FetchType.LAZY)
     private Hospital hospital;
 
+    @NotNull
     private int numberHealthcareProvider;
+    @NotNull
     private int numberWard;
     //입원실 수
+    @NotNull
     private int numberPatientRoom;
 
     @Embedded
+    @NotNull
     private HospitalAddress hospitalAddress;
 
     //병원 장소(좌표)

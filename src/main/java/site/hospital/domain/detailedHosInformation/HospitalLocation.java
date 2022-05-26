@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Embeddable
@@ -20,8 +21,10 @@ public class HospitalLocation {
     private BigDecimal y_coordination;
     //위도, 경도
     @Column(columnDefinition="Decimal(19,12)")
+    @NotNull
     private BigDecimal latitude;
     @Column(columnDefinition="Decimal(19,12)")
+    @NotNull
     private BigDecimal longitude;
 
     @Builder
