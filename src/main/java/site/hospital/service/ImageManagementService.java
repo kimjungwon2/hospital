@@ -82,7 +82,7 @@ public class ImageManagementService {
         if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")&&!extension.equals("BMP")
                 &&!extension.equals("jpeg")&&!extension.equals("JPEG")&&!extension.equals("JPG")
                 &&!extension.equals("jpg")&&!extension.equals("png")&&!extension.equals("PNG") &&!extension.equals("gif")
-                &&!extension.equals("GIF")
+                &&!extension.equals("GIF")&&!extension.equals("jfif")
                 &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
             throw new IllegalStateException("이미지 확장자가 아닙니다.");
         }
@@ -114,7 +114,7 @@ public class ImageManagementService {
         if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")&&!extension.equals("BMP")
                 &&!extension.equals("jpeg")&&!extension.equals("JPEG")&&!extension.equals("JPG")
                 &&!extension.equals("jpg")&&!extension.equals("png")&&!extension.equals("PNG") &&!extension.equals("gif")
-                &&!extension.equals("GIF")
+                &&!extension.equals("GIF")&&!extension.equals("jfif")
                 &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
             throw new IllegalStateException("이미지 확장자가 아닙니다.");
         }
@@ -149,7 +149,7 @@ public class ImageManagementService {
             if(!extension.equals("bmp")&&!extension.equals("rle")&&!extension.equals("dib")&&!extension.equals("BMP")
                     &&!extension.equals("jpeg")&&!extension.equals("JPEG")&&!extension.equals("JPG")
                     &&!extension.equals("jpg")&&!extension.equals("png")&&!extension.equals("PNG") &&!extension.equals("gif")
-                    &&!extension.equals("GIF")
+                    &&!extension.equals("GIF")&&!extension.equals("jfif")
                     &&!extension.equals("tif")&&!extension.equals("tiff")&&!extension.equals("raw")){
                 throw new IllegalStateException("이미지 확장자가 아닙니다.");
             }
@@ -192,7 +192,7 @@ public class ImageManagementService {
     }
 
     //병원 이미지 삭제하기
-    public void deleteHospitalImages(Long hospitalImageId, String dirName){
+    public void deleteHospitalImage(Long hospitalImageId, String dirName){
         HospitalImage hospitalImage = hospitalImageRepository.findById(hospitalImageId)
                 .orElseThrow(()->new IllegalStateException("등록되지 않은 병원 이미지입니다."));
 

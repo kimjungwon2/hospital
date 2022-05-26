@@ -9,6 +9,7 @@ import static site.hospital.domain.hospital.QHospital.hospital;
 import static site.hospital.domain.QPostTag.postTag;
 import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.domain.QHospitalImage.hospitalImage;
 import static site.hospital.domain.QTag.tag;
 
 import javax.persistence.EntityManager;
@@ -56,8 +57,17 @@ public class HospitalViewRepository {
                 .join(postTag.tag, tag)
                 .where(postTag.hospital.id.in(hosId))
                 .fetch();
-
         result.setHospitalTags(hospitalTagDTOS);
+
+        //병원 내부 이미지 넣기
+        List<HospitalImageDTO> hospitalImageDTOS = queryFactory
+                .select(new QHospitalImageDTO(hospital.id,hospitalImage.id,hospitalImage.imageKey))
+                .from(hospitalImage)
+                .join(hospitalImage.hospital, hospital)
+                .where(hospitalImage.hospital.id.in(hosId))
+                .fetch();
+
+        result.setHospitalImages(hospitalImageDTOS);
 
         return result;
     }

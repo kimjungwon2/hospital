@@ -287,14 +287,6 @@ public class HospitalApiController {
         return ImageURL;
     }
 
-    //관리자 이미지 등록
-    @PostMapping("/admin/hospital/register/images")
-    public List<String> adminRegisterHospitalImages(@RequestParam(value="imageFiles", required=false) List<MultipartFile> imageFiles,
-                                         @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
-        List<String> ImageURLS = imageManagementService.hospitalImageUpload(imageFiles, "hospitalImage", hospitalId);
-
-        return ImageURLS;
-    }
 
     //관리자 섬네일 보기
     @GetMapping("/admin/hospital/view/thumbnail")
@@ -309,6 +301,32 @@ public class HospitalApiController {
     public void adminDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId){
         imageManagementService.deleteThumbnail(thumbnailId,"thumbnail");
     }
+
+    //관리자 이미지 등록
+    @PostMapping("/admin/hospital/register/images")
+    public List<String> adminRegisterHospitalImages(@RequestParam(value="imageFiles", required=false) List<MultipartFile> imageFiles,
+                                                    @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
+        List<String> ImageURLS = imageManagementService.hospitalImageUpload(imageFiles, "hospitalImage", hospitalId);
+
+        return ImageURLS;
+    }
+
+    //관리자 이미지 보기
+    @GetMapping("/admin/hospital/view/hospitalImages")
+    public List<AdminHospitalImageDTO> adminViewHospitalImages(@RequestParam(value="hospitalId",required = false) Long hospitalId){
+        List<HospitalImage> hospitalImages = hospitalService.viewHospitalImages(hospitalId);
+        List<AdminHospitalImageDTO> images = hospitalImages.stream().map(h->new AdminHospitalImageDTO(h))
+                .collect(Collectors.toList());
+
+        return images;
+    }
+
+    //관리자 병원 이미지 삭제
+    @DeleteMapping("/admin/hospital/delete/hospitalImages/{hospitalImageId}")
+    public void adminDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId){
+        imageManagementService.deleteHospitalImage(hospitalImageId,"hospitalImage");
+    }
+
 
     /* DTO */
     @Data
@@ -446,4 +464,14 @@ public class HospitalApiController {
         }
     }
 
+    @Data
+    private static class AdminHospitalImageDTO{
+        private Long hospitalImageId;
+        private String imageKey;
+
+        public AdminHospitalImageDTO(HospitalImage hospitalImage) {
+            this.hospitalImageId = hospitalImage.getId();
+            this.imageKey = hospitalImage.getImageKey();
+        }
+    }
 }

@@ -43,6 +43,7 @@ public class ViewHospitalDTO {
     private Long hospitalReviewCount;
     private List<HospitalTagDTO> hospitalTags;
     private List<HospitalEstimationDTO> hospitalEstimations;
+    private List<HospitalImageDTO> hospitalImages;
 
     @QueryProjection
     public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId, Long hospitalThumbnailId, String licensingDate, String hospitalName,

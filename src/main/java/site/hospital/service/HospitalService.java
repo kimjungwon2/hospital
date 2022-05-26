@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.Doctor;
+import site.hospital.domain.HospitalImage;
 import site.hospital.domain.HospitalThumbnail;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.hospital.Hospital;
@@ -15,6 +16,7 @@ import site.hospital.dto.hospital.admin.AdminModifyHospitalRequest;
 import site.hospital.dto.ModifyHospitalRequest;
 import site.hospital.dto.hospital.staff.StaffModifyHospitalRequest;
 import site.hospital.repository.DetailedHosRepository;
+import site.hospital.repository.HospitalImageRepository;
 import site.hospital.repository.HospitalThumbnailRepository;
 import site.hospital.repository.estimation.EstimationRepository;
 import site.hospital.repository.hospital.HospitalRepository;
@@ -47,6 +49,7 @@ public class HospitalService {
     private final QuestionRepository questionRepository;
     private final EstimationRepository estimationRepository;
     private final JwtStaffAccessService jwtStaffAccessService;
+    private final HospitalImageRepository hospitalImageRepository;
 
 
     //병원 + 상세 정보등록
@@ -373,5 +376,15 @@ public class HospitalService {
         HospitalThumbnail thumbnail = hospitalThumbnailRepository.findById(thumbnailId)
                 .orElseThrow(()->new IllegalStateException("해당 id에 속하는 병원 썸네일이 존재하지 않습니다."));
         return thumbnail;
+    }
+
+    //관리자 병원 이미지들 보기
+    public List<HospitalImage> viewHospitalImages(Long hospitalId){
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(()->new IllegalStateException("해당 병원이 존재하지 않습니다."));
+
+        List<HospitalImage> hospitalImage = hospitalImageRepository.findByHospital(hospital);
+
+        return hospitalImage;
     }
 }
