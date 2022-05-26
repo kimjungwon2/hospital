@@ -516,6 +516,7 @@ export default {
   position:relative;
   text-align:left;
   left:12%;
+  width:73%;
 }
 
 .reviewContents__content{
@@ -524,7 +525,6 @@ export default {
     margin-bottom:20px;
     border-bottom: 1px solid #dee2e6!important;
     padding-bottom: 20px;
-    width:73%;
 }
 
 .leftBox__nickName{

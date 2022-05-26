@@ -4,12 +4,12 @@
     <section class="viewHospital__images" v-if="hospitalImages.length==0">
     </section>
     <section class="viewHospital__images" v-else>
-        <hooper :autoPlay="true" :playSpeed="2000" class="images_array">
+        <hooper :autoPlay="true" :playSpeed="2500" class="images_array">
             <slide class ="slide" v-for="image in hospitalImages" :key="image.hospitalImageId">
                   <img alt="hospitalImage" class="image__hospital" 
                             :src='`http://d123wf46onsgyf.cloudfront.net/w600/${image.imageKey}`'/>
             </slide>
-            <hooper-navigation slot="hooper-addons"></hooper-navigation>
+            <hooper-pagination slot="hooper-addons"></hooper-pagination>
         </hooper>
     </section>
 
@@ -76,7 +76,7 @@ import ViewDetailedInfoForm from '@/components/hospital/ViewDetailedInfoForm.vue
 import ViewHospitalReviewForm from '@/components/hospital/ViewHospitalReviewForm.vue';
 import ViewQandAForm from '@/components/hospital/ViewQandAForm.vue';
 
-import {Hooper,Slide,Navigation as HooperNavigation} from 'hooper';
+import {Hooper,Slide,Pagination as HooperPagination} from 'hooper';
 import 'hooper/dist/hooper.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -92,7 +92,7 @@ export default {
       ViewDetailedInfoForm,
       ViewHospitalReviewForm,
       ViewQandAForm,
-      Hooper,Slide,HooperNavigation,
+      Hooper,Slide,HooperPagination
   },
   data() {
     return {

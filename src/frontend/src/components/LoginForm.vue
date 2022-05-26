@@ -16,7 +16,6 @@
             <div class="signup_link">
                 회원이 아니세요? <router-link class="link" to="/signup">Signup</router-link>
             </div>
-            <p>{{logMessage}}</p>
         </form>
     </div>
 </template>
@@ -31,7 +30,6 @@ export default {
         return {
             memberIdName: '',
             password:'',
-            logMessage:'',
         }
     },
     computed:{
@@ -71,7 +69,7 @@ export default {
                await this.$store.dispatch('login',userData);
                this.$router.push('/main').catch(error=>error);
             } catch (error) {
-                this.logMessage = error.response.data;
+                alert(error.response.data.error);
             } finally{
                 this.initForm();
             }
