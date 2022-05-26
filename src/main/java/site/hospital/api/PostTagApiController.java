@@ -8,6 +8,7 @@ import site.hospital.domain.PostTag;
 import site.hospital.service.PostTagService;
 
 import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,7 +61,9 @@ public class PostTagApiController {
     @Data
     private static class StaffLinkTagRequest {
         private Long memberId;
+        @NotNull(message="태그 번호를 입력해주세요.")
         private Long tagId;
+        @NotNull(message="병원 번호를 입력해주세요.")
         private Long hospitalId;
     }
 
@@ -68,7 +71,9 @@ public class PostTagApiController {
     /* DTO */
     @Data
     private static class LinkTagRequest {
+        @NotNull(message="태그 번호를 입력해주세요.")
         private Long tagId;
+        @NotNull(message="병원 번호를 입력해주세요.")
         private Long hospitalId;
     }
 

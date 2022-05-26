@@ -28,6 +28,7 @@ import site.hospital.service.HospitalService;
 import site.hospital.service.ImageManagementService;
 
 import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -387,12 +388,19 @@ public class HospitalApiController {
     @Data
     private static class CreateHospitalRequest{
 
+        @NotNull(message="개업일을 입력해주세요..")
         private String licensingDate;
+        @NotNull(message="병원 이름을 입력해주세요.")
         private String hospitalName;
+        @NotNull(message="전화번호를 입력해주세요.")
         private String phoneNumber;
+        @NotNull(message="병원 종류를 입력해주세요.")
         private String distinguishedName;
+        @NotNull(message="진료 과목을 입력해주세요.")
         private String medicalSubjectInformation;
+        @NotNull(message="영업 상태를 입력해주세요.")
         private BusinessCondition businessCondition;
+        @NotNull(message="도시 이름을 입력해주세요.")
         private String cityName;
 
         private Boolean detailedInfoCheck;
@@ -403,16 +411,21 @@ public class HospitalApiController {
 
         private HospitalLocation hospitalLocation;
         private HospitalAddress hospitalAddress;
-
     }
 
     @Data
     private static class CreateDetailedHospitalInformationRequest{
+        @NotNull(message="병원 번호를 입력해주세요.")
         private Long hospitalId;
+        @NotNull(message="종업원 수를 입력해주세요.")
         private Integer numberHealthcareProvider;
+        @NotNull(message="병실 수를 입력해주세요.")
         private Integer numberWard;
+        @NotNull(message="환자실 수를 입력해주세요.")
         private Integer numberPatientRoom;
+        @NotNull(message="병원 위치 좌표를 입력해주세요.")
         private HospitalLocation hospitalLocation;
+        @NotNull(message="병원 주소를 입력해주세요.")
         private HospitalAddress hospitalAddress;
     }
 
@@ -436,9 +449,13 @@ public class HospitalApiController {
 
     @Data
     private static class CreateStaffHosRequest{
+        @NotNull(message="병원 번호를 입력해주세요.")
         private Long hospitalId;
+        @NotNull(message="병원 소개를 입력해주세요.")
         private String introduction;
+        @NotNull(message="영업 시간을 입력해주세요.")
         private String consultationHour;
+        @NotNull(message="특이사항을 입력해주세요.")
         private String abnormality;
         private List<CreateDoctorRequest> doctors;
     }

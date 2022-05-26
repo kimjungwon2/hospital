@@ -10,6 +10,7 @@ import site.hospital.dto.doctor.StaffCreateDoctorRequest;
 import site.hospital.service.DoctorService;
 
 import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,7 +75,9 @@ public class DoctorApiController {
 
     @Data
     private static class AdminModifyDoctorRequest{
+        @NotNull(message="의사 경력을 입력해주세요.")
         private String history;
+        @NotNull(message="의사 이름을 입력해주세요.")
         private String name;
     }
 

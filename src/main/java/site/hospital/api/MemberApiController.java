@@ -210,7 +210,11 @@ public class MemberApiController {
 
     @Data
     private static class LoginMemberRequest{
+        @Email(message="올바른 이메일 형태가 아닙니다.")
+        @NotBlank(message="공백없이 아이디를 입력해주세요.")
         String memberIdName;
+
+        @NotNull(message="비밀번호를 입력해주세요.")
         String password;
     }
 
@@ -325,6 +329,7 @@ public class MemberApiController {
         private String phoneNumber;
         @NotNull(message="권한을 넣어주세요.")
         private MemberStatus memberStatus;
+        @NotNull(message="병원 번호를 넣어주세요.")
         private Long hospitalId;
     }
 }

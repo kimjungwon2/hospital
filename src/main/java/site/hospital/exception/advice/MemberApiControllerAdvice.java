@@ -43,4 +43,10 @@ public class MemberApiControllerAdvice {
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler
+    public ErrorResponse serverHandle(Exception e){
+        log.error("InternalServerException:",e);
+        return new ErrorResponse("SERVER_ERROR",e.getMessage());
+    }
 }

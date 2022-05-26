@@ -16,6 +16,7 @@ import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
 import site.hospital.service.QuestionService;
 
 import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -124,8 +125,11 @@ public class QuestionApiController {
 
     @Data
     private static class CreateQuestionRequest{
+        @NotNull(message="병원 번호를 입력해주세요.")
         private Long hospitalId;
+        @NotNull(message="멤버 번호를 입력해주세요.")
         private Long memberId;
+        @NotNull(message="질문 내용을 입력해주세요.")
         private String content;
     }
 

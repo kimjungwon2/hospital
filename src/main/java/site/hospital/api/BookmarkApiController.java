@@ -14,6 +14,7 @@ import site.hospital.dto.StaffBookmarkSearchCondition;
 import site.hospital.service.BookmarkService;
 
 import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,7 +93,9 @@ public class BookmarkApiController {
 
     @Data
     private static class CreateBookmarkRequest{
+        @NotNull(message="멤버 번호가 필요합니다.")
         private Long memberId;
+        @NotNull(message="병원 번호가 필요합니다.")
         private Long hospitalId;
     }
 

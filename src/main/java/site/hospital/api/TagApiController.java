@@ -13,6 +13,7 @@ import site.hospital.domain.Tag;
 import site.hospital.service.PostTagService;
 import site.hospital.service.TagService;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,6 +91,7 @@ public class TagApiController {
     /* DTO */
     @Data
     private static class CreateTagRequest {
+        @NotNull(message="태그 이름을 입력해주세요.")
         private String tagName;
     }
 
