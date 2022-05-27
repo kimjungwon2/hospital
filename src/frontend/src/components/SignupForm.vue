@@ -66,10 +66,15 @@ export default {
                     nickName: this.nickName,
                     phoneNumber: this.phoneNumber,
                 }
-                await signupUser(userData);
-                this.$alert("회원 가입이 완료되었습니다.")
-                this.initForm();
-                this.$router.push('/main').catch(error=>error);
+                try{
+                    await signupUser(userData);
+                    this.$alert("회원 가입이 완료되었습니다.");
+                    this.$router.push('/main');
+                }catch(error){
+                    alert(error.response.data.message);
+                } finally{
+                    this.initForm();
+                }
             }
         },
         initForm(){
@@ -78,6 +83,7 @@ export default {
             this.userName = '';
             this.nickName = '';
             this.phoneNumber = '';
+            this.repassword='';
         },
     }
 };

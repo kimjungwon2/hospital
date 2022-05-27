@@ -211,7 +211,7 @@ a.router-link-exact-active {
 
 #sub-menu{
   position:absolute;
-  background: #0a5a3e;
+  background: #4c7e80;
   opacity:0;
   visibility: hidden;
   z-index:2;
@@ -223,7 +223,7 @@ a.router-link-exact-active {
 }
 
 #sub-menu>li>a{
-  color:rgba(255,255,255,0.6);
+  color:white;
   text-decoration: none;
 }
 

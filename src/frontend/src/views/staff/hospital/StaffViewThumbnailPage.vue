@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import StaffViewThumbnailForm from '@/components/staff/hospital/StaffViewImageHospitalForm';
+import StaffViewThumbnailForm from '@/components/staff/hospital/StaffViewThumbnailForm';
 
 export default {
     

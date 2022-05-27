@@ -67,7 +67,7 @@ export default {
                      password: this.password,
                 }; 
                await this.$store.dispatch('login',userData);
-               this.$router.push('/main').catch(error=>error);
+               this.$router.push('/main');
             } catch (error) {
                 alert(error.response.data.error);
             } finally{

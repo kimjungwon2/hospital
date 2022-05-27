@@ -4,6 +4,7 @@
         <button class="hospital__category__btn"> 병원 정보 </button>
         <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
         <button class="hospital__category__btn" @click.prevent="viewThumbnail"> 병원 섬네일 </button>
+        <button class="hospital__category__btn" @click.prevent="viewHospitalImage"> 병원 이미지</button>
     </div>
       <StaffModifyHospitalModal :hospitalId="hospital.hospitalId" :hospital="hospital" v-if ="isModifyHospital===true" 
       @hospitalCancel="cancelModifyHospital" @hospitalLoad="staffLoadHospital"/>
@@ -113,6 +114,13 @@ export default {
         //병원 섬네일 보기
         viewThumbnail(){
             this.$router.push({name:'staffThumbnail',
+                query: {hospitalId:this.hospital.hospitalId,
+                    staffHosInfoId:this.hospital.staffHosInfoId,
+                    thumbnailId:this.hospital.thumbnailId}
+            }); 
+        },
+        viewHospitalImage(){
+            this.$router.push({name:'staffHospitalImage',
                 query: {hospitalId:this.hospital.hospitalId,
                     staffHosInfoId:this.hospital.staffHosInfoId,
                     thumbnailId:this.hospital.thumbnailId}

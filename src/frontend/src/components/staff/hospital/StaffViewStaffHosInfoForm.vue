@@ -4,6 +4,7 @@
     <button class="hospital__category__btn" @click.prevent=viewHospital> 병원 정보 </button>
     <button class="hospital__category__btn"> 추가 병원 정보 </button>
     <button class="hospital__category__btn" @click.prevent="viewThumbnail"> 병원 섬네일 </button>
+    <button class="hospital__category__btn" @click.prevent="viewHospitalImage"> 병원 이미지</button>
   </div>
 
   <div v-if="staffHosInfoId===null">
@@ -64,6 +65,13 @@ export default {
                 staffHosInfoId:this.$route.query.staffHosInfoId,
                 thumbnailId:this.$route.query.thumbnailId}
         }); 
+    },
+    viewHospitalImage(){
+            this.$router.push({name:'staffHospitalImage',
+                query: {hospitalId:this.$route.query.hospitalId,
+                    staffHosInfoId:this.$route.query.staffHosInfoId,
+                    thumbnailId:this.$route.query.thumbnailId}
+            }); 
     },
     createHospital(){
       this.$router.push('/staff/register/'+this.hospitalId+'/staffHosInfo');

@@ -66,8 +66,6 @@ export default {
         const id = this.$route.params.id;
         const {data} = await viewHospitalQandA(id);
         this.QandAs = data;
-
-        console.log(data);
   }
 }
 </script>

@@ -97,6 +97,26 @@ function staffDeleteThumbnail(thumbnailId){
     return staff.delete('/hospital/delete/thumbnail/'+thumbnailId);
 }
 
+//관리자 병원 이미지 업로드
+function staffCreateHospitalImage(data){
+    return staff.post(`/hospital/register/images`,data);
+}
+
+//관리자 병원 이미지들 보기
+function staffViewHospitalImages(hospitalId){
+    return staff.get('/hospital/view/hospitalImages',
+    {
+        params:{
+            hospitalId:hospitalId,
+        },
+    });
+}
+
+//관리자 병원 이미지 삭제
+function staffDeleteHospitalImage(hospitalImageId){
+    return staff.delete('/hospital/delete/hospitalImages/'+hospitalImageId);
+}
+
 
 
 /*등록된 병원 검색 서비스*/
@@ -176,7 +196,9 @@ export{
     staffModifyHospital,staffViewHospital,staffDeleteHospitalTag,staffDeleteDetailedHosInfo,
     staffViewStaffHospitalInfo,staffDeleteStaffHosInfo,
     staffCreateDoctor,staffDeleteDoctor,staffModifyDoctor,
+
     staffViewThumbnail,staffDeleteThumbnail,staffCreateThumbnail,
+    staffCreateHospitalImage,staffViewHospitalImages,staffDeleteHospitalImage,
 
     staffRegisterAnswer,staffNoAnswerCount,staffSearchBookmarkUsers,staffViewReview,
     staffSearchReviewLists,staffSearchQuestionLists,staffSearchNoAnswerQuestions,

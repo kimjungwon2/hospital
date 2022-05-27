@@ -41,7 +41,6 @@
         </div>
 
         <button type="submit">회원가입</button>
-        <p>{{ logMessage }}</p>
     </form>
 
     </div>
@@ -69,7 +68,6 @@ export default {
             memberStatus:'',
             hospitalId:'',
             //log
-            logMessage:'',
             isSearchHospital:false,
         };
     },
@@ -85,10 +83,15 @@ export default {
                     memberStatus: this.memberStatus,
                     hospitalId:this.hospitalId
                 }
-                await adminCreateMember(userData);
-                this.$alert("회원 가입이 완료되었습니다.")
-                this.initForm();
-                this.$router.push('/admin/users').catch(error=>error);
+                try{
+                    await adminCreateMember(userData);
+                    this.$alert("회원 가입이 완료되었습니다.");
+                    this.$router.push('/admin/users').catch(error=>error);
+                }catch(error){
+                    alert(error.response.data.message);
+                }finally{
+                    this.initForm();
+                }
             }
 
             else{
@@ -101,10 +104,15 @@ export default {
                     memberStatus: this.memberStatus,
                     hospitalId:null
                 }
-                await adminCreateMember(userData);
-                this.$alert("회원 가입이 완료되었습니다.")
-                this.initForm();
-                this.$router.push('/admin/users').catch(error=>error);
+                try{
+                    await adminCreateMember(userData);
+                    this.$alert("회원 가입이 완료되었습니다.");
+                    this.$router.push('/admin/users').catch(error=>error);
+                }catch(error){
+                    this.$alert(error.response.data.message);
+                }finally{
+                    this.initForm();
+                }
             }
         },
         initForm(){

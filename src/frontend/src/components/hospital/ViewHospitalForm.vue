@@ -246,17 +246,18 @@ export default {
     margin-left:20px;
     margin-right:20px;
     display:flex;
-    border-bottom:1px solid #444444;
+    border-bottom:1px solid #d3d3d3;
 }
 
 .hospital__class{
     width:15%;
     text-align:center;
-    border-right:1px solid #444444;
+    padding:5px;
 }
 
 .hospital__content{
     margin-left:10px;
+    padding:5px;
     width:80%;
 }
 

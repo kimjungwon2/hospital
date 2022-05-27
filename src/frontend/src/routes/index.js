@@ -90,6 +90,12 @@ const router =  new VueRouter({
             meta: {staff: true},
        },
        {
+            path:'/staff/hospitalImage',
+            component:() => import('@/views/staff/hospital/StaffViewHospitalImagePage.vue'),
+            name:'staffHospitalImage',
+            meta: {staff: true},
+       },
+       {
           path:'/staff/register/:hospitalId/staffHosInfo',
           component: ()=> import('@/views/staff/hospital/StaffRegisterStaffHosInfoPage.vue'),
           meta: { staff: true},
