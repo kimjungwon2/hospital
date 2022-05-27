@@ -29,10 +29,12 @@ public class StaffHosInformation extends BaseEntity {
     private List<Doctor> doctors = new ArrayList<>();
 
     @NotNull
+    @Column(length = 1000)
     private String introduction;
     @NotNull
     private String consultationHour;
     @NotNull
+    @Column(length = 1000)
     private String abnormality;
 
     //연관관계 때문에 set 설정

@@ -51,7 +51,6 @@ public class Member extends BaseTimeEntity {
     private String phoneNumber;
 
     //병원 번호
-    @NotNull
     private Long hospitalNumber;
 
     //멤버 권한.
