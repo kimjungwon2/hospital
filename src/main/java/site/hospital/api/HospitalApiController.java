@@ -152,6 +152,32 @@ public class HospitalApiController {
         imageManagementService.deleteThumbnail(thumbnailId,"thumbnail");
     }
 
+    //관계자 이미지 등록
+    @PostMapping("/staff/hospital/register/images")
+    public List<String> staffRegisterHospitalImages(@RequestParam(value="imageFiles", required=false) List<MultipartFile> imageFiles,
+                                                    @RequestParam(value="hospitalId", required = false) Long hospitalId) throws IOException{
+        List<String> ImageURLS = imageManagementService.hospitalImageUpload(imageFiles, "hospitalImage", hospitalId);
+
+        return ImageURLS;
+    }
+
+    //관계자 이미지 보기
+    @GetMapping("/staff/hospital/view/hospitalImages")
+    public List<AdminHospitalImageDTO> staffViewHospitalImages(@RequestParam(value="hospitalId",required = false) Long hospitalId){
+        List<HospitalImage> hospitalImages = hospitalService.viewHospitalImages(hospitalId);
+        List<AdminHospitalImageDTO> images = hospitalImages.stream().map(h->new AdminHospitalImageDTO(h))
+                .collect(Collectors.toList());
+
+        return images;
+    }
+
+    //관계자 병원 이미지 삭제
+    @DeleteMapping("/staff/hospital/delete/hospitalImages/{hospitalImageId}")
+    public void staffDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId){
+        imageManagementService.deleteHospitalImage(hospitalImageId,"hospitalImage");
+    }
+
+
     //관리자 병원 검색
     @GetMapping("/admin/hospital/search")
     public Page<AdminSearchHospitalDto> adminSearchHospitals(@RequestParam(value="hospitalId",required = false) Long hospitalId,

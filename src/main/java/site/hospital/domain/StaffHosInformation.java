@@ -32,6 +32,7 @@ public class StaffHosInformation extends BaseEntity {
     @Column(length = 1000)
     private String introduction;
     @NotNull
+    @Column(length = 500)
     private String consultationHour;
     @NotNull
     @Column(length = 1000)
