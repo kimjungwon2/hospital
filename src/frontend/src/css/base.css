@@ -1,0 +1,20 @@
+/* Global*/
+* {
+  box-sizing: border-box;
+}
+h1 {
+  margin: 16px 0px;
+}
+h2 {
+  margin: 8px 0px;
+}
+h3 {
+  margin: 8px 0px;
+}
+button {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
