@@ -41,7 +41,70 @@
 </br>
 
 ## 6. 고려한 점
+<details>
+<summary>Entity 클래스에서 Setter 메소드를 만들지 않았습니다.(연관관계 메서드 제외)</summary>
+<div markdown="1">
+
+- **이유**: 클래스의 인스턴스 값들이 언제 어디서 변하는지 코드상으로 명확하게 구분할 수 없어, 차후 기능 변경 시 Setter를 사용하면 정말 복잡해집니다.
+- **해결**: 기본적인 구조는 생성자를 통해 DB에 삽입합니다. 값 변경이 필요한 경우 이벤트에 맞는 public 메소드를 호출하여 변경했습니다.
+- **예시**
+
+<b>Setter 사용</b>
+```
+  Estimation estimation = new Estimation();
+  Member.setEstimationList("주사제");
+  Member.setEstimationGrade("1등급");
+```
+*****
+<b>생성자를 통해 변경</b> :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/4d39e3c12ba04a1de79a0574a1c49897216eaf11/src/main/java/site/hospital/domain/estimation/Estimation.java#L44)
+```
+  public void modifyEstimation(Estimation estimation){
+        this.estimationList = estimation.getEstimationList();
+        this.distinctionGrade = estimation.getDistinctionGrade();
+    }
+```
+이렇게 modifyEstimation 함수명으로 **정보를 수정한다는 걸 한 눈에 알 수 있습니다**. 
+
+</div>
+</details>
+
+<details>
+<summary>엔티티나 임베디드 타입은 기본 생성자를 protected로 설정했습니다. 저는 @NoArgsConstructor(access = AccessLevel.PROTECTED) 롬복으로 대체했습니다.</summary>
+<div markdown="1">
+
+- 다른 사람이 쓰지 못하도록 아무 곳이나 생성되는 걸 막기 위함.
+- **private을 사용 못하는 이유**: JPA 표준 스펙에 디폴트 생성자가 있어야합니다. JPA가 프록시 기술을 쓸 때,  jpa hibernate가 객체를 강제로 만들어야하는데 private로 만들면 이것이 다 막힙니다.
+</div>
+</details>
+
+<details>
+<summary>Service 계층에서 @Transaction(readOnly = true) 사용.</summary>
+<div markdown="1">
+
+- 읽기 모드로 성능을 최적화하기 위해서입니다.
+</div>
+</details>
+
+<details>
+<summary>데이터를 수정할 때, merge보다는 dirty checking(변경 감지)를 이용해 업데이트.</summary>
+<div markdown="1">
+
+- merge 사용 시, 값이 없으면 null로 업데이트 되기에 변경 감지를 사용했습니다.
+</div>
+</details>
+
+<details>
+<summary>Auditing으로 등록일, 수정일을 다 넣었습니다. </summary> 
+<div markdown="1">
+
+- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/baseEntity/BaseEntity.java)
+- 데이터를 언제 바꿨냐, 언제 문제가 생겼냐는 게 중요해서 넣으면 운영할 때 편합니다.
+- 등록, 수정 두가지는 모든 테이블에 다 적용했습니다.
+</div>
+</details>
+
 </br>
+
 
 ## 7. 회고&느낀점
 </br>
