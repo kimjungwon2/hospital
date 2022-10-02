@@ -31,7 +31,7 @@
 </br>
 
 ## 3. ERD 설계
-
+![병원 ERD](https://user-images.githubusercontent.com/40010165/193455271-e1571937-4290-470a-bf86-d39537e954df.png)
 </br>
 
 ## 4. 핵심 기능
