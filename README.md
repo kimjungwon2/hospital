@@ -72,7 +72,7 @@
 <summary>엔티티나 임베디드 타입은 기본 생성자를 protected로 설정했습니다. 저는 @NoArgsConstructor(access = AccessLevel.PROTECTED) 롬복으로 대체했습니다.</summary>
 <div markdown="1">
 
-- 다른 사람이 쓰지 못하도록 아무 곳이나 생성되는 걸 막기 위함.
+- Setter로 타인이 무분별하게 값을 변경하는 걸 방지하기 위해, protected 생성자로 아무데나 생성되는 걸 제약한다.
 - **private을 사용 못하는 이유**: JPA 표준 스펙에 디폴트 생성자가 있어야합니다. JPA가 프록시 기술을 쓸 때,  jpa hibernate가 객체를 강제로 만들어야하는데 private로 만들면 이것이 다 막힙니다.
 </div>
 </details>
