@@ -42,6 +42,15 @@
 
 ## 6. 고려한 점
 <details>
+<summary>모든 연관 관계는 지연 로딩(LazyLoading)으로 설정했습니다. </summary>
+<div markdown="1">
+
+- 즉시 로딩(EAGER)은 예측이 어렵고, 어떤 SQL이 실행될지 추적하기 어렵기 때문입니다.
+- XToOne(일대일, 다대일) 관계는 기본이 EAGER Loading이라서 직접 지연로딩으로 설정했습니다.
+</div>
+</details>
+
+<details>
 <summary>Entity 클래스에서 Setter 메소드를 만들지 않았습니다.(연관관계 메서드 제외)</summary>
 <div markdown="1">
 
@@ -65,6 +74,15 @@
 ```
 이렇게 modifyEstimation 함수명으로 **정보를 수정한다는 걸 한 눈에 알 수 있습니다**. 
 
+</div>
+</details>
+
+<details>
+<summary>양방향 연관관계 메서드를 entity 양쪽 객체에서 둘 다 작성하는 게 아닌 한쪽만 작성했습니다. </summary>
+<div markdown="1">
+
+- - :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/hospital/Hospital.java#L71)
+- 기존의 개발자가 작성한 두 개의 메서드 중에서 코드를 작성하는 다른 개발자들은 어떤 메서드를 호출해야 할지 혼란스러움을 느끼기 때문입니다.
 </div>
 </details>
 
@@ -122,7 +140,7 @@
 </details>
 
 <details>
-<summary>일대다 관계에서 컬렉션이 있는 칼럼을 조회할 때,  다대일 관계만 모두 페치조인으로 하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size 적용했습니다.</summary>
+<summary>일대다 관계에서 컬렉션이 있는 칼럼을 조회할 때,  XToOne(일대일, 다대일) 관계만 모두 페치조인으로 하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size 적용했습니다.</summary>
 <div markdown="1">
 
 - :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
