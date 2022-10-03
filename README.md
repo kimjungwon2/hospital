@@ -103,6 +103,43 @@
 </div>
 </details>
 
+<details>
+<summary>API 계층에서 Entity를 그대로 파라미터에 넣거나, Entity 값으로 반환하지 않았습니다. 대신 API 스펙을 위한 별도의 DTO를 생성했습니다.</summary>
+<div markdown="1">
+
+- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L165)
+- Entity를 웹에 노출하면 api 스펙이 변해버리거나 패스워드가 그대로 노출되기에, DTO로 변환해줘야 합니다.
+</div>
+</details>
+
+<details>
+<summary>양방향 연관 관계에서 객체(다른 객체가 칼럼에 있는)들을 조회 시, 엔티티를 DTO로 변환하고 Repository에서 fetch join 사용.</summary>
+<div markdown="1">
+
+- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
+- fetch join으로 해당 객체의 칼럼들을 select를 다 가져오게끔 한다. 이러면 LAZY.LOADING으로 인한 조회 성능이 최적화된다.
+</div>
+</details>
+
+<details>
+<summary>일대다 관계에서 컬렉션이 있는 칼럼을 조회할 때,  다대일 관계만 모두 페치조인으로 하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size 적용했습니다.</summary>
+<div markdown="1">
+
+- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
+- 이러면 성능 최적화도 되고,  페이징도 적용됩니다. 쿼리 호출 수가 1 + N  => 1 + 1 로 최적화 돼서 조인보다 DB 데이터 전송량이 최적화 됩니다.
+- fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
+</div>
+</details>
+
+<details>
+<summary>페이징 시 countQuery를 따로 분리했습니다.</summary>
+<div markdown="1">
+
+- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L100)
+- 분리함으로써 성능을 최적화했습니다.
+</div>
+</details>
+
 </br>
 
 
