@@ -46,7 +46,7 @@
 <div markdown="1">
 
 - 즉시 로딩(EAGER)은 예측이 어렵고, 어떤 SQL이 실행될지 추적하기 어렵기 때문입니다.
-- XToOne(일대일, 다대일) 관계는 기본이 EAGER Loading이라서 직접 지연로딩으로 설정했습니다.
+- XToOne(일대일, 다대일) 관계는 기본이 EAGER Loading이라서 직접 지연로딩으로 설정했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/Bookmark.java#L21)
 </div>
 </details>
 
