@@ -117,7 +117,7 @@
 <div markdown="1">
 
 - :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
-- fetch join으로 해당 객체의 칼럼들을 select를 다 가져오게끔 했습니다. 이러면 LAZY.LOADING으로 인한 조회 성능이 최적화됩니다.
+- fetch join으로 해당 객체의 칼럼들을 select를 다 가져오게끔 했습니다. 이러면 LAZY.LOADING과 조회 성능이 최적화됩니다.
 </div>
 </details>
 
