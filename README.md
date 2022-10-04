@@ -126,7 +126,7 @@
   - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
   
 - 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 :clipboard: [다음 코드](https://github.com/kimjungwon2/hospital/blob/d718177cc841d5f03de7221bba0aa32c21a1e85c/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L62)와 같은 방식으로 select양을 줄어들게 했습니다.
-  - QueryDTO를 ID로 바꿔서 그걸 파라미터 in 절로 넣어 쿼리를 날리고. hashmap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해서 값을 세팅해줬습니다.
+  - QueryDTO를 ID로 바꿔서 그걸 파라미터 in 절로 넣어 쿼리를 날리고. Hashmap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해서 값을 세팅해줬습니다.
 
 ### 5.2. 병원 검색 
 
