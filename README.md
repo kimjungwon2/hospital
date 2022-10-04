@@ -116,6 +116,17 @@
 <div markdown="1">
 
 ### 5.1. Repository 계층
+- 단순한 쿼리나 단순한 동적 쿼리의 경우 spring data jpa를 사용했고:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/TagRepository.java), 복잡한 동적쿼리의 경우 QueryDSL을 사용했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
+
+- 객체 단위의 필드를 조회할 때, fetch join으로 모든 필드들을 가져왔습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
+  - fetch join으로 해당 객체의 칼럼들을 다 가져오게끔 했습니다. 이러면 LAZY.LOADING과 조회 성능이 최적화됩니다.
+
+- 컬렉션(ArrayList)을 조회할 때,  XToOne(일대일, 다대일) 관계만 모두 fetch join으로 조회하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size를 설정해 in 쿼리를 날려서 한 번에 처리하게끔 만들었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
+  - 이러면 성능 최적화도 되고,  페이징도 적용됩니다. 쿼리 호출 수가 1 + N  => 1 + 1 로 최적화 돼서 조인보다 DB 데이터 전송량이 최적화 됩니다.
+  - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
+  
+- 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 :clipboard: [다음 코드](https://github.com/kimjungwon2/hospital/blob/d718177cc841d5f03de7221bba0aa32c21a1e85c/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L62)와 같은 방식으로 select양을 줄어들게 했습니다.
+  - QueryDTO를 ID로 바꿔서 그걸 파라미터 in 절로 넣어 쿼리를 날리고. hashmap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해서 값을 세팅해줬습니다.
 
 ### 5.2. 병원 검색 
 
@@ -242,25 +253,6 @@ Stateless
 
 - :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L165)
 - Entity를 웹에 노출하면 api 스펙이 변해버리거나 패스워드가 그대로 노출되기에, DTO로 변환해줘야 합니다.
-</div>
-</details>
-
-<details>
-<summary>양방향 연관 관계에서 객체(다른 객체가 칼럼에 있는)들을 조회 시, 엔티티를 DTO로 변환하고 Repository에서 fetch join 사용했습니다.</summary>
-<div markdown="1">
-
-- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
-- fetch join으로 해당 객체의 칼럼들을 select를 다 가져오게끔 했습니다. 이러면 LAZY.LOADING과 조회 성능이 최적화됩니다.
-</div>
-</details>
-
-<details>
-<summary>일대다 관계에서 컬렉션이 있는 칼럼을 조회할 때,  XToOne(일대일, 다대일) 관계만 모두 페치조인으로 하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size 적용했습니다.</summary>
-<div markdown="1">
-
-- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
-- 이러면 성능 최적화도 되고,  페이징도 적용됩니다. 쿼리 호출 수가 1 + N  => 1 + 1 로 최적화 돼서 조인보다 DB 데이터 전송량이 최적화 됩니다.
-- fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
 </div>
 </details>
 
