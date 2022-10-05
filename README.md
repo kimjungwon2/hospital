@@ -193,6 +193,18 @@ Back-end : JWT 토큰
   - .antMatchers(특정 URL).hasAnyRole(권한)으로 특정 권한이 있어야지 해당 URL로 접근 허용.
   - .anyRequest().authenticated() 나머지 요청들은 모두 인증이 되도록 설정. 
   - .apply(new JwtSecurityConfig(tokenProvider))로 앞에서 설정한 JwtSecurityConfig를 적용.
+
+- **사용자 로그인**
+  - 로그인 때 DB에서 유저정보와 권한정보를 가져오면, 해당 정보를 기반으로 userDetails.User 객체를 생성해 리턴. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtUserDetailsService.java)
+  
+  - 병원 관계자가 MANAGER 권한이 필요한 행동을 할 때마다 token에서 병원 번호를 얻습니다. :clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtStaffAccessService.java) 자신이 관리하는 병원 번호가 아닐 경우 접근 금지 처리. :clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
+  
+  - **로그인 과정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/MemberApiController.java#L39)
+    - ID와 PW를 통해서 AuthenticationToken 객체를 생성. authentication Token을 이용해서 authenticate 메소드가 실행될 때 loadUserByUsername 메소드가 실행.
+    - JwtUserDetailsService를 통해 loadUserByUsername이 실행된다. 이 결과값을 가지고 authentication 객체를 생성한다. 
+    - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
+    - 토큰을 header에 넣어준다. 
+    
   </br>
 ### 5.4. 이미지 관리 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java)
 #### 5.4.1. Stateful vs Stateless
