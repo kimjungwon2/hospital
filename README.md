@@ -126,7 +126,7 @@
   - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
   
 - 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 :clipboard: [다음 코드](https://github.com/kimjungwon2/hospital/blob/d718177cc841d5f03de7221bba0aa32c21a1e85c/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L62)와 같은 방식으로 select양을 줄어들게 했습니다.
-  - QueryDTO를 ID로 바꿔서 그걸 파라미터 in 절로 넣어 쿼리를 날리고. Hashmap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해서 값을 세팅해줬습니다.
+  - 구현 원리는 5.2 일반+태그 검색에서 후술한 것을 참고하시면 됩니다.
 
 ### 5.2. 병원 검색
 - **일반 검색**
@@ -141,7 +141,7 @@
   - **성능 최적화**: 검색은 수많은 DB들을 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다.
     - Queryprojection으로 특정 필드만 검색하기 위해, 각각의 Entity의 DTO를 생성했습니다. 
     - stream을 돌려서 HospitalSearchDto를 hospitalId로 바꿨습니다. 이러면 여러 개가 뽑히는데 그걸 파라미터 in절로 넣었습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L53)
-    - HashMap을 통해 메모리에서 매칭해서 값을 세팅해줬습니다. (O(1)) :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L56)
+    - HashMap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해 값을 세팅해줬습니다. (O(1)) :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L56)
     - 리뷰뿐만 아니라 태그도 한 번에 조회하기 위해서 앞의 과정을 다시 반복해줍니다. 
     - 이러면 1+1+1 조회가 됐고, Queryprojection으로 인해 데이터 select양이 줄어듭니다.
 
@@ -149,7 +149,15 @@
   - 간혹 일반+태그 검색으로도 병원이 검색 안 되는 경우가 있기에 리뷰의 내용 혹은 등록한 질병명을 토대로 검색했습니다.
   - 페이징과 성능 최적화는 이전의 일반+태그 검색과 동일하게 했습니다. 
 
-### 5.3. 세 가지의 계정 종류
+### 5.3. 계정 권한
+
+Front-end
+-------------
+네비게이션 가드
+
+Back-end
+-------------
+토큰 값
 
 ### 5.4. 이미지 관리 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java)
 #### 5.4.1. Stateful vs Stateless
