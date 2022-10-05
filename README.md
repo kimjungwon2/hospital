@@ -1,6 +1,6 @@
 # :pushpin: 병원 조회 웹사이트
->RESTful API 방식. 병원 정보, 위치(지도), 리뷰, Q&A 등의 기능이 있는 웹사이트.</br>
->[경기데이터드림](https://data.gg.go.kr/portal/mainPage.do)의 DB를 활용하여 남양주시와 의정부시의 병원 정보를 기입했습니다. (약 200개 가량의 데이터) 
+>RESTful API 방식. 병원 정보, 위치(지도), 리뷰, Q&A 등의 기능이 있는 웹사이트. </br>
+>[경기데이터드림](https://data.gg.go.kr/portal/mainPage.do)의 DB를 활용하여 남양주시와 의정부시의 병원 정보를 기재했습니다. (약 200개 가량의 데이터) 
 
 </br>
 
@@ -66,7 +66,7 @@
 - **api**: Axios를 통해 서버에 데이터 요청. 
 - **assets**: 사이트에 사용되는 기본 이미지들을 모았습니다.
 - **components**: 페이지들의 구성요소인 컴포넌트들을 보관.
-- **css**: 공통적으로 사용되는 css입니다.
+- **css**: 공통으로 사용되는 css입니다.
 - **routes**: 각각의 url과 vue의 페이지들을 매칭시켜주는 역할.
 - **store**: vue의 store 관련 함수.
 - **utils**: 쿠키, 필터(숫자를 받아 날짜로 변경해주는), 이메일 문자열인지 검증해주는 코드들.
@@ -88,9 +88,9 @@
 ![설명2](https://user-images.githubusercontent.com/40010165/193619543-bc61ad47-c8bf-4349-a094-c36b60f65d35.png)
 
 ### 4.2. 연관관계의 주인 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/Question.java#L27)
-- 일대다 or 다대일 양방향 관계일 경우, 연관관계의 주인을 정해야합니다. 
+- 일대다 or 다대일 양방향 관계일 경우, 연관관계의 주인을 정해야 합니다. 
   
-- 다 관계쪽에 있거나, 외래키가 있는 곳을 연관관계의 주인으로 설정했습니다. 
+- 다 관계 쪽에 있거나, 외래키가 있는 곳을 연관관계의 주인으로 설정했습니다. 
   
 - 연관관계 주인만이 외래키를 관리(update,create,delete)할 수 있습니다. 
   
@@ -99,9 +99,9 @@
 ### 4.3. 기본 키(PK)는 Long 타입의 대리 키로 설정
 - 모든 Entity의 PK는 Long 타입의 Auto_increment를 사용했습니다. 
   
-- PK를 자연 키(주민번호, 전화번호 등)로 하면 비즈니스 환경이 변할 때, 간혹 기본 키로 인해 수정할 부분이 많아질 경우가 있습니다. 반면 대리 키는 비즈니스와 아무 관련이 없기에 비즈니스가 변경되어도 유연한 대처가 가능합니다. 
+- PK를 자연 키(주민등록번호, 전화번호 등)로 하면 비즈니스 환경이 변할 때, 간혹 기본 키로 인해 수정할 부분이 많아질 경우가 있습니다. 반면 대리 키는 비즈니스와 아무 관련이 없기에 비즈니스가 변경되어도 유연한 대처가 가능합니다. 
   
-- 테이블간의 관계를 설계할 때, 비식별 관계(부모 테이블의 기본 키를 받아 자식 테이블의 외래 키로만 사용)에서 대리 키를 주로 사용합니다. 이러면 매핑도 쉽고 코드가 단순해집니다.
+- 테이블 간의 관계를 설계할 때, 비식별 관계(부모 테이블의 기본 키를 받아 자식 테이블의 외래 키로만 사용)에서 대리 키를 주로 사용합니다. 이러면 매핑도 쉽고 코드가 단순해집니다.
 
 ### 4.4. 모든 컬렉션은 필드에서 초기화. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L26)
 - 필드 레벨에서 생성하는 것이 가장 안전하고, 코드가 간결해집니다. 무엇보다 null 문제에서 안전해집니다.
@@ -124,14 +124,14 @@
 ### 5.1. Repository 계층 & 쿼리 최적화
 - 단순한 쿼리나 단순한 동적 쿼리의 경우 spring data jpa를 사용했고, 복잡한 동적쿼리의 경우 QueryDSL을 사용했습니다. :clipboard: [단순한 쿼리](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/TagRepository.java) :clipboard: [복잡한 쿼리](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
 
-- 객체 단위의 필드를 조회할 때, fetch join으로 모든 필드들을 가져왔습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
+- 객체 단위의 필드를 조회할 때, fetch join으로 모든 필드를 가져왔습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
   - fetch join으로 해당 객체의 칼럼들을 다 가져오게끔 했습니다. 이러면 LAZY.LOADING과 조회 성능이 최적화됩니다.
 
-- 컬렉션(ArrayList)을 조회할 때,  XToOne(일대일, 다대일) 관계만 모두 fetch join으로 조회하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size를 설정해 in 쿼리를 날려서 한 번에 처리하게끔 만들었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
-  - 이러면 성능 최적화도 되고,  페이징도 적용됩니다. 쿼리 호출 수가 1 + N  => 1 + 1 로 최적화 돼서 조인보다 DB 데이터 전송량이 최적화 됩니다.
+- 컬렉션(ArrayList)을 조회할 때, XToOne(일대일, 다대일) 관계만 모두 fetch join으로 조회하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size를 설정해 in 쿼리를 날려서 한 번에 처리하게끔 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
+  - 이러면 성능 최적화도 되고, 페이징도 적용됩니다. 쿼리 호출 수가 1 + N  => 1 + 1 로 최적화돼서 조인보다 DB 데이터 전송량이 최적화됩니다.
   - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
   
-- 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 :clipboard: [다음 코드](https://github.com/kimjungwon2/hospital/blob/d718177cc841d5f03de7221bba0aa32c21a1e85c/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L62)와 같은 방식으로 select양을 줄어들게 했습니다.
+- 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 :clipboard: [다음 코드](https://github.com/kimjungwon2/hospital/blob/d718177cc841d5f03de7221bba0aa32c21a1e85c/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L62)와 같은 방식으로 select 양을 줄어들게 했습니다.
   - 구현 원리는 5.2 일반+태그 검색에서 후술한 것을 참고하시면 됩니다.
   </br>
 ### 5.2. 병원 검색
@@ -145,12 +145,12 @@
 - **일반+태그 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java)
   - **페이징**: 수많은 데이터를 한꺼번에 조회하는 것이기 때문에 페이징을 적용했습니다. 
   
-  - **성능 최적화**: 검색은 수많은 DB들을 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다.
+  - **성능 최적화**: 검색은 수많은 DB를 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다.
     - Queryprojection으로 특정 필드만 검색하기 위해, 각각의 Entity의 DTO를 생성했습니다. 
-    - stream을 돌려서 HospitalSearchDto를 hospitalId로 바꿨습니다. 이러면 여러 개가 뽑히는데 그걸 파라미터 in절로 넣었습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L53)
+    - stream을 돌려서 HospitalSearchDto를 hospitalId로 바꿨습니다. 이러면 여러 개가 뽑히는데 그걸 파라미터 in 절로 넣었습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L53)
     - HashMap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해 값을 세팅해줬습니다. (O(1)) :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L56)
     - 리뷰뿐만 아니라 태그도 한 번에 조회하기 위해서 앞의 과정을 다시 반복해줍니다. 
-    - 이러면 1+1+1 조회가 됐고, Queryprojection으로 인해 데이터 select양이 줄어듭니다.
+    - 이러면 1+1+1 조회가 됐고, Queryprojection으로 인해 데이터 select 양이 줄어듭니다.
 
 - **리뷰 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/review/query/ReviewSearchRepository.java)
   - 간혹 일반+태그 검색으로도 병원이 검색 안 되는 경우가 있기에 리뷰의 내용 혹은 등록한 질병명을 토대로 검색했습니다.
@@ -161,7 +161,7 @@ Front-end : 네비게이션 가드
 -------------
 - 네비게이션 가드는 권한이 없는 특정 URL에 진입하려고 했을 때 막아줍니다.
  
-- 사용자의 정보는 로그인을 할 때 store에 있습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/store/index.js#L42)
+- 사용자의 정보는 로그인할 때 store에 있습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/store/index.js#L42)
   
 - beforeEach를 통해서 store의 사용자 정보에 따른 네비게이션 가드를 구현했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L200)
 
@@ -173,7 +173,7 @@ Back-end : JWT 토큰
 ![설명2](https://user-images.githubusercontent.com/40010165/193619543-bc61ad47-c8bf-4349-a094-c36b60f65d35.png)
   - Authority의 권한 상태는 enum 타입으로 ROLE_USER(사용자), ROLE_MANAGER(병원 관계자), ROLE_ADMIN(관리자) 세 가지로 고정했습니다.
   - MemberAuthority 엔티티의 hospitalNo는 병원 번호를 뜻합니다. ROLE_MANAGER(병원 관계자) 권한을 가진 사용자만 병원 번호를 가질 수 있습니다. 
-  - 멤버는 권한에 따라 여러 개의 권한을 가집니다. 예를들어 병원 관계자는 USER(사용자), MANAGER(병원 관계자) 2개의 권한을 갖게끔 했습니다. 
+  - 멤버는 권한에 따라 여러 개의 권한을 가집니다. 예를 들어 병원 관계자는 USER(사용자), MANAGER(병원 관계자) 2개의 권한을 갖게끔 했습니다. 
 
 - **Token 생성** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/TokenProvider.java)
   - **createToken**: Authentication 파라미터를 받습니다. 여기서 토큰을 생성했습니다.
@@ -187,15 +187,15 @@ Back-end : JWT 토큰
   - **기타 설정**: 자격 증명을 안 하고 접근할 때 401 에러:clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAuthenticationEntryPoint.java),  필요한 권한이 없는 경우 403에러 설정.:clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAccessDeniedHandler.java) 
 
 - **WebSecurity 설정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java)
-  - SecurityConfig의 파라미터에 앞에서 설정한 Token 설정들을 넣습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java#L28)
-  - authorizeRequests로 HttpServletRequest를 사용하는 요청들에 대한 접근 제한을 했습니다.
-  - .antMatchers(PUBLIC_URI).permitAll()는 인증없이 접근 허용.
+  - SecurityConfig의 파라미터에 앞에서 설정한 Token 설정을 넣습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java#L28)
+  - authorizeRequests로 HttpServletRequest를 사용하는 요청들에 대한 접근 제한했습니다.
+  - .antMatchers(PUBLIC_URI).permitAll()는 인증 없이 접근 허용.
   - .antMatchers(특정 URL).hasAnyRole(권한)으로 특정 권한이 있어야지 해당 URL로 접근 허용.
   - .anyRequest().authenticated() 나머지 요청들은 모두 인증이 되도록 설정. 
   - .apply(new JwtSecurityConfig(tokenProvider))로 앞에서 설정한 JwtSecurityConfig를 적용.
 
 - **사용자 로그인**
-  - 로그인 때 DB에서 유저정보와 권한정보를 가져오면, 해당 정보를 기반으로 userDetails.User 객체를 생성해 리턴. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtUserDetailsService.java)
+  - 로그인 때 DB에서 유저 정보와 권한 정보를 가져오면, 해당 정보를 기반으로 userDetails.User 객체를 생성해 리턴. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtUserDetailsService.java)
   
   - 병원 관계자가 MANAGER 권한이 필요한 행동을 할 때마다 token에서 병원 번호를 얻습니다. :clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtStaffAccessService.java) 자신이 관리하는 병원 번호가 아닐 경우 접근 금지 처리. :clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
   
@@ -210,15 +210,15 @@ Back-end : JWT 토큰
 #### 5.4.1. Stateful vs Stateless
 Stateful
 -------------
-나중에 서비스가 커질 때, 서버를 확장해야할 때가 있습니다. 이럴 때는 아래의 방식처럼 서버를 확장해야 합니다.
+나중에 서비스가 커질 때, 서버를 확장해야 할 때가 있습니다. 이럴 때는 아래의 방식처럼 서버를 확장해야 합니다.
 ![Stateful](https://user-images.githubusercontent.com/40010165/193820645-540b0ebc-c135-48aa-9dbe-474213c45f4f.png)</br>
 Load Balancer는 요청이 들어오면 서버의 부하가 없는 곳에 전해줍니다. 이럴 경우 아래의 사건들이 발생합니다.
-- **DB**: 서버와 완전 무관합니다. 처리를 하고 호출만 해줘서, 중앙화된 서버가 있어서 똑같은 데이터를 바라보기에 상관이 없습니다.
+- **DB**: 서버와 완전 무관합니다. 처리하고 호출만 해줘서, 중앙화된 서버가 있어서 똑같은 데이터를 바라보기에 상관이 없습니다.
   
 - **이미지**: 아미지 파일들이 흩어져서 저장됩니다. 즉, 서버들이 상태를 갖게 됩니다. Stateful한 상태가 되면 아래의 세 가지 문제가 발생합니다.
-  - **이미지 삭제**: 생성과 조회는 괜찮을 수 있어도, 삭제의 경우 문제가 발생합니다. 예를 들어 img6을 Server1에서 삭제할라고 하면, 삭제를 못 합니다.
-  - **서버 축소**: 항상 서버가 3대만 있는 게 아닙니다. 부하가 줄어드면 자동으로 서버 수를 줄이게되는데, 이러면 이미지도 같이 삭제됩니다.
-  - **성능적인 측면**: 이미지를 관리하는걸 서버를 통해서 하면, 메인 서버가 다른 작업들을 하는데 퍼포먼스 상으로 영향을 줘서 성능에 영향을 줄 수 있다.
+  - **이미지 삭제**: 생성과 조회는 괜찮을 수 있어도, 삭제의 경우 문제가 발생합니다. 예를 들어 img6을 Server1에서 삭제하려고 하면, 삭제를 못 합니다.
+  - **서버 축소**: 항상 서버가 3대만 있는 게 아닙니다. 부하가 줄어들면 자동으로 서버 수를 줄이게 되는데, 이러면 이미지도 같이 삭제됩니다.
+  - **성능적인 측면**: 이미지를 관리하는 걸 서버를 통해서 하면, 메인 서버가 다른 작업을 하는데 퍼포먼스 상으로 영향을 줘서 성능에 영향을 줄 수 있다.
 
 Stateless
 -------------
@@ -234,7 +234,7 @@ Stateless
 #### 5.4.2. 이미지 로딩 속도 높이기
 - CDN 사용으로 캐시 서버를 통해 최적화됩니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/views/ViewHospitalPage.vue#L9)
 
-- 로딩이 빠르려면 이미지 원본 크기를 줄여야합니다. 저는 서버의 부하를 줄이기 위해 AWS Lamda를 사용해서, 이미지 저장이 되면 width 길이를 140 & 600으로 리사이징 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/lambda/index.js)
+- 로딩이 빨라지려면 이미지 원본 크기를 줄여야 합니다. 저는 서버의 부하를 줄이기 위해 AWS Lamda를 사용해서, 이미지 저장이 되면 width 길이를 140 & 600으로 리사이징 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/lambda/index.js)
 
 </div>
 </details>
