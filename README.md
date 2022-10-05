@@ -250,7 +250,7 @@ Stateless
 <div markdown="1">
 
 - 즉시 로딩(EAGER)은 예측이 어렵고, 어떤 SQL이 실행될지 추적하기 어렵기 때문입니다.
-- XToOne(일대일, 다대일) 관계는 기본이 EAGER Loading이라서 직접 지연로딩으로 설정했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/Bookmark.java#L21)
+- XToOne(일대일, 다대일) 관계는 기본이 EAGER Loading이라서 직접 지연 로딩으로 설정했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/Bookmark.java#L21)
 </div>
 </details>
 
@@ -276,7 +276,7 @@ Stateless
         this.distinctionGrade = estimation.getDistinctionGrade();
     }
 ```
-이렇게 modifyEstimation 함수명으로 **정보를 수정한다는 걸 한 눈에 알 수 있습니다**. 
+이렇게 modifyEstimation 함수명으로 **정보를 수정한다는 걸 한눈에 알 수 있습니다**. 
 
 </div>
 </details>
@@ -294,8 +294,8 @@ Stateless
 <summary>엔티티나 임베디드 타입은 기본 생성자를 protected로 설정했습니다. 저는 @NoArgsConstructor(access = AccessLevel.PROTECTED) 롬복으로 대체했습니다.</summary>
 <div markdown="1">
 
-- Setter로 타인이 무분별하게 값을 변경하는 걸 방지하기 위해, protected 생성자로 아무데나 생성되는 걸 제약한다.
-- **private을 사용 못하는 이유**: JPA 표준 스펙에 디폴트 생성자가 있어야합니다. JPA가 프록시 기술을 쓸 때,  jpa hibernate가 객체를 강제로 만들어야하는데 private로 만들면 이것이 다 막힙니다.
+- Setter로 타인이 무분별하게 값을 변경하는 걸 방지하기 위해, protected 생성자로 아무 데나 생성되는 걸 제약한다.
+- **private를 사용 못하는 이유**: JPA 표준 스펙에 디폴트 생성자가 있어야 합니다. JPA가 프록시 기술을 쓸 때,  jpa hibernate가 객체를 강제로 만들어야 하는데 private로 만들면 이것이 다 막힙니다.
 </div>
 </details>
 
@@ -311,7 +311,7 @@ Stateless
 <summary>데이터를 수정할 때, merge보다는 dirty checking(변경 감지)를 이용해 업데이트.</summary>
 <div markdown="1">
 
-- merge 사용 시, 값이 없으면 null로 업데이트 되기에 변경 감지를 사용했습니다.
+- merge 사용 시, 값이 없으면 null로 업데이트되기에 변경 감지를 사용했습니다.
 </div>
 </details>
 
@@ -321,7 +321,7 @@ Stateless
 
 - :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/baseEntity/BaseEntity.java)
 - 데이터를 언제 바꿨냐, 언제 문제가 생겼냐는 게 중요해서 넣으면 운영할 때 편합니다.
-- 등록, 수정 두가지는 모든 테이블에 다 적용했습니다.
+- 등록, 수정 두 가지는 모든 테이블에 다 적용했습니다.
 </div>
 </details>
 
