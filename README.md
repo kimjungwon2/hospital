@@ -202,7 +202,7 @@ Back-end : JWT 토큰
   - **로그인 과정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/MemberApiController.java#L39)
     - ID와 PW를 통해서 AuthenticationToken 객체를 생성. authentication Token을 이용해서 authenticate 메소드가 실행될 때 loadUserByUsername 메소드가 실행.
     - JwtUserDetailsService를 통해 loadUserByUsername이 실행된다. 이 결과값을 가지고 authentication 객체를 생성한다. 
-    - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
+    - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
     - 토큰을 header에 넣어준다. 
     
   </br>
