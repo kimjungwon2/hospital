@@ -134,7 +134,7 @@
   
 - **태그 검색**
   - 아래와 같이 일대다 다대일 관계로 테이블을 설계했습니다. 이러면 '치통' 같이 특정 해시태그만 입력해도 검색이 됩니다.
-  ![tag 테이블 설계](https://user-images.githubusercontent.com/40010165/193867068-1faae692-e33c-48cc-8734-de1a3a0b17d6.png)
+![tag 테이블 설계](https://user-images.githubusercontent.com/40010165/193867068-1faae692-e33c-48cc-8734-de1a3a0b17d6.png)
   
 - **일반+태그 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java)
   - **페이징**: 수많은 데이터를 한꺼번에 조회하는 것이기 때문에 페이징을 적용했습니다. 
