@@ -244,7 +244,7 @@ Stateless
 #### 5.4.2. 이미지 로딩 속도 높이기
 - CDN 사용으로 캐시 서버를 통해 최적화됩니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/views/ViewHospitalPage.vue#L9)
 
-- 로딩이 빨라지려면 이미지 원본 크기를 줄여야 합니다. 저는 서버의 부하를 줄이기 위해 AWS Lamda를 사용해서, 이미지 저장이 되면 width 길이를 140 & 600으로 리사이징 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/lambda/index.js)
+- 로딩이 빨라지려면 이미지 원본 크기를 줄여야 합니다. 저는 서버의 부하를 줄이기 위해 AWS Lamda를 사용해서, 이미지 저장이 되면 자동으로 width 길이를 140 & 600으로 리사이징 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/lambda/index.js)
 
 </div>
 </details>
