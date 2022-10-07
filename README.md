@@ -212,6 +212,8 @@ Front-end : 토큰 값 싣기
 - axios 쪽에 store에 저장된 token 값 싣기. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
 
 - 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용했습니다. 
+
+- 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다.
 </br>
 
 ### 5.4. 이미지 관리 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java)
