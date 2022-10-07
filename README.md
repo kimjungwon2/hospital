@@ -206,9 +206,9 @@ Back-end : JWT 토큰
     - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
     - 토큰을 header에 넣어준다. 
     
-Front-end : 토큰 값 싣기
+Front-end : 토큰값 싣기
 -------------
-- vue의 store 이용. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/store/index.js#L53)
+- 토큰값을 실으려고 vue의 store 이용. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/store/index.js#L53)
 
 - axios 쪽의 store에 저장된 token 값 싣기. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
 
