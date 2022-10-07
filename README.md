@@ -205,7 +205,14 @@ Back-end : JWT 토큰
     - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
     - 토큰을 header에 넣어준다. 
     
-  </br>
+Front-end : 토큰 값 싣기
+-------------
+- vue의 store 이용. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/store/index.js#L53)
+- axios 쪽에 store에 저장된 token 값 싣기. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
+- 네트워크 쪽에 Authorization에 token 값이 싣지 못하므로, 인터셉터를 활용했습니다. 
+
+</br>
+
 ### 5.4. 이미지 관리 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java)
 #### 5.4.1. Stateful vs Stateless
 Stateful
