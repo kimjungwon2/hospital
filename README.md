@@ -261,7 +261,6 @@ Back-end
 
 - 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id값(pk)이 2가 나왔습니다.
 - `@GeneratedValue(strategy = GenerationType.IDENTITY)` 사용으로, 기본 키 생성을 데이터베이스에 위임. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L22)
-- id 값을 null로 하면 DB가 알아서 AUTO_INCREMENT 해준다.
 
 </div>
 </details>
@@ -434,6 +433,45 @@ mounted(){
 - 저는 watch로 props값이 온 걸 확인하면 지도를 출력했습니다. :clipboard: [개선된 코드](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/hospital/ViewMapForm.vue#L22)
 </div>
 </details>
+
+</div>
+</details>
+
+<details>
+<summary>vue에서 배열에 인덱스 값을 넣을 때 반응을 못할 경우</summary>
+<div markdown="1">
+
+- 아래와 같이 코드를 작성했을 때 배열의 값들이 변하지 않았습니다. 
+  
+<details>
+<summary><b>기존 코드</b></summary>
+<div markdown="1">
+
+~~~javascript
+        async loadReviewAllLike(length){
+            const memberId= this.$store.getters.getMemberId;
+
+            for(let i=0; i<length; i++){
+                const isReviewLike = await isLikeReview(memberId, this.reviews[i].reviewId);
+                this.reviewLike[i] = isReviewLike.data.isReviewLike; 
+            }
+        },
+    },
+~~~
+
+</div>
+</details>
+   
+- [vue 공식 문서](https://v3.ko.vuejs.org/guide/change-detection.html#%E1%84%87%E1%85%A2%E1%84%8B%E1%85%A7%E1%86%AF)를 통해 배열 index로 항목을 직접 설정하거나, 배열 길이를 수정하는 경우. 배열의 변화를 감지할 수 없음을 인지. 
+ 
+<details>
+<summary><b>개선된 코드</b></summary>
+<div markdown="1">
+
+- this.$set 사용으로 반응성 시스템에서 상태 변경을 발생시키게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/hospital/ViewHospitalReviewForm.vue#L493)
+
+</div>
+</details>  
 
 </div>
 </details>
