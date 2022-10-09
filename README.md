@@ -245,13 +245,13 @@ Stateless
 
 - 클라이언트에서 넘어온 이미지는 겹치는 이름이 올 수 있기에 UUID를 이용해 고유의 image key로 저장했다.
 
-- 이미지의 DB는 외래키(병원 or 리뷰의 PK), 원본 이미지의 파일명, 이미지를 불려올 key값으로 설계했다.
+- 이미지의 DB는 외래키(병원 or 리뷰의 PK), 원본 이미지의 파일명, 이미지를 불려올 key 값으로 설계했다.
 
-- 이미지 파일 확장자가 아닌 경우 exception을 발생하게 만들었다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L113)
+- 이미지 파일 확장자가 아닌 경우 exception을 발생하게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L113)
 
-- 이미지를 저장할 경우에 S3에 이미지가 저장되고, DB에 이미지 정보를 저장하게끔 만들었다.
+- 이미지를 저장할 경우에 S3에 이미지가 저장되고, DB에 이미지 정보를 저장하게끔 했다.
 
-- 이미지를 삭제할 경우에 lambda를 통해 S3에 사이즈 별로 3가지 종류의 이미지가 저장되기에, 3종류의 이미지를 삭제하고 DB를 삭제하게 만들었다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L171)
+- 이미지를 삭제할 경우에 lambda를 통해 S3에 사이즈 별로 3가지 종류의 이미지가 저장되기에, 3종류의 이미지를 삭제하고 DB를 삭제하게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L171)
 
 
 #### 5.4.3. 이미지 로딩 속도 높이기
@@ -271,7 +271,7 @@ Back-end
 <summary>데이터를 추가할 때마다 모든 엔티티의 PK 값이 증가</summary>
 <div markdown="1">
 
-- 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id값(pk)이 2가 나왔습니다.
+- 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id 값(pk)이 2가 나왔습니다.
 - `@GeneratedValue(strategy = GenerationType.IDENTITY)` 사용으로, 기본 키 생성을 데이터베이스에 위임. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L22)
 
 </div>
@@ -348,7 +348,7 @@ Back-end
 
 - Answer의 객체 탐색 단계 때, null이 반환되지 않을지 의심해야 한다.
   
-- DTO 생성시 답변이 없을 경우에 대한 예외 로직을 아래와 같이 추가.
+- DTO 생성 시 답변이 없으면, 이에 대한 예외 로직을 아래와 같이 추가.
   
 <details>
 <summary><b>개선된 코드</b></summary>
@@ -388,15 +388,15 @@ Back-end
 <summary>multipart 형태의 파일을 올릴 때 null로 받아지는 경우</summary>
 <div markdown="1">
 
-- 검색을 통해 `@RequestBody`는 content-Type이 multipart/form-data로 전달될 때, Exception을 발생시켜 문제가 발생됨을 인지.
+- 검색을 통해 `@RequestBody`는 content-Type이 multipart/form-data로 전달될 때, Exception을 발생시켜 문제가 발생함을 인지.
 
 - multipart/form-data일 경우에는 `@RequestPart` 혹은 `RequestParam`을 사용. 무수한 데이터 종류를 전송할 경우 `@modelAttribute`가 적합한 걸 알아냈다.
   
 - 저는 전송 데이터 종류가 적기에 `@RequestParam`을 사용했습니다. 하나의 이미지는 MultipartFile을 사용했고, 다수의 이미지는 List<MultipartFile>를 사용했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L155)
   
-- 프론트 엔드에서는 key 와 value로 저장할수있는 FormData를 사용. 여러 파일을 업로드할 때 유용하다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/f97424eb0646ca31386125690a3b4d256a2c5375/src/frontend/src/components/admin/hospital/AdminViewHospitalImageForm.vue#L126)
+- 프론트 엔드에서는 key와 value로 저장할 수 있는 FormData를 사용. 여러 파일을 업로드할 때 유용하다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/f97424eb0646ca31386125690a3b4d256a2c5375/src/frontend/src/components/admin/hospital/AdminViewHospitalImageForm.vue#L126)
   
-- vue의 form태그에 entype 속성값을 multipart/form-data로 설정해서 이미지파일을 전송했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/f97424eb0646ca31386125690a3b4d256a2c5375/src/frontend/src/components/admin/hospital/AdminViewHospitalImageForm.vue#L25)
+- vue의 form태그에 entype 속성값을 multipart/form-data로 설정해서 이미지 파일을 전송했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/f97424eb0646ca31386125690a3b4d256a2c5375/src/frontend/src/components/admin/hospital/AdminViewHospitalImageForm.vue#L25)
 
 </div>
 </details>
@@ -404,12 +404,12 @@ Back-end
 Front-end 
 -------------
 <details>
-<summary> vue에서 props 데이터가 계속 늦게 도착해 카카오맵이 정상 출력이 안 된 문제 </summary>
+<summary> vue에서 props 데이터가 계속 늦게 도착해 카카오 맵이 정상 출력이 안 된 문제 </summary>
 <div markdown="1">
 
 - 초기에는 mounted hook에서 지도를 출력하게 했습니다. 
 
-- 하지만 props로 DB의 좌표 값을 받아와도 지도가 정상출력되지 않았습니다. 
+- 하지만 props로 DB의 좌표값을 받아와도 지도가 정상 출력되지 않았습니다. 
 
 <details>
 <summary><b>기존 코드</b></summary>
@@ -432,11 +432,11 @@ mounted(){
 </div>
 </details>
 
-- console.log를 통해서 props의 지도 좌표 DB값이 늦게 도착해서, 카카오맵이 초기값을 먼저 출력해 지도가 정상적으로 안 나오는 걸 인식.
+- console.log를 통해서 props의 지도 좌표 DB값이 늦게 도착해서, 카카오 맵이 초기값을 먼저 출력해 지도가 정상적으로 안 나오는 걸 인식.
 
 - [검색을 통해 vue의 life cycle 개념을 확인.](https://any-ting.tistory.com/42) props로 좌표값을 받아오기 전 mounted된 것이 먼저 실행된 것을 인지했습니다. 
 
-- props로 데이터를 정상적으로 받는, 상태 변화에 반응하기 위해서 computed 혹은 watch를 사용해야함을 인식. 
+- props로 데이터를 정상적으로 받는, 상태 변화에 반응하기 위해서 computed 혹은 watch를 사용해야 함을 인식. 
 
 <details>
 <summary><b>개선된 코드</b></summary>
@@ -450,7 +450,7 @@ mounted(){
 </details>
 
 <details>
-<summary>vue에서 배열에 인덱스 값을 넣을 때 반응을 못할 경우</summary>
+<summary>vue에서 배열에 인덱스값을 넣을 때 반응을 못할 경우</summary>
 <div markdown="1">
 
 - 아래와 같이 코드를 작성했을 때 배열의 값들이 변하지 않았습니다. 
@@ -489,10 +489,10 @@ mounted(){
 </details>
   
 <details>
-<summary>여러 명의 의사들을 한꺼번에 등록하기</summary>
+<summary>여러 명의 의사를 한꺼번에 등록하기</summary>
 <div markdown="1">
 
-- Back-end에서는 의사들을 List 형태로 받게했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L277)
+- Back-end에서는 의사들을 List 형태로 받게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L277)
 
 - 서버단의 DTO 데이터 형식에 맞게끔 Front-end에서 데이터를 가공. 특히 의사의 경우 List 형식의 데이터이다.
   
