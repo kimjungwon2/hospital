@@ -217,7 +217,7 @@ Front-end : 토큰값 싣기
 - 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다.
 </br>
 
-### 5.4. 이미지 관리 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java)
+### 5.4. 이미지 관리 
 #### 5.4.1. Stateful vs Stateless
 Stateful
 -------------
@@ -241,8 +241,20 @@ Stateless
 
 - Stateless한 상태가 돼서 서버의 확장성이 좋아집니다.
 
+#### 5.4.2. SPRING의 이미지 관리 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java)
 
-#### 5.4.2. 이미지 로딩 속도 높이기
+- 클라이언트에서 넘어온 이미지는 겹치는 이름이 올 수 있기에 UUID를 이용해 고유의 image key로 저장했다.
+
+- 이미지의 DB는 외래키(병원 or 리뷰의 PK), 원본 이미지의 파일명, 이미지를 불려올 key값으로 설계했다.
+
+- 이미지 파일 확장자가 아닌 경우 exception을 발생하게 만들었다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L113)
+
+- 이미지를 저장할 경우에 S3에 이미지가 저장되고, DB에 이미지 정보를 저장하게끔 만들었다.
+
+- 이미지를 삭제할 경우에 lambda를 통해 S3에 사이즈 별로 3가지 종류의 이미지가 저장되기에, 3종류의 이미지를 삭제하고 DB를 삭제하게 만들었다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L171)
+
+
+#### 5.4.3. 이미지 로딩 속도 높이기
 - CDN 사용으로 캐시 서버를 통해 최적화됩니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/views/ViewHospitalPage.vue#L9)
 
 - 로딩이 빨라지려면 이미지 원본 크기를 줄여야 합니다. 저는 서버의 부하를 줄이기 위해 AWS Lamda를 사용해서, 이미지 저장이 되면 자동으로 width 길이를 140 & 600으로 리사이징 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/lambda/index.js)
