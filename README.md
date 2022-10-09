@@ -372,6 +372,23 @@ Back-end
   
 </div>
 </details>
+  
+<details>
+<summary>multipart 형태의 파일을 올릴 때 null로 받아지는 경우</summary>
+<div markdown="1">
+
+- 검색을 통해 `@RequestBody`는 content-Type이 multipart/form-data로 전달될 때, Exception을 발생시켜 문제가 발생됨을 인지.
+
+- multipart/form-data일 경우에는 `@RequestPart` 혹은 `RequestParam`을 사용. 무수한 데이터 종류를 전송할 경우 `@modelAttribute`가 적합한 걸 알아냈다.
+  
+- 저는 전송 데이터 종류가 적기에 `@RequestParam`을 사용했습니다. 하나의 이미지는 MultipartFile을 사용했고, 다수의 이미지는 List<MultipartFile>를 사용했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L155)
+  
+- 프론트 엔드에서는 key 와 value로 저장할수있는 FormData를 사용. 여러 파일을 업로드할 때 유용하다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/f97424eb0646ca31386125690a3b4d256a2c5375/src/frontend/src/components/admin/hospital/AdminViewHospitalImageForm.vue#L126)
+  
+- vue의 form태그에 entype 속성값을 multipart/form-data로 설정해서 이미지파일을 전송했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/f97424eb0646ca31386125690a3b4d256a2c5375/src/frontend/src/components/admin/hospital/AdminViewHospitalImageForm.vue#L25)
+
+</div>
+</details>
 
 Front-end 
 -------------
