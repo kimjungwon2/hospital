@@ -253,6 +253,76 @@ Stateless
 </br>
 
 ## 6. 트러블슈팅
+Back-end 
+-------------
+<details>
+<summary>데이터를 추가할 때마다 모든 엔티티의 PK 값이 증가</summary>
+<div markdown="1">
+
+- 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id값(pk)이 2가 나왔습니다.
+- `@GeneratedValue(strategy = GenerationType.IDENTITY)` 사용으로, 기본 키 생성을 데이터베이스에 위임. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L22)
+- id 값을 null로 하면 DB가 알아서 AUTO_INCREMENT 해준다.
+
+</div>
+</details>
+
+<details>
+<summary>소수점 10자리 이상인 데이터를 받아올 때 계속 2자리만 나올 경우</summary>
+<div markdown="1">
+
+- `@Column(columnDefinition="Decimal(19,12)")` 선언으로 소수점 12자리까지 나오게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/detailedHosInformation/HospitalLocation.java#L18)
+
+</div>
+</details>
+
+Front-end 
+-------------
+<details>
+<summary> vue에서 props 데이터가 계속 늦게 도착해 카카오맵이 정상 출력이 안 된 문제 </summary>
+<div markdown="1">
+
+- 초기에는 mounted hook에서 지도를 출력하게 했습니다. 
+
+- 하지만 props로 DB의 좌표 값을 받아와도 지도가 정상출력되지 않았습니다. 
+
+<details>
+<summary><b>기존 코드</b></summary>
+<div markdown="1">
+
+~~~javascript
+
+mounted(){
+      if (window.kakao && window.kakao.maps) {
+        this.initMap()
+      } else {
+          const script = document.createElement('script')
+          script.onload = () => kakao.maps.load(this.initMap);
+          script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bcdb595a4b1c6bc005200d3b0d9271fb'
+          document.head.appendChild(script)
+      }
+}
+~~~
+
+</div>
+</details>
+
+- console.log를 통해서 props의 지도 좌표 DB값이 늦게 도착해서, 카카오맵이 초기값을 먼저 출력해 지도가 정상적으로 안 나오는 걸 인식.
+
+- [검색을 통해 vue의 life cycle 개념을 확인.](https://any-ting.tistory.com/42) props로 좌표값을 받아오기 전 mounted된 것이 먼저 실행된 것을 인지했습니다. 
+
+- props로 데이터를 정상적으로 받는, 상태 변화에 반응하기 위해서 computed 혹은 watch를 사용해야함을 인식. 
+
+<details>
+<summary><b>개선된 코드</b></summary>
+<div markdown="1">
+
+- 저는 watch로 props값이 온 걸 확인하면 지도를 출력했습니다. :clipboard: [개선된 코드](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/hospital/ViewMapForm.vue#L22)
+</div>
+</details>
+
+</div>
+</details>
+
 </br>
 
 ## 7. 고려한 점
