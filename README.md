@@ -475,6 +475,25 @@ mounted(){
 
 </div>
 </details>
+  
+<details>
+<summary>여러 명의 의사들을 한꺼번에 등록하기</summary>
+<div markdown="1">
+
+- Back-end에서는 의사들을 List 형태로 받게했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L277)
+
+- 서버단의 DTO 데이터 형식에 맞게끔 Front-end에서 데이터를 가공. 특히 의사의 경우 List 형식의 데이터이다.
+  
+- List 형식의 데이터에 어떻게 하면 값을 넣거나 뺄 수 있을까, 생각하는 도중에 JS의 Array 메서드를 생각했습니다.
+  
+- 의사 추가하기 버튼으로 doctorNumber의 수가 하나씩 증가, doctorNumber 수만큼 for loop를 돌렸고 push 메서드를 통해 배열에 값을 넣었습니다.
+  
+- 의사 제거 버튼으로 doctorNumber의 수가 하나씩 감소, pop 메서드를 통해 배열의 의사 정보를 제거했습니다. 
+  
+- 위의 조건들을 적용한 최종 코드는 다음과 같다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/admin/hospital/AdminRegisterStaffHospitalForm.vue#L36)
+  
+</div>
+</details>
 
 </br>
 
