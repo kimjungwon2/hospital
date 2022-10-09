@@ -275,6 +275,104 @@ Back-end
 </div>
 </details>
 
+<details>
+<summary> Q&A에서 답변의 NullPointerException 문제</summary>
+<div markdown="1">
+
+- Q&A를 조회할 때 답변이 없는 경우(null)도 나타내기 위해서 leftJoin을 사용. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/question/QuestionRepositoryImpl.java#L31)
+
+- Answer 객체의 answerId나, answerContent를 불러오면 자꾸 NullPointerException 문제가 발생.
+  
+<details>
+<summary><b>기존 코드</b></summary>
+<div markdown="1">
+
+~~~java
+
+    //병원 관계자 Questions 검색
+    @GetMapping("/staff/question/search")
+    public Page staffSearchQuestions(ServletRequest servletRequest,
+                                               @RequestParam(value="nickName",required = false) String nickName,
+                                               @RequestParam(value="memberIdName",required = false) String memberIdName,
+                                               Pageable pageable){
+        StaffQuestionSearchCondition condition = StaffQuestionSearchCondition.builder()
+                .nickName(nickName).memberIdName(memberIdName).build();
+
+        Page<Question> questions = questionService.staffSearchHospitalQuestion(servletRequest,condition,pageable);
+
+        List<SearchHospitalQuestionResponse> result = questions.stream()
+                .map(q->new SearchHospitalQuestionResponse(q))
+                .collect(Collectors.toList());
+
+        Long total = questions.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
+    }
+  
+
+    @Data
+    private static class SearchHospitalQuestionResponse{
+        private Long questionId;
+        private String memberIdName;
+        private String nickName;
+        private String content;
+        private Long answerId;
+        private String answerContent;
+
+        public SearchHospitalQuestionResponse(Question question) {
+            this.memberIdName = question.getMember().getMemberIdName();
+            this.questionId = question.getId();
+            this.nickName = question.getMember().getNickName();
+            this.content = question.getContent();
+            this.answerId = question.getAnswer().getId();
+            this.answerContent = question.getAnswer().getAnswerContent();
+        }
+    }  
+~~~
+
+</div>
+</details>
+    
+- 답변이 없는 QnA를 처리할 때 발생하는 문제임을 인식.
+
+- Answer의 객체 탐색 단계 때, null이 반환되지 않을지 의심해야 한다.
+  
+- DTO 생성시 답변이 없을 경우에 대한 예외 로직을 아래와 같이 추가.
+  
+<details>
+<summary><b>개선된 코드</b></summary>
+<div markdown="1">
+
+~~~java
+    @Data
+    private static class SearchHospitalQuestionResponse{
+        private Long questionId;
+        private String memberIdName;
+        private String nickName;
+        private String content;
+        private Long answerId;
+        private String answerContent;
+
+        public SearchHospitalQuestionResponse(Question question) {
+            this.memberIdName = question.getMember().getMemberIdName();
+            this.questionId = question.getId();
+            this.nickName = question.getMember().getNickName();
+            this.content = question.getContent();
+
+            if(question.getAnswer() !=null) {
+                this.answerId = question.getAnswer().getId();
+                this.answerContent = question.getAnswer().getAnswerContent();
+            }
+        }
+    }  
+~~~
+
+</div>
+</details>
+  
+</div>
+</details>
+
 Front-end 
 -------------
 <details>
