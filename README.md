@@ -32,7 +32,7 @@
 </br>
 
 ## 3. 프로젝트 구조
-![프로젝트 구조](https://user-images.githubusercontent.com/40010165/194765956-2e55308e-5538-490e-9853-187ba460ff48.png)
+![프로젝트 구조](https://user-images.githubusercontent.com/40010165/194766752-24ee1d3f-84d7-4062-bc7f-243c97a2d963.png)
 
 ### 3.1. Back-end :mag_right: [구조 확인](https://github.com/kimjungwon2/hospital/tree/4d39e3c12ba04a1de79a0574a1c49897216eaf11/src/main/java/site/hospital)
 <details>
