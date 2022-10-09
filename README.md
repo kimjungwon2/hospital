@@ -75,7 +75,7 @@
 </details>
 
 ## 4. ERD 설계
-![병원 ERD2](https://user-images.githubusercontent.com/40010165/193455534-62b45df4-e83e-4820-b37d-32251308f8a6.png)
+![ERD](https://user-images.githubusercontent.com/40010165/194764130-5e4caaff-892f-47a0-a871-78929755aeb7.png)
 <details>
 <summary><b>도메인 설계 펼치기</b></summary>
 <div markdown="1">
