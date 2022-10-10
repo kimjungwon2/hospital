@@ -115,7 +115,9 @@
 ![계정 종류](https://user-images.githubusercontent.com/40010165/193796762-3770daf3-15ab-4cc0-965f-b5e475de4101.png)
 이 서비스는 세 가지 종류의 계정이 있습니다. 
 - **사용자**: 병원 정보를 조회하거나, 해당 병원에 리뷰 또는 질문을 등록할 수 있습니다.
+
 - **병원 관계자**: 자신의 병원만 관리할 수 있습니다. 사진을 올리거나, 병원 정보 수정, 태그 설정, 사용자가 등록한 질문에 답변을 할 수 있습니다. 
+
 - **관리자**: 위의 모든 기능을 할 수 있습니다. 계정을 관리하거나, 병원 정보를 관리. 무엇보다 사용자가 등록한 리뷰의 영수증을 확인해서, 이 리뷰가 검증된 것임을 승인할 수 있습니다. 
 
 </br>
@@ -150,13 +152,18 @@
   
   - **성능 최적화**: 검색은 수많은 DB를 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다.
     - Queryprojection으로 특정 필드만 검색하기 위해, 각각의 Entity의 DTO를 생성했습니다. 
+    
     - stream을 돌려서 HospitalSearchDto를 hospitalId로 바꿨습니다. 이러면 여러 개가 뽑히는데 그걸 파라미터 in 절로 넣었습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L53)
+    
     - HashMap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해 값을 세팅해줬습니다. (O(1)) :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L56)
+    
     - 리뷰뿐만 아니라 태그도 한 번에 조회하기 위해서 앞의 과정을 다시 반복해줍니다. 
+    
     - 이러면 1+1+1 조회가 됐고, Queryprojection으로 인해 데이터 select 양이 줄어듭니다.
 
 - **리뷰 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/review/query/ReviewSearchRepository.java)
   - 간혹 일반+태그 검색으로도 병원이 검색 안 되는 경우가 있기에 리뷰의 내용 혹은 등록한 질병명을 토대로 검색했습니다.
+  
   - 페이징과 성능 최적화는 이전의 일반+태그 검색과 동일하게 했습니다. 
   </br>
 ### 5.3. 계정 권한
@@ -175,26 +182,38 @@ Back-end : JWT 토큰
 - **테이블 설계**
 ![설명2](https://user-images.githubusercontent.com/40010165/193619543-bc61ad47-c8bf-4349-a094-c36b60f65d35.png)
   - Authority의 권한 상태는 enum 타입으로 ROLE_USER(사용자), ROLE_MANAGER(병원 관계자), ROLE_ADMIN(관리자) 세 가지로 고정했습니다.
+  
   - MemberAuthority 엔티티의 hospitalNo는 병원 번호를 뜻합니다. ROLE_MANAGER(병원 관계자) 권한을 가진 사용자만 병원 번호를 가질 수 있습니다. 
+  
   - 멤버는 권한에 따라 여러 개의 권한을 가집니다. 예를 들어 병원 관계자는 USER(사용자), MANAGER(병원 관계자) 2개의 권한을 갖게끔 했습니다. 
 
 - **Token 생성** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/TokenProvider.java)
   - **createToken**: Authentication 파라미터를 받습니다. 여기서 토큰을 생성했습니다.
+  
   - **createStaffToken**: Authentication과 병원 번호 파라미터를 받습니다. 병원 관계자가 토큰을 생성할 때, 토큰에 병원 번호를 넣기 위함입니다.
+  
   - **getAuthentication**: 토큰을 파라미터로 받아서 claim을 만들고, 클레임에서 권한 정보들을 빼냅니다. 권한 정보들을 이용해서 유저 객체를 만듭니다. 그리고 앞의 정보들을 이용해 Authentication 객체를 리턴했습니다. 
+  
   - **getHospitalNumber**: 병원 관계자 전용 함수. 토큰을 파라미터로 받아서 병원 번호를 리턴했습니다. 
 
 - **Token 설정** 
   - **JwtFilter**: doFilter 함수로 토큰의 인증정보를 SecurityContext에 저장했습니다. resolveToken 함수는 토큰 정보를 꺼냅니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtFilter.java)
+  
   - **JwtSecurityConfig**: 앞에서 언급한 Token 생성(Token Provider) 클래스를 주입받아서 JwtFilter를 통해 Security 로직에 필터 등록. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtSecurityConfig.java)
+  
   - **기타 설정**: 자격 증명을 안 하고 접근할 때 401 에러:clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAuthenticationEntryPoint.java),  필요한 권한이 없는 경우 403에러 설정.:clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAccessDeniedHandler.java) 
 
 - **WebSecurity 설정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java)
   - SecurityConfig의 파라미터에 앞에서 설정한 Token 설정을 넣습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java#L28)
+  
   - authorizeRequests로 HttpServletRequest를 사용하는 요청들에 대한 접근 제한했습니다.
+  
   - .antMatchers(PUBLIC_URI).permitAll()는 인증 없이 접근 허용.
+  
   - .antMatchers(특정 URL).hasAnyRole(권한)으로 특정 권한이 있어야지 해당 URL로 접근 허용.
+  
   - .anyRequest().authenticated() 나머지 요청들은 모두 인증이 되도록 설정. 
+  
   - .apply(new JwtSecurityConfig(tokenProvider))로 앞에서 설정한 JwtSecurityConfig를 적용.
 
 - **사용자 로그인**
@@ -204,9 +223,11 @@ Back-end : JWT 토큰
   
   - **로그인 과정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/MemberApiController.java#L39)
     - ID와 PW를 통해서 AuthenticationToken 객체를 생성. authentication Token을 이용해서 authenticate 메소드가 실행될 때 loadUserByUsername 메소드가 실행.
+    
     - JwtUserDetailsService를 통해 loadUserByUsername이 실행된다. 이 결과값을 가지고 authentication 객체를 생성한다. 
+    
     - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
-    - 토큰을 header에 넣어준다. 
+    
     
 Front-end : 토큰값 싣기
 -------------
@@ -230,7 +251,9 @@ Load Balancer는 요청이 들어오면 서버의 부하가 없는 곳에 전해
   
 - **이미지**: 아미지 파일들이 흩어져서 저장됩니다. 즉, 서버들이 상태를 갖게 됩니다. Stateful한 상태가 되면 아래의 세 가지 문제가 발생합니다.
   - **이미지 삭제**: 생성과 조회는 괜찮을 수 있어도, 삭제의 경우 문제가 발생합니다. 예를 들어 img6을 Server1에서 삭제하려고 하면, 삭제를 못 합니다.
+  
   - **서버 축소**: 항상 서버가 3대만 있는 게 아닙니다. 부하가 줄어들면 자동으로 서버 수를 줄이게 되는데, 이러면 이미지도 같이 삭제됩니다.
+  
   - **성능적인 측면**: 이미지를 관리하는 걸 서버를 통해서 하면, 메인 서버가 다른 작업을 하는데 퍼포먼스 상으로 영향을 줘서 성능에 영향을 줄 수 있다.
 
 Stateless
