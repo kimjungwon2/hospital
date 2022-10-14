@@ -509,6 +509,7 @@ mounted(){
 <details>
 <summary><b>개선된 코드</b></summary>
 <div markdown="1">
+  
 ~~~javascript
         async loadReviewAllLike(length){
             const memberId= this.$store.getters.getMemberId;
@@ -519,7 +520,7 @@ mounted(){
             }
         },
 ~~~
-
+                                   
 </div>
 </details>  
 
