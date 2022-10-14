@@ -419,7 +419,7 @@ Back-end
 
 - 검색을 통해 `@RequestBody`는 content-Type이 multipart/form-data로 전달될 때, Exception을 발생시켜 문제가 발생함을 인지.
 
-- multipart/form-data일 경우에는 `@RequestPart` 혹은 `RequestParam`을 사용. 무수한 데이터 종류를 전송할 경우 `@modelAttribute`가 적합한 걸 알아냈다.
+- multipart/form-data일 경우에는 `@RequestPart` 혹은 `@RequestParam`을 사용. 무수한 데이터 종류를 전송할 경우 `@modelAttribute`가 적합한 걸 알아냈다.
   
 - 저는 전송 데이터 종류가 적기에 `@RequestParam`을 사용했습니다. 하나의 이미지는 MultipartFile을 사용했고, 다수의 이미지는 List<MultipartFile>를 사용했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L155)
   
