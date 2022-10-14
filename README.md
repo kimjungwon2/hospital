@@ -497,19 +497,28 @@ mounted(){
                 this.reviewLike[i] = isReviewLike.data.isReviewLike; 
             }
         },
-    },
 ~~~
 
 </div>
 </details>
    
 - [vue 공식 문서](https://v3.ko.vuejs.org/guide/change-detection.html#%E1%84%87%E1%85%A2%E1%84%8B%E1%85%A7%E1%86%AF)를 통해 배열 index로 항목을 직접 설정하거나, 배열 길이를 수정하는 경우. 배열의 변화를 감지할 수 없음을 인지. 
+
+- this.$set 사용으로 반응성 시스템에서 상태 변경을 발생시키게 했다. 
  
 <details>
 <summary><b>개선된 코드</b></summary>
 <div markdown="1">
+~~~javascript
+        async loadReviewAllLike(length){
+            const memberId= this.$store.getters.getMemberId;
 
-- this.$set 사용으로 반응성 시스템에서 상태 변경을 발생시키게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/hospital/ViewHospitalReviewForm.vue#L493)
+            for(let i=0; i<length; i++){
+                const isReviewLike = await isLikeReview(memberId, this.reviews[i].reviewId);
+                this.$set(this.reviewLike, i, isReviewLike.data.isReviewLike);
+            }
+        },
+~~~
 
 </div>
 </details>  
