@@ -254,37 +254,14 @@ Stateless
 
 </br>
 
-## 6. 트러블슈팅
-Back-end 
--------------
-<details>
-<summary>데이터를 추가할 때마다 모든 엔티티의 PK 값이 증가</summary>
-<div markdown="1">
+## 6. 핵심 트러블슈팅
+- 사용자 권한은 어떻게 구현할 것이고, 특정 병원 번호만 어떻게 조작이 가능하게 할 것인가?
 
-- 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id 값(pk)이 2가 나왔습니다.
-- `@GeneratedValue(strategy = GenerationType.IDENTITY)` 사용으로, 기본 키 생성을 데이터베이스에 위임. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L22)
+- 이걸 어떻게 구현할지 감이 안 온 저는, 우아한형제들 기술이사 김영한 님의 강의를 평소에 보고 있어서 아래와 같은 조언을 얻었습니다. 
 
-</div>
-</details>
-
-<details>
-<summary>소수점 10자리 이상인 데이터를 받아올 때 계속 2자리만 나올 경우</summary>
-<div markdown="1">
-
-- `@Column(columnDefinition="Decimal(19,12)")` 선언으로 소수점 12자리까지 나오게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/detailedHosInformation/HospitalLocation.java#L18)
-
-</div>
-</details>
-
-<details>
-<summary>사용자 권한은 어떻게 구현할 것이고, 특정 병원 번호만 어떻게 조작이 가능하게 할 것인가</summary>
-<div markdown="1">
-
-- 이걸 어떻게 구현할지 감이 안 온 저는, 우아한형제들 기술이사 김영한님의 강의를 평소에 보고 있어서 아래와 같은 조언을 얻었습니다. 
-  
 - 어떤 방법을 사용하든 권한 체크는 서버에서 추가로 해주어야 한다. 
 
-- 병원의 고유 번호(ex.5764)를 가진 사람이 5764번 병원만 정보를 수정하게끔 할수 있는가 없는가에 대한 판단도 서버에서 모두 계산해서 클라이언트로 내려주는 것이 좋다.
+- 병원의 고유 번호(ex.5764)를 가진 사람이 5764번 병원만 정보를 수정하게끔 할 수 있는가 없는가에 대한 판단도 서버에서 모두 계산해서 클라이언트로 내려주는 것이 좋다.
   
 - 위의 부분들을 모두 고려해 저는 아래와 같이 테이블을 설계했습니다. 
 
@@ -351,9 +328,31 @@ Back-end
     
     - JwtUserDetailsService를 통해 loadUserByUsername이 실행된다. 이 결과값을 가지고 authentication 객체를 생성한다. 
     
-    - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
+    - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다.    
+
+</br>
+
+## 7. 기타 트러블슈팅
+Back-end 
+-------------
+<details>
+<summary>데이터를 추가할 때마다 모든 엔티티의 PK 값이 증가</summary>
+<div markdown="1">
+
+- 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id 값(pk)이 2가 나왔습니다.
+- `@GeneratedValue(strategy = GenerationType.IDENTITY)` 사용으로, 기본 키 생성을 데이터베이스에 위임. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L22)
+
 </div>
-</details>    
+</details>
+
+<details>
+<summary>소수점 10자리 이상인 데이터를 받아올 때 계속 2자리만 나올 경우</summary>
+<div markdown="1">
+
+- `@Column(columnDefinition="Decimal(19,12)")` 선언으로 소수점 12자리까지 나오게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/detailedHosInformation/HospitalLocation.java#L18)
+
+</div>
+</details>
 
 <details>
 <summary> Q&A에서 답변의 NullPointerException 문제</summary>
@@ -588,7 +587,7 @@ mounted(){
 
 </br>
 
-## 7. 고려한 점
+## 8. 고려한 점
 <details>
 <summary>Entity 클래스에서 Setter 메소드를 만들지 않았습니다.(연관관계 메서드 제외)</summary>
 <div markdown="1">
@@ -672,6 +671,6 @@ mounted(){
 </br>
 
 
-## 8. 회고&느낀점
+## 9. 회고&느낀점
 >프로젝트 개발 회고 글: https://kjw1313.tistory.com/
 </br>
