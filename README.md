@@ -292,7 +292,7 @@ Stateless
 <summary><b>Token 생성</b></summary>
 <div markdown="1">
  
-- clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/TokenProvider.java)
+- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/TokenProvider.java)
 
 - **createToken**: Authentication 파라미터를 받습니다. 여기서 토큰을 생성했습니다.
   
