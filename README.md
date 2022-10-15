@@ -267,14 +267,19 @@ Stateless
 
 </br>
 
-- **테이블 설계**
+<details>
+<summary><b>테이블 설계</b></summary>
+<div markdown="1">
+  
 ![설명2](https://user-images.githubusercontent.com/40010165/193619543-bc61ad47-c8bf-4349-a094-c36b60f65d35.png)
   - Authority의 권한 상태는 enum 타입으로 ROLE_USER(사용자), ROLE_MANAGER(병원 관계자), ROLE_ADMIN(관리자) 세 가지로 고정했습니다.
   
   - MemberAuthority 엔티티의 hospitalNo는 병원 번호를 뜻합니다. ROLE_MANAGER(병원 관계자) 권한을 가진 사용자만 병원 번호를 가질 수 있습니다. 
   
-  - 멤버는 권한에 따라 여러 개의 권한을 가집니다. 예를 들어 병원 관계자는 USER(사용자), MANAGER(병원 관계자) 2개의 권한을 갖게끔 했습니다. 
-
+  - 멤버는 권한에 따라 여러 개의 권한을 가집니다. 예를 들어 병원 관계자는 USER(사용자), MANAGER(병원 관계자) 2개의 권한을 갖게끔 했습니다.
+  
+</div>
+</details>
 </br>
 
 - 토큰과 세션 둘 중의 방법을 고민하던 중 무상태성(Stateless)를 유지하는데는 토큰 기반 인증이 적합한 걸 알게됐습니다. 
@@ -283,52 +288,82 @@ Stateless
   
  </br>  
  
-- **Token 생성** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/TokenProvider.java)
-  - **createToken**: Authentication 파라미터를 받습니다. 여기서 토큰을 생성했습니다.
+<details>
+<summary><b>Token 생성</b></summary>
+<div markdown="1">
+ 
+- clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/TokenProvider.java)
+
+- **createToken**: Authentication 파라미터를 받습니다. 여기서 토큰을 생성했습니다.
   
-  - **createStaffToken**: Authentication과 병원 번호 파라미터를 받습니다. 병원 관계자가 토큰을 생성할 때, 토큰에 병원 번호를 넣기 위함입니다.
+- **createStaffToken**: Authentication과 병원 번호 파라미터를 받습니다. 병원 관계자가 토큰을 생성할 때, 토큰에 병원 번호를 넣기 위함입니다.
   
-  - **getAuthentication**: 토큰을 파라미터로 받아서 claim을 만들고, 클레임에서 권한 정보들을 빼냅니다. 권한 정보들을 이용해서 유저 객체를 만듭니다. 그리고 앞의 정보들을 이용해 Authentication 객체를 리턴했습니다. 
+- **getAuthentication**: 토큰을 파라미터로 받아서 claim을 만들고, 클레임에서 권한 정보들을 빼냅니다. 권한 정보들을 이용해서 유저 객체를 만듭니다. 그리고 앞의 정보들을 이용해 Authentication 객체를 리턴했습니다. 
   
-  - **getHospitalNumber**: 병원 관계자 전용 함수. 토큰을 파라미터로 받아서 병원 번호를 리턴했습니다. 
+- **getHospitalNumber**: 병원 관계자 전용 함수. 토큰을 파라미터로 받아서 병원 번호를 리턴했습니다. 
+  
+</div>
+</details>
 
 </br>
 
-- **Token 설정** 
-  - **JwtFilter**: doFilter 함수로 토큰의 인증정보를 SecurityContext에 저장했습니다. resolveToken 함수는 토큰 정보를 꺼냅니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtFilter.java)
+<details>
+<summary><b>Token 설정</b></summary>
+<div markdown="1">
   
-  - **JwtSecurityConfig**: 앞에서 언급한 Token 생성(Token Provider) 클래스를 주입받아서 JwtFilter를 통해 Security 로직에 필터 등록. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtSecurityConfig.java)
+- **JwtFilter**: doFilter 함수로 토큰의 인증정보를 SecurityContext에 저장했습니다. resolveToken 함수는 토큰 정보를 꺼냅니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtFilter.java)
   
-  - **기타 설정**: 자격 증명을 안 하고 접근할 때 401 에러:clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAuthenticationEntryPoint.java),  필요한 권한이 없는 경우 403에러 설정.:clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAccessDeniedHandler.java) 
+- **JwtSecurityConfig**: 앞에서 언급한 Token 생성(Token Provider) 클래스를 주입받아서 JwtFilter를 통해 Security 로직에 필터 등록. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtSecurityConfig.java)
+  
+- **기타 설정**: 자격 증명을 안 하고 접근할 때 401 에러:clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAuthenticationEntryPoint.java),  필요한 권한이 없는 경우 403에러 설정.:clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/jwtToken/JwtAccessDeniedHandler.java) 
+  
+</div>
+</details>
 
 </br>
 
-- **WebSecurity 설정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java)
-  - SecurityConfig의 파라미터에 앞에서 설정한 Token 설정을 넣습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java#L28)
   
-  - authorizeRequests로 HttpServletRequest를 사용하는 요청들에 대한 접근 제한했습니다.
+<details>
+<summary><b>WebSecurity 설정</b></summary>
+<div markdown="1">
+
+- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java)
+
+- SecurityConfig의 파라미터에 앞에서 설정한 Token 설정을 넣습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/configuration/SecurityConfig.java#L28)
   
-  - .antMatchers(PUBLIC_URI).permitAll()는 인증 없이 접근 허용.
+- authorizeRequests로 HttpServletRequest를 사용하는 요청들에 대한 접근 제한했습니다.
   
-  - .antMatchers(특정 URL).hasAnyRole(권한)으로 특정 권한이 있어야지 해당 URL로 접근 허용.
+- .antMatchers(PUBLIC_URI).permitAll()는 인증 없이 접근 허용.
   
-  - .anyRequest().authenticated() 나머지 요청들은 모두 인증이 되도록 설정. 
+- .antMatchers(특정 URL).hasAnyRole(권한)으로 특정 권한이 있어야지 해당 URL로 접근 허용.
   
-  - .apply(new JwtSecurityConfig(tokenProvider))로 앞에서 설정한 JwtSecurityConfig를 적용.
+- .anyRequest().authenticated() 나머지 요청들은 모두 인증이 되도록 설정. 
+  
+- .apply(new JwtSecurityConfig(tokenProvider))로 앞에서 설정한 JwtSecurityConfig를 적용.
+  
+</div>
+</details>
 
 </br>
 
-- **사용자 로그인**
-  - 로그인 때 DB에서 유저 정보와 권한 정보를 가져오면, 해당 정보를 기반으로 userDetails.User 객체를 생성해 리턴. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtUserDetailsService.java)
   
-  - 병원 관계자가 MANAGER 권한이 필요한 행동을 할 때마다 token에서 병원 번호를 얻습니다. :clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtStaffAccessService.java) 자신이 관리하는 병원 번호가 아닐 경우 접근 금지 처리. :clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
+<details>
+<summary><b>사용자 로그인</b></summary>
+<div markdown="1">
+
+- 로그인 때 DB에서 유저 정보와 권한 정보를 가져오면, 해당 정보를 기반으로 userDetails.User 객체를 생성해 리턴. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtUserDetailsService.java)
   
-  - **로그인 과정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/MemberApiController.java#L39)
-    - ID와 PW를 통해서 AuthenticationToken 객체를 생성. authentication Token을 이용해서 authenticate 메소드가 실행될 때 loadUserByUsername 메소드가 실행.
+- 병원 관계자가 MANAGER 권한이 필요한 행동을 할 때마다 token에서 병원 번호를 얻습니다. :clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtStaffAccessService.java) 자신이 관리하는 병원 번호가 아닐 경우 접근 금지 처리. :clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
+  
+- **로그인 과정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/MemberApiController.java#L39)
+  - ID와 PW를 통해서 AuthenticationToken 객체를 생성. authentication Token을 이용해서 authenticate 메소드가 실행될 때 loadUserByUsername 메소드가 실행.
     
-    - JwtUserDetailsService를 통해 loadUserByUsername이 실행된다. 이 결과값을 가지고 authentication 객체를 생성한다. 
+  - JwtUserDetailsService를 통해 loadUserByUsername이 실행된다. 이 결과값을 가지고 authentication 객체를 생성한다. 
     
-    - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다.    
+  - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
+
+</div>
+</details>
 
 </br>
 
