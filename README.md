@@ -390,6 +390,229 @@ Back-end
 </details>
 
 <details>
+<summary>로그인을 할 때마다 불필요한 쿼리가 발생할 때</summary>
+<div markdown="1">
+
+- 로그인 요청이 오면 UserDetailsService 타입의 loadUserByUsername 함수가 실행됩니다.
+
+- 저는 loadUserByUsername 함수에 User 타입으로 반환을 했었습니다.
+
+- 그런데 User 타입으로는 병원 번호를 불러올 수 없습니다. 이에 Member 정보를 불러오는 쿼리를 발생했습니다. 
+
+<details>
+<summary><b>기존 코드</b></summary>
+<div markdown="1">
+
+~~~java
+
+### JwtUserDetailsService
+  @Service
+  @Transactional(readOnly=true)
+  @RequiredArgsConstructor
+  public class JwtUserDetailsService implements UserDetailsService {
+      private final MemberRepository memberRepository;
+
+      @Override
+      @Transactional
+      public UserDetails loadUserByUsername(String name){
+          Optional<Member> memberOptional = memberRepository.findOneEmailByMemberIdName(name);
+
+          Member member = memberOptional.orElseThrow(()->new IllegalStateException("로그인하려는 아이디가 존재하지 않습니다."));
+
+          List<MemberAuthority> memberAuthorities = memberRepository.memberAuthorities(name);
+
+          List<GrantedAuthority> grantedAuthorities = memberAuthorities.stream()
+                  .map(a-> new SimpleGrantedAuthority(a.getAuthority().getAuthorizationStatus().toString())).collect(Collectors.toList());
+
+          return new org.springframework.security.core.userdetails.User(member.getMemberIdName()
+                  ,member.getPassword(),grantedAuthorities);
+      }
+
+### API Controller
+    @PostMapping("/login")
+    public ResponseEntity<LoginMemberResponse> loginMember(@RequestBody @Validated LoginMemberRequest request){
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(request.getMemberIdName(), request.getPassword());
+
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            Member member = memberService.logIn(request.getMemberIdName(), request.getPassword());
+
+            String jwt;
+
+            //멤버 권한이 STAFF 전용 토큰 만들기
+            if(member.getMemberStatus() == MemberStatus.STAFF){
+                jwt = tokenProvider.createStaffToken(authentication,
+                        member.getPhoneNumber(),member.getHospitalNumber());
+            }
+            //멤버 권한이 관리자나, 일반 유저라면
+            else  {
+                jwt = tokenProvider.createToken(authentication, member.getPhoneNumber());
+            }
+
+            //토큰 null 체크.
+            if(jwt == null){
+                throw new IllegalStateException("토큰 값이 null 입니다.");
+            }
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+            return new ResponseEntity<>(new LoginMemberResponse(member.getId(), member.getNickName(), member.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
+    }
+~~~
+
+</div>
+</details>
+
+- 위의 문제점은 로그인을 하는데 loadUserByUsername 함수 안에 있는 쿼리로도 충분한데, API Controller의 ` Member member = memberService.logIn(request.getMemberIdName(), request.getPassword());`로 불필요한 쿼리를 호출합니다. 이러면 로그인을 할 때마다 성능 저하가 발생할 수 있습니다.
+
+- 디버깅을 통해 authentication의 principal에 username, authorities, password만 있는 것을 인지했습니다. (잡다한 것은 생략했다.)
+
+- 구글 검색으로 User의 데이터 수를 늘릴 방법을 찾던 중에 커스트마이징을 통해 수를 늘릴 수 있는 것을 알아냈습니다.  
+
+- 바꾼 코드는 아래와 같습니다. 
+
+<details>
+<summary><b>개선된 코드</b></summary>
+<div markdown="1">
+
+~~~java
+
+
+@Service
+@Transactional(readOnly=true)
+@RequiredArgsConstructor
+public class JwtUserDetailsService implements UserDetailsService {
+    private final MemberRepository memberRepository;
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String name){
+        Optional<Member> memberOptional = memberRepository.findOneEmailByMemberIdName(name);
+
+        Member member = memberOptional.orElseThrow(()->new IllegalStateException("로그인하려는 아이디가 존재하지 않습니다."));
+
+        List<MemberAuthority> memberAuthorities = memberRepository.memberAuthorities(name);
+
+        List<GrantedAuthority> grantedAuthorities = memberAuthorities.stream()
+                .map(a-> new SimpleGrantedAuthority(a.getAuthority().getAuthorizationStatus().toString())).collect(Collectors.toList());
+
+        return new CustomUserDetail(member.getMemberIdName()
+                ,member.getPassword(),grantedAuthorities,
+                member.getPhoneNumber(),member.getHospitalNumber(),
+                member.getId(),member.getNickName(),member.getMemberStatus());
+    }
+
+    public class CustomUserDetail extends User {
+
+        String phoneNumber;
+        Long hospitalNumber;
+        Long memberId;
+        String nickName;
+        MemberStatus memberStatus;
+
+        public CustomUserDetail(String username, String password, Collection<? extends GrantedAuthority> authorities,
+                                String phoneNumber, Long hospitalNumber,
+                                Long memberId, String nickName, MemberStatus memberStatus) {
+            super(username, password, authorities);
+            this.phoneNumber = phoneNumber;
+            this.hospitalNumber = hospitalNumber;
+            this.memberId = memberId;
+            this.nickName = nickName;
+            this.memberStatus = memberStatus;
+        }
+
+        public String getPhoneNumber() {
+            return phoneNumber;
+        }
+
+        public Long getHospitalNumber() {
+            return hospitalNumber;
+        }
+
+        public Long getMemberId() {
+            return memberId;
+        }
+
+        public String getNickName() {
+            return nickName;
+        }
+
+        public MemberStatus getMemberStatus() {
+            return memberStatus;
+        }
+    }
+
+}
+
+
+### API Controller
+    @PostMapping("/login")
+    public ResponseEntity<LoginMemberResponse> loginMember(@RequestBody @Validated LoginMemberRequest request){
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(request.getMemberIdName(), request.getPassword());
+
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            //jwt Token
+            String jwt;
+            //커스텀 사용자 객체 가져오기
+             JwtUserDetailsService.CustomUserDetail user =
+                     (JwtUserDetailsService.CustomUserDetail) authentication.getPrincipal();
+
+
+             //멤버 권한이 일반 유저라면
+             if(!authentication.getAuthorities().stream()
+                     .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER")) &&
+
+                     authentication.getAuthorities().stream()
+                     .anyMatch(a->a.getAuthority().equals("ROLE_USER"))
+             )
+             {
+                jwt = tokenProvider.createToken(authentication, user.getPhoneNumber());
+             }
+             //멤버 권한이 STAFF 전용 토큰 만들기
+            else if(!authentication.getAuthorities().stream()
+                    .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN")) &&
+
+                     authentication.getAuthorities().stream()
+                    .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER"))
+             )
+            {
+                jwt = tokenProvider.createStaffToken(authentication,
+                        user.getPhoneNumber(), user.getHospitalNumber());
+            }
+            //멤버 권한이 관리자라면
+            else if(authentication.getAuthorities().stream()
+                     .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"))) {
+                jwt = tokenProvider.createToken(authentication, user.getPhoneNumber());
+            }
+            else{
+                throw new IllegalStateException("권한이 존재하지 않습니다.");
+             }
+
+            //토큰 null 체크.
+            if(jwt == null){
+                throw new IllegalStateException("토큰 값이 null 입니다.");
+            }
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+            return new ResponseEntity<>(new LoginMemberResponse(user.getMemberId(), user.getNickName(), user.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
+    }
+~~~
+
+</div>
+</details>
+
+</div>
+</details>
+
+<details>
 <summary> Q&A에서 답변의 NullPointerException 문제</summary>
 <div markdown="1">
 
