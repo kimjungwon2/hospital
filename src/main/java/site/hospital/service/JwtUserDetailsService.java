@@ -26,7 +26,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String name){
         Optional<Member> memberOptional = memberRepository.findOneEmailByMemberIdName(name);
 
-        Member member = memberOptional.orElseThrow(()->new IllegalStateException("로그인할려는 아이디가 존재하지 않습니다."));
+        Member member = memberOptional.orElseThrow(()->new IllegalStateException("로그인하려는 아이디가 존재하지 않습니다."));
 
         List<MemberAuthority> memberAuthorities = memberRepository.memberAuthorities(name);
 
