@@ -19,6 +19,7 @@ import site.hospital.domain.member.MemberStatus;
 import site.hospital.dto.AdminMemberSearchCondition;
 import site.hospital.jwtToken.JwtFilter;
 import site.hospital.jwtToken.TokenProvider;
+import site.hospital.service.JwtUserDetailsService;
 import site.hospital.service.MemberService;
 
 import javax.validation.constraints.Email;
@@ -43,19 +44,42 @@ public class MemberApiController {
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            Member member = memberService.logIn(request.getMemberIdName(), request.getPassword());
-
+            //jwt Token
             String jwt;
+            //커스텀 사용자 객체 가져오기
+             JwtUserDetailsService.CustomUserDetail user =
+                     (JwtUserDetailsService.CustomUserDetail) authentication.getPrincipal();
 
-            //멤버 권한이 STAFF 전용 토큰 만들기
-            if(member.getMemberStatus() == MemberStatus.STAFF){
+
+             //멤버 권한이 일반 유저라면
+             if(!authentication.getAuthorities().stream()
+                     .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER")) &&
+
+                     authentication.getAuthorities().stream()
+                     .anyMatch(a->a.getAuthority().equals("ROLE_USER"))
+             )
+             {
+                jwt = tokenProvider.createToken(authentication, user.getPhoneNumber());
+             }
+             //멤버 권한이 STAFF 전용 토큰 만들기
+            else if(!authentication.getAuthorities().stream()
+                    .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN")) &&
+
+                     authentication.getAuthorities().stream()
+                    .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER"))
+             )
+            {
                 jwt = tokenProvider.createStaffToken(authentication,
-                        member.getPhoneNumber(),member.getHospitalNumber());
+                        user.getPhoneNumber(), user.getHospitalNumber());
             }
-            //멤버 권한이 관리자나, 일반 유저라면
-            else  {
-                jwt = tokenProvider.createToken(authentication, member.getPhoneNumber());
+            //멤버 권한이 관리자라면
+            else if(authentication.getAuthorities().stream()
+                     .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"))) {
+                jwt = tokenProvider.createToken(authentication, user.getPhoneNumber());
             }
+            else{
+                throw new IllegalStateException("권한이 존재하지 않습니다.");
+             }
 
             //토큰 null 체크.
             if(jwt == null){
@@ -65,7 +89,7 @@ public class MemberApiController {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-            return new ResponseEntity<>(new LoginMemberResponse(member.getId(), member.getNickName(), member.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(new LoginMemberResponse(user.getMemberId(), user.getNickName(), user.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/signup")

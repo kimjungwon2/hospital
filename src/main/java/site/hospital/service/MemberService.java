@@ -53,7 +53,7 @@ public class MemberService {
         return member.getId();
     }
 
-    public Member logIn(String memberIdName, String password) {
+    public Member logIn(String memberIdName) {
         Member findMembers = memberRepository.findOneByMemberIdName(memberIdName);
 
         if (findMembers == null) {
