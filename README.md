@@ -397,7 +397,7 @@ Back-end
 
 - 저는 loadUserByUsername 함수에 User 타입으로 반환을 했었습니다.
 
-- 그런데 User 타입으로는 병원 번호를 불러올 수 없습니다. 이에 Member 정보를 불러오는 쿼리를 발생했습니다. 
+- 그런데 User 타입으로는 병원 번호를 불러올 수 없습니다. 이에 Member 정보를 불러오는 쿼리를 또 만들었습니다. 
 
 <details>
 <summary><b>기존 코드</b></summary>
