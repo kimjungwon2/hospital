@@ -468,7 +468,7 @@ Back-end
 
 - 위 코드의 문제점은 로그인하는데 loadUserByUsername 함수 안에 있는 쿼리로도 충분한데, API Controller의 ` Member member = memberService.logIn(request.getMemberIdName(), request.getPassword());`로 불필요한 쿼리를 호출합니다. 이러면 로그인을 할 때마다 성능 저하가 발생할 수 있습니다.
 
-- 디버깅을 통해 authentication의 principal에 username, authorities, password만 있는 것을 인지했습니다. (잡다한 것은 생략했다.)
+- 디버깅을 통해 authentication의 principal에 username, authorities, password만 있는 것을 인지했습니다. (잡다한 변수는 생략했다.)
 
 - 구글 검색으로 User의 데이터 수를 늘릴 방법을 찾던 중에 커스트마이징을 통해 수를 늘릴 수 있는 것을 알아냈습니다.  
 
