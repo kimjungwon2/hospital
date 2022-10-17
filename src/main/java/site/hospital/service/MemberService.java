@@ -53,16 +53,6 @@ public class MemberService {
         return member.getId();
     }
 
-    public Member logIn(String memberIdName) {
-        Member findMembers = memberRepository.findOneByMemberIdName(memberIdName);
-
-        if (findMembers == null) {
-            throw new IllegalStateException("해당 아이디는 존재하지 않습니다.");
-        }
-
-        return findMembers;
-    }
-
     //중복 아이디 검사
     private void validateDuplicateMember(Member member) {
         List<Member> findMembers = memberRepository.findByMemberIdName(member.getMemberIdName());
