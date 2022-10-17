@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.member.MemberStatus;
 import site.hospital.dto.AdminMemberSearchCondition;
+import site.hospital.jwtToken.CustomUserDetail;
 import site.hospital.jwtToken.JwtFilter;
 import site.hospital.jwtToken.TokenProvider;
-import site.hospital.service.JwtUserDetailsService;
 import site.hospital.service.MemberService;
 
 import javax.validation.constraints.Email;
@@ -44,42 +44,12 @@ public class MemberApiController {
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            //jwt Token
-            String jwt;
             //커스텀 사용자 객체 가져오기
-             JwtUserDetailsService.CustomUserDetail user =
-                     (JwtUserDetailsService.CustomUserDetail) authentication.getPrincipal();
+             CustomUserDetail user =
+                     (CustomUserDetail) authentication.getPrincipal();
 
-
-             //멤버 권한이 일반 유저라면
-             if(!authentication.getAuthorities().stream()
-                     .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER")) &&
-
-                     authentication.getAuthorities().stream()
-                     .anyMatch(a->a.getAuthority().equals("ROLE_USER"))
-             )
-             {
-                jwt = tokenProvider.createToken(authentication, user.getPhoneNumber());
-             }
-             //멤버 권한이 STAFF 전용 토큰 만들기
-            else if(!authentication.getAuthorities().stream()
-                    .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN")) &&
-
-                     authentication.getAuthorities().stream()
-                    .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER"))
-             )
-            {
-                jwt = tokenProvider.createStaffToken(authentication,
-                        user.getPhoneNumber(), user.getHospitalNumber());
-            }
-            //멤버 권한이 관리자라면
-            else if(authentication.getAuthorities().stream()
-                     .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"))) {
-                jwt = tokenProvider.createToken(authentication, user.getPhoneNumber());
-            }
-            else{
-                throw new IllegalStateException("권한이 존재하지 않습니다.");
-             }
+            //jwt Token
+            String jwt = GetJWToken(authentication,user);
 
             //토큰 null 체크.
             if(jwt == null){
@@ -205,6 +175,39 @@ public class MemberApiController {
         memberService.adminGiveAuthority(memberId,request.getMemberStatus(),request.getHospitalNumber());
     }
 
+
+    //토큰 획득
+    private String GetJWToken(Authentication authentication, CustomUserDetail user){
+        //멤버 권한이 일반 유저라면
+        if(!authentication.getAuthorities().stream()
+                .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER")) &&
+
+                authentication.getAuthorities().stream()
+                        .anyMatch(a->a.getAuthority().equals("ROLE_USER"))
+        )
+        {
+            return tokenProvider.createToken(authentication, user.getPhoneNumber());
+        }
+        //멤버 권한이 STAFF 전용 토큰 만들기
+        else if(!authentication.getAuthorities().stream()
+                .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN")) &&
+
+                authentication.getAuthorities().stream()
+                        .anyMatch(a->a.getAuthority().equals("ROLE_MANAGER"))
+        )
+        {
+            return tokenProvider.createStaffToken(authentication,
+                    user.getPhoneNumber(), user.getHospitalNumber());
+        }
+        //멤버 권한이 관리자라면
+        else if(authentication.getAuthorities().stream()
+                .anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"))) {
+            return tokenProvider.createToken(authentication, user.getPhoneNumber());
+        }
+        else{
+            throw new IllegalStateException("권한이 존재하지 않습니다.");
+        }
+    }
 
     /* DTO */
     @Data

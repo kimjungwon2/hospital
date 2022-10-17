@@ -10,10 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.member.MemberAuthority;
-import site.hospital.domain.member.MemberStatus;
+import site.hospital.jwtToken.CustomUserDetail;
 import site.hospital.repository.member.MemberRepository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,45 +40,4 @@ public class JwtUserDetailsService implements UserDetailsService {
                 member.getPhoneNumber(),member.getHospitalNumber(),
                 member.getId(),member.getNickName(),member.getMemberStatus());
     }
-
-    public class CustomUserDetail extends User {
-
-        String phoneNumber;
-        Long hospitalNumber;
-        Long memberId;
-        String nickName;
-        MemberStatus memberStatus;
-
-        public CustomUserDetail(String username, String password, Collection<? extends GrantedAuthority> authorities,
-                                String phoneNumber, Long hospitalNumber,
-                                Long memberId, String nickName, MemberStatus memberStatus) {
-            super(username, password, authorities);
-            this.phoneNumber = phoneNumber;
-            this.hospitalNumber = hospitalNumber;
-            this.memberId = memberId;
-            this.nickName = nickName;
-            this.memberStatus = memberStatus;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public Long getHospitalNumber() {
-            return hospitalNumber;
-        }
-
-        public Long getMemberId() {
-            return memberId;
-        }
-
-        public String getNickName() {
-            return nickName;
-        }
-
-        public MemberStatus getMemberStatus() {
-            return memberStatus;
-        }
-    }
-
 }
