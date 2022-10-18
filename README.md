@@ -766,11 +766,29 @@ mounted(){
 
 - props로 데이터를 정상적으로 받는, 상태 변화에 반응하기 위해서 computed 혹은 watch를 사용해야 함을 인식. 
 
+- 저는 watch로 아래의 코드 처럼 props값이 온 걸 확인하면 지도를 출력했습니다. 
+
 <details>
 <summary><b>개선된 코드</b></summary>
 <div markdown="1">
 
-- 저는 watch로 props값이 온 걸 확인하면 지도를 출력했습니다. :clipboard: [개선된 코드](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/hospital/ViewMapForm.vue#L22)
+~~~javascript
+
+  watch:{
+    detailed: function(){
+      if (window.kakao && window.kakao.maps) {
+        this.initMap()
+      } else {
+          const script = document.createElement('script')
+          script.onload = () => kakao.maps.load(this.initMap);
+          script.src = 'http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bcdb595a4b1c6bc005200d3b0d9271fb'
+          document.head.appendChild(script)
+      }
+    }
+  },
+~~~ 
+
+:clipboard: [자세한 코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/hospital/ViewMapForm.vue#L22)
 </div>
 </details>
 
