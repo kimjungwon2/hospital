@@ -354,15 +354,43 @@ Stateless
 <div markdown="1">
 
 - 로그인 때 DB에서 유저 정보와 권한 정보를 가져오면, 해당 정보를 기반으로 userDetails.User 객체를 생성해 리턴. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtUserDetailsService.java)
-  
-- 병원 관계자가 MANAGER 권한이 필요한 행동을 할 때마다 token에서 병원 번호를 얻습니다. :clipboard: [코드1](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/JwtStaffAccessService.java) 자신이 관리하는 병원 번호가 아닐 경우 접근 금지 처리. :clipboard: [코드2](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
-  
+
 - **로그인 과정** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/MemberApiController.java#L39)
   - ID와 PW를 통해서 AuthenticationToken 객체를 생성. authentication Token을 이용해서 authenticate 메소드가 실행될 때 loadUserByUsername 메소드가 실행.
     
   - JwtUserDetailsService를 통해 loadUserByUsername이 실행된다. 이 결과값을 가지고 authentication 객체를 생성한다. 
     
   - 인증 정보를 기준으로 해서 Token을 생성. 이때 Manager 권한을 가진 사용자는 병원 번호를 받기 위해서 전용 토큰을 생성해야 한다. 
+  
+- **병원 관계자**
+  - 병원 관계자는 다른 계정과 달리 token에 병원 번호를 넣었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/a2375806ce02f0912442ece68007cb01e5776ebf/src/main/java/site/hospital/jwtToken/TokenProvider.java#L59) 
+  
+  - 로그인을 할 경우 병원 관계자 사용자는 자신이 조작하는 병원을 구분하기 위해 전용 토큰을 생성합니다.
+
+</div>
+</details>
+
+</br>
+
+- '병원의 고유 번호(ex.5764)를 가진 사람이 어떻게 자신의 병원만 수정하게 할까?' 고심하던 중 아래와 같이 생각했습니다. 
+
+- doFilter로 병원 관계자가 해당 URL에 들어갈 때마다 병원 번호를 확인하는 쿼리를 매번 날리는 건 비효율적이라 생각했습니다. 
+
+- 토큰의 병원 번호와 DB의 병원 번호가 일치하더라도 프론트단에서 수정하려는 병원 번호(pk)를 조작하면 그 병원의 정보 갱신이 가능해집니다.
+
+ </br>  
+
+<details>
+<summary><b>자신의 병원만 수정</b></summary>
+<div markdown="1">
+
+- servletRequest을 통해 토큰의 병원 번호를 꺼냅니다.
+
+- 사용자의 Id(PK)와 ROLE_MANAGER를 파라미터로 넣어서 멤버 권한을 찾는 쿼리를 날립니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/a2375806ce02f0912442ece68007cb01e5776ebf/src/main/java/site/hospital/service/JwtStaffAccessService.java#L36)
+
+- 토큰의 병원 번호와 DB의 병원 번호가 같은지 확인하고, 프론트 엔드에서 수정 요청한 병원 id(PK)와 DB의 병원 번호가 같은지 확인했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/a2375806ce02f0912442ece68007cb01e5776ebf/src/main/java/site/hospital/service/JwtStaffAccessService.java#L38)
+
+- 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호가 아닐 경우 위에서 작성한 접근 금지하는 메소드를 매번 넣었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
 
 </div>
 </details>
