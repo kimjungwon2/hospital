@@ -390,7 +390,7 @@ Stateless
 
 - 토큰의 병원 번호와 DB의 병원 번호가 같은지 확인하고, 프론트 엔드에서 수정 요청한 병원 id(PK)와 DB의 병원 번호가 같은지 확인했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/a2375806ce02f0912442ece68007cb01e5776ebf/src/main/java/site/hospital/service/JwtStaffAccessService.java#L38)
 
-- 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호가 아닐 경우 위에서 작성한 접근 금지하는 메소드를 매번 넣었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
+- 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호가 아닐 시 위에서 작성한 접근 금지하는 메소드를 매번 넣었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
 
 </div>
 </details>
