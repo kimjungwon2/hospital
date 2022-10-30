@@ -113,7 +113,6 @@ public class MemberService {
             Hospital hospital = hospitalRepository.findById(modifyMember.getHospitalNumber())
                     .orElseThrow(()-> new IllegalStateException("해당 번호에 속하는 병원이 존재하지 않습니다."));
 
-
             Authority authority_STAFF = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_MANAGER);
             if (authority_STAFF == null) throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
 

@@ -80,7 +80,10 @@ public class Member extends BaseTimeEntity {
         this.phoneNumber=member.getPhoneNumber();
         this.userName = member.getUserName();
         this.memberStatus = member.getMemberStatus();
-        this.hospitalNumber = member.getHospitalNumber();
+
+        if(member.memberStatus==MemberStatus.STAFF) {
+            this.hospitalNumber = member.getHospitalNumber();
+        }
     }
 
     //수정하기
