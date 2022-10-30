@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import site.hospital.api.HospitalApiController;
+import site.hospital.domain.hospital.BusinessCondition;
+import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Authority;
 import site.hospital.domain.member.Authorization;
 import site.hospital.domain.member.Member;
@@ -29,6 +32,9 @@ class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    HospitalService hospitalService;
 
     @BeforeEach
     public void 권한생성(){
@@ -167,5 +173,110 @@ class MemberServiceTest {
         assertEquals(MemberStatus.NORMAL,findMember2.get().getMemberStatus());
     }
 
+    @Test
+    public void 회원정보_수정(){
+        //given
+        Member member1 = Member.builder().userName("이덕후")
+                .nickName("풉키풉키").phoneNumber("01057469163")
+                .memberIdName("a@naver2.com")
+                .password(passwordEncoder.encode("1234")).build();
+        Long id1 = memberService.signUp(member1);
+
+        //when
+        Member modifyMember = Member.builder().phoneNumber("01056135554").nickName("화유")
+                .userName("김희철").memberStatus(MemberStatus.ADMIN).build();
+
+        memberService.modifyMember(id1,modifyMember);
+
+        Optional<Member> findMember = memberRepository.findById(id1);
+
+        //then
+        assertEquals(findMember.get().getPhoneNumber(),"01056135554");
+        assertEquals(findMember.get().getNickName(),"화유");
+        assertEquals(findMember.get().getUserName(),"김희철");
+        assertEquals(findMember.get().getMemberStatus(),MemberStatus.NORMAL);
+    }
+
+    @Test
+    public void 회원이없는정보_수정(){
+        //given
+        Member member1 = Member.builder().userName("이덕후")
+                .nickName("풉키풉키").phoneNumber("01057469163")
+                .memberIdName("a@naver2.com")
+                .password(passwordEncoder.encode("1234")).build();
+        Long id1 = memberService.signUp(member1);
+
+        //when
+        Member modifyMember = Member.builder().phoneNumber("01056135554").nickName("화유")
+                .userName("김희철").memberStatus(MemberStatus.ADMIN).build();
+
+        //then
+        assertThrows(IllegalStateException.class, () -> {
+            memberService.modifyMember(2L,modifyMember);
+        });
+    }
+
+    @Test
+    public void 관리자_회원정보_수정(){
+        //given
+        Member member1 = Member.builder().userName("이덕후")
+                .nickName("풉키풉키").phoneNumber("01057469163")
+                .memberIdName("a@naver2.com")
+                .password(passwordEncoder.encode("1234")).build();
+        Long id1 = memberService.signUp(member1);
+
+        Member member2 = Member.builder().userName("이덕후")
+                .nickName("풉키풉키").phoneNumber("01057469163")
+                .memberIdName("a@naver3.com")
+                .password(passwordEncoder.encode("1234")).build();
+        Long id2 = memberService.signUp(member2);
+
+        //병원 생성(병원 번호를 얻기 위해)
+        Hospital hospital = Hospital.builder()
+                .licensingDate("20121008")
+                .hospitalName("가평산속요양병원")
+                .phoneNumber("031-584-8900")
+                .distinguishedName("요양병원(일반요양병원)")
+                .medicalSubjectInformation("내과, 한방내과")
+                .businessCondition(BusinessCondition.영업중)
+                .cityName("가평군")
+                .build();
+
+        hospitalService.registerHospital(hospital);
+
+        //when
+        Member modifyMember1 = Member.builder().phoneNumber("01056135554")
+                .memberStatus(MemberStatus.ADMIN)
+                .nickName("화유")
+                .hospitalNumber(2L)
+                .userName("김희철").build();
+
+        Member modifyMember2 = Member.builder().phoneNumber("01064311551")
+                .memberStatus(MemberStatus.STAFF)
+                .nickName("유대")
+                .hospitalNumber(1L)
+                .userName("김희도").build();
+
+
+        memberService.adminModifyMember(id1,modifyMember1);
+
+        memberService.adminModifyMember(id2,modifyMember2);
+
+        Optional<Member> findMember = memberRepository.findById(id1);
+        Optional<Member> findMember2 = memberRepository.findById(id2);
+
+        //then
+        assertEquals(findMember.get().getPhoneNumber(),"01056135554");
+        assertEquals(findMember.get().getNickName(),"화유");
+        assertEquals(findMember.get().getUserName(),"김희철");
+        assertEquals(findMember.get().getMemberStatus(),MemberStatus.ADMIN);
+        assertEquals(findMember.get().getHospitalNumber(),null);
+
+        assertEquals(findMember2.get().getPhoneNumber(),"01064311551");
+        assertEquals(findMember2.get().getNickName(),"유대");
+        assertEquals(findMember2.get().getUserName(),"김희도");
+        assertEquals(findMember2.get().getMemberStatus(),MemberStatus.STAFF);
+        assertEquals(findMember2.get().getHospitalNumber(),1L);
+    }
 
 }
