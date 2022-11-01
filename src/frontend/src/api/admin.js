@@ -37,10 +37,6 @@ function adminModifyMember(memberId, userData){
     return admin.put('/user/modify/'+memberId, userData);
 }
 
-//관리자 멤버 권한 주기.
-function adminAuthorizeMember(memberId, request){
-    return admin.put('/user/authority/'+memberId, request);
-}
 
 /* 병원 관리 */
 //관리자 병원 검색
@@ -305,7 +301,6 @@ export {
     adminSearchMemberLists, 
     adminViewMember, adminCreateMember, 
     adminDeleteMember, adminModifyMember, 
-    adminAuthorizeMember,
 
     //병원
     adminSearchHospitalLists,adminCreateHospital,adminViewThumbnail,

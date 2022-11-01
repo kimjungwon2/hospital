@@ -168,14 +168,6 @@ public class MemberApiController {
         memberService.adminModifyMember(memberId, member);
     }
 
-    //관리자 멤버 권한 부여하기.
-    @PutMapping("/admin/user/authority/{memberId}")
-    public void adminGiveAuthorityMember(@PathVariable("memberId") Long memberId,
-                                  @RequestBody @Validated AdminMemberAuthorizeRequest request){
-        memberService.adminGiveAuthority(memberId,request.getMemberStatus(),request.getHospitalNumber());
-    }
-
-
     //토큰 획득
     private String GetJWToken(Authentication authentication, CustomUserDetail user){
         //멤버 권한이 일반 유저라면

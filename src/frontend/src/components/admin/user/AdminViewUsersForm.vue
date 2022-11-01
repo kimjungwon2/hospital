@@ -20,7 +20,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
-import { adminViewMemberLists, adminAuthorizeMember, adminDeleteMember } from '@/api/admin';
+import { adminViewMemberLists, adminDeleteMember } from '@/api/admin';
 
 library.add(faTrashAlt)
 library.add(faHospitalUser)
@@ -42,17 +42,6 @@ export default {
     async deleteMember(memberId){
       if(confirm('정말로 멤버를 삭제하시겠습니까?')){
             await adminDeleteMember(memberId);
-            this.adminLoadMembers();
-      }
-    },
-    async authorityMember(memberId){
-      if(confirm('STAFF 권한을 주시겠습니까?')){
-            const data = {
-              memberStatus:"STAFF",
-              hospitalNumber:1,
-            };
-
-            await adminAuthorizeMember(memberId, data);
             this.adminLoadMembers();
       }
     },
