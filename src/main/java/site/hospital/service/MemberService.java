@@ -80,9 +80,11 @@ public class MemberService {
         //권한이 같다면 권한 수정을 안 한다.
         if (member.getMemberStatus() == modifyMember.getMemberStatus() &&
                 modifyMember.getMemberStatus() != MemberStatus.STAFF) {
+            member.modifyMember(modifyMember);
         }
         //관리자는 권한 수정을 못 하게 한다.
         else if (modifyMember.getMemberStatus() == MemberStatus.ADMIN) {
+            member.modifyMember(modifyMember);
         }
         else if (modifyMember.getMemberStatus() == MemberStatus.NORMAL) {
             //모든 권한 삭제
@@ -96,6 +98,10 @@ public class MemberService {
                     .member(member).authority(authority_USER).build();
 
             memberAuthorityRepository.save(memberAuthority);
+
+            //member 데이터 변환
+            member.adminModifyMember(modifyMember);
+
         } else if (modifyMember.getMemberStatus() == MemberStatus.STAFF) {
             //모든 권한 삭제
             memberRepository.adminDeleteMemberAuthority(member);
@@ -120,10 +126,11 @@ public class MemberService {
                     .member(member).authority(authority_STAFF).hospitalNo(modifyMember.getHospitalNumber()).build();
 
             memberAuthorityRepository.save(managerAuthority);
+
+            //member 데이터 변환
+            member.adminModifyMember(modifyMember);
         }
 
-        //member 데이터 변환
-        member.adminModifyMember(modifyMember);
     }
 
 
