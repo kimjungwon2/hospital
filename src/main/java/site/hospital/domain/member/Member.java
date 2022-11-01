@@ -71,7 +71,10 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.memberStatus = memberStatus;
-        this.hospitalNumber =hospitalNumber;
+
+        if(memberStatus==MemberStatus.STAFF) {
+            this.hospitalNumber = hospitalNumber;
+        }
     }
 
     //수정하기
