@@ -72,7 +72,6 @@ public class TokenProvider implements Serializable {
                 .signWith(SignatureAlgorithm.HS512,secret)
                 .setExpiration(validity)
                 .compact();
-
     }
 
     //STAFF 병원 번호 반환

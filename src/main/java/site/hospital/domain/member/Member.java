@@ -96,14 +96,4 @@ public class Member extends BaseTimeEntity {
         this.userName = member.getUserName();
     }
 
-    //멤버 권한 주기
-    public void giveAuthority(MemberStatus memberStatus){
-        this.memberStatus = memberStatus;
-    }
-
-    //STAFF 병원 번호 주기
-    public void giveHospitalNumber(Long hospitalNumber){
-        this.hospitalNumber = hospitalNumber;
-    }
-
 }
