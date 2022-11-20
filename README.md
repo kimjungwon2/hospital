@@ -50,16 +50,6 @@
 </div>
 </details>
 
-<details>
-<summary>domain & repository 안의 폴더 의미</summary>
-<div markdown="1">
-
-- **domain**: 폴더 이름의 객체와 객체 안의 enum, 임베디드 타입(내장 객체)들을 묶은 것입니다.
-- **repository**: 그 엔티티에 QueryDSL을 사용하거나, 복잡한 데이터 조회나 성능을 위해서. @QueryProjection을 사용하여 전체 데이터가 아닌 원하는 데이터만 select 하게끔 QueryDSL을 통해 Query문을 만들었습니다.
-</div>
-</details>
-
-
 ### 3.2. Front-end :mag_right: [구조 확인](https://github.com/kimjungwon2/hospital/tree/4d39e3c12ba04a1de79a0574a1c49897216eaf11/src/frontend/src)
 <details>
 <summary>패키지 설명</summary>
