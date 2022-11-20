@@ -401,25 +401,6 @@ Stateless
 Back-end 
 -------------
 <details>
-<summary>데이터를 추가할 때마다 모든 엔티티의 PK 값이 증가</summary>
-<div markdown="1">
-
-- 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id 값(pk)이 2가 나왔습니다.
-- `@GeneratedValue(strategy = GenerationType.IDENTITY)` 사용으로, 기본 키 생성을 데이터베이스에 위임. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L22)
-
-</div>
-</details>
-
-<details>
-<summary>소수점 10자리 이상인 데이터를 받아올 때 계속 2자리만 나올 경우</summary>
-<div markdown="1">
-
-- `@Column(columnDefinition="Decimal(19,12)")` 선언으로 소수점 12자리까지 나오게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/detailedHosInformation/HospitalLocation.java#L18)
-
-</div>
-</details>
-
-<details>
 <summary>로그인을 할 때마다 불필요한 쿼리가 발생할 때</summary>
 <div markdown="1">
 
@@ -872,25 +853,6 @@ mounted(){
 </div>
 </details>
   
-<details>
-<summary>여러 명의 의사를 한꺼번에 등록하기</summary>
-<div markdown="1">
-
-- Back-end에서는 의사들을 List 형태로 받게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L277)
-
-- 서버단의 DTO 데이터 형식에 맞게끔 Front-end에서 데이터를 가공. 특히 의사의 경우 List 형식의 데이터이다.
-  
-- List 형식의 데이터에 어떻게 하면 값을 넣거나 뺄 수 있을까, 생각하는 도중에 JS의 Array 메서드를 생각했습니다.
-  
-- 의사 추가하기 버튼으로 doctorNumber의 수가 하나씩 증가, doctorNumber 수만큼 for loop를 돌렸고 push 메서드를 통해 배열에 값을 넣었습니다.
-  
-- 의사 제거 버튼으로 doctorNumber의 수가 하나씩 감소, pop 메서드를 통해 배열의 의사 정보를 제거했습니다. 
-  
-- 위의 조건들을 적용한 최종 코드는 다음과 같다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/admin/hospital/AdminRegisterStaffHospitalForm.vue#L36)
-  
-</div>
-</details>
-
 </br>
 
 ## 8. 고려한 점
