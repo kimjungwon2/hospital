@@ -117,7 +117,7 @@ public class HospitalSearchRepository {
         return isEmpty(name)?  null: hospital.medicalSubjectInformation.contains(name);
     }
     private BooleanExpression tagNameLike(String name){
-        return isEmpty(name)?  null: hospital.postTags.any().tag.name.contains(name);
+        return isEmpty(name)?  null: hospital.postTags.any().tag.name.eq(name);
     }
 
 }
