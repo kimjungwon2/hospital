@@ -50,16 +50,6 @@
 </div>
 </details>
 
-<details>
-<summary>domain & repository 안의 폴더 의미</summary>
-<div markdown="1">
-
-- **domain**: 폴더 이름의 객체와 객체 안의 enum, 임베디드 타입(내장 객체)들을 묶은 것입니다.
-- **repository**: 그 엔티티에 QueryDSL을 사용하거나, 복잡한 데이터 조회나 성능을 위해서. @QueryProjection을 사용하여 전체 데이터가 아닌 원하는 데이터만 select 하게끔 QueryDSL을 통해 Query문을 만들었습니다.
-</div>
-</details>
-
-
 ### 3.2. Front-end :mag_right: [구조 확인](https://github.com/kimjungwon2/hospital/tree/4d39e3c12ba04a1de79a0574a1c49897216eaf11/src/frontend/src)
 <details>
 <summary>패키지 설명</summary>
@@ -255,6 +245,7 @@ Stateless
 </br>
 
 ## 6. 핵심 트러블슈팅
+### 6-1. 사용자 권한
 - **사용자 권한은 어떻게 구현할 것이고, 특정 병원 번호만 어떻게 조작이 가능하게 할 것인가?**
 
 - 이걸 어떻게 구현할지 감이 안 온 저는, 우아한형제들 기술이사 김영한 님의 강의를 평소에 보고 있어서 아래와 같은 조언을 얻었습니다. 
@@ -266,10 +257,7 @@ Stateless
 
 </br>
 
-<details>
-<summary><b>테이블 설계</b></summary>
-<div markdown="1">
-  
+
 ![설명2](https://user-images.githubusercontent.com/40010165/193619543-bc61ad47-c8bf-4349-a094-c36b60f65d35.png)
   - Authority의 권한 상태는 enum 타입으로 ROLE_USER(사용자), ROLE_MANAGER(병원 관계자), ROLE_ADMIN(관리자) 세 가지로 고정했습니다.
   
@@ -277,15 +265,6 @@ Stateless
   
   - 멤버는 권한에 따라 여러 개의 권한을 가집니다. 예를 들어 병원 관계자는 USER(사용자), MANAGER(병원 관계자) 2개의 권한을 갖게끔 했습니다.
   
-</div>
-</details>
-</br>
-
-- 토큰과 세션 둘 중의 방법을 고민하던 중 무상태성(Stateless)를 유지한다는 토큰 기반 인증이 적합한 걸 알게됐습니다. 
-  
-- 세션 방식으로 어떻게 해야 하는지 감을 못 잡아서, 구현하기 쉬운 토큰 방식을 택했습니다. 
-  
- </br>  
  
 <details>
 <summary><b>Token 생성</b></summary>
@@ -400,25 +379,6 @@ Stateless
 ## 7. 기타 트러블슈팅
 Back-end 
 -------------
-<details>
-<summary>데이터를 추가할 때마다 모든 엔티티의 PK 값이 증가</summary>
-<div markdown="1">
-
-- 멤버에 데이터를 넣고, 병원에 데이터를 넣었는데 병원의 id 값(pk)이 2가 나왔습니다.
-- `@GeneratedValue(strategy = GenerationType.IDENTITY)` 사용으로, 기본 키 생성을 데이터베이스에 위임. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/member/Member.java#L22)
-
-</div>
-</details>
-
-<details>
-<summary>소수점 10자리 이상인 데이터를 받아올 때 계속 2자리만 나올 경우</summary>
-<div markdown="1">
-
-- `@Column(columnDefinition="Decimal(19,12)")` 선언으로 소수점 12자리까지 나오게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/detailedHosInformation/HospitalLocation.java#L18)
-
-</div>
-</details>
-
 <details>
 <summary>로그인을 할 때마다 불필요한 쿼리가 발생할 때</summary>
 <div markdown="1">
@@ -872,25 +832,6 @@ mounted(){
 </div>
 </details>
   
-<details>
-<summary>여러 명의 의사를 한꺼번에 등록하기</summary>
-<div markdown="1">
-
-- Back-end에서는 의사들을 List 형태로 받게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L277)
-
-- 서버단의 DTO 데이터 형식에 맞게끔 Front-end에서 데이터를 가공. 특히 의사의 경우 List 형식의 데이터이다.
-  
-- List 형식의 데이터에 어떻게 하면 값을 넣거나 뺄 수 있을까, 생각하는 도중에 JS의 Array 메서드를 생각했습니다.
-  
-- 의사 추가하기 버튼으로 doctorNumber의 수가 하나씩 증가, doctorNumber 수만큼 for loop를 돌렸고 push 메서드를 통해 배열에 값을 넣었습니다.
-  
-- 의사 제거 버튼으로 doctorNumber의 수가 하나씩 감소, pop 메서드를 통해 배열의 의사 정보를 제거했습니다. 
-  
-- 위의 조건들을 적용한 최종 코드는 다음과 같다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/components/admin/hospital/AdminRegisterStaffHospitalForm.vue#L36)
-  
-</div>
-</details>
-
 </br>
 
 ## 8. 고려한 점
