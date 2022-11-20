@@ -245,6 +245,7 @@ Stateless
 </br>
 
 ## 6. 핵심 트러블슈팅
+### 6-1. 사용자 권한
 - **사용자 권한은 어떻게 구현할 것이고, 특정 병원 번호만 어떻게 조작이 가능하게 할 것인가?**
 
 - 이걸 어떻게 구현할지 감이 안 온 저는, 우아한형제들 기술이사 김영한 님의 강의를 평소에 보고 있어서 아래와 같은 조언을 얻었습니다. 
@@ -256,10 +257,7 @@ Stateless
 
 </br>
 
-<details>
-<summary><b>테이블 설계</b></summary>
-<div markdown="1">
-  
+
 ![설명2](https://user-images.githubusercontent.com/40010165/193619543-bc61ad47-c8bf-4349-a094-c36b60f65d35.png)
   - Authority의 권한 상태는 enum 타입으로 ROLE_USER(사용자), ROLE_MANAGER(병원 관계자), ROLE_ADMIN(관리자) 세 가지로 고정했습니다.
   
@@ -267,15 +265,6 @@ Stateless
   
   - 멤버는 권한에 따라 여러 개의 권한을 가집니다. 예를 들어 병원 관계자는 USER(사용자), MANAGER(병원 관계자) 2개의 권한을 갖게끔 했습니다.
   
-</div>
-</details>
-</br>
-
-- 토큰과 세션 둘 중의 방법을 고민하던 중 무상태성(Stateless)를 유지한다는 토큰 기반 인증이 적합한 걸 알게됐습니다. 
-  
-- 세션 방식으로 어떻게 해야 하는지 감을 못 잡아서, 구현하기 쉬운 토큰 방식을 택했습니다. 
-  
- </br>  
  
 <details>
 <summary><b>Token 생성</b></summary>
