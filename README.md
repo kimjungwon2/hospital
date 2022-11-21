@@ -809,7 +809,6 @@ mounted(){
 <summary>Auditing으로 등록일, 수정일을 다 넣었습니다. </summary> 
 <div markdown="1">
 
-- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/domain/baseEntity/BaseEntity.java)
 - 데이터를 언제 바꿨냐, 언제 문제가 생겼냐는 게 중요해서 넣으면 운영할 때 편합니다.
 - 등록, 수정 두 가지는 모든 테이블에 다 적용했습니다.
 </div>
@@ -819,7 +818,6 @@ mounted(){
 <summary>API 계층에서 Entity를 그대로 파라미터에 넣거나, Entity 값으로 반환하지 않았습니다. 대신 API 스펙을 위한 별도의 DTO를 생성했습니다.</summary>
 <div markdown="1">
 
-- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/api/HospitalApiController.java#L165)
 - Entity를 웹에 노출하면 api 스펙이 변해버리거나 패스워드가 그대로 노출되기에, DTO로 변환해줘야 합니다.
 </div>
 </details>
@@ -828,7 +826,6 @@ mounted(){
 <summary>페이징 시 countQuery를 따로 분리했습니다.</summary>
 <div markdown="1">
 
-- :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L100)
 - 분리함으로써 성능을 최적화했습니다.
 </div>
 </details>
