@@ -380,8 +380,6 @@ Back-end
 
 - 구글 검색으로 User의 데이터 수를 늘릴 방법을 찾던 중에 커스트마이징을 통해 수를 늘릴 수 있는 것을 알아냈습니다.  
 
-- 바꾼 코드는 아래와 같습니다. 
-
 <details>
 <summary><b>개선된 코드</b></summary>
 <div markdown="1">
@@ -578,9 +576,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 </div>
 </details>
     
-- 답변이 없는 QnA를 처리할 때 발생하는 문제임을 인식.
-
-- Answer의 객체 탐색 단계 때, null이 반환되지 않을지 의심해야 한다.
+- 답변이 없는 QnA를 처리할 때 발생하는 문제임을 인식하여, Answer의 객체 탐색 단계 때 null이 반환되지 않을지 의심했습니다.
   
 - DTO 생성 시 답변이 없으면, 이에 대한 예외 로직을 아래와 같이 추가.
   
