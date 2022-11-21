@@ -196,45 +196,18 @@ Front-end : 토큰값 싣기
 </br>
 
 ### 5.4. 이미지 관리 
-#### 5.4.1. Stateful vs Stateless
-Stateful
--------------
-나중에 서비스가 커질 때, 서버를 확장해야 할 때가 있습니다. 이럴 때는 아래의 방식처럼 서버를 확장해야 합니다.
-![Stateful](https://user-images.githubusercontent.com/40010165/193820645-540b0ebc-c135-48aa-9dbe-474213c45f4f.png)</br>
-Load Balancer는 요청이 들어오면 서버의 부하가 없는 곳에 전해줍니다. 이럴 경우 아래의 사건들이 발생합니다.
-- **DB**: 서버와 완전 무관합니다. 처리하고 호출만 해줘서, 중앙화된 서버가 있어서 똑같은 데이터를 바라보기에 상관이 없습니다.
-  
-- **이미지**: 아미지 파일들이 흩어져서 저장됩니다. 즉, 서버들이 상태를 갖게 됩니다. Stateful한 상태가 되면 아래의 세 가지 문제가 발생합니다.
-  - **이미지 삭제**: 생성과 조회는 괜찮을 수 있어도, 삭제의 경우 문제가 발생합니다. 예를 들어 img6을 Server1에서 삭제하려고 하면, 삭제를 못 합니다.
-  
-  - **서버 축소**: 항상 서버가 3대만 있는 게 아닙니다. 부하가 줄어들면 자동으로 서버 수를 줄이게 되는데, 이러면 이미지도 같이 삭제됩니다.
-  
-  - **성능적인 측면**: 이미지를 관리하는 걸 서버를 통해서 하면, 메인 서버가 다른 작업을 하는데 퍼포먼스 상으로 영향을 줘서 성능에 영향을 줄 수 있다.
-
-Stateless
--------------
-![Stateless ](https://user-images.githubusercontent.com/40010165/193825523-4d59f86a-31cb-45ac-a888-4ceda3f0c4fd.png)</br>
-저는 위의 문제 때문에 AWS S3를 사용했습니다. S3를 사용하면 아래와 같은 결과가 발생합니다.
-- S3 저장소를 별도로 둬서, Stateless한 상태가 됩니다.
-
-- 이미지뿐만 아니라 영상, 파일도 더 이상 서버에 저장하지 않고, S3에 저장할 수 있습니다.
-
-- Stateless한 상태가 돼서 서버의 확장성이 좋아집니다.
-
-#### 5.4.2. SPRING의 이미지 관리 :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java)
-
-- 클라이언트에서 넘어온 이미지는 겹치는 이름이 올 수 있기에 UUID를 이용해 고유의 image key로 저장했다.
-
-- 이미지의 DB는 외래키(병원 or 리뷰의 PK), 원본 이미지의 파일명, 이미지를 불려올 key 값으로 설계했다.
-
-- 이미지 파일 확장자가 아닌 경우 exception을 발생하게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L113)
+- 서비스가 커질 때, 서버를 확장해야 할 때가 있습니다. 이미지는 DB와 달라서 STATELESS 상태를 유지하기 위해서, S3를 사용했습니다. 
 
 - 이미지를 저장할 경우에 S3에 이미지가 저장되고, DB에 이미지 정보를 저장하게끔 했다.
 
-- 이미지를 삭제할 경우에 lambda를 통해 S3에 사이즈 별로 3가지 종류의 이미지가 저장되기에, 3종류의 이미지를 삭제하고 DB를 삭제하게 했다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/ImageManagementService.java#L171)
+- 클라이언트에서 넘어온 이미지는 겹치는 이름이 올 수 있기에 UUID를 이용해 고유의 image key로 저장했습니다.
+
+- 이미지 파일 확장자가 아닌 경우 exception을 발생하게 했다. 
+
+- 이미지를 삭제할 경우에 lambda를 통해 S3에 사이즈 별로 3가지 종류의 이미지가 저장되기에, 3종류의 이미지를 삭제하고 DB를 삭제하게 했습니다.
 
 
-#### 5.4.3. 이미지 로딩 속도 높이기
+#### 5.4.1. 이미지 로딩 속도 높이기
 - CDN 사용으로 캐시 서버를 통해 최적화됩니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/views/ViewHospitalPage.vue#L9)
 
 - 로딩이 빨라지려면 이미지 원본 크기를 줄여야 합니다. 저는 서버의 부하를 줄이기 위해 AWS Lamda를 사용해서, 이미지 저장이 되면 자동으로 width 길이를 140 & 600으로 리사이징 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/lambda/index.js)
