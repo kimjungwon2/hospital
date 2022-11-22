@@ -136,7 +136,7 @@
 - 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
 
 ### (3) JWT 토큰
--  6번 트러블슈팅 문단에 후술한 것을 참고하면 됩니다.
+-  트러블슈팅 문단에 후술하였습니다.
 </br>
 
 ### 5.2. 병원 검색
@@ -150,24 +150,126 @@
   - 일대다 다대일 관계로 테이블을 설계했습니다. PostTag는 Tag와 Hospital를 연결해주는 역할을 합니다. 이러면 '치통' 같이 특정 해시태그만 입력해도 검색이 됩니다.
 </br>
 
-- **일반+태그 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java)
-  - **성능 최적화**: 검색은 수많은 DB를 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다.
-    - Queryprojection으로 특정 필드만 검색하기 위해, 각각의 Entity의 DTO를 생성했습니다. 
-    
-    - stream을 돌려서 HospitalSearchDto를 hospitalId로 바꿨습니다. 이러면 여러 개가 뽑히는데 그걸 파라미터 in 절로 넣었습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L53)
-    
-    - HashMap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해 값을 세팅해줬습니다. (O(1)) :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L56)
-    
-    - 리뷰뿐만 아니라 태그도 한 번에 조회하기 위해서 앞의 과정을 다시 반복해줍니다. 이러면 1+1+1 조회가 됐고, Queryprojection으로 인해 데이터 select 양이 줄어듭니다.
-</br>
-
 - **리뷰 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/review/query/ReviewSearchRepository.java)
   - 간혹 일반+태그 검색으로도 병원이 검색 안 되는 경우가 있기에 리뷰의 내용 혹은 등록한 질병명을 토대로 검색했습니다.
-  
-  - 페이징과 성능 최적화는 이전의 일반+태그 검색과 동일하게 했습니다. 
   </br>
 
+#### 5.1.1. 검색 최적화
+
+<details>
+<summary><b>코드 확인</b></summary>
+<div markdown="1">
+  
+~~~java
+@Repository
+public class HospitalSearchRepository {
+    private final JPAQueryFactory queryFactory;
+
+    public HospitalSearchRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
+
+
+    public Page<HospitalSearchDto> searchHospital(String searchName,Pageable pageable){
+        Page<HospitalSearchDto> result = findHospitals(searchName, pageable);
+
+        //비어있으면 바로 반환.
+        if(result.getContent().isEmpty()) return result;
+
+        //병원 id 모음.
+        List<Long> hospitalIds = result.stream()
+                .map(h-> h.getHospitalId())
+                .collect(Collectors.toList());
+
+        //리뷰 넣기
+        List<ReviewHospitalDto> reviewHospitalDtos =
+                queryFactory
+                .select(new QReviewHospitalDto(reviewHospital.hospital.id,
+                        reviewHospital.evCriteria.averageRate.avg(), reviewHospital.count()))
+                .from(reviewHospital)
+                .join(reviewHospital.hospital, hospital)
+                .groupBy(reviewHospital.hospital.id)
+                .where(reviewHospital.hospital.id.in(hospitalIds))
+                .fetch();
+
+        Map<Long, List<ReviewHospitalDto>> reviewHospitalMap = reviewHospitalDtos.stream()
+                .collect(Collectors.groupingBy(reviewHospitalDto -> reviewHospitalDto.getHospitalId()));
+
+        result.forEach(h->h.setReviewHospitals(reviewHospitalMap.get(h.getHospitalId())));
+
+        //태그 넣기
+        List<PostTagDto> postTagDtos =
+                queryFactory
+                        .select(new QPostTagDto(postTag.hospital.id, tag.id, tag.name))
+                        .from(postTag)
+                        .join(postTag.tag, tag)
+                        .where(postTag.hospital.id.in(hospitalIds))
+                        .fetch();
+
+        Map<Long, List<PostTagDto>> tagHospitalMap = postTagDtos.stream()
+                .collect(Collectors.groupingBy(PostTagDto -> PostTagDto.getHospitalId()));
+
+        result.forEach(h->h.setPostTagDtos(tagHospitalMap.get(h.getHospitalId())));
+
+        return result;
+    }
+
+    private Page<HospitalSearchDto> findHospitals(String searchName, Pageable pageable){
+        List<HospitalSearchDto> content =  queryFactory
+                .select(new QHospitalSearchDto(hospital.id,
+                        hospital.hospitalName,
+                        hospitalThumbnail.imageKey,
+                        hospital.businessCondition,
+                        hospital.medicalSubjectInformation,
+                        detailedHosInformation.hospitalAddress.roadBaseAddress
+                        )
+                )
+                .from(hospital)
+                .leftJoin(hospital.detailedHosInformation, detailedHosInformation)
+                .leftJoin(hospital.hospitalThumbnail, hospitalThumbnail)
+                .where( (hospitalNameLike(searchName)
+                        .or(hospitalSubjectLike(searchName)
+                        .or(tagNameLike(searchName))))
+                      )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        //쿼리 수 세기
+        JPAQuery<Hospital> countQuery= queryFactory
+                .select(hospital)
+                .from(hospital)
+                .join(hospital.detailedHosInformation, detailedHosInformation)
+                .where( (hospitalNameLike(searchName)
+                        .or(hospitalSubjectLike(searchName)
+                                .or(tagNameLike(searchName)
+                                ))));
+
+        return PageableExecutionUtils.getPage(content, pageable, ()-> countQuery.fetchCount());
+    }
+
+
+    private BooleanExpression hospitalNameLike(String name){
+        return isEmpty(name)?  null: hospital.hospitalName.contains(name);
+    }
+    private BooleanExpression hospitalSubjectLike(String name){
+        return isEmpty(name)?  null: hospital.medicalSubjectInformation.contains(name);
+    }
+    private BooleanExpression tagNameLike(String name){
+        return isEmpty(name)?  null: hospital.postTags.any().tag.name.eq(name);
+    }
+}
+~~~
+</div>
+</details>
+
+- 검색은 수많은 DB를 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다. Queryprojection으로 특정 필드만 검색하기 위해, 각각의 Entity의 DTO를 생성했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchDto.java#L22)
+    
+- stream을 돌려서 HospitalSearchDto를 hospitalId로 바꿨습니다. 이러면 여러 개가 뽑히는데 그걸 파라미터 in 절로 넣었습니다. 그리고 HashMap을 통해 메모리에서 다 가져온 다음에 메모리에서 매칭해 값을 세팅해줬습니다. (O(1))
+    
+- 리뷰뿐만 아니라 태그도 한 번에 조회하기 위해서 앞의 과정을 다시 반복해줍니다. 이러면 1+1+1 조회가 됐고, Queryprojection으로 인해 데이터 select 양이 줄어듭니다.
+
+
 </br>
+
 <details>
 <summary><b>기타 핵심 기능 펼치기</b></summary>
 <div markdown="1">
