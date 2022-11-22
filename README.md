@@ -149,7 +149,7 @@
 - **리뷰 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/review/query/ReviewSearchRepository.java)
   - 간혹 일반+태그 검색으로도 병원이 검색 안 되는 경우가 있기에 리뷰의 내용 혹은 등록한 질병명을 토대로 검색했습니다.
 
-#### 5.2.1. 검색 최적화
+### 5.2.1. 검색 최적화
 
 <details>
 <summary><b>코드 예제</b></summary>
@@ -302,7 +302,7 @@ public class HospitalSearchRepository {
 
 - 이미지 파일 확장자가 아닌 경우 exception을 발생하게 했습니다.
 
-#### 5.4.1. 이미지 로딩 속도 높이기
+### 5.4.1. 이미지 로딩 속도 높이기
 - CDN 사용으로 캐시 서버를 통해 최적화됩니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/views/ViewHospitalPage.vue#L9)
 
 - 로딩이 빨라지려면 이미지 원본 크기를 줄여야 합니다. 저는 서버의 부하를 줄이기 위해 AWS Lamda를 사용해서, 이미지 저장이 되면 자동으로 width 길이를 140 & 600으로 리사이징하게 설정했습니다. 
