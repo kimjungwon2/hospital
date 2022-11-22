@@ -339,7 +339,7 @@ public class HospitalSearchRepository {
 
 - JWT Token을 사용했습니다. Spring Security를 활용하여 WebSecurity 설정으로 특정 URL에 들어갈 때 계정에 권한이 있어야지만 해당 URL에 접근을 허용했습니다.
 
-- 권한이 필요한 URL로 들어갈 때마다 doFilter를 매번 호출하도록 설정했습니다. 
+- 프론트에서 요청한 URL로 들어갈 때마다 doFilter를 매번 호출하도록 설정했습니다. 
 
 </br>
 
