@@ -115,6 +115,7 @@
 </br>
 
 ## 5. 핵심 기능
+### 5.1. 계정 권한
 ![계정 종류](https://user-images.githubusercontent.com/40010165/193796762-3770daf3-15ab-4cc0-965f-b5e475de4101.png)
 이 서비스는 세 가지 종류의 계정이 있습니다. 
 - **사용자**: 병원 정보를 조회하거나, 해당 병원에 리뷰 또는 질문을 등록할 수 있습니다.
@@ -122,8 +123,24 @@
 - **병원 관계자**: 자신의 병원만 관리할 수 있습니다. 사진을 올리거나, 병원 정보 수정, 태그 설정, 사용자가 등록한 질문에 답변을 할 수 있습니다. 
 
 - **관리자**: 위의 모든 기능을 할 수 있습니다. 계정을 관리하거나, 병원 정보를 관리. 무엇보다 사용자가 등록한 리뷰의 영수증을 확인해서, 이 리뷰가 검증된 것임을 승인할 수 있습니다. 
-
 </br>
+Front-end : 네비게이션 가드
+-------------
+- 네비게이션 가드는 권한이 없는 특정 URL에 진입하려고 했을 때 막아줍니다. beforeEach를 통해서 Vue의 store 기능을 사용해, 사용자 정보에 따른 네비게이션 가드를 구현했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L200)
+
+- meta를 이용해서 페이지별 권한을 설정했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L29)
+
+Front-end : 토큰값 싣기
+-------------
+- 토큰값을 실으려고 vue의 store 기능을 사용. axios로 store에 저장된 token 값을 실었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
+
+- 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다.
+
+Back-end : JWT 토큰
+-------------
+-  6번 트러블슈팅 문단에 후술한 것을 참고하면 됩니다.  
+    
+
 <details>
 <summary><b>핵심 기능 설명 펼치기</b></summary>
 <div markdown="1">
@@ -169,31 +186,6 @@
   
   - 페이징과 성능 최적화는 이전의 일반+태그 검색과 동일하게 했습니다. 
   </br>
-### 5.3. 계정 권한
-Front-end : 네비게이션 가드
--------------
-- 네비게이션 가드는 권한이 없는 특정 URL에 진입하려고 했을 때 막아줍니다.
- 
-- 사용자의 정보는 로그인할 때 store에 있습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/store/index.js#L42)
-  
-- beforeEach를 통해서 store의 사용자 정보에 따른 네비게이션 가드를 구현했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L200)
-
-- meta를 이용해서 페이지별 권한을 설정했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L29)
-
-Back-end : JWT 토큰
--------------
--  6번 트러블슈팅 문단에 후술한 것을 참고하면 됩니다.  
-    
-Front-end : 토큰값 싣기
--------------
-- 토큰값을 실으려고 vue의 store 이용. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/store/index.js#L53)
-
-- axios 쪽의 store에 저장된 token 값 싣기. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
-
-- 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용했습니다. 
-
-- 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다.
-</br>
 
 ### 5.4. 이미지 관리 
 - 서비스가 커질 때, 서버를 확장해야 할 때가 있습니다. 이미지는 DB와 달라서 STATELESS 상태를 유지하기 위해서, S3를 사용했습니다. 
