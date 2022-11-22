@@ -272,19 +272,37 @@ public class HospitalSearchRepository {
 <summary><b>기타 핵심 기능 펼치기</b></summary>
 <div markdown="1">
 
-### 5.1. Repository 계층 & 쿼리 최적화
-- 단순한 쿼리나 단순한 동적 쿼리의 경우 spring data jpa를 사용했고, 복잡한 동적쿼리의 경우 QueryDSL을 사용했습니다. :clipboard: [단순한 쿼리](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/TagRepository.java) :clipboard: [복잡한 쿼리](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
+### 5.3. 쿼리 최적화
+- 객체 단위의 필드를 조회할 때, fetch join으로 해당 객체의 칼럼들을 다 가져오게끔 했습니다. 이러면 LAZY.LOADING과 조회 성능이 최적화됩니다. 
 
-- 객체 단위의 필드를 조회할 때, fetch join으로 모든 필드를 가져왔습니다.:clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/HospitalRepositoryImpl.java#L22)
-  - fetch join으로 해당 객체의 칼럼들을 다 가져오게끔 했습니다. 이러면 LAZY.LOADING과 조회 성능이 최적화됩니다.
+<details>
+<summary><b>코드 확인</b></summary>
+<div markdown="1">
+  
+~~~java
+    public Hospital viewHospital(Long hospitalId){
+        Hospital result = queryFactory
+                .select(hospital)
+                .from(hospital)
+                .leftJoin(hospital.detailedHosInformation, detailedHosInformation).fetchJoin()
+                .leftJoin(hospital.staffHosInformation, staffHosInformation).fetchJoin()
+                .leftJoin(hospital.hospitalThumbnail, hospitalThumbnail).fetchJoin()
+                .where(hospitalIdEq(hospitalId))
+                .fetchOne();
+        return result;
+    }
+~~~
+</div>
+</details>
 
 - 컬렉션(ArrayList)을 조회할 때, XToOne(일대일, 다대일) 관계만 모두 fetch join으로 조회하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size를 설정해 in 쿼리를 날려서 한 번에 처리하게끔 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
   - 이러면 성능 최적화도 되고, 페이징도 적용됩니다. 쿼리 호출 수가 1 + N  => 1 + 1 로 최적화돼서 조인보다 DB 데이터 전송량이 최적화됩니다.
   - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
   
 - 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 :clipboard: [다음 코드](https://github.com/kimjungwon2/hospital/blob/d718177cc841d5f03de7221bba0aa32c21a1e85c/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java#L62)와 같은 방식으로 select 양을 줄어들게 했습니다.
-  - 구현 원리는 5.2 일반+태그 검색에서 후술한 것을 참고하시면 됩니다.
+  - 구현 원리는 이전에 설명한 5.1.1 검색 최적화를 참고하시면 됩니다.
   </br>
+
 ### 5.4. 이미지 관리 
 - 서비스가 커질 때, 서버를 확장해야 할 때가 있습니다. 이미지는 DB와 달라서 STATELESS 상태를 유지하기 위해서, S3를 사용했습니다. 
 
