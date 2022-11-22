@@ -132,17 +132,16 @@ Front-end : 네비게이션 가드
 
 Front-end : 토큰값 싣기
 -------------
-- 토큰값을 실으려고 vue의 store 기능을 사용. axios로 store에 저장된 token 값을 실었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
+- 토큰값을 실으려고 vue의 store 기능을 사용, axios로 store에 저장된 token 값을 실었습니다. 
 
-- 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다.
+- 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
 
 Back-end : JWT 토큰
 -------------
 -  6번 트러블슈팅 문단에 후술한 것을 참고하면 됩니다.  
-    
 
 <details>
-<summary><b>핵심 기능 설명 펼치기</b></summary>
+<summary><b>기타 핵심 기능 펼치기</b></summary>
 <div markdown="1">
 
 ### 5.1. Repository 계층 & 쿼리 최적화
