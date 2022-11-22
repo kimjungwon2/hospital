@@ -144,7 +144,7 @@
   
 - **태그 검색**
   
-  ![tag 테이블 설계](https://user-images.githubusercontent.com/40010165/193867068-1faae692-e33c-48cc-8734-de1a3a0b17d6.png)
+  ![태그 검색](https://user-images.githubusercontent.com/40010165/203242020-6a849caa-f4bf-4038-938e-c6846fd61fa0.png)
   - 일대다 다대일 관계로 테이블을 설계했습니다. PostTag는 Tag와 Hospital를 연결해주는 역할을 합니다. 이러면 '치통' 같이 특정 해시태그만 입력해도 검색이 됩니다.
   
 - **일반+태그 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java)
