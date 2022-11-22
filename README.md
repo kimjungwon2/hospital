@@ -351,14 +351,39 @@ public class HospitalSearchRepository {
 - 토큰의 병원 번호와 DB의 병원 번호가 일치하더라도 프론트단에서 수정하려는 병원 번호(pk)를 조작하면 그 병원의 정보 갱신이 가능해집니다. 이에 아래와 같이 설계했습니다.
 
  </br>  
+ 
+- 먼저 doFilter를 통해 Manager 권한을 부여하여, Manager 권한이 필요한 특정 URL에 매번 들어갈 수 있습니다. (1차 검증)
 
-- servletRequest을 통해 토큰의 병원 번호를 꺼냅니다.
+- 병원 번호를 확인하는 메소드를 아래와 같이 만들었습니다. 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호인지 확인하기 위해서 메소드를 매번 넣었습니다. (2차 검증) 
 
-- 사용자의 ID(PK)와 ROLE_MANAGER를 파라미터로 넣어서 멤버 권한을 찾는 쿼리를 날립니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/a2375806ce02f0912442ece68007cb01e5776ebf/src/main/java/site/hospital/service/JwtStaffAccessService.java#L36)
+    ~~~java
+    public void staffAccessFunction(ServletRequest servletRequest, Long memberId, Long existingHospitalId){
 
-- 토큰의 병원 번호와 DB의 병원 번호가 같은지 확인하고, 프론트 엔드에서 수정 요청한 병원 ID(PK)와 DB의 병원 번호가 같은지 확인했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/a2375806ce02f0912442ece68007cb01e5776ebf/src/main/java/site/hospital/service/JwtStaffAccessService.java#L38)
+        //토큰의 병원 번호
+        Long JwtHospitalId = getJwtHospitalNumber(servletRequest);
 
-- 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호인지 확인하기 위해서 위에서 작성한 메소드를 매번 넣었습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L32)
+        //멤버 권한의 병원 번호
+        MemberAuthority findMemberManager = memberRepository.findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
+
+        if(findMemberManager == null){
+            throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");
+        }
+        else if(findMemberManager.getHospitalNo() == 0){
+            throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
+        }
+        //토큰 번호와 권한의 병원 정보가 같지 않으면 인증 오류
+        else if(JwtHospitalId !=findMemberManager.getHospitalNo()){
+            throw new AccessDeniedException("토큰 번호와 권한 번호가 일치하지 않습니다.");
+        }
+        //권한의 병원 번호와 실제 병원 번호가 다르면 접근 차단.
+        else if(findMemberManager.getHospitalNo() != existingHospitalId) {
+            throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
+        }
+    }
+
+- servletRequest을 통해 토큰의 병원 번호를 꺼냅니다. 그리고 멤버 권한의 병원 번호를 DB에서 찾는 쿼리를 날립니다. 
+
+- 토큰의 병원 번호와 DB의 병원 번호가 같은지 확인하고, 프론트 엔드에서 수정 요청한 병원 ID(PK)와 DB의 병원 번호가 같은지 확인했습니다. 
 
 </br>
 
