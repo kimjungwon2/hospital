@@ -133,7 +133,7 @@
 ### (2) 토큰값 싣기
 - 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
 
-### (3) JWT 토큰
+### (3) Back-end : JWT 토큰
 - 구현 원리는 [6.1. 사용자 권한 문단](#6-1-사용자-권한)에 후술하였습니다.
 </br>
 
@@ -348,12 +348,9 @@ public class HospitalSearchRepository {
 
  
  ### (3) 병원 번호 확인
- 
- </br>
-
 - '병원의 고유 번호(ex.5764)를 가진 사람이 어떻게 자신의 병원만 수정하게 할까?' 고심하던 중, 병원 관계자 계정이 URL을 이동할 때마다 doFilter로 병원 번호를 확인하는 쿼리를 매번 날리는 건 비효율적이라 생각했습니다. 
 
-- 토큰의 병원 번호와 DB의 병원 번호가 일치하더라도 프론트단에서 수정하려는 병원 번호(pk)를 조작하면 그 병원의 정보 갱신이 가능해집니다.
+- 토큰의 병원 번호와 DB의 병원 번호가 일치하더라도 프론트단에서 수정하려는 병원 번호(pk)를 조작하면 그 병원의 정보 갱신이 가능해집니다. 이에 아래와 같이 설계했습니다.
 
  </br>  
 
