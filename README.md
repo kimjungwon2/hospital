@@ -128,11 +128,13 @@
 - 네비게이션 가드는 권한이 없는 특정 URL에 진입하려고 했을 때 막아줍니다. beforeEach를 통해서 Vue의 store 기능을 사용해, 사용자 정보에 따른 네비게이션 가드를 구현했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L200)
 
 - meta를 이용해서 페이지별 권한을 설정했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L29)
+</br>
 
 ### (2) 토큰값 싣기
 - 토큰값을 실으려고 vue의 store 기능을 사용, axios로 store에 저장된 token 값을 실었습니다. 
 
 - 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
+</br>
 
 ### (3) JWT 토큰
 -  6번 트러블슈팅 문단에 후술한 것을 참고하면 됩니다.
@@ -142,11 +144,13 @@
 - **일반 검색**
   - 병원명과 진료과목을 입력할 경우 검색이 되도록 했습니다.
 </br>
+
 - **태그 검색**
   
   ![태그 검색](https://user-images.githubusercontent.com/40010165/203242020-6a849caa-f4bf-4038-938e-c6846fd61fa0.png)
   - 일대다 다대일 관계로 테이블을 설계했습니다. PostTag는 Tag와 Hospital를 연결해주는 역할을 합니다. 이러면 '치통' 같이 특정 해시태그만 입력해도 검색이 됩니다.
 </br>
+
 - **일반+태그 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java)
   - **성능 최적화**: 검색은 수많은 DB를 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다.
     - Queryprojection으로 특정 필드만 검색하기 위해, 각각의 Entity의 DTO를 생성했습니다. 
@@ -157,6 +161,7 @@
     
     - 리뷰뿐만 아니라 태그도 한 번에 조회하기 위해서 앞의 과정을 다시 반복해줍니다. 이러면 1+1+1 조회가 됐고, Queryprojection으로 인해 데이터 select 양이 줄어듭니다.
 </br>
+
 - **리뷰 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/review/query/ReviewSearchRepository.java)
   - 간혹 일반+태그 검색으로도 병원이 검색 안 되는 경우가 있기에 리뷰의 내용 혹은 등록한 질병명을 토대로 검색했습니다.
   
