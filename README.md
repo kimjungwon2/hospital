@@ -140,17 +140,14 @@
 ### 5.2. 병원 검색
 - **일반 검색**
   - 병원명과 진료과목을 입력할 경우 검색이 되도록 했습니다.
-</br>
 
 - **태그 검색**
   
   ![태그 검색](https://user-images.githubusercontent.com/40010165/203242020-6a849caa-f4bf-4038-938e-c6846fd61fa0.png)
   - 일대다 다대일 관계로 테이블을 설계했습니다. PostTag는 Tag와 Hospital를 연결해주는 역할을 합니다. 이러면 '치통' 같이 특정 해시태그만 입력해도 검색이 됩니다.
-</br>
 
 - **리뷰 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/review/query/ReviewSearchRepository.java)
   - 간혹 일반+태그 검색으로도 병원이 검색 안 되는 경우가 있기에 리뷰의 내용 혹은 등록한 질병명을 토대로 검색했습니다.
-  </br>
 
 #### 5.2.1. 검색 최적화
 
