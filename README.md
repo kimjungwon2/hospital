@@ -143,9 +143,9 @@
   - 병원명과 진료과목을 입력할 경우 검색이 되도록 했습니다.
   
 - **태그 검색**
-  - 아래와 같이 일대다 다대일 관계로 테이블을 설계했습니다. PostTag는 Tag와 Hospital를 연결해주는 역할을 합니다. 이러면 '치통' 같이 특정 해시태그만 입력해도 검색이 됩니다.
   
-![tag 테이블 설계](https://user-images.githubusercontent.com/40010165/193867068-1faae692-e33c-48cc-8734-de1a3a0b17d6.png)
+  ![tag 테이블 설계](https://user-images.githubusercontent.com/40010165/193867068-1faae692-e33c-48cc-8734-de1a3a0b17d6.png)
+  - 일대다 다대일 관계로 테이블을 설계했습니다. PostTag는 Tag와 Hospital를 연결해주는 역할을 합니다. 이러면 '치통' 같이 특정 해시태그만 입력해도 검색이 됩니다.
   
 - **일반+태그 검색** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/repository/hospital/searchQuery/HospitalSearchRepository.java)
   - **성능 최적화**: 검색은 수많은 DB를 조회하기 때문에 검색이 빨라지도록 데이터의 select 양을 줄였습니다.
