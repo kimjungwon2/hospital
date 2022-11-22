@@ -336,7 +336,7 @@ public class HospitalSearchRepository {
 </br>
 
 ### (2) JWT Token
-![토큰 구조 설명](https://user-images.githubusercontent.com/40010165/203326445-a76dfa43-c13e-40de-90d9-2d52e29ae11f.png)
+![토큰 구조 설명](https://user-images.githubusercontent.com/40010165/203349006-a1681a0d-762e-49cd-9e4b-4427ab4834b3.png)
 
 - JWT Token을 사용했습니다. 프론트에서 서버로 매번 요청할 때마다 doFilter로 Header에서 토큰 정보를 꺼냈습니다. 이를 기반으로 유저 객체를 생성, Authentication 객체를 만들었고 권한을 부여했습니다.
 
