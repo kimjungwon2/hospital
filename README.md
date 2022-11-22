@@ -337,9 +337,9 @@ public class HospitalSearchRepository {
 
 ### (2) JWT Token
 
-- JWT Token을 사용했습니다. Spring Security를 활용하여 WebSecurity 설정으로 특정 URL에 들어갈 때 계정에 권한이 있어야지만 해당 URL에 접근을 허용했습니다.
+- JWT Token을 사용했습니다. 프론트에서 매번 요청할 때마다 doFilter로 Header에서 토큰 정보를 꺼냈습니다. 이를 기반으로 유저 객체를 생성, Authentication 객체를 만들었고 권한을 부여했습니다.
 
-- 프론트에서 매번 요청할 때마다 doFilter로 Header에서 토큰 정보를 꺼냈습니다. 이를 기반으로 유저 객체를 생성, Authentication 객체를 만들었고 권한을 부여했습니다.
+- Spring Security를 활용하여 WebSecurity 설정으로 특정 URL에 들어갈 때 계정에 특정 권한이 있어야지만, 해당 URL에 접근을 허용했습니다.
 
 </br>
 
