@@ -134,7 +134,7 @@
 - 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
 
 ### (3) JWT 토큰
--  트러블슈팅 문단에 후술하였습니다.
+-  6.핵심 트러블슈팅 문단에 후술하였습니다.
 </br>
 
 ### 5.2. 병원 검색
