@@ -288,7 +288,7 @@ public class HospitalSearchRepository {
         return result;
     } 
 
-- 컬렉션(ArrayList)을 조회할 때, XToOne(일대일, 다대일) 관계만 모두 fetch join으로 조회하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size를 설정해 in 쿼리를 날려서 한 번에 처리하게끔 했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
+- 컬렉션(ArrayList)을 조회할 때, XToOne(일대일, 다대일) 관계만 모두 fetch join으로 조회하고. 컬렉션은 지연 로딩 성능 최적화를 위해 hibernate.default_batch_fetch_size를 설정해 in 쿼리를 날려서 한 번에 처리하게끔 했습니다. :clipboard: [설정 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/resources/application.yml#L18)
   - 이러면 성능 최적화도 되고, 페이징도 적용됩니다. 쿼리 호출 수가 1 + N  => 1 + 1 로 최적화돼서 조인보다 DB 데이터 전송량이 최적화됩니다.
   - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
   
