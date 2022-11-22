@@ -129,13 +129,11 @@
 - 네비게이션 가드는 권한이 없는 특정 URL에 진입하려고 했을 때 막아줍니다. beforeEach를 통해서 Vue의 store 기능을 사용해, 사용자 정보에 따른 네비게이션 가드를 구현했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L200)
 
 - meta를 이용해서 페이지별 권한을 설정했습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/routes/index.js#L29)
-</br>
 
 ### (2) 토큰값 싣기
 - 토큰값을 실으려고 vue의 store 기능을 사용, axios로 store에 저장된 token 값을 실었습니다. 
 
 - 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
-</br>
 
 ### (3) JWT 토큰
 -  6번 트러블슈팅 문단에 후술한 것을 참고하면 됩니다.
