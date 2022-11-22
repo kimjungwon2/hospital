@@ -303,10 +303,7 @@ public class HospitalSearchRepository {
 
 - 클라이언트에서 넘어온 이미지는 겹치는 이름이 올 수 있기에 UUID를 이용해 고유의 image key로 저장했습니다.
 
-- 이미지 파일 확장자가 아닌 경우 exception을 발생하게 했다. 
-
-- 이미지를 삭제할 경우에 lambda를 통해 S3에 사이즈 별로 3가지 종류의 이미지가 저장되기에, 3종류의 이미지를 삭제하고 DB를 삭제하게 했습니다.
-
+- 이미지 파일 확장자가 아닌 경우 exception을 발생하게 했습니다.
 
 #### 5.4.1. 이미지 로딩 속도 높이기
 - CDN 사용으로 캐시 서버를 통해 최적화됩니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/views/ViewHospitalPage.vue#L9)
