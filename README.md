@@ -354,7 +354,7 @@ public class HospitalSearchRepository {
  
 - 먼저 기존의 doFilter를 통해 Manager 권한을 부여하여, Manager 권한이 필요한 특정 URL에 매번 들어갈 수 있습니다. **(1차 검증)**
 
-- 병원 번호를 확인하는 메소드를 아래와 같이 만들었습니다. 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호인지 확인하기 위해 매번 확인 메소드를 넣었습니다. **(2차 검증)** :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/main/java/site/hospital/service/AnswerService.java#L26)
+- 병원 번호를 확인하는 메소드를 아래와 같이 만들었습니다. 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호인지 확인하기 위해 매번 확인 메소드를 넣었습니다. **(2차 검증)** 
 
     ~~~java
     public void staffAccessFunction(ServletRequest servletRequest, Long memberId, Long existingHospitalId){
