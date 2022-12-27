@@ -152,7 +152,7 @@
 ### 5.2.1. 검색 최적화
 
 <details>
-<summary><b>코드 예제</b></summary>
+<summary><b>코드 보기</b></summary>
 <div markdown="1">
   
 ~~~java
