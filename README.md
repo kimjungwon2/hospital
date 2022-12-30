@@ -5,7 +5,7 @@
 </br>
 
 ## 1. 프로젝트 요약 
-![프로젝트 요약](https://user-images.githubusercontent.com/40010165/210054013-a5b837cd-c0b0-4193-adbd-f6e424e15cb1.png)
+![project Summary](https://user-images.githubusercontent.com/40010165/210058624-e0a22df1-1a65-4850-9c98-bbf58730bdfc.png)
 </br>
 
 ## 2. 프로젝트 구조
