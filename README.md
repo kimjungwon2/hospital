@@ -919,4 +919,4 @@ mounted(){
 </br>
 
 ## 9. 회고&느낀점
->프로젝트 개발 회고 글: https://kjw1313.tistory.com/49![image](https://user-images.githubusercontent.com/40010165/210042175-28e9c093-f116-4269-8948-dcd66d8717f9.png)
+>프로젝트 개발 회고 글: https://kjw1313.tistory.com/49
