@@ -339,7 +339,7 @@ public class HospitalSearchRepository {
         //servletRequest를 통해 토큰의 병원 번호를 가져옵니다.
         Long JwtHospitalId = getJwtHospitalNumber(servletRequest);
 
-        //쿼리를 통해 DB속 멤버 권한의 병원 번호를 불러온다.
+        //쿼리를 통해 DB속 멤버 권한의 병원 번호를 불러옵니다.
         MemberAuthority findMemberManager = memberRepository.findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
         
         
