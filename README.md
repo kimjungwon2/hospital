@@ -267,7 +267,7 @@ public class HospitalSearchRepository {
   - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
   
 - 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 람다와 스트림, Queryprojection, map을 활용하여 select 양을 줄어들게 했습니다.
-  - 구현 원리는 이전에 설명한 [5.2.1 검색 최적화](#521-검색-최적화)를 참고하시면 됩니다.
+  - 구현 원리는 이전에 설명한 [4.2.1 검색 최적화](#521-검색-최적화)를 참고하시면 됩니다.
   </br>
 
 ### 4.4. 이미지 관리 
