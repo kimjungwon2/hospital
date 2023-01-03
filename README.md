@@ -345,7 +345,6 @@ public class HospitalSearchRepository {
 - 병원 번호를 확인하는 메소드를 아래와 같이 만들었습니다. 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호인지 확인하기 위해 매번 확인 메소드를 넣었습니다. **(2차 검증)** 
 
     ~~~java
-    //staff 권한 접근.
     public void staffAccessFunction(ServletRequest servletRequest, Long memberId,
             Long existingHospitalId) {
 
