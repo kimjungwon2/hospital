@@ -5,7 +5,7 @@
 </br>
 
 ## 1. 프로젝트 요약 
-![project Summary](https://user-images.githubusercontent.com/40010165/210058624-e0a22df1-1a65-4850-9c98-bbf58730bdfc.png)
+![프로젝트 요약](https://user-images.githubusercontent.com/40010165/210128114-d2d8e450-c7cc-4373-9978-c401a92ef01e.png)
 </br>
 
 ## 2. 프로젝트 구조
@@ -111,7 +111,7 @@
 - 네트워크 쪽에 header의 Authorization에 token 값이 제대로 싣지 못하므로, 인터셉터를 활용. 인터셉터를 이용해서 매번 store에 있는 state 값을 가져와서 담았습니다. :clipboard: [코드 확인](https://github.com/kimjungwon2/hospital/blob/master/src/frontend/src/api/common/interceptors.js#L7)
 
 ### (3) Back-end : JWT 토큰
-- 구현 원리는 [6.1. 사용자 권한 문단](#61-사용자-권한)에 후술하였습니다.
+- 구현 원리는 [5.1. 사용자 권한 문단](#51-사용자-권한)에 후술하였습니다.
 </br>
 
 ### 4.2. 병원 검색
@@ -267,7 +267,7 @@ public class HospitalSearchRepository {
   - fetch join 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소합니다.
   
 - 위의 default_batch_fetch_size 방식보다 성능을 잡고 싶을 때는 람다와 스트림, Queryprojection, map을 활용하여 select 양을 줄어들게 했습니다.
-  - 구현 원리는 이전에 설명한 [5.2.1 검색 최적화](#521-검색-최적화)를 참고하시면 됩니다.
+  - 구현 원리는 이전에 설명한 [4.2.1 검색 최적화](#421-검색-최적화)를 참고하시면 됩니다.
   </br>
 
 ### 4.4. 이미지 관리 
