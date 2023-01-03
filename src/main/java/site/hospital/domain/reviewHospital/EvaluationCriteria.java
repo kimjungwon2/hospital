@@ -28,12 +28,12 @@ public class EvaluationCriteria {
 
     @Builder
     public EvaluationCriteria(int sumPrice, int kindness, int symptomRelief,
-                              int cleanliness, int waitTime) {
+            int cleanliness, int waitTime) {
         this.sumPrice = sumPrice;
         this.kindness = kindness;
         this.symptomRelief = symptomRelief;
         this.cleanliness = cleanliness;
         this.waitTime = waitTime;
-        this.averageRate = (sumPrice + kindness + symptomRelief + cleanliness + waitTime)/ 5 ;
+        this.averageRate = (sumPrice + kindness + symptomRelief + cleanliness + waitTime) / 5;
     }
 }

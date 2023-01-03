@@ -20,12 +20,16 @@ import java.util.List;
 
 @Repository
 public class AdminHospitalSearchRepository {
+
     private final JPAQueryFactory queryFactory;
 
-    public AdminHospitalSearchRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
+    public AdminHospitalSearchRepository(EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
 
-    public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition, Pageable pageable){
+    public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition,
+            Pageable pageable) {
         QueryResults<AdminSearchHospitalDto> result = queryFactory
                 .select(new QAdminSearchHospitalDto(
                         hospital.id, detailedHosInformation.id,
@@ -49,19 +53,22 @@ public class AdminHospitalSearchRepository {
         List<AdminSearchHospitalDto> content = result.getResults();
         Long total = result.getTotal();
 
-        return new PageImpl<>(content,pageable,total);
+        return new PageImpl<>(content, pageable, total);
     }
 
-    private BooleanExpression hospitalIdEq(Long hospitalId){
-        return hospitalId==null?  null: hospital.id.eq(hospitalId);
+    private BooleanExpression hospitalIdEq(Long hospitalId) {
+        return hospitalId == null ? null : hospital.id.eq(hospitalId);
     }
-    private BooleanExpression hospitalNameLike(String hospitalName){
-        return hospitalName==null?  null: hospital.hospitalName.contains(hospitalName);
+
+    private BooleanExpression hospitalNameLike(String hospitalName) {
+        return hospitalName == null ? null : hospital.hospitalName.contains(hospitalName);
     }
-    private BooleanExpression businessConditionEq(BusinessCondition businessCondition){
-        return businessCondition==null?  null: hospital.businessCondition.eq(businessCondition);
+
+    private BooleanExpression businessConditionEq(BusinessCondition businessCondition) {
+        return businessCondition == null ? null : hospital.businessCondition.eq(businessCondition);
     }
-    private BooleanExpression cityNameEq(String cityName){
-        return cityName==null?  null: hospital.cityName.eq(cityName);
+
+    private BooleanExpression cityNameEq(String cityName) {
+        return cityName == null ? null : hospital.cityName.eq(cityName);
     }
 }

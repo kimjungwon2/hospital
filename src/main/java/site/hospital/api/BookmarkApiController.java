@@ -27,20 +27,22 @@ public class BookmarkApiController {
 
     //북마크 등록 + 삭제
     @PostMapping("/user/hospital/bookmark/register")
-    public void saveBookmark(@RequestBody @Validated CreateBookmarkRequest request){
+    public void saveBookmark(@RequestBody @Validated CreateBookmarkRequest request) {
         bookmarkService.bookmark(request.getMemberId(), request.getHospitalId());
     }
 
     //북마크 여부 확인.
-    @GetMapping(value ={"/user/{memberId}/bookmark/hospital/{hospitalId}"})
+    @GetMapping(value = {"/user/{memberId}/bookmark/hospital/{hospitalId}"})
     public IsBookmark isNullBookmark(@PathVariable("memberId") Long memberId,
-                                     @PathVariable("hospitalId") Long hospitalId){
+            @PathVariable("hospitalId") Long hospitalId) {
         Boolean isBookmark = false;
 
         Bookmark bookmark = bookmarkService.isBookmark(memberId, hospitalId);
 
         //북마크가 있으면 true 반환.
-        if(bookmark != null) isBookmark = true;
+        if (bookmark != null) {
+            isBookmark = true;
+        }
 
         return new IsBookmark(isBookmark);
     }
@@ -48,17 +50,18 @@ public class BookmarkApiController {
     //병원 관계자 즐겨찾기한 유저 검색
     @GetMapping("/staff/bookmark/search/user")
     public Page staffSearchBookmarkUsers(ServletRequest servletRequest,
-                                     @RequestParam(value="nickName",required = false) String nickName,
-                                     @RequestParam(value="memberIdName",required = false) String memberIdName,
-                                     @RequestParam(value="phoneNumber",required = false) String phoneNumber,
-                                     Pageable pageable){
+            @RequestParam(value = "nickName", required = false) String nickName,
+            @RequestParam(value = "memberIdName", required = false) String memberIdName,
+            @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+            Pageable pageable) {
         StaffBookmarkSearchCondition condition = StaffBookmarkSearchCondition.builder()
                 .nickName(nickName).memberIdName(memberIdName).phoneNumber(phoneNumber).build();
 
-        Page<Bookmark> bookmarks = bookmarkService.staffSearchBookmarkUsers(servletRequest, condition, pageable);
+        Page<Bookmark> bookmarks = bookmarkService
+                .staffSearchBookmarkUsers(servletRequest, condition, pageable);
 
         List<SearchBookmarkUsersResponse> result = bookmarks.stream()
-                .map(b->new SearchBookmarkUsersResponse(b))
+                .map(b -> new SearchBookmarkUsersResponse(b))
                 .collect(Collectors.toList());
 
         Long total = bookmarks.getTotalElements();
@@ -68,10 +71,10 @@ public class BookmarkApiController {
 
     //즐겨찾기 목록 전체 조회(관리자)
     @GetMapping("/admin/bookmark/search")
-    public List<SearchBookmarkResponse> searchBookmark(){
+    public List<SearchBookmarkResponse> searchBookmark() {
         List<Bookmark> bookmarks = bookmarkService.searchAdminBookmark();
         List<SearchBookmarkResponse> result = bookmarks.stream()
-                .map(b->new SearchBookmarkResponse(b))
+                .map(b -> new SearchBookmarkResponse(b))
                 .collect(Collectors.toList());
 
         return result;
@@ -79,10 +82,11 @@ public class BookmarkApiController {
 
     //즐겨찾기 조회(사용자)
     @GetMapping("/user/{memberId}/bookmarks")
-    public List<SearchMemberBookmarkResponse> searchMemberBookmark(@PathVariable("memberId") Long memberId){
+    public List<SearchMemberBookmarkResponse> searchMemberBookmark(
+            @PathVariable("memberId") Long memberId) {
         List<Bookmark> bookmarks = bookmarkService.searchMemberBookmark(memberId);
         List<SearchMemberBookmarkResponse> result = bookmarks.stream()
-                .map(b->new SearchMemberBookmarkResponse(b))
+                .map(b -> new SearchMemberBookmarkResponse(b))
                 .collect(Collectors.toList());
 
         return result;
@@ -92,15 +96,17 @@ public class BookmarkApiController {
     /* DTO */
 
     @Data
-    private static class CreateBookmarkRequest{
-        @NotNull(message="멤버 번호가 필요합니다.")
+    private static class CreateBookmarkRequest {
+
+        @NotNull(message = "멤버 번호가 필요합니다.")
         private Long memberId;
-        @NotNull(message="병원 번호가 필요합니다.")
+        @NotNull(message = "병원 번호가 필요합니다.")
         private Long hospitalId;
     }
 
     @Data
-    private static class IsBookmark{
+    private static class IsBookmark {
+
         private Boolean isBookmark;
 
         public IsBookmark(Boolean isBookmark) {
@@ -109,7 +115,8 @@ public class BookmarkApiController {
     }
 
     @Data
-    private static class SearchBookmarkResponse{
+    private static class SearchBookmarkResponse {
+
         private Long bookmarkId;
         private Long hospitalId;
         private Long memberId;
@@ -134,7 +141,8 @@ public class BookmarkApiController {
     }
 
     @Data
-    private static class SearchMemberBookmarkResponse{
+    private static class SearchMemberBookmarkResponse {
+
         private Long hospitalId;
         private String medicalSubjectInformation;
         private BusinessCondition businessCondition;
@@ -153,7 +161,8 @@ public class BookmarkApiController {
     }
 
     @Data
-    private static class SearchBookmarkUsersResponse{
+    private static class SearchBookmarkUsersResponse {
+
         private Long bookmarkId;
         private String memberIdName;
         private String nickName;
@@ -168,7 +177,8 @@ public class BookmarkApiController {
     }
 
     @Data
-    private static class SearchHospitalBookmarkResponse{
+    private static class SearchHospitalBookmarkResponse {
+
         private Long bookmarkId;
         private Long memberId;
         private String memberName;

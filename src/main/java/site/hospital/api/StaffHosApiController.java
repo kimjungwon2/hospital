@@ -25,7 +25,7 @@ public class StaffHosApiController {
 
     //병원 추가 정보 보기(고객)
     @GetMapping("/hospital/staffHosInfo/{staffHosId}")
-    public StaffHosInfoView viewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
+    public StaffHosInfoView viewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId) {
         StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
         StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
 
@@ -34,7 +34,7 @@ public class StaffHosApiController {
 
     //병원 관계자 추가 정보 보기
     @GetMapping("/staff/staffHosInfo/{staffHosId}")
-    public StaffHosInfoView staffViewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
+    public StaffHosInfoView staffViewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId) {
         StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
         StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
 
@@ -43,20 +43,22 @@ public class StaffHosApiController {
 
     //병원 관계자 추가 정보 수정하기
     @PutMapping("/staff/staffHosInfo/modify/{staffHosId}")
-    public void staffModifyStaffHosInfo(ServletRequest servletRequest, @PathVariable("staffHosId") Long staffHosId,
-                                   @RequestBody @Validated StaffModifyStaffHosRequest request){
+    public void staffModifyStaffHosInfo(ServletRequest servletRequest,
+            @PathVariable("staffHosId") Long staffHosId,
+            @RequestBody @Validated StaffModifyStaffHosRequest request) {
         staffHosService.staffModifyStaffHosInfo(servletRequest, staffHosId, request);
     }
 
     //병원 관계자 추가 정보 삭제하기
     @DeleteMapping("/staff/{memberId}/staffHosInfo/delete/{staffHosId}")
-    public void staffDeleteStaffHosInfo(ServletRequest servletRequest, @PathVariable("memberId") Long memberId, @PathVariable("staffHosId") Long staffHosId){
+    public void staffDeleteStaffHosInfo(ServletRequest servletRequest,
+            @PathVariable("memberId") Long memberId, @PathVariable("staffHosId") Long staffHosId) {
         staffHosService.staffDeleteStaffHosInfo(servletRequest, memberId, staffHosId);
     }
 
     //관리자 병원 추가 정보 보기
     @GetMapping("/admin/staffHosInfo/{staffHosId}")
-    public StaffHosInfoView adminViewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
+    public StaffHosInfoView adminViewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId) {
         StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
         StaffHosInfoView staffHosInfoView = new StaffHosInfoView(staffHosInformation);
 
@@ -66,19 +68,20 @@ public class StaffHosApiController {
     //관리자 추가 정보 수정하기
     @PutMapping("/admin/staffHosInfo/modify/{staffHosId}")
     public void modifyStaffHosInfo(@PathVariable("staffHosId") Long staffHosId,
-                                   @RequestBody @Validated AdminModifyStaffHosRequest request){
+            @RequestBody @Validated AdminModifyStaffHosRequest request) {
         staffHosService.adminModifyStaffHosInfo(staffHosId, request);
     }
 
     //관리자 추가 정보 삭제하기
     @DeleteMapping("/admin/staffHosInfo/delete/{staffHosId}")
-    public void deleteStaffHosInfo(@PathVariable("staffHosId") Long staffHosId){
+    public void deleteStaffHosInfo(@PathVariable("staffHosId") Long staffHosId) {
         staffHosService.adminDeleteStaffHosInfo(staffHosId);
     }
 
     /*DTO*/
     @Data
-    private static class StaffHosInfoView{
+    private static class StaffHosInfoView {
+
         private String introduction;
         private String consultationHour;
         private String abnormality;
@@ -89,13 +92,14 @@ public class StaffHosApiController {
             this.consultationHour = staffHosInformation.getConsultationHour();
             this.abnormality = staffHosInformation.getAbnormality();
             this.doctors = staffHosInformation.getDoctors().stream()
-                    .map(d->new DoctorDTO(d))
+                    .map(d -> new DoctorDTO(d))
                     .collect(Collectors.toList());
         }
     }
 
     @Data
-    private static class DoctorDTO{
+    private static class DoctorDTO {
+
         private Long doctorId;
         private String name;
         private String history;

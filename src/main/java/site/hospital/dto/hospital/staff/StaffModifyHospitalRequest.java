@@ -8,6 +8,7 @@ import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class StaffModifyHospitalRequest {
+
     private Long memberId;
     private String licensingDate;
     private String hospitalName;

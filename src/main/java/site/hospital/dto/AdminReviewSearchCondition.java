@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class AdminReviewSearchCondition {
+
     private String nickName;
     private String hospitalName;
     private String memberIdName;

@@ -16,8 +16,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "question_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "question_id")
     private long id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -38,28 +39,28 @@ public class Question extends BaseTimeEntity {
 
 
     //== 연관 관계 메서드 ==/
-    public void changeMember(Member member){
+    public void changeMember(Member member) {
         this.member = member;
         member.getQuestions().add(this);
     }
 
-    public void changeHospital(Hospital hospital){
+    public void changeHospital(Hospital hospital) {
         this.hospital = hospital;
         hospital.getQuestions().add(this);
     }
 
-    public void changeAnswer(Answer answer){
+    public void changeAnswer(Answer answer) {
         this.answer = answer;
         answer.setQuestion(this);
     }
 
     @Builder
-    public Question(String content){
+    public Question(String content) {
         this.content = content;
     }
 
     //생성 메서드
-    public static Question CreateQuestion(Member member, Hospital hospital, String content){
+    public static Question CreateQuestion(Member member, Hospital hospital, String content) {
         Question question = new Question(content);
         question.changeMember(member);
         question.changeHospital(hospital);

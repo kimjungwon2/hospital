@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class ReviewHospitalDto {
+
     private Long hospitalId;
     private Double averageRate;
     private Long reviewCount;

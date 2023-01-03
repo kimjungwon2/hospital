@@ -6,6 +6,7 @@ import site.hospital.domain.estimation.EstimationList;
 
 @Data
 public class AdminHospitalEstimationDTO {
+
     private Long estimationId;
 
     private String city;

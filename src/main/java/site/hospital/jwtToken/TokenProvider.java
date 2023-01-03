@@ -50,13 +50,14 @@ public class TokenProvider implements Serializable {
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(PHONE_KEY, phoneNumber)
-                .signWith(SignatureAlgorithm.HS512,secret)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
     }
 
     //STAFF 토큰 생성
-    public String createStaffToken(Authentication authentication, String phoneNumber, Long hospitalNumber) {
+    public String createStaffToken(Authentication authentication, String phoneNumber,
+            Long hospitalNumber) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -69,21 +70,22 @@ public class TokenProvider implements Serializable {
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(PHONE_KEY, phoneNumber)
                 .claim(HOSPITAL_NUMBER_KEY, hospitalNumber)
-                .signWith(SignatureAlgorithm.HS512,secret)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
     }
 
     //STAFF 병원 번호 반환
-    public Long getHospitalNumber(String token){
+    public Long getHospitalNumber(String token) {
         Claims claims = Jwts
                 .parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
 
-        if(claims.get(HOSPITAL_NUMBER_KEY) == null)
+        if (claims.get(HOSPITAL_NUMBER_KEY) == null) {
             throw new AccessDeniedException("병원 번호가 존재하지 않는 계정");
+        }
 
         String hospitalNumber = claims.get(HOSPITAL_NUMBER_KEY).toString();
 

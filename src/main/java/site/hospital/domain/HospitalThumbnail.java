@@ -15,24 +15,24 @@ public class HospitalThumbnail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="hospitalThumbnail_id")
+    @Column(name = "hospitalThumbnail_id")
     private long id;
 
     private String originalName;
 
-    @Column(unique=true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String imageKey;
 
     @OneToOne(mappedBy = "hospitalThumbnail", fetch = FetchType.LAZY)
     private Hospital hospital;
 
     //연관관계 때문에 set 설정
-    public void setHospital(Hospital hospital){
+    public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
 
     @Builder
-    public HospitalThumbnail(String originalName, String imageKey){
+    public HospitalThumbnail(String originalName, String imageKey) {
         this.originalName = originalName;
         this.imageKey = imageKey;
     }

@@ -1,15 +1,14 @@
 package site.hospital.repository.hospital.viewQuery;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Data;
-import site.hospital.domain.StaffHosInformation;
-import site.hospital.domain.hospital.BusinessCondition;
-
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.Data;
+import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class ViewHospitalDTO {
+
     private Long hospitalId;
     private Long detailedHosId;
     private Long staffHosInfoId;
@@ -46,14 +45,15 @@ public class ViewHospitalDTO {
     private List<HospitalImageDTO> hospitalImages;
 
     @QueryProjection
-    public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId, Long hospitalThumbnailId, String licensingDate, String hospitalName,
-                           String phoneNumber, String distinguishedName,
-                           String medicalSubjectInformation, BusinessCondition businessCondition,
-                           String cityName, String landLotBasedSystem,String zipCode,
-                           String roadBaseAddress, Integer numberHealthcareProvider,
-                           Integer numberWard, Integer numberPatientRoom,
-                           BigDecimal x_coordination, BigDecimal y_coordination,
-                           BigDecimal latitude, BigDecimal longitude) {
+    public ViewHospitalDTO(Long hospitalId, Long detailedHosId, Long staffHosInfoId,
+            Long hospitalThumbnailId, String licensingDate, String hospitalName,
+            String phoneNumber, String distinguishedName,
+            String medicalSubjectInformation, BusinessCondition businessCondition,
+            String cityName, String landLotBasedSystem, String zipCode,
+            String roadBaseAddress, Integer numberHealthcareProvider,
+            Integer numberWard, Integer numberPatientRoom,
+            BigDecimal x_coordination, BigDecimal y_coordination,
+            BigDecimal latitude, BigDecimal longitude) {
 
         this.hospitalId = hospitalId;
         this.detailedHosId = detailedHosId;

@@ -6,6 +6,7 @@ import site.hospital.domain.member.MemberStatus;
 
 @Data
 public class AdminMemberSearchCondition {
+
     //모두 검색
     private String allSearch;
 
@@ -19,9 +20,9 @@ public class AdminMemberSearchCondition {
 
     @Builder
     public AdminMemberSearchCondition(String allSearch, Long memberId, String memberIdName,
-                                      String nickName, String userName,
-                                      String phoneNumber, MemberStatus memberStatus,
-                                      Long hospitalNumber) {
+            String nickName, String userName,
+            String phoneNumber, MemberStatus memberStatus,
+            Long hospitalNumber) {
         this.allSearch = allSearch;
         this.memberId = memberId;
         this.memberIdName = memberIdName;

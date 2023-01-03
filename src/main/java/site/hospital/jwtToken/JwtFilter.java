@@ -1,4 +1,5 @@
 package site.hospital.jwtToken;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,8 @@ public class JwtFilter extends GenericFilterBean {
 
     //JWT TOKEN의 인증정보를 Security Context에 저장하는 역할 수행.
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
+            FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);

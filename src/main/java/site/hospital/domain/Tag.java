@@ -15,14 +15,15 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_id")
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tag")
     private List<PostTag> postTags = new ArrayList<>();
 
-    @Column(unique=true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String name;
 
     //태그 생성

@@ -9,5 +9,6 @@ import site.hospital.repository.ReviewImageRepository;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReviewImageService {
+
     private final ReviewImageRepository reviewImageRepository;
 }

@@ -20,21 +20,25 @@ public class PostTagApiController {
 
     //관계자 병원 태그 연결
     @PostMapping("/staff/hospital/tag/link")
-    public LinkTagResponse staffLinkTag(ServletRequest servletRequest, @RequestBody @Validated StaffLinkTagRequest request){
-        Long id = postTagService.staffTagLink(servletRequest, request.getTagId(), request.getMemberId(), request.getHospitalId());
+    public LinkTagResponse staffLinkTag(ServletRequest servletRequest,
+            @RequestBody @Validated StaffLinkTagRequest request) {
+        Long id = postTagService
+                .staffTagLink(servletRequest, request.getTagId(), request.getMemberId(),
+                        request.getHospitalId());
 
         return new LinkTagResponse(id);
     }
 
     //관계자 병원 연결 태그 삭제
     @DeleteMapping("/staff/{memberId}/hospital/tag/delete/{postTagId}")
-    public void staffPostTagDelete(ServletRequest servletRequest,  @PathVariable("memberId") Long memberId, @PathVariable("postTagId") Long postTagId){
+    public void staffPostTagDelete(ServletRequest servletRequest,
+            @PathVariable("memberId") Long memberId, @PathVariable("postTagId") Long postTagId) {
         postTagService.staffPostTagDelete(servletRequest, memberId, postTagId);
     }
 
     //병원 태그 연결
     @PostMapping("/admin/hospital/tag/link")
-    public LinkTagResponse linkTag(@RequestBody @Validated LinkTagRequest request){
+    public LinkTagResponse linkTag(@RequestBody @Validated LinkTagRequest request) {
         Long id = postTagService.tagLink(request.getTagId(), request.getHospitalId());
 
         return new LinkTagResponse(id);
@@ -42,16 +46,17 @@ public class PostTagApiController {
 
     //병원 태그 삭제
     @DeleteMapping("/admin/hospital/tag/delete/{postTagId}")
-    public void postTagDelete(@PathVariable("postTagId") Long postTagId){
+    public void postTagDelete(@PathVariable("postTagId") Long postTagId) {
         postTagService.postTagDelete(postTagId);
     }
 
     //병원 연결 태그 보기.
     @GetMapping("/hospital/tag/view/{hospitalId}")
-    public List<hospitalTagViewResponse> hospitalTagView(@PathVariable("hospitalId") Long hospitalId){
+    public List<hospitalTagViewResponse> hospitalTagView(
+            @PathVariable("hospitalId") Long hospitalId) {
         List<PostTag> postTags = postTagService.viewHospitalTag(hospitalId);
         List<hospitalTagViewResponse> result = postTags.stream()
-                .map(p->new hospitalTagViewResponse(p))
+                .map(p -> new hospitalTagViewResponse(p))
                 .collect(Collectors.toList());
 
         return result;
@@ -60,10 +65,11 @@ public class PostTagApiController {
     /* DTO */
     @Data
     private static class StaffLinkTagRequest {
+
         private Long memberId;
-        @NotNull(message="태그 번호를 입력해주세요.")
+        @NotNull(message = "태그 번호를 입력해주세요.")
         private Long tagId;
-        @NotNull(message="병원 번호를 입력해주세요.")
+        @NotNull(message = "병원 번호를 입력해주세요.")
         private Long hospitalId;
     }
 
@@ -71,15 +77,18 @@ public class PostTagApiController {
     /* DTO */
     @Data
     private static class LinkTagRequest {
-        @NotNull(message="태그 번호를 입력해주세요.")
+
+        @NotNull(message = "태그 번호를 입력해주세요.")
         private Long tagId;
-        @NotNull(message="병원 번호를 입력해주세요.")
+        @NotNull(message = "병원 번호를 입력해주세요.")
         private Long hospitalId;
     }
 
     @Data
     private static class LinkTagResponse {
+
         private Long postTagId;
+
         public LinkTagResponse(long postTagId) {
             this.postTagId = postTagId;
         }
@@ -87,6 +96,7 @@ public class PostTagApiController {
 
     @Data
     private static class hospitalTagViewResponse {
+
         private String tagName;
         private Long tagId;
 

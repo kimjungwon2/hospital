@@ -8,8 +8,11 @@ import site.hospital.dto.StaffBookmarkSearchCondition;
 import java.util.List;
 
 public interface BookmarkRepositoryCustom {
-    Bookmark isUserBookmark(Long memberId,Long hospitalId);
+
+    Bookmark isUserBookmark(Long memberId, Long hospitalId);
+
     Page<Bookmark> staffSearchBookmark(Long hospitalId, StaffBookmarkSearchCondition condition,
-                                       Pageable pageable);
+            Pageable pageable);
+
     List<Bookmark> searchBookmark(Long memberId, Long hospitalId);
 }

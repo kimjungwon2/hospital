@@ -30,28 +30,33 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class ReviewApiController {
+
     private final ReviewService reviewService;
     private final ImageManagementService imageManagementService;
 
     //리뷰 등록
     @PostMapping("/user/review/register")
-    public CreateReviewResponse saveReview(@RequestPart(value="imageFile", required=false) MultipartFile imageFile
-            ,@ModelAttribute @Validated CreateReviewRequest requestData) throws IOException {
+    public CreateReviewResponse saveReview(
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+            , @ModelAttribute @Validated CreateReviewRequest requestData) throws IOException {
         EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
                 .sumPrice(requestData.getSumPrice()).kindness(requestData.getKindness())
-                .symptomRelief(requestData.getSymptomRelief()).cleanliness(requestData.getCleanliness())
+                .symptomRelief(requestData.getSymptomRelief())
+                .cleanliness(requestData.getCleanliness())
                 .waitTime(requestData.getWaitTime()).build();
 
         ReviewHospital reviewHospital = ReviewHospital.builder()
                 .content(requestData.getContent()).disease(requestData.getDisease())
-                .recommendationStatus(requestData.getRecommendationStatus()).evCriteria(evaluationCriteria)
+                .recommendationStatus(requestData.getRecommendationStatus())
+                .evCriteria(evaluationCriteria)
                 .build();
 
-        Long reviewId= reviewService.reviewRegister(requestData.getMemberId(),requestData.getHospitalId(),
-                reviewHospital);
+        Long reviewId = reviewService
+                .reviewRegister(requestData.getMemberId(), requestData.getHospitalId(),
+                        reviewHospital);
 
         //영수증 파일 저장.
-        if(imageFile!=null) {
+        if (imageFile != null) {
             imageManagementService.reviewReceiptUpload(imageFile, "receipt", reviewId);
         }
 
@@ -60,10 +65,11 @@ public class ReviewApiController {
 
     //병원에 등록된 리뷰 보기.
     @GetMapping("/hospital/review/{hospitalId}")
-    public List<HospitalReviewResponse> reviewList(@PathVariable("hospitalId") Long hospitalId){
+    public List<HospitalReviewResponse> reviewList(@PathVariable("hospitalId") Long hospitalId) {
         List<Review> review = reviewService.hospitalReviewList(hospitalId);
 
-        List<HospitalReviewResponse> result = review.stream().map(r -> new HospitalReviewResponse(r))
+        List<HospitalReviewResponse> result = review.stream()
+                .map(r -> new HospitalReviewResponse(r))
                 .collect(Collectors.toList());
 
         return result;
@@ -71,7 +77,7 @@ public class ReviewApiController {
 
     //유저가 등록한 리뷰 보기
     @GetMapping("/user/{memberId}/reviews")
-    public List<UserReviewResponse> userReview(@PathVariable("memberId") Long memberId){
+    public List<UserReviewResponse> userReview(@PathVariable("memberId") Long memberId) {
         List<Review> review = reviewService.userReviewSearch(memberId);
 
         List<UserReviewResponse> result = review.stream().map(r -> new UserReviewResponse(r))
@@ -82,7 +88,7 @@ public class ReviewApiController {
 
     //리뷰 상세보기
     @GetMapping("/review/view/{reviewId}")
-    public ReviewViewResponse viewReview(@PathVariable("reviewId") Long reviewId){
+    public ReviewViewResponse viewReview(@PathVariable("reviewId") Long reviewId) {
 
         Review review = reviewService.viewHospitalReview(reviewId);
 
@@ -93,40 +99,45 @@ public class ReviewApiController {
 
     //리뷰 좋아요 + 취소하기
     @PostMapping("/user/hospital/review/like")
-    public void likeReview(@RequestBody @Validated ReviewLikeRequest request){
+    public void likeReview(@RequestBody @Validated ReviewLikeRequest request) {
         reviewService.likeReview(request.getMemberId(), request.getReviewId());
     }
 
     //리뷰 좋아요 여부 확인.
-    @GetMapping(value ={"/user/{memberId}/hospital/review/{reviewId}"})
+    @GetMapping(value = {"/user/{memberId}/hospital/review/{reviewId}"})
     public IsLikeReview isNullLike(@PathVariable("memberId") Long memberId,
-                                   @PathVariable("reviewId") Long reviewId){
+            @PathVariable("reviewId") Long reviewId) {
         Boolean isLikeReview = false;
         ReviewLike reviewLike = reviewService.isLikeReview(memberId, reviewId);
 
         //좋아요가 있으면 true 반환
-        if(reviewLike !=null) isLikeReview =true;
+        if (reviewLike != null) {
+            isLikeReview = true;
+        }
 
         return new IsLikeReview(isLikeReview);
     }
 
     //리뷰 검색하기
     @GetMapping("/search/review/{searchName}")
-    public Page<ReviewSearchDto> searchReview(@PathVariable("searchName") String searchName, Pageable pageable){
+    public Page<ReviewSearchDto> searchReview(@PathVariable("searchName") String searchName,
+            Pageable pageable) {
         return reviewService.searchReview(searchName, pageable);
     }
 
     //병원 관계자 리뷰 검색
     @GetMapping("/staff/review/search")
-    public Page<AdminReviewsResponse> staffSearchReviews(ServletRequest servletRequest, @RequestParam(value="nickName",required = false) String nickName,
-                                                         @RequestParam(value="memberIdName",required = false) String memberIdName,
-                                                         Pageable pageable){
+    public Page<AdminReviewsResponse> staffSearchReviews(ServletRequest servletRequest,
+            @RequestParam(value = "nickName", required = false) String nickName,
+            @RequestParam(value = "memberIdName", required = false) String memberIdName,
+            Pageable pageable) {
         //받은 값들 생성자로 생성.
         StaffReviewSearchCondition condition = StaffReviewSearchCondition.builder()
                 .nickName(nickName).memberIdName(memberIdName).build();
 
-        Page<Review> reviews = reviewService.staffSearchReviews(servletRequest, condition, pageable);
-        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
+        Page<Review> reviews = reviewService
+                .staffSearchReviews(servletRequest, condition, pageable);
+        List<AdminReviewsResponse> result = reviews.stream().map(r -> new AdminReviewsResponse(r))
                 .collect(Collectors.toList());
 
         Long total = reviews.getTotalElements();
@@ -136,7 +147,7 @@ public class ReviewApiController {
 
     //병원 관계자 상세보기
     @GetMapping("/staff/review/view/{reviewId}")
-    public ReviewViewResponse staffViewReview(@PathVariable("reviewId") Long reviewId){
+    public ReviewViewResponse staffViewReview(@PathVariable("reviewId") Long reviewId) {
 
         Review review = reviewService.viewHospitalReview(reviewId);
         ReviewViewResponse result = new ReviewViewResponse(review);
@@ -146,16 +157,17 @@ public class ReviewApiController {
 
     //관리자 리뷰 검색
     @GetMapping("/admin/review/search")
-    public Page<AdminReviewsResponse> adminSearchReviews(@RequestParam(value="nickName",required = false) String nickName,
-                                                         @RequestParam(value="hospitalName",required = false) String hospitalName,
-                                                         @RequestParam(value="memberIdName",required = false) String memberIdName,
-                                                         Pageable pageable){
+    public Page<AdminReviewsResponse> adminSearchReviews(
+            @RequestParam(value = "nickName", required = false) String nickName,
+            @RequestParam(value = "hospitalName", required = false) String hospitalName,
+            @RequestParam(value = "memberIdName", required = false) String memberIdName,
+            Pageable pageable) {
         //받은 값들 생성자로 생성.
         AdminReviewSearchCondition condition = AdminReviewSearchCondition.builder()
                 .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
 
-        Page<Review> reviews = reviewService.adminSearchReviews(condition,pageable);
-        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
+        Page<Review> reviews = reviewService.adminSearchReviews(condition, pageable);
+        List<AdminReviewsResponse> result = reviews.stream().map(r -> new AdminReviewsResponse(r))
                 .collect(Collectors.toList());
 
         Long total = reviews.getTotalElements();
@@ -165,7 +177,7 @@ public class ReviewApiController {
 
     //관리자 미승인 리뷰 갯수
     @GetMapping("/admin/review/unapproved/count")
-    public Long adminUnapprovedReviewCount(){
+    public Long adminUnapprovedReviewCount() {
         Long unapprovedCount = reviewService.adminUnapprovedReviewCount();
 
         return unapprovedCount;
@@ -173,10 +185,10 @@ public class ReviewApiController {
 
     //관리자 미승인 리뷰 검색
     @GetMapping("/admin/review/unapproved/search")
-    public Page<AdminReviewsResponse> adminSearchReviews(Pageable pageable){
+    public Page<AdminReviewsResponse> adminSearchReviews(Pageable pageable) {
 
         Page<Review> reviews = reviewService.adminSearchUnapprovedReviews(pageable);
-        List<AdminReviewsResponse> result = reviews.stream().map(r->new AdminReviewsResponse(r))
+        List<AdminReviewsResponse> result = reviews.stream().map(r -> new AdminReviewsResponse(r))
                 .collect(Collectors.toList());
 
         Long total = reviews.getTotalElements();
@@ -186,19 +198,20 @@ public class ReviewApiController {
 
     //관리자 리뷰 승인해주기
     @PutMapping("/admin/review/approve/{reviewId}")
-    public void approveReview(@PathVariable("reviewId") Long reviewId,@RequestBody @Validated AdminApproveReviewRequest request){
-        reviewService.approve(reviewId,request.getReviewAuthentication());
+    public void approveReview(@PathVariable("reviewId") Long reviewId,
+            @RequestBody @Validated AdminApproveReviewRequest request) {
+        reviewService.approve(reviewId, request.getReviewAuthentication());
     }
 
     //관리자 리뷰 삭제
     @DeleteMapping("/admin/review/delete/{reviewId}")
-    public void deleteReview(@PathVariable("reviewId") Long reviewId){
+    public void deleteReview(@PathVariable("reviewId") Long reviewId) {
         reviewService.deleteReview(reviewId);
     }
 
     //관리자 리뷰 상세보기
     @GetMapping("/admin/review/view/{reviewId}")
-    public ReviewViewResponse adminViewReview(@PathVariable("reviewId") Long reviewId){
+    public ReviewViewResponse adminViewReview(@PathVariable("reviewId") Long reviewId) {
 
         Review review = reviewService.viewHospitalReview(reviewId);
         ReviewViewResponse result = new ReviewViewResponse(review);
@@ -210,37 +223,42 @@ public class ReviewApiController {
     /* DTO */
     @Data
     private static class CreateReviewResponse {
+
         Long id;
+
         public CreateReviewResponse(long id) {
             this.id = id;
         }
     }
+
     @Data
     private static class CreateReviewRequest {
-        @NotNull(message="멤버 번호를 입력해주세요.")
+
+        @NotNull(message = "멤버 번호를 입력해주세요.")
         private Long memberId;
-        @NotNull(message="병원 번호를 입력해주세요.")
+        @NotNull(message = "병원 번호를 입력해주세요.")
         private Long hospitalId;
-        @NotNull(message="질문 내용을 입력해주세요.")
+        @NotNull(message = "질문 내용을 입력해주세요.")
         private String content;
-        @NotNull(message="진료 병명을 입력해주세요.")
+        @NotNull(message = "진료 병명을 입력해주세요.")
         private String disease;
-        @NotNull(message="추천 여부를 선택해주세요.")
+        @NotNull(message = "추천 여부를 선택해주세요.")
         private Recommendation recommendationStatus;
-        @NotNull(message="가격 점수를 입력해주세요.")
+        @NotNull(message = "가격 점수를 입력해주세요.")
         private Integer sumPrice;
-        @NotNull(message="친절함 점수를 입력해주세요.")
+        @NotNull(message = "친절함 점수를 입력해주세요.")
         private Integer kindness;
-        @NotNull(message="증상 완화 점수를 입력해주세요.")
+        @NotNull(message = "증상 완화 점수를 입력해주세요.")
         private Integer symptomRelief;
-        @NotNull(message="청결을 점수를 입력해주세요.")
+        @NotNull(message = "청결을 점수를 입력해주세요.")
         private Integer cleanliness;
-        @NotNull(message="대기 시간 점수를 입력해주세요.")
+        @NotNull(message = "대기 시간 점수를 입력해주세요.")
         private Integer waitTime;
     }
 
     @Data
-    private static class HospitalReviewResponse{
+    private static class HospitalReviewResponse {
+
         private Long reviewId;
         private ReviewAuthentication authenticationStatus;
         private LocalDateTime createdDate;
@@ -263,7 +281,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class ReviewLikeDTO{
+    private static class ReviewLikeDTO {
+
         Long likeId;
         Long memberId;
 
@@ -274,7 +293,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class ReviewHospitalDto{
+    private static class ReviewHospitalDto {
+
         private String content;
         private String disease;
         private Integer sumPrice;
@@ -299,15 +319,17 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class ReviewLikeRequest{
-        @NotNull(message="멤버 번호를 입력해주세요.")
+    private static class ReviewLikeRequest {
+
+        @NotNull(message = "멤버 번호를 입력해주세요.")
         private Long memberId;
-        @NotNull(message="리뷰 번호를 입력해주세요.")
+        @NotNull(message = "리뷰 번호를 입력해주세요.")
         private Long reviewId;
     }
 
     @Data
-    private static class UserReviewResponse{
+    private static class UserReviewResponse {
+
         private Long reviewId;
         private ReviewAuthentication authenticationStatus;
         private LocalDateTime createdDate;
@@ -325,7 +347,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class ReviewHospitalUserDto{
+    private static class ReviewHospitalUserDto {
+
         private Long hospitalId;
         private String hospitalName;
         private String content;
@@ -354,7 +377,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class ReviewViewResponse{
+    private static class ReviewViewResponse {
+
         private Long reviewId;
         private ReviewAuthentication authenticationStatus;
         private LocalDateTime createdDate;
@@ -373,22 +397,24 @@ public class ReviewApiController {
                     .map(reviewHospital -> new ReviewViewDto(reviewHospital))
                     .collect(Collectors.toList());
 
-            if(reviews.getReviewImage()!=null) {
+            if (reviews.getReviewImage() != null) {
                 this.imageId = reviews.getReviewImage().getId();
             }
-            if(this.imageId != null) {
+            if (this.imageId != null) {
                 this.imageKey = reviews.getReviewImage().getImageKey();
             }
         }
     }
 
     @Data
-    private static class AdminApproveReviewRequest{
+    private static class AdminApproveReviewRequest {
+
         private ReviewAuthentication reviewAuthentication;
     }
 
     @Data
-    private static class ReviewViewDto{
+    private static class ReviewViewDto {
+
         private String content;
         private String disease;
         private String hospitalName;
@@ -398,7 +424,8 @@ public class ReviewApiController {
 
         public ReviewViewDto(ReviewHospital reviewHospital) {
             this.hospitalName = reviewHospital.getHospital().getHospitalName();
-            this.medicalSubjectInformation =reviewHospital.getHospital().getMedicalSubjectInformation();
+            this.medicalSubjectInformation = reviewHospital.getHospital()
+                    .getMedicalSubjectInformation();
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
             this.recommendationStatus = reviewHospital.getRecommendationStatus();
@@ -407,7 +434,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class AdminReviewView{
+    private static class AdminReviewView {
+
         private Long reviewId;
         private Long memberId;
         private ReviewAuthentication authenticationStatus;
@@ -430,7 +458,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class IsLikeReview{
+    private static class IsLikeReview {
+
         private Boolean isReviewLike;
 
         public IsLikeReview(Boolean isReviewLike) {
@@ -439,7 +468,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class AdminReviewDto{
+    private static class AdminReviewDto {
+
         private Long reviewHospitalId;
         private Long hospitalId;
         private String content;
@@ -455,7 +485,7 @@ public class ReviewApiController {
             this.hospitalId = reviewHospital.getHospital().getId();
             this.hospitalName = reviewHospital.getHospital().getHospitalName();
             this.hospitalCityName = reviewHospital.getHospital().getCityName();
-            this.medicalSubject =reviewHospital.getHospital().getMedicalSubjectInformation();
+            this.medicalSubject = reviewHospital.getHospital().getMedicalSubjectInformation();
             this.content = reviewHospital.getContent();
             this.disease = reviewHospital.getDisease();
             this.recommendationStatus = reviewHospital.getRecommendationStatus();
@@ -465,6 +495,7 @@ public class ReviewApiController {
 
     @Data
     private static class AdminReviewsResponse {
+
         private Long reviewId;
         private ReviewAuthentication reviewAuthentication;
         private String memberIdName;
@@ -488,7 +519,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class AdminReviewLikesDto{
+    private static class AdminReviewLikesDto {
+
         private Long reviewLikeId;
 
         public AdminReviewLikesDto(ReviewLike ReviewLike) {
@@ -497,7 +529,8 @@ public class ReviewApiController {
     }
 
     @Data
-    private static class AdminReviewsHospitalDto{
+    private static class AdminReviewsHospitalDto {
+
         private String hospitalName;
         private Double averageRate;
 

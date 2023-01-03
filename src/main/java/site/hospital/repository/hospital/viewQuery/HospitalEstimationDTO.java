@@ -6,12 +6,14 @@ import site.hospital.domain.estimation.EstimationList;
 
 @Data
 public class HospitalEstimationDTO {
+
     private Long hospitalId;
     private String distinctionGrade;
     private EstimationList estimationList;
 
     @QueryProjection
-    public HospitalEstimationDTO(Long hospitalId, String distinctionGrade, EstimationList estimationList) {
+    public HospitalEstimationDTO(Long hospitalId, String distinctionGrade,
+            EstimationList estimationList) {
         this.hospitalId = hospitalId;
         this.distinctionGrade = distinctionGrade;
         this.estimationList = estimationList;

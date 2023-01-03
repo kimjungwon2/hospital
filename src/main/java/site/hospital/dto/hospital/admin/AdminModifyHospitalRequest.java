@@ -7,6 +7,7 @@ import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class AdminModifyHospitalRequest {
+
     private String licensingDate;
     private String hospitalName;
     private String phoneNumber;

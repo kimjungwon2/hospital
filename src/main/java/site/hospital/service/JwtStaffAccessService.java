@@ -1,5 +1,7 @@
 package site.hospital.service;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,46 +15,44 @@ import site.hospital.jwtToken.JwtFilter;
 import site.hospital.jwtToken.TokenProvider;
 import site.hospital.repository.member.MemberRepository;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
 @Service
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class JwtStaffAccessService {
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
     //staff 권한 접근.
-    public void staffAccessFunction(ServletRequest servletRequest, Long memberId, Long existingHospitalId){
+    public void staffAccessFunction(ServletRequest servletRequest, Long memberId,
+            Long existingHospitalId) {
 
         //토큰의 병원 번호
         Long JwtHospitalId = getJwtHospitalNumber(servletRequest);
 
         //멤버 권한의 병원 번호
-        MemberAuthority findMemberManager = memberRepository.findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
+        MemberAuthority findMemberManager = memberRepository
+                .findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
 
-        if(findMemberManager == null){
+        if (findMemberManager == null) {
             throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");
-        }
-        else if(findMemberManager.getHospitalNo() == 0){
+        } else if (findMemberManager.getHospitalNo() == 0) {
             throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
         }
         //토큰 번호와 권한의 병원 정보가 같지 않으면 인증 오류
-        else if(JwtHospitalId !=findMemberManager.getHospitalNo()){
+        else if (JwtHospitalId != findMemberManager.getHospitalNo()) {
             throw new AccessDeniedException("토큰 번호와 권한 번호가 일치하지 않습니다.");
         }
         //권한의 병원 번호와 실제 병원 번호가 다르면 접근 차단.
-        else if(findMemberManager.getHospitalNo() != existingHospitalId) {
+        else if (findMemberManager.getHospitalNo() != existingHospitalId) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
 
     //token 병원 정보 얻기
-    public Long getHospitalNumber(ServletRequest servletRequest){
+    public Long getHospitalNumber(ServletRequest servletRequest) {
         //토큰의 병원 번호
         Long JwtHospitalId = getJwtHospitalNumber(servletRequest);
 

@@ -14,9 +14,10 @@ public class CustomUserDetail extends User {
     String nickName;
     MemberStatus memberStatus;
 
-    public CustomUserDetail(String username, String password, Collection<? extends GrantedAuthority> authorities,
-                            String phoneNumber, Long hospitalNumber,
-                            Long memberId, String nickName, MemberStatus memberStatus) {
+    public CustomUserDetail(String username, String password,
+            Collection<? extends GrantedAuthority> authorities,
+            String phoneNumber, Long hospitalNumber,
+            Long memberId, String nickName, MemberStatus memberStatus) {
         super(username, password, authorities);
         this.phoneNumber = phoneNumber;
         this.hospitalNumber = hospitalNumber;

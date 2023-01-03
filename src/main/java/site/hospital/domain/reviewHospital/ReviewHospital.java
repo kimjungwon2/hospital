@@ -16,8 +16,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewHospital extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="review_hospital_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "review_hospital_id")
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,15 +46,16 @@ public class ReviewHospital extends BaseTimeEntity {
     private Recommendation recommendationStatus;
 
     /*연관관계 때문에 set 설정*/
-    public void setReview(Review review){
+    public void setReview(Review review) {
         this.review = review;
     }
 
     //== 생성 메서드 ==//
 
     @Builder
-    public ReviewHospital(Hospital hospital, String content, String disease,EvaluationCriteria evCriteria,
-                          Recommendation recommendationStatus) {
+    public ReviewHospital(Hospital hospital, String content, String disease,
+            EvaluationCriteria evCriteria,
+            Recommendation recommendationStatus) {
         this.hospital = hospital;
         this.content = content;
         this.disease = disease;
@@ -62,7 +64,8 @@ public class ReviewHospital extends BaseTimeEntity {
     }
 
     //리뷰 병원 작성
-    public static ReviewHospital saveReviewHospital(Hospital hospital, ReviewHospital reviewHospitalDTO){
+    public static ReviewHospital saveReviewHospital(Hospital hospital,
+            ReviewHospital reviewHospitalDTO) {
         //평가 기준 적용
         EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
                 .sumPrice(reviewHospitalDTO.getEvCriteria().getSumPrice())

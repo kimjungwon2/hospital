@@ -19,23 +19,24 @@ import site.hospital.jwtToken.TokenProvider;
 
 @EnableWebSecurity
 @Configuration
-public class    SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    public SecurityConfig(TokenProvider tokenProvider, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-                          JwtAccessDeniedHandler jwtAccessDeniedHandler){
+    public SecurityConfig(TokenProvider tokenProvider,
+            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+            JwtAccessDeniedHandler jwtAccessDeniedHandler) {
         this.tokenProvider = tokenProvider;
-        this.jwtAccessDeniedHandler =jwtAccessDeniedHandler;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     //허용 url
     private static final String[] PUBLIC_URI = {
-            "/login","/signup","/search/hospital/**","/search/review/**","/hospital/view/**",
-            "/hospital/staffHosInfo/**","/hospital/review/**",
+            "/login", "/signup", "/search/hospital/**", "/search/review/**", "/hospital/view/**",
+            "/hospital/staffHosInfo/**", "/hospital/review/**",
             "/hospital/question/**"
     };
 
@@ -70,7 +71,8 @@ public class    SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     //비밀번호 암호화
-    @Bean public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

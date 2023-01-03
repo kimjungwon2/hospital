@@ -15,7 +15,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Answer extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
     private long id;
 
@@ -31,8 +32,8 @@ public class Answer extends BaseTimeEntity {
     private String answerContent;
 
 
-    public void setQuestion(Question question){
-        this.question =question;
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
     @Builder
@@ -41,7 +42,7 @@ public class Answer extends BaseTimeEntity {
     }
 
     //연관 관계 메서드
-    public void changeMember(Member member){
+    public void changeMember(Member member) {
         this.member = member;
         member.getAnswers().add(this);
     }

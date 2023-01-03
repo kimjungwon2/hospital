@@ -1,9 +1,16 @@
 package site.hospital.repository.review;
 
 
+import static site.hospital.domain.QReviewImage.reviewImage;
+import static site.hospital.domain.member.QMember.member;
+import static site.hospital.domain.review.QReview.review;
+import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,37 +21,28 @@ import site.hospital.dto.AdminReviewSearchCondition;
 import site.hospital.dto.StaffReviewSearchCondition;
 
 
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static site.hospital.domain.review.QReview.review;
-import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
-import static site.hospital.domain.QReviewImage.reviewImage;
-
-
-public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
+public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public ReviewRepositoryImpl(EntityManager em){
+    public ReviewRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override
-    public List<Review> hospitalReviewSearch(Long hospitalId, Long memberId){
+    public List<Review> hospitalReviewSearch(Long hospitalId, Long memberId) {
         List<Review> result = queryFactory
                 .select(review)
                 .from(review)
                 .join(review.member, member).fetchJoin()
-                .where(hospitalIdEq(hospitalId),memberIdEq(memberId))
+                .where(hospitalIdEq(hospitalId), memberIdEq(memberId))
                 .fetch();
 
         return result;
     }
 
     @Override
-    public Review viewHospitalReview(Long reviewId){
+    public Review viewHospitalReview(Long reviewId) {
         Review result = queryFactory
                 .select(review)
                 .from(review)
@@ -57,7 +55,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public Page<Review> staffSearchReviews(Long hospitalId, StaffReviewSearchCondition condition, Pageable pageable){
+    public Page<Review> staffSearchReviews(Long hospitalId, StaffReviewSearchCondition condition,
+            Pageable pageable) {
         QueryResults<Review> result = queryFactory
                 .select(review)
                 .from(review)
@@ -78,7 +77,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
 
     @Override
-    public void adminDeleteReviewHospital(Hospital hospital){
+    public void adminDeleteReviewHospital(Hospital hospital) {
         //리뷰 아이디
         List<Long> reviewIds = queryFactory
                 .select(reviewHospital.review.id)
@@ -98,7 +97,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable){
+    public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition,
+            Pageable pageable) {
         QueryResults<Review> result = queryFactory
                 .select(review)
                 .from(review)
@@ -119,7 +119,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
     //미승인 리뷰의 갯수
     @Override
-    public Long adminUnapprovedReviewCount(){
+    public Long adminUnapprovedReviewCount() {
         return queryFactory.select(review)
                 .from(review)
                 .where(review.authenticationStatus.eq(ReviewAuthentication.WAITING))
@@ -128,7 +128,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
     //미승인 리뷰만 보이기
     @Override
-    public Page<Review> adminSearchUnapprovedReviews(Pageable pageable){
+    public Page<Review> adminSearchUnapprovedReviews(Pageable pageable) {
         QueryResults<Review> result = queryFactory
                 .select(review)
                 .from(review)
@@ -145,16 +145,28 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
         return new PageImpl<>(content, pageable, total);
     }
 
-    private BooleanExpression memberIdEq(Long id){
-        return id == null? null:review.member.id.eq(id);
+    private BooleanExpression memberIdEq(Long id) {
+        return id == null ? null : review.member.id.eq(id);
     }
-    private BooleanExpression reviewIdEq(Long id){
-        return id == null? null: review.id.eq(id);
+
+    private BooleanExpression reviewIdEq(Long id) {
+        return id == null ? null : review.id.eq(id);
     }
-    private BooleanExpression hospitalIdEq(Long id){
-        return id == null? null: review.reviewHospitals.any().hospital.id.eq(id);
+
+    private BooleanExpression hospitalIdEq(Long id) {
+        return id == null ? null : review.reviewHospitals.any().hospital.id.eq(id);
     }
-    private BooleanExpression nickNameEq(String nickName){ return nickName == null? null: member.nickName.eq(nickName);}
-    private BooleanExpression hospitalNameLike(String hospitalName){ return hospitalName == null? null: review.reviewHospitals.any().hospital.hospitalName.contains(hospitalName);}
-    private BooleanExpression memberIdNameLike(String memberIdName){ return memberIdName == null? null: member.memberIdName.contains(memberIdName);}
+
+    private BooleanExpression nickNameEq(String nickName) {
+        return nickName == null ? null : member.nickName.eq(nickName);
+    }
+
+    private BooleanExpression hospitalNameLike(String hospitalName) {
+        return hospitalName == null ? null
+                : review.reviewHospitals.any().hospital.hospitalName.contains(hospitalName);
+    }
+
+    private BooleanExpression memberIdNameLike(String memberIdName) {
+        return memberIdName == null ? null : member.memberIdName.contains(memberIdName);
+    }
 }

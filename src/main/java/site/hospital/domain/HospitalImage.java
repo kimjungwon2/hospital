@@ -14,7 +14,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalImage extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hospital_image_id")
     private Long id;
 
@@ -22,7 +23,7 @@ public class HospitalImage extends BaseEntity {
     @JoinColumn(name = "hospital_id")
     Hospital hospital;
 
-    @Column(unique=true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String imageKey;
 
     private String originalName;

@@ -21,12 +21,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class TagApiController {
+
     private final TagService tagService;
     private final PostTagService postTagService;
 
     //관계자 태그 생성
     @PostMapping("/staff/tag/create")
-    public CreateTagResponse staffSaveTag(@RequestBody @Validated CreateTagRequest request){
+    public CreateTagResponse staffSaveTag(@RequestBody @Validated CreateTagRequest request) {
         Tag tag = Tag.builder().
                 name(request.getTagName()).build();
 
@@ -37,10 +38,10 @@ public class TagApiController {
 
     //관계자 태그 검색
     @GetMapping("/staff/tag/search/{tagName}")
-    public Page staffSearchTagName(@PathVariable("tagName") String tagName,Pageable pageable){
+    public Page staffSearchTagName(@PathVariable("tagName") String tagName, Pageable pageable) {
         Page<Tag> findTags = tagService.searchTagName(tagName, pageable);
         List<ResponseSearchTagName> responseSearchTagName = findTags.stream()
-                .map(t-> new ResponseSearchTagName(t))
+                .map(t -> new ResponseSearchTagName(t))
                 .collect(Collectors.toList());
         Long total = findTags.getTotalElements();
 
@@ -49,7 +50,7 @@ public class TagApiController {
 
     //관리자 태그 생성
     @PostMapping("/admin/tag/create")
-    public CreateTagResponse saveTag(@RequestBody @Validated CreateTagRequest request){
+    public CreateTagResponse saveTag(@RequestBody @Validated CreateTagRequest request) {
         Tag tag = Tag.builder().
                 name(request.getTagName()).build();
         Long id = tagService.tagCreate(tag);
@@ -59,29 +60,29 @@ public class TagApiController {
 
     //관리자 태그 삭제
     @DeleteMapping("/admin/tag/delete/{tagId}")
-    public void deleteTag(@PathVariable("tagId") Long tagId){
+    public void deleteTag(@PathVariable("tagId") Long tagId) {
         tagService.tagDelete(tagId);
     }
 
     //관리자 태그 보기
     @GetMapping("/admin/tags")
-    public Page allSearchTag(Pageable pageable){
+    public Page allSearchTag(Pageable pageable) {
         Page<Tag> allTags = tagService.allSearchTag(pageable);
         List<allTag> collect = allTags.stream()
-                .map(t-> new allTag(t))
+                .map(t -> new allTag(t))
                 .collect(Collectors.toList());
 
-        Long total =allTags.getTotalElements();
+        Long total = allTags.getTotalElements();
 
-        return new PageImpl<>(collect, pageable,total);
+        return new PageImpl<>(collect, pageable, total);
     }
 
     //관리자 태그 검색
     @GetMapping("/admin/tag/search/{tagName}")
-    public Page searchTagName(@PathVariable("tagName") String tagName,Pageable pageable){
+    public Page searchTagName(@PathVariable("tagName") String tagName, Pageable pageable) {
         Page<Tag> findTags = tagService.searchTagName(tagName, pageable);
         List<ResponseSearchTagName> responseSearchTagName = findTags.stream()
-                .map(t-> new ResponseSearchTagName(t))
+                .map(t -> new ResponseSearchTagName(t))
                 .collect(Collectors.toList());
         Long total = findTags.getTotalElements();
 
@@ -91,25 +92,29 @@ public class TagApiController {
     /* DTO */
     @Data
     private static class CreateTagRequest {
-        @NotNull(message="태그 이름을 입력해주세요.")
+
+        @NotNull(message = "태그 이름을 입력해주세요.")
         private String tagName;
     }
 
     @Data
     private static class CreateTagResponse {
+
         private Long tagId;
+
         public CreateTagResponse(long tagId) {
             this.tagId = tagId;
         }
     }
 
     @Data
-    private static class ResponseSearchTagName{
+    private static class ResponseSearchTagName {
+
         private Long tagId;
         private String name;
         private LocalDateTime createdDate;
 
-        public ResponseSearchTagName(Tag tag){
+        public ResponseSearchTagName(Tag tag) {
             this.tagId = tag.getId();
             this.name = tag.getName();
             this.createdDate = tag.getCreatedDate();
@@ -117,7 +122,8 @@ public class TagApiController {
     }
 
     @Data
-    private static class allTag{
+    private static class allTag {
+
         private Long tagId;
         private String name;
         private LocalDateTime createdDate;

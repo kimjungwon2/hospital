@@ -6,6 +6,7 @@ import site.hospital.domain.review.ReviewAuthentication;
 
 @Data
 public class StaffSearchReviewDTO {
+
     private Long reviewId;
     private ReviewAuthentication reviewAuthentication;
     private String memberIdName;
@@ -14,7 +15,7 @@ public class StaffSearchReviewDTO {
 
     @QueryProjection
     public StaffSearchReviewDTO(Long reviewId, ReviewAuthentication reviewAuthentication,
-                                String memberIdName, String nickName, Long likeNumber) {
+            String memberIdName, String nickName, Long likeNumber) {
         this.reviewId = reviewId;
         this.reviewAuthentication = reviewAuthentication;
         this.memberIdName = memberIdName;

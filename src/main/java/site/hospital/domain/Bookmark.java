@@ -14,7 +14,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Bookmark extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookmark_id")
     private long id;
 
@@ -27,18 +28,18 @@ public class Bookmark extends BaseTimeEntity {
     private Hospital hospital;
 
     //== 연관 관계 메서드 ==/
-    public void changeMember(Member member){
+    public void changeMember(Member member) {
         this.member = member;
         member.getBookmarks().add(this);
     }
 
-    public void changeHospital(Hospital hospital){
+    public void changeHospital(Hospital hospital) {
         this.hospital = hospital;
         hospital.getBookmarks().add(this);
     }
 
     //생성 메서드
-    public static Bookmark createBookmark(Member member, Hospital hospital){
+    public static Bookmark createBookmark(Member member, Hospital hospital) {
         Bookmark bookmark = new Bookmark();
         bookmark.changeMember(member);
         bookmark.changeHospital(hospital);

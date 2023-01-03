@@ -1,38 +1,42 @@
 package site.hospital.repository.hospital.viewQuery;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.stereotype.Repository;
-
+import static site.hospital.domain.QHospitalImage.hospitalImage;
+import static site.hospital.domain.QPostTag.postTag;
+import static site.hospital.domain.QTag.tag;
+import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.domain.estimation.QEstimation.estimation;
 import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.QPostTag.postTag;
-import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
-import static site.hospital.domain.QHospitalImage.hospitalImage;
-import static site.hospital.domain.QTag.tag;
 
-import javax.persistence.EntityManager;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class HospitalViewRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public HospitalViewRepository(EntityManager em){ this.queryFactory = new JPAQueryFactory(em);}
+    public HospitalViewRepository(EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
-    public ViewHospitalDTO viewHospital(Long hospitalId){
+    public ViewHospitalDTO viewHospital(Long hospitalId) {
         ViewHospitalDTO result = findHospital(hospitalId);
 
-        if(result==null) return null;
+        if (result == null) {
+            return null;
+        }
 
         //병원 아이디
         Long hosId = result.getHospitalId();
 
         //병원 평가 넣기
         List<HospitalEstimationDTO> hospitalEstimationDTOS = queryFactory
-                .select(new QHospitalEstimationDTO(hospital.id, estimation.distinctionGrade, estimation.estimationList))
+                .select(new QHospitalEstimationDTO(hospital.id, estimation.distinctionGrade,
+                        estimation.estimationList))
                 .from(estimation)
                 .join(estimation.hospital, hospital)
                 .where(estimation.hospital.id.in(hosId))
@@ -61,7 +65,8 @@ public class HospitalViewRepository {
 
         //병원 내부 이미지 넣기
         List<HospitalImageDTO> hospitalImageDTOS = queryFactory
-                .select(new QHospitalImageDTO(hospital.id,hospitalImage.id,hospitalImage.imageKey))
+                .select(new QHospitalImageDTO(hospital.id, hospitalImage.id,
+                        hospitalImage.imageKey))
                 .from(hospitalImage)
                 .join(hospitalImage.hospital, hospital)
                 .where(hospitalImage.hospital.id.in(hosId))
@@ -73,12 +78,15 @@ public class HospitalViewRepository {
     }
 
 
-    private ViewHospitalDTO findHospital(Long hospitalId){
+    private ViewHospitalDTO findHospital(Long hospitalId) {
 
         ViewHospitalDTO result = queryFactory
-                .select(new QViewHospitalDTO(hospital.id, detailedHosInformation.id, hospital.staffHosInformation.id, hospital.hospitalThumbnail.id, hospital.licensingDate,hospital.hospitalName,
-                        hospital.phoneNumber, hospital.distinguishedName, hospital.medicalSubjectInformation,
-                        hospital.businessCondition,hospital.cityName,
+                .select(new QViewHospitalDTO(hospital.id, detailedHosInformation.id,
+                        hospital.staffHosInformation.id, hospital.hospitalThumbnail.id,
+                        hospital.licensingDate, hospital.hospitalName,
+                        hospital.phoneNumber, hospital.distinguishedName,
+                        hospital.medicalSubjectInformation,
+                        hospital.businessCondition, hospital.cityName,
                         detailedHosInformation.hospitalAddress.landLotBasedSystem,
                         detailedHosInformation.hospitalAddress.zipCode,
                         detailedHosInformation.hospitalAddress.roadBaseAddress,
@@ -89,17 +97,17 @@ public class HospitalViewRepository {
                         detailedHosInformation.hospitalLocation.y_coordination,
                         detailedHosInformation.hospitalLocation.latitude,
                         detailedHosInformation.hospitalLocation.longitude
-                        ))
+                ))
                 .from(hospital)
-                .leftJoin(hospital.detailedHosInformation,detailedHosInformation)
+                .leftJoin(hospital.detailedHosInformation, detailedHosInformation)
                 .where(hospitalIdEq(hospitalId))
                 .fetchOne();
 
         return result;
     }
 
-    private BooleanExpression hospitalIdEq(Long id){
-        return id != null? hospital.id.eq(id): null;
+    private BooleanExpression hospitalIdEq(Long id) {
+        return id != null ? hospital.id.eq(id) : null;
     }
 
 }

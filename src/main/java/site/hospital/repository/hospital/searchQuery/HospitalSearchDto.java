@@ -20,9 +20,10 @@ public class HospitalSearchDto {
     private List<ReviewHospitalDto> reviewHospitals;
 
     @QueryProjection
-    public HospitalSearchDto(Long hospitalId, String hospitalName, String imageKey, BusinessCondition businessCondition,
-                             String medicalSubjectInformation,
-                             String roadBaseAddress) {
+    public HospitalSearchDto(Long hospitalId, String hospitalName, String imageKey,
+            BusinessCondition businessCondition,
+            String medicalSubjectInformation,
+            String roadBaseAddress) {
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;
         this.imageKey = imageKey;

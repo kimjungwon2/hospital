@@ -40,7 +40,8 @@ public class StaffHospitalView {
     private List<StaffHospitalTagDTO> hospitalTags;
     private List<StaffHospitalEstimationDTO> estimations;
 
-    public StaffHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId, Long hospitalThumbnailId) {
+    public StaffHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId,
+            Long hospitalThumbnailId) {
         this.hospitalId = hospital.getId();
         this.licensingDate = hospital.getLicensingDate();
         this.hospitalName = hospital.getHospitalName();
@@ -50,31 +51,42 @@ public class StaffHospitalView {
         this.businessCondition = hospital.getBusinessCondition();
         this.cityName = hospital.getCityName();
 
-        if(detailedHosInfoId != null) {
+        if (detailedHosInfoId != null) {
             this.detailedHosInfoId = hospital.getDetailedHosInformation().getId();
-            this.numberHealthcareProvider = hospital.getDetailedHosInformation().getNumberHealthcareProvider();;
-            this.numberWard = hospital.getDetailedHosInformation().getNumberWard();;
-            this.numberPatientRoom = hospital.getDetailedHosInformation().getNumberPatientRoom();;
-            this.landLotBasedSystem = hospital.getDetailedHosInformation().getHospitalAddress().getLandLotBasedSystem();
-            this.roadBaseAddress = hospital.getDetailedHosInformation().getHospitalAddress().getRoadBaseAddress();
+            this.numberHealthcareProvider = hospital.getDetailedHosInformation()
+                    .getNumberHealthcareProvider();
+            ;
+            this.numberWard = hospital.getDetailedHosInformation().getNumberWard();
+            ;
+            this.numberPatientRoom = hospital.getDetailedHosInformation().getNumberPatientRoom();
+            ;
+            this.landLotBasedSystem = hospital.getDetailedHosInformation().getHospitalAddress()
+                    .getLandLotBasedSystem();
+            this.roadBaseAddress = hospital.getDetailedHosInformation().getHospitalAddress()
+                    .getRoadBaseAddress();
             this.zipCode = hospital.getDetailedHosInformation().getHospitalAddress().getZipCode();
-            this.x_coordination = hospital.getDetailedHosInformation().getHospitalLocation().getX_coordination();
-            this.y_coordination = hospital.getDetailedHosInformation().getHospitalLocation().getY_coordination();
-            this.latitude = hospital.getDetailedHosInformation().getHospitalLocation().getLatitude();
-            this.longitude = hospital.getDetailedHosInformation().getHospitalLocation().getLongitude();
+            this.x_coordination = hospital.getDetailedHosInformation().getHospitalLocation()
+                    .getX_coordination();
+            this.y_coordination = hospital.getDetailedHosInformation().getHospitalLocation()
+                    .getY_coordination();
+            this.latitude = hospital.getDetailedHosInformation().getHospitalLocation()
+                    .getLatitude();
+            this.longitude = hospital.getDetailedHosInformation().getHospitalLocation()
+                    .getLongitude();
         }
 
-        if(staffHosInfoId != null) {
+        if (staffHosInfoId != null) {
             this.staffHosInfoId = hospital.getStaffHosInformation().getId();
         }
 
-        if(hospitalThumbnailId != null) {
+        if (hospitalThumbnailId != null) {
             this.thumbnailId = hospital.getHospitalThumbnail().getId();
         }
 
-        this.hospitalTags = hospital.getPostTags().stream().map(h-> new StaffHospitalTagDTO(h))
+        this.hospitalTags = hospital.getPostTags().stream().map(h -> new StaffHospitalTagDTO(h))
                 .collect(Collectors.toList());
-        this.estimations = hospital.getEstimations().stream().map(e->new StaffHospitalEstimationDTO(e))
+        this.estimations = hospital.getEstimations().stream()
+                .map(e -> new StaffHospitalEstimationDTO(e))
                 .collect(Collectors.toList());
     }
 }

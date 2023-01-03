@@ -10,21 +10,21 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"member_id","authority_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "authority_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "member_authority_id")
+    @Column(name = "member_authority_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="authority_id")
+    @JoinColumn(name = "authority_id")
     private Authority authority;
 
     //병원 번호
@@ -37,12 +37,12 @@ public class MemberAuthority {
         this.hospitalNo = hospitalNo;
     }
 
-    public void giveHospitalNumber(Long hospitalNo){
+    public void giveHospitalNumber(Long hospitalNo) {
         this.hospitalNo = hospitalNo;
     }
 
     //권한을 주기
-    public void giveAuthority(Authority authority){
+    public void giveAuthority(Authority authority) {
         this.authority = authority;
     }
 

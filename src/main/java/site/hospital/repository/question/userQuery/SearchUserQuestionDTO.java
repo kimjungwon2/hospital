@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class SearchUserQuestionDTO {
+
     private Long questionId;
     private Long hospitalId;
     private String hospitalName;
@@ -14,7 +15,8 @@ public class SearchUserQuestionDTO {
     private String answerContent;
 
     @QueryProjection
-    public SearchUserQuestionDTO(Long questionId, Long hospitalId, String hospitalName, String nickName, String content, Long answerId, String answerContent) {
+    public SearchUserQuestionDTO(Long questionId, Long hospitalId, String hospitalName,
+            String nickName, String content, Long answerId, String answerContent) {
         this.questionId = questionId;
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;

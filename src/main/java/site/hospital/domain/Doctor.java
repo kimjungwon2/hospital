@@ -17,8 +17,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Doctor extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="doctor_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "doctor_id")
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,13 +45,13 @@ public class Doctor extends BaseEntity {
         this.history = history;
     }
 
-    public Doctor(CreateDoctorRequest request){
+    public Doctor(CreateDoctorRequest request) {
         this.name = request.getName();
         this.history = request.getHistory();
     }
 
     //수정 메서드
-    public void modifyDoctor(Doctor doctor){
+    public void modifyDoctor(Doctor doctor) {
         this.name = doctor.getName();
         this.history = doctor.getHistory();
     }

@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class HospitalReviewDTO {
+
     private Long hospitalId;
 
     @QueryProjection

@@ -15,7 +15,7 @@ public class ReviewHospitalDTO2 {
 
     @QueryProjection
     public ReviewHospitalDTO2(Long reviewId, String content, String disease,
-                              Double averageRate, Long hospitalId, String hospitalName) {
+            Double averageRate, Long hospitalId, String hospitalName) {
         this.reviewId = reviewId;
         this.content = content;
         this.disease = disease;

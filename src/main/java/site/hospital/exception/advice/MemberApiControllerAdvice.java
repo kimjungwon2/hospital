@@ -23,21 +23,21 @@ public class MemberApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ErrorResponse BadCredentialsException(BadCredentialsException e){
-        log.error("BadCredentialsException:",e);
-        return new ErrorResponse("BAD_REQUEST",e.getMessage());
+    public ErrorResponse BadCredentialsException(BadCredentialsException e) {
+        log.error("BadCredentialsException:", e);
+        return new ErrorResponse("BAD_REQUEST", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ErrorResponse ServletException(ServletException e){
-        log.error("ServletException:",e);
-        return new ErrorResponse("BAD_REQUEST","아이디와 비밀번호가 일치하지 않습니다.");
+    public ErrorResponse ServletException(ServletException e) {
+        log.error("ServletException:", e);
+        return new ErrorResponse("BAD_REQUEST", "아이디와 비밀번호가 일치하지 않습니다.");
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> signUpValidException(MethodArgumentNotValidException e){
-        log.error("signUp validation error",e);
+    public ResponseEntity<ErrorResponse> signUpValidException(MethodArgumentNotValidException e) {
+        log.error("signUp validation error", e);
         ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST",
                 e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
@@ -45,15 +45,15 @@ public class MemberApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    public ErrorResponse serverHandle(Exception e){
-        log.error("InternalServerException:",e);
-        return new ErrorResponse("SERVER_ERROR",e.getMessage());
+    public ErrorResponse serverHandle(Exception e) {
+        log.error("InternalServerException:", e);
+        return new ErrorResponse("SERVER_ERROR", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ErrorResponse illegalStateHandle(IllegalStateException e){
-        log.error("IllegalStateException:",e);
-        return new ErrorResponse("BAD_REQUEST",e.getMessage());
+    public ErrorResponse illegalStateHandle(IllegalStateException e) {
+        log.error("IllegalStateException:", e);
+        return new ErrorResponse("BAD_REQUEST", e.getMessage());
     }
 }

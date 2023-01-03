@@ -5,13 +5,14 @@ import lombok.Data;
 
 @Data
 public class HospitalImageDTO {
+
     private Long hospitalId;
     private Long hospitalImageId;
     private String imageKey;
 
     @QueryProjection
     public HospitalImageDTO(Long hospitalId, Long hospitalImageId,
-                            String imageKey) {
+            String imageKey) {
         this.hospitalImageId = hospitalImageId;
         this.imageKey = imageKey;
         this.hospitalId = hospitalId;

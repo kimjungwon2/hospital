@@ -19,8 +19,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "member_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @OneToMany(mappedBy = "member")
@@ -37,7 +38,7 @@ public class Member extends BaseTimeEntity {
     private List<MemberAuthority> memberAuthorities = new ArrayList<>();
 
     //회원 아이디
-    @Column(unique=true, nullable = false)
+    @Column(unique = true, nullable = false)
     @NotNull
     private String memberIdName;
     @NotNull
@@ -64,7 +65,7 @@ public class Member extends BaseTimeEntity {
     //회원 생성
     @Builder
     public Member(String memberIdName, String password, String userName, String nickName,
-                  String phoneNumber, MemberStatus memberStatus, Long hospitalNumber){
+            String phoneNumber, MemberStatus memberStatus, Long hospitalNumber) {
         this.memberIdName = memberIdName;
         this.password = password;
         this.userName = userName;
@@ -72,27 +73,27 @@ public class Member extends BaseTimeEntity {
         this.phoneNumber = phoneNumber;
         this.memberStatus = memberStatus;
 
-        if(memberStatus==MemberStatus.STAFF) {
+        if (memberStatus == MemberStatus.STAFF) {
             this.hospitalNumber = hospitalNumber;
         }
     }
 
     //수정하기
-    public void adminModifyMember(Member member){
-        this.nickName =member.getNickName();
-        this.phoneNumber=member.getPhoneNumber();
+    public void adminModifyMember(Member member) {
+        this.nickName = member.getNickName();
+        this.phoneNumber = member.getPhoneNumber();
         this.userName = member.getUserName();
         this.memberStatus = member.getMemberStatus();
 
-        if(member.memberStatus==MemberStatus.STAFF) {
+        if (member.memberStatus == MemberStatus.STAFF) {
             this.hospitalNumber = member.getHospitalNumber();
         }
     }
 
     //수정하기
-    public void modifyMember(Member member){
-        this.nickName =member.getNickName();
-        this.phoneNumber=member.getPhoneNumber();
+    public void modifyMember(Member member) {
+        this.nickName = member.getNickName();
+        this.phoneNumber = member.getPhoneNumber();
         this.userName = member.getUserName();
     }
 

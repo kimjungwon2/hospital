@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class StaffModifyStaffHosRequest {
+
     private Long memberId;
     private String introduction;
     private String consultationHour;

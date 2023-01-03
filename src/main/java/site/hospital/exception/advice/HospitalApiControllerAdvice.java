@@ -17,8 +17,9 @@ import site.hospital.exception.ErrorResponse;
 public class HospitalApiControllerAdvice {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> hospitalSearchValidException(MethodArgumentNotValidException e){
-        log.error("hospitalSearch validation error",e);
+    public ResponseEntity<ErrorResponse> hospitalSearchValidException(
+            MethodArgumentNotValidException e) {
+        log.error("hospitalSearch validation error", e);
         ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST",
                 e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);

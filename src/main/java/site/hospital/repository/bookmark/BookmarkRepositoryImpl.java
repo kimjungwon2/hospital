@@ -16,28 +16,29 @@ import static site.hospital.domain.QBookmark.bookmark;
 import static site.hospital.domain.member.QMember.member;
 import static site.hospital.domain.hospital.QHospital.hospital;
 
-public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
+public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public BookmarkRepositoryImpl(EntityManager em){
+    public BookmarkRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
     //고객의 즐겨찾기 유무 확인
-    public Bookmark isUserBookmark(Long memberId, Long hospitalId){
+    public Bookmark isUserBookmark(Long memberId, Long hospitalId) {
         Bookmark result = queryFactory
                 .select(bookmark)
                 .from(bookmark)
-                .where(memberIdEq(memberId),hospitalIdEq(hospitalId))
+                .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
                 .fetchOne();
 
         return result;
     }
 
     //병원 관계자 북마크 확인.
-    public Page<Bookmark> staffSearchBookmark(Long hospitalId, StaffBookmarkSearchCondition condition,
-                                              Pageable pageable){
+    public Page<Bookmark> staffSearchBookmark(Long hospitalId,
+            StaffBookmarkSearchCondition condition,
+            Pageable pageable) {
         QueryResults<Bookmark> result = queryFactory
                 .select(bookmark)
                 .from(bookmark)
@@ -46,44 +47,46 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
                         memberIdNameLike(condition.getMemberIdName()),
                         nickNameEq(condition.getNickName()),
                         phoneNumberLike(condition.getPhoneNumber())
-                        )
+                )
                 .fetchResults();
 
         List<Bookmark> content = result.getResults();
 
         long total = result.getTotal();
 
-        return new PageImpl<>(content,pageable,total);
+        return new PageImpl<>(content, pageable, total);
     }
 
-    public List<Bookmark> searchBookmark(Long memberId, Long hospitalId){
+    public List<Bookmark> searchBookmark(Long memberId, Long hospitalId) {
         List<Bookmark> result = queryFactory
                 .select(bookmark)
                 .from(bookmark)
                 .join(bookmark.member, member).fetchJoin()
                 .join(bookmark.hospital, hospital).fetchJoin()
-                .where(memberIdEq(memberId),hospitalIdEq(hospitalId))
+                .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
                 .fetch();
 
         return result;
     }
 
-    private BooleanExpression memberIdNameLike(String memberIdName){
-        return memberIdName==null?  null: member.memberIdName.contains(memberIdName);
+    private BooleanExpression memberIdNameLike(String memberIdName) {
+        return memberIdName == null ? null : member.memberIdName.contains(memberIdName);
     }
 
-    private BooleanExpression nickNameEq(String nickName){
-        return nickName==null?  null: member.nickName.eq(nickName);
-    }
-    private BooleanExpression phoneNumberLike(String phoneNumber){
-        return phoneNumber==null?  null: member.phoneNumber.contains(phoneNumber);
+    private BooleanExpression nickNameEq(String nickName) {
+        return nickName == null ? null : member.nickName.eq(nickName);
     }
 
-    private BooleanExpression memberIdEq(Long id){
-        return id != null? bookmark.member.id.eq(id): null;
+    private BooleanExpression phoneNumberLike(String phoneNumber) {
+        return phoneNumber == null ? null : member.phoneNumber.contains(phoneNumber);
     }
-    private BooleanExpression hospitalIdEq(Long id){
-        return id != null? bookmark.hospital.id.eq(id): null;
+
+    private BooleanExpression memberIdEq(Long id) {
+        return id != null ? bookmark.member.id.eq(id) : null;
+    }
+
+    private BooleanExpression hospitalIdEq(Long id) {
+        return id != null ? bookmark.hospital.id.eq(id) : null;
     }
 
 }

@@ -18,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StaffHosInformation extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staffHosInformation_id")
     private Long id;
 
@@ -39,20 +40,21 @@ public class StaffHosInformation extends BaseEntity {
     private String abnormality;
 
     //연관관계 때문에 set 설정
-    public void setHospital(Hospital hospital){
+    public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
 
     //연관 관계 메서드
-    public void addDoctor(Doctor doctor){
+    public void addDoctor(Doctor doctor) {
         doctors.add(doctor);
         doctor.setStaffHosInformation(this);
     }
 
     //생성 메서드
-    public static StaffHosInformation createStaffHosInformation(StaffHosInformation staffHosInformation, List<Doctor> doctors){
+    public static StaffHosInformation createStaffHosInformation(
+            StaffHosInformation staffHosInformation, List<Doctor> doctors) {
 
-        for(Doctor doctor : doctors){
+        for (Doctor doctor : doctors) {
             staffHosInformation.addDoctor(doctor);
         }
 
@@ -60,7 +62,7 @@ public class StaffHosInformation extends BaseEntity {
     }
 
     //수정 메서드
-    public void modifyStaffHosInformation(StaffHosInformation staffHosInformation){
+    public void modifyStaffHosInformation(StaffHosInformation staffHosInformation) {
         this.introduction = staffHosInformation.getIntroduction();
         this.consultationHour = staffHosInformation.getConsultationHour();
         this.abnormality = staffHosInformation.getAbnormality();
@@ -74,7 +76,7 @@ public class StaffHosInformation extends BaseEntity {
         this.abnormality = abnormality;
     }
 
-    public static StaffHosInformation createDoctor(Doctor doctor){
+    public static StaffHosInformation createDoctor(Doctor doctor) {
         StaffHosInformation staffHosInformation = new StaffHosInformation();
         staffHosInformation.addDoctor(doctor);
 
@@ -82,7 +84,7 @@ public class StaffHosInformation extends BaseEntity {
     }
 
     public void modifyStaffHosInformation(String introduction,
-                                          String consultationHour, String abnormality) {
+            String consultationHour, String abnormality) {
         this.introduction = introduction;
         this.consultationHour = consultationHour;
         this.abnormality = abnormality;

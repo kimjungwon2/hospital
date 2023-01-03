@@ -5,6 +5,7 @@ import site.hospital.domain.PostTag;
 
 @Data
 public class StaffHospitalTagDTO {
+
     private Long postTagId;
     private String tagName;
 

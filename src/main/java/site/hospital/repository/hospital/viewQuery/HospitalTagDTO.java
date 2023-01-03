@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class HospitalTagDTO {
+
     private Long hospitalId;
     private String tagName;
 

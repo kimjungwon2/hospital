@@ -6,6 +6,7 @@ import site.hospital.domain.reviewHospital.ReviewHospital;
 
 @Data
 public class AdminReviewHospitalDTO {
+
     private Long reviewId;
     private Long reviewHospitalId;
 

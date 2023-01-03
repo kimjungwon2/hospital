@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HospitalAddress  {
+public class HospitalAddress {
 
     //지번주소
     @NotNull

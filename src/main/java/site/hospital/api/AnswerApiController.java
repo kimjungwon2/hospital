@@ -15,32 +15,39 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequiredArgsConstructor
 public class AnswerApiController {
+
     private final AnswerService answerService;
 
     @PostMapping("/staff/question/answer")
-    public CreateAnswerResponse registerAnswer(ServletRequest servletRequest, @RequestBody @Validated CreateAnswerRequest request){
+    public CreateAnswerResponse registerAnswer(ServletRequest servletRequest,
+            @RequestBody @Validated CreateAnswerRequest request) {
         Answer answer = Answer.builder().answerContent(request.getAnswerContent()).build();
-        Long id = answerService.registerAnswer(servletRequest, request.getMemberId(), request.getQuestionId(), answer);
+        Long id = answerService
+                .registerAnswer(servletRequest, request.getMemberId(), request.getQuestionId(),
+                        answer);
 
         return new CreateAnswerResponse(id);
     }
 
     /*DTO */
     @Data
-    private static class CreateAnswerResponse{
+    private static class CreateAnswerResponse {
+
         private Long answerId;
+
         public CreateAnswerResponse(Long answerId) {
             this.answerId = answerId;
         }
     }
 
     @Data
-    private static class CreateAnswerRequest{
-        @NotNull(message="멤버 번호가 필요합니다.")
+    private static class CreateAnswerRequest {
+
+        @NotNull(message = "멤버 번호가 필요합니다.")
         private Long memberId;
-        @NotNull(message="질문 번호가 필요합니다.")
+        @NotNull(message = "질문 번호가 필요합니다.")
         private Long questionId;
-        @NotNull(message="답변 내용을 입력해주세요.")
+        @NotNull(message = "답변 내용을 입력해주세요.")
         private String answerContent;
     }
 }

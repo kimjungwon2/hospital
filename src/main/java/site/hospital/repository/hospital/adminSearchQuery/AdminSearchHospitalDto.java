@@ -6,6 +6,7 @@ import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class AdminSearchHospitalDto {
+
     Long hospitalId;
     Long detailedHosId;
     Long staffHosInformationId;
@@ -17,9 +18,9 @@ public class AdminSearchHospitalDto {
 
     @QueryProjection
     public AdminSearchHospitalDto(Long hospitalId, Long detailedHosId, Long staffHosInformationId,
-                                  Long thumbnailId,
-                                  String hospitalName, BusinessCondition businessCondition,
-                                  String cityName, String phoneNumber) {
+            Long thumbnailId,
+            String hospitalName, BusinessCondition businessCondition,
+            String cityName, String phoneNumber) {
         this.hospitalId = hospitalId;
         this.detailedHosId = detailedHosId;
         this.staffHosInformationId = staffHosInformationId;

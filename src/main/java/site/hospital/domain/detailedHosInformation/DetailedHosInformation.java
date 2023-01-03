@@ -15,7 +15,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DetailedHosInformation extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "detailedHosInformation_id")
     private Long id;
 
@@ -39,7 +40,7 @@ public class DetailedHosInformation extends BaseEntity {
     private HospitalLocation hospitalLocation;
 
 
-    public void modifyDetailedHosInformation(DetailedHosInformation detailedHosInformation){
+    public void modifyDetailedHosInformation(DetailedHosInformation detailedHosInformation) {
         this.numberHealthcareProvider = detailedHosInformation.getNumberHealthcareProvider();
         this.numberWard = detailedHosInformation.getNumberWard();
         this.numberPatientRoom = detailedHosInformation.getNumberPatientRoom();
@@ -48,12 +49,12 @@ public class DetailedHosInformation extends BaseEntity {
     }
 
     @Builder
-    public DetailedHosInformation(int numberHealthcareProvider, int numberWard, int numberPatientRoom,
-                                  HospitalAddress hospitalAddress, HospitalLocation hospitalLocation) {
+    public DetailedHosInformation(int numberHealthcareProvider, int numberWard,
+            int numberPatientRoom,
+            HospitalAddress hospitalAddress, HospitalLocation hospitalLocation) {
         this.numberHealthcareProvider = numberHealthcareProvider;
         this.numberWard = numberWard;
         this.numberPatientRoom = numberPatientRoom;
-
 
         this.hospitalAddress = hospitalAddress.builder()
                 .roadBaseAddress(hospitalAddress.getRoadBaseAddress())
@@ -70,14 +71,15 @@ public class DetailedHosInformation extends BaseEntity {
     }
 
     //연관관계 때문에 set 설정
-    public void setHospital(Hospital hospital){
+    public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
 
 
     //비즈니스 메서드
-    public void updateDetailedHosInformation(Integer numberWard, Integer numberHealthcareProvider, Integer numberPatientRoom,
-                                             HospitalAddress hospitalAddress, HospitalLocation hospitalLocation){
+    public void updateDetailedHosInformation(Integer numberWard, Integer numberHealthcareProvider,
+            Integer numberPatientRoom,
+            HospitalAddress hospitalAddress, HospitalLocation hospitalLocation) {
         this.numberHealthcareProvider = numberHealthcareProvider;
         this.numberWard = numberWard;
         this.numberPatientRoom = numberPatientRoom;

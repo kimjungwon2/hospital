@@ -6,6 +6,7 @@ import site.hospital.domain.hospital.BusinessCondition;
 
 @Data
 public class AdminHospitalSearchCondition {
+
     Long hospitalId;
     String hospitalName;
     BusinessCondition businessCondition;
@@ -14,7 +15,7 @@ public class AdminHospitalSearchCondition {
 
     @Builder
     public AdminHospitalSearchCondition(Long hospitalId, String hospitalName,
-                                        BusinessCondition businessCondition, String cityName) {
+            BusinessCondition businessCondition, String cityName) {
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;
         this.businessCondition = businessCondition;
