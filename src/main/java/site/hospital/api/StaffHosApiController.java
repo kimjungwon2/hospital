@@ -1,20 +1,22 @@
 package site.hospital.api;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.ServletRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.dto.hospital.staff.StaffModifyStaffHosRequest;
-import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
 import site.hospital.dto.staffHosInfo.AdminModifyStaffHosRequest;
 import site.hospital.service.StaffHosService;
-
-import javax.servlet.ServletRequest;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

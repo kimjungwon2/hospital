@@ -1,20 +1,19 @@
 package site.hospital.repository.bookmark;
 
+import static site.hospital.domain.QBookmark.bookmark;
+import static site.hospital.domain.hospital.QHospital.hospital;
+import static site.hospital.domain.member.QMember.member;
+
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.Bookmark;
 import site.hospital.dto.StaffBookmarkSearchCondition;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static site.hospital.domain.QBookmark.bookmark;
-import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.hospital.QHospital.hospital;
 
 public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 

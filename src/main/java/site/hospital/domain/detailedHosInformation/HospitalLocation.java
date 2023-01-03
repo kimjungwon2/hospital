@@ -1,14 +1,13 @@
 package site.hospital.domain.detailedHosInformation;
 
+import java.math.BigDecimal;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 @Embeddable
 @Getter

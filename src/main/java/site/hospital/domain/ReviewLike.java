@@ -1,13 +1,19 @@
 package site.hospital.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.review.Review;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -27,6 +33,15 @@ public class ReviewLike extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    //생성 메서드
+    public static ReviewLike createReviewLike(Member member, Review review) {
+        ReviewLike reviewLike = new ReviewLike();
+        reviewLike.changeMember(member);
+        reviewLike.changeReview(review);
+
+        return reviewLike;
+    }
+
     //== 연관 관계 메서드 ==/
     public void changeMember(Member member) {
         this.member = member;
@@ -36,15 +51,6 @@ public class ReviewLike extends BaseTimeEntity {
     public void changeReview(Review review) {
         this.review = review;
         review.getReviewLikes().add(this);
-    }
-
-    //생성 메서드
-    public static ReviewLike createReviewLike(Member member, Review review) {
-        ReviewLike reviewLike = new ReviewLike();
-        reviewLike.changeMember(member);
-        reviewLike.changeReview(review);
-
-        return reviewLike;
     }
 
 }

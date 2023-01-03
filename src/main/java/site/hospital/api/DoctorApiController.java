@@ -1,16 +1,20 @@
 package site.hospital.api;
 
+import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import site.hospital.domain.Doctor;
 import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.doctor.StaffCreateDoctorRequest;
 import site.hospital.service.DoctorService;
-
-import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequiredArgsConstructor

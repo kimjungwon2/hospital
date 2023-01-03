@@ -1,12 +1,18 @@
 package site.hospital.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.hospital.Hospital;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -26,6 +32,15 @@ public class PostTag extends BaseEntity {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
+    //생성 메서드
+    public static PostTag createPostTag(Tag tag, Hospital hospital) {
+        PostTag postTag = new PostTag();
+        postTag.changeTag(tag);
+        postTag.changeHospital(hospital);
+
+        return postTag;
+    }
+
     //== 연관 관계 메서드 ==/
     public void changeTag(Tag tag) {
         this.tag = tag;
@@ -35,15 +50,6 @@ public class PostTag extends BaseEntity {
     public void changeHospital(Hospital hospital) {
         this.hospital = hospital;
         hospital.getPostTags().add(this);
-    }
-
-    //생성 메서드
-    public static PostTag createPostTag(Tag tag, Hospital hospital) {
-        PostTag postTag = new PostTag();
-        postTag.changeTag(tag);
-        postTag.changeHospital(hospital);
-
-        return postTag;
     }
 
 }

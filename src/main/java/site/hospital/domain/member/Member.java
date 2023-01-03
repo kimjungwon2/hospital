@@ -1,18 +1,27 @@
 package site.hospital.domain.member;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.hospital.domain.*;
+import site.hospital.domain.Answer;
+import site.hospital.domain.Bookmark;
+import site.hospital.domain.Question;
+import site.hospital.domain.ReviewLike;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.review.Review;
-import site.hospital.domain.ReviewLike;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

@@ -1,5 +1,7 @@
 package site.hospital.api;
 
+import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -8,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.domain.Answer;
 import site.hospital.service.AnswerService;
-
-import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequiredArgsConstructor

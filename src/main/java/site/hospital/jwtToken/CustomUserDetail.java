@@ -1,10 +1,9 @@
 package site.hospital.jwtToken;
 
+import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import site.hospital.domain.member.MemberStatus;
-
-import java.util.Collection;
 
 public class CustomUserDetail extends User {
 

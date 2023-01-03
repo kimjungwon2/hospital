@@ -1,24 +1,38 @@
 package site.hospital.api;
 
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import site.hospital.domain.*;
+import site.hospital.domain.Doctor;
+import site.hospital.domain.HospitalImage;
+import site.hospital.domain.HospitalThumbnail;
+import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
 import site.hospital.domain.detailedHosInformation.HospitalAddress;
 import site.hospital.domain.detailedHosInformation.HospitalLocation;
-
 import site.hospital.domain.hospital.BusinessCondition;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.dto.AdminHospitalSearchCondition;
-import site.hospital.dto.hospital.admin.AdminModifyHospitalRequest;
 import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.hospital.admin.AdminHospitalView;
+import site.hospital.dto.hospital.admin.AdminModifyHospitalRequest;
 import site.hospital.dto.hospital.staff.StaffHospitalView;
 import site.hospital.dto.hospital.staff.StaffModifyHospitalRequest;
 import site.hospital.repository.hospital.adminSearchQuery.AdminSearchHospitalDto;
@@ -26,12 +40,6 @@ import site.hospital.repository.hospital.searchQuery.HospitalSearchDto;
 import site.hospital.repository.hospital.viewQuery.ViewHospitalDTO;
 import site.hospital.service.HospitalService;
 import site.hospital.service.ImageManagementService;
-
-import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

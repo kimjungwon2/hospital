@@ -2,10 +2,9 @@ package site.hospital.repository.hospital.searchQuery;
 
 
 import com.querydsl.core.annotations.QueryProjection;
+import java.util.List;
 import lombok.Data;
 import site.hospital.domain.hospital.BusinessCondition;
-
-import java.util.List;
 
 @Data
 public class HospitalSearchDto {

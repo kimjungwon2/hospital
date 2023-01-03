@@ -1,5 +1,16 @@
 package site.hospital.domain;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,9 +18,6 @@ import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Member;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -38,6 +46,20 @@ public class Question extends BaseTimeEntity {
     private String content;
 
 
+    @Builder
+    public Question(String content) {
+        this.content = content;
+    }
+
+    //생성 메서드
+    public static Question CreateQuestion(Member member, Hospital hospital, String content) {
+        Question question = new Question(content);
+        question.changeMember(member);
+        question.changeHospital(hospital);
+
+        return question;
+    }
+
     //== 연관 관계 메서드 ==/
     public void changeMember(Member member) {
         this.member = member;
@@ -54,22 +76,7 @@ public class Question extends BaseTimeEntity {
         answer.setQuestion(this);
     }
 
-    @Builder
-    public Question(String content) {
-        this.content = content;
-    }
-
-    //생성 메서드
-    public static Question CreateQuestion(Member member, Hospital hospital, String content) {
-        Question question = new Question(content);
-        question.changeMember(member);
-        question.changeHospital(hospital);
-
-        return question;
-    }
-
     //비즈니스 메서드
-
 
     public void modifyQandA(String content) {
         this.content = content;

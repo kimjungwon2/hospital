@@ -1,22 +1,21 @@
 package site.hospital.repository.hospital.adminSearchQuery;
 
+import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
+import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
+import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
+import static site.hospital.domain.hospital.QHospital.hospital;
+
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import site.hospital.domain.hospital.BusinessCondition;
 import site.hospital.dto.AdminHospitalSearchCondition;
-
-import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
-import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
-import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
-
-import javax.persistence.EntityManager;
-import java.util.List;
 
 @Repository
 public class AdminHospitalSearchRepository {

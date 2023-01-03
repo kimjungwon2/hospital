@@ -1,11 +1,10 @@
 package site.hospital.repository.bookmark;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import site.hospital.domain.Bookmark;
 import site.hospital.dto.StaffBookmarkSearchCondition;
-
-import java.util.List;
 
 public interface BookmarkRepositoryCustom {
 

@@ -1,16 +1,20 @@
 package site.hospital.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseEntity;
-import site.hospital.domain.baseEntity.BaseTimeEntity;
 import site.hospital.dto.doctor.CreateDoctorRequest;
-import site.hospital.dto.staffHosInfo.AdminDoctorDTO;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -32,12 +36,6 @@ public class Doctor extends BaseEntity {
     private String history;
 
 
-    //연관 관계 때문에 설정.
-    public void setStaffHosInformation(StaffHosInformation staffHosInformation) {
-        this.staffHosInformation = staffHosInformation;
-    }
-
-
     @Builder
     public Doctor(StaffHosInformation staffHosInformation, String name, String history) {
         this.staffHosInformation = staffHosInformation;
@@ -45,9 +43,15 @@ public class Doctor extends BaseEntity {
         this.history = history;
     }
 
+
     public Doctor(CreateDoctorRequest request) {
         this.name = request.getName();
         this.history = request.getHistory();
+    }
+
+    //연관 관계 때문에 설정.
+    public void setStaffHosInformation(StaffHosInformation staffHosInformation) {
+        this.staffHosInformation = staffHosInformation;
     }
 
     //수정 메서드

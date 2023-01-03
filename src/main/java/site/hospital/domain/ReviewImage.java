@@ -1,13 +1,18 @@
 package site.hospital.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.baseEntity.BaseEntity;
 import site.hospital.domain.review.Review;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -27,14 +32,14 @@ public class ReviewImage extends BaseEntity {
     @OneToOne(mappedBy = "reviewImage", fetch = FetchType.LAZY)
     private Review review;
 
-    //연관관계 때문에 set 설정
-    public void setReview(Review review) {
-        this.review = review;
-    }
-
     @Builder
     public ReviewImage(String originalName, String imageKey) {
         this.originalName = originalName;
         this.imageKey = imageKey;
+    }
+
+    //연관관계 때문에 set 설정
+    public void setReview(Review review) {
+        this.review = review;
     }
 }

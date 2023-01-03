@@ -1,12 +1,17 @@
 package site.hospital.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.domain.hospital.Hospital;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -26,14 +31,14 @@ public class HospitalThumbnail {
     @OneToOne(mappedBy = "hospitalThumbnail", fetch = FetchType.LAZY)
     private Hospital hospital;
 
-    //연관관계 때문에 set 설정
-    public void setHospital(Hospital hospital) {
-        this.hospital = hospital;
-    }
-
     @Builder
     public HospitalThumbnail(String originalName, String imageKey) {
         this.originalName = originalName;
         this.imageKey = imageKey;
+    }
+
+    //연관관계 때문에 set 설정
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 }

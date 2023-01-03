@@ -1,12 +1,11 @@
 package site.hospital.dto.hospital.admin;
 
-import lombok.Data;
-import site.hospital.domain.hospital.BusinessCondition;
-import site.hospital.domain.hospital.Hospital;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Data;
+import site.hospital.domain.hospital.BusinessCondition;
+import site.hospital.domain.hospital.Hospital;
 
 @Data
 public class AdminHospitalView {
@@ -55,11 +54,8 @@ public class AdminHospitalView {
             this.detailedHosInfoId = hospital.getDetailedHosInformation().getId();
             this.numberHealthcareProvider = hospital.getDetailedHosInformation()
                     .getNumberHealthcareProvider();
-            ;
             this.numberWard = hospital.getDetailedHosInformation().getNumberWard();
-            ;
             this.numberPatientRoom = hospital.getDetailedHosInformation().getNumberPatientRoom();
-            ;
             this.landLotBasedSystem = hospital.getDetailedHosInformation().getHospitalAddress()
                     .getLandLotBasedSystem();
             this.roadBaseAddress = hospital.getDetailedHosInformation().getHospitalAddress()

@@ -1,9 +1,8 @@
 package site.hospital.exception.advice;
 
+import javax.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.CORBA.UserException;
 import org.springframework.core.annotation.Order;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import site.hospital.api.MemberApiController;
 import site.hospital.exception.ErrorResponse;
-
-import javax.servlet.ServletException;
 
 @Slf4j
 @ControllerAdvice(assignableTypes = MemberApiController.class)
