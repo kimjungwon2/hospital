@@ -1,11 +1,8 @@
 package site.hospital.api;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,8 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.api.dto.bookmark.BookmarkCheckResponse;
+import site.hospital.api.dto.bookmark.BookmarkCreateRequest;
+import site.hospital.api.dto.bookmark.BookmarkSearchMemberResponse;
+import site.hospital.api.dto.bookmark.BookmarkSearchResponse;
+import site.hospital.api.dto.bookmark.BookmarkAdminSearchMemberResponse;
 import site.hospital.domain.Bookmark;
-import site.hospital.domain.hospital.BusinessCondition;
 import site.hospital.dto.StaffBookmarkSearchCondition;
 import site.hospital.service.BookmarkService;
 
@@ -30,13 +31,13 @@ public class BookmarkApiController {
 
     //북마크 등록 + 삭제
     @PostMapping("/user/hospital/bookmark/register")
-    public void saveBookmark(@RequestBody @Validated CreateBookmarkRequest request) {
+    public void saveBookmark(@RequestBody @Validated BookmarkCreateRequest request) {
         bookmarkService.bookmark(request.getMemberId(), request.getHospitalId());
     }
 
     //북마크 여부 확인.
     @GetMapping(value = {"/user/{memberId}/bookmark/hospital/{hospitalId}"})
-    public IsBookmark isNullBookmark(@PathVariable("memberId") Long memberId,
+    public BookmarkCheckResponse isNullBookmark(@PathVariable("memberId") Long memberId,
             @PathVariable("hospitalId") Long hospitalId) {
         Boolean isBookmark = false;
 
@@ -47,7 +48,7 @@ public class BookmarkApiController {
             isBookmark = true;
         }
 
-        return new IsBookmark(isBookmark);
+        return BookmarkCheckResponse.from(isBookmark);
     }
 
     //병원 관계자 즐겨찾기한 유저 검색
@@ -63,8 +64,8 @@ public class BookmarkApiController {
         Page<Bookmark> bookmarks = bookmarkService
                 .staffSearchBookmarkUsers(servletRequest, condition, pageable);
 
-        List<SearchBookmarkUsersResponse> result = bookmarks.stream()
-                .map(b -> new SearchBookmarkUsersResponse(b))
+        List<BookmarkAdminSearchMemberResponse> result = bookmarks.stream()
+                .map(b -> BookmarkAdminSearchMemberResponse.from(b))
                 .collect(Collectors.toList());
 
         Long total = bookmarks.getTotalElements();
@@ -74,10 +75,10 @@ public class BookmarkApiController {
 
     //즐겨찾기 목록 전체 조회(관리자)
     @GetMapping("/admin/bookmark/search")
-    public List<SearchBookmarkResponse> searchBookmark() {
+    public List<BookmarkSearchResponse> searchBookmark() {
         List<Bookmark> bookmarks = bookmarkService.searchAdminBookmark();
-        List<SearchBookmarkResponse> result = bookmarks.stream()
-                .map(b -> new SearchBookmarkResponse(b))
+        List<BookmarkSearchResponse> result = bookmarks.stream()
+                .map(b -> BookmarkSearchResponse.from(b))
                 .collect(Collectors.toList());
 
         return result;
@@ -85,117 +86,15 @@ public class BookmarkApiController {
 
     //즐겨찾기 조회(사용자)
     @GetMapping("/user/{memberId}/bookmarks")
-    public List<SearchMemberBookmarkResponse> searchMemberBookmark(
+    public List<BookmarkSearchMemberResponse> searchMemberBookmark(
             @PathVariable("memberId") Long memberId) {
         List<Bookmark> bookmarks = bookmarkService.searchMemberBookmark(memberId);
-        List<SearchMemberBookmarkResponse> result = bookmarks.stream()
-                .map(b -> new SearchMemberBookmarkResponse(b))
+        List<BookmarkSearchMemberResponse> result = bookmarks.stream()
+                .map(b -> BookmarkSearchMemberResponse.from(b))
                 .collect(Collectors.toList());
 
         return result;
     }
 
 
-    /* DTO */
-
-    @Data
-    private static class CreateBookmarkRequest {
-
-        @NotNull(message = "멤버 번호가 필요합니다.")
-        private Long memberId;
-        @NotNull(message = "병원 번호가 필요합니다.")
-        private Long hospitalId;
-    }
-
-    @Data
-    private static class IsBookmark {
-
-        private Boolean isBookmark;
-
-        public IsBookmark(Boolean isBookmark) {
-            this.isBookmark = isBookmark;
-        }
-    }
-
-    @Data
-    private static class SearchBookmarkResponse {
-
-        private Long bookmarkId;
-        private Long hospitalId;
-        private Long memberId;
-        private String medicalSubjectInformation;
-        private BusinessCondition businessCondition;
-        private String cityName;
-        private String userName;
-        private String hospitalName;
-        private LocalDateTime createTime;
-
-        public SearchBookmarkResponse(Bookmark bookmark) {
-            this.bookmarkId = bookmark.getId();
-            this.hospitalId = bookmark.getHospital().getId();
-            this.memberId = bookmark.getMember().getId();
-            this.medicalSubjectInformation = bookmark.getHospital().getMedicalSubjectInformation();
-            this.businessCondition = bookmark.getHospital().getBusinessCondition();
-            this.cityName = bookmark.getHospital().getCityName();
-            this.userName = bookmark.getMember().getUserName();
-            this.hospitalName = bookmark.getHospital().getHospitalName();
-            this.createTime = bookmark.getCreatedDate();
-        }
-    }
-
-    @Data
-    private static class SearchMemberBookmarkResponse {
-
-        private Long hospitalId;
-        private String medicalSubjectInformation;
-        private BusinessCondition businessCondition;
-        private String cityName;
-        private String hospitalName;
-        private LocalDateTime createTime;
-
-        public SearchMemberBookmarkResponse(Bookmark bookmark) {
-            this.hospitalId = bookmark.getHospital().getId();
-            this.medicalSubjectInformation = bookmark.getHospital().getMedicalSubjectInformation();
-            this.businessCondition = bookmark.getHospital().getBusinessCondition();
-            this.cityName = bookmark.getHospital().getCityName();
-            this.hospitalName = bookmark.getHospital().getHospitalName();
-            this.createTime = bookmark.getCreatedDate();
-        }
-    }
-
-    @Data
-    private static class SearchBookmarkUsersResponse {
-
-        private Long bookmarkId;
-        private String memberIdName;
-        private String nickName;
-        private String phoneNumber;
-
-        public SearchBookmarkUsersResponse(Bookmark bookmark) {
-            this.bookmarkId = bookmark.getId();
-            this.memberIdName = bookmark.getMember().getMemberIdName();
-            this.nickName = bookmark.getMember().getNickName();
-            this.phoneNumber = bookmark.getMember().getPhoneNumber();
-        }
-    }
-
-    @Data
-    private static class SearchHospitalBookmarkResponse {
-
-        private Long bookmarkId;
-        private Long memberId;
-        private String memberName;
-        private String nickName;
-        private String phoneNumber;
-        private LocalDateTime createTime;
-
-        public SearchHospitalBookmarkResponse(Bookmark bookmark) {
-            this.bookmarkId = bookmark.getId();
-            this.memberId = bookmark.getMember().getId();
-            this.memberName = bookmark.getMember().getUserName();
-            this.nickName = bookmark.getMember().getNickName();
-            this.phoneNumber = bookmark.getMember().getPhoneNumber();
-            this.createTime = bookmark.getCreatedDate();
-        }
-    }
 }
