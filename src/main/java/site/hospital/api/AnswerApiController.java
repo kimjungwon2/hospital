@@ -1,13 +1,12 @@
 package site.hospital.api;
 
 import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.api.dto.answer.AnswerCreateRequest;
 import site.hospital.api.dto.answer.AnswerCreateResponse;
 import site.hospital.domain.Answer;
 import site.hospital.service.AnswerService;
@@ -20,8 +19,9 @@ public class AnswerApiController {
 
     @PostMapping("/staff/question/answer")
     public AnswerCreateResponse registerAnswer(ServletRequest servletRequest,
-            @RequestBody @Validated CreateAnswerRequest request) {
+            @RequestBody @Validated AnswerCreateRequest request) {
         Answer answer = Answer.builder().answerContent(request.getAnswerContent()).build();
+
         Long id = answerService
                 .registerAnswer(servletRequest, request.getMemberId(), request.getQuestionId(),
                         answer);
@@ -30,14 +30,4 @@ public class AnswerApiController {
     }
 
 
-    @Data
-    private static class CreateAnswerRequest {
-
-        @NotNull(message = "멤버 번호가 필요합니다.")
-        private Long memberId;
-        @NotNull(message = "질문 번호가 필요합니다.")
-        private Long questionId;
-        @NotNull(message = "답변 내용을 입력해주세요.")
-        private String answerContent;
-    }
 }
