@@ -3,8 +3,6 @@ package site.hospital.api;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.api.dto.question.QuestionCreateRequest;
+import site.hospital.api.dto.question.QuestionCreateResponse;
+import site.hospital.api.dto.question.QuestionSearchResponse;
 import site.hospital.domain.Question;
 import site.hospital.dto.AdminQuestionSearchCondition;
 import site.hospital.dto.StaffQuestionSearchCondition;
@@ -34,11 +35,11 @@ public class QuestionApiController {
 
     //Question 생성
     @PostMapping("/user/hospital/question/register")
-    public CreateQuestionResponse createQuestion(
-            @RequestBody @Validated CreateQuestionRequest request) {
+    public QuestionCreateResponse createQuestion(
+            @RequestBody @Validated QuestionCreateRequest request) {
         Long id = questionService.questionCreate(request.getMemberId(), request.getHospitalId(),
                 request.getContent());
-        return new CreateQuestionResponse(id);
+        return QuestionCreateResponse.from(id);
     }
 
     //병원 Question 조회.
@@ -66,8 +67,8 @@ public class QuestionApiController {
         Page<Question> questions = questionService
                 .staffSearchHospitalQuestion(servletRequest, condition, pageable);
 
-        List<SearchHospitalQuestionResponse> result = questions.stream()
-                .map(q -> new SearchHospitalQuestionResponse(q))
+        List<QuestionSearchResponse> result = questions.stream()
+                .map(q -> QuestionSearchResponse.from(q))
                 .collect(Collectors.toList());
 
         Long total = questions.getTotalElements();
@@ -87,8 +88,8 @@ public class QuestionApiController {
         Page<Question> questions = questionService
                 .staffSearchNoQuestion(servletRequest, condition, pageable);
 
-        List<SearchHospitalQuestionResponse> result = questions.stream()
-                .map(q -> new SearchHospitalQuestionResponse(q))
+        List<QuestionSearchResponse> result = questions.stream()
+                .map(q -> QuestionSearchResponse.from(q))
                 .collect(Collectors.toList());
 
         Long total = questions.getTotalElements();
@@ -123,52 +124,6 @@ public class QuestionApiController {
             @RequestParam(value = "questionId", required = false) Long questionId,
             @RequestParam(value = "answerId", required = false) Long answerId) {
         questionService.questionDelete(questionId, answerId);
-    }
-
-
-    /* DTO */
-    @Data
-    private static class CreateQuestionResponse {
-
-        private Long id;
-
-        public CreateQuestionResponse(long id) {
-            this.id = id;
-        }
-    }
-
-    @Data
-    private static class CreateQuestionRequest {
-
-        @NotNull(message = "병원 번호를 입력해주세요.")
-        private Long hospitalId;
-        @NotNull(message = "멤버 번호를 입력해주세요.")
-        private Long memberId;
-        @NotNull(message = "질문 내용을 입력해주세요.")
-        private String content;
-    }
-
-    @Data
-    private static class SearchHospitalQuestionResponse {
-
-        private Long questionId;
-        private String memberIdName;
-        private String nickName;
-        private String content;
-        private Long answerId;
-        private String answerContent;
-
-        public SearchHospitalQuestionResponse(Question question) {
-            this.memberIdName = question.getMember().getMemberIdName();
-            this.questionId = question.getId();
-            this.nickName = question.getMember().getNickName();
-            this.content = question.getContent();
-
-            if (question.getAnswer() != null) {
-                this.answerId = question.getAnswer().getId();
-                this.answerContent = question.getAnswer().getAnswerContent();
-            }
-        }
     }
 
 }

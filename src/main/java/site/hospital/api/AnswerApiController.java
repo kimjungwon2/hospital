@@ -29,5 +29,4 @@ public class AnswerApiController {
         return AnswerCreateResponse.from(id);
     }
 
-
 }

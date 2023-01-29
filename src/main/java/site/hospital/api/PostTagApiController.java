@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.api.dto.postTag.PostTagLinkTagRequest;
+import site.hospital.api.dto.postTag.PostTagLinkTagResponse;
 import site.hospital.domain.PostTag;
 import site.hospital.service.PostTagService;
 
@@ -24,13 +26,13 @@ public class PostTagApiController {
 
     //관계자 병원 태그 연결
     @PostMapping("/staff/hospital/tag/link")
-    public LinkTagResponse staffLinkTag(ServletRequest servletRequest,
+    public PostTagLinkTagResponse staffLinkTag(ServletRequest servletRequest,
             @RequestBody @Validated StaffLinkTagRequest request) {
         Long id = postTagService
                 .staffTagLink(servletRequest, request.getTagId(), request.getMemberId(),
                         request.getHospitalId());
 
-        return new LinkTagResponse(id);
+        return PostTagLinkTagResponse.from(id);
     }
 
     //관계자 병원 연결 태그 삭제
@@ -42,10 +44,10 @@ public class PostTagApiController {
 
     //병원 태그 연결
     @PostMapping("/admin/hospital/tag/link")
-    public LinkTagResponse linkTag(@RequestBody @Validated LinkTagRequest request) {
+    public PostTagLinkTagResponse linkTag(@RequestBody @Validated PostTagLinkTagRequest request) {
         Long id = postTagService.tagLink(request.getTagId(), request.getHospitalId());
 
-        return new LinkTagResponse(id);
+        return PostTagLinkTagResponse.from(id);
     }
 
     //병원 태그 삭제
@@ -79,25 +81,6 @@ public class PostTagApiController {
 
 
     /* DTO */
-    @Data
-    private static class LinkTagRequest {
-
-        @NotNull(message = "태그 번호를 입력해주세요.")
-        private Long tagId;
-        @NotNull(message = "병원 번호를 입력해주세요.")
-        private Long hospitalId;
-    }
-
-    @Data
-    private static class LinkTagResponse {
-
-        private Long postTagId;
-
-        public LinkTagResponse(long postTagId) {
-            this.postTagId = postTagId;
-        }
-    }
-
     @Data
     private static class hospitalTagViewResponse {
 
