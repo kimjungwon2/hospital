@@ -4,6 +4,7 @@ import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.api.dto.answer.AnswerCreateRequest;
 import site.hospital.domain.Answer;
 import site.hospital.domain.Question;
 import site.hospital.domain.member.Member;
@@ -23,18 +24,27 @@ public class AnswerService {
 
     //답변 등록
     @Transactional
-    public Long registerAnswer(ServletRequest servletRequest, Long memberId, Long questionId,
-            Answer answer) {
-        Member member = memberRepository.findById(memberId)
+    public Long registerAnswer(
+            ServletRequest servletRequest,
+            AnswerCreateRequest request
+    ) {
+        Member member = memberRepository
+                .findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
-        Question question = questionRepository.findById(questionId)
+
+        Question question = questionRepository
+                .findById(request.getQuestionId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 질문이 존재하지 않습니다."));
 
         jwtStaffAccessService
-                .staffAccessFunction(servletRequest, memberId, question.getHospital().getId());
-        answer.changeMember(member);
-        answerRepository.save(answer);
+                .staffAccessFunction(servletRequest, member.getId(),
+                        question.getHospital().getId());
 
+        Answer answer = Answer.builder().answerContent(request.getAnswerContent()).build();
+
+        answer.changeMember(member);
+
+        answerRepository.save(answer);
         question.changeAnswer(answer);
 
         return answer.getId();

@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +31,9 @@ import site.hospital.domain.HospitalImage;
 import site.hospital.domain.HospitalThumbnail;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.detailedHosInformation.DetailedHosInformation;
-import site.hospital.domain.detailedHosInformation.HospitalAddress;
-import site.hospital.domain.detailedHosInformation.HospitalLocation;
 import site.hospital.domain.hospital.BusinessCondition;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.dto.AdminHospitalSearchCondition;
-import site.hospital.dto.doctor.CreateDoctorRequest;
 import site.hospital.dto.hospital.admin.AdminHospitalView;
 import site.hospital.dto.hospital.admin.AdminModifyHospitalRequest;
 import site.hospital.dto.hospital.staff.StaffHospitalView;
@@ -438,6 +433,5 @@ public class HospitalApiController {
     public void adminDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId) {
         imageManagementService.deleteHospitalImage(hospitalImageId, "hospitalImage");
     }
-
 
 }

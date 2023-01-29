@@ -19,12 +19,10 @@ public class AnswerApiController {
 
     @PostMapping("/staff/question/answer")
     public AnswerCreateResponse registerAnswer(ServletRequest servletRequest,
-            @RequestBody @Validated AnswerCreateRequest request) {
-        Answer answer = Answer.builder().answerContent(request.getAnswerContent()).build();
-
+            @RequestBody @Validated AnswerCreateRequest request
+    ) {
         Long id = answerService
-                .registerAnswer(servletRequest, request.getMemberId(), request.getQuestionId(),
-                        answer);
+                .registerAnswer(servletRequest, request);
 
         return AnswerCreateResponse.from(id);
     }
