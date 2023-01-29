@@ -9,12 +9,12 @@ import site.hospital.domain.Question;
 @Builder(access = AccessLevel.PRIVATE)
 public class QuestionSearchResponse {
 
-    private Long questionId;
-    private String memberIdName;
-    private String nickName;
-    private String content;
-    private Long answerId;
-    private String answerContent;
+    private final Long questionId;
+    private final String memberIdName;
+    private final String nickName;
+    private final String content;
+    private final Long answerId;
+    private final String answerContent;
 
     public static QuestionSearchResponse from(Question question) {
 

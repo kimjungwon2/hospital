@@ -10,9 +10,9 @@ import site.hospital.domain.Tag;
 @Builder(access = AccessLevel.PRIVATE)
 public class TagAdminViewAllResponse {
 
-    private Long tagId;
-    private String name;
-    private LocalDateTime createdDate;
+    private final Long tagId;
+    private final String name;
+    private final LocalDateTime createdDate;
 
     public static TagAdminViewAllResponse from(Tag tag) {
         return TagAdminViewAllResponse

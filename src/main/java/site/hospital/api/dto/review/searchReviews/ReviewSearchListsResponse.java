@@ -12,12 +12,12 @@ import site.hospital.domain.review.ReviewAuthentication;
 @Builder(access = AccessLevel.PRIVATE)
 public class ReviewSearchListsResponse {
 
-    private Long reviewId;
-    private ReviewAuthentication reviewAuthentication;
-    private String memberIdName;
-    private String nickName;
-    private List<ReviewSearchListsHospitalDTO> reviewHospitals;
-    private List<ReviewSearchListsLikeDTO> reviewLike;
+    private final Long reviewId;
+    private final ReviewAuthentication reviewAuthentication;
+    private final String memberIdName;
+    private final String nickName;
+    private final List<ReviewSearchListsHospitalDTO> reviewHospitals;
+    private final List<ReviewSearchListsLikeDTO> reviewLike;
 
 
     public static ReviewSearchListsResponse from(Review review) {

@@ -3,8 +3,6 @@ package site.hospital.api;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.ServletRequest;
-import javax.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.api.dto.postTag.PostTagLinkTagRequest;
 import site.hospital.api.dto.postTag.PostTagLinkTagResponse;
+import site.hospital.api.dto.postTag.PostTagStaffLinkTagRequest;
+import site.hospital.api.dto.postTag.PostTagViewHospitalTagResponse;
 import site.hospital.domain.PostTag;
 import site.hospital.service.PostTagService;
 
@@ -27,7 +27,7 @@ public class PostTagApiController {
     //관계자 병원 태그 연결
     @PostMapping("/staff/hospital/tag/link")
     public PostTagLinkTagResponse staffLinkTag(ServletRequest servletRequest,
-            @RequestBody @Validated StaffLinkTagRequest request) {
+            @RequestBody @Validated PostTagStaffLinkTagRequest request) {
         Long id = postTagService
                 .staffTagLink(servletRequest, request.getTagId(), request.getMemberId(),
                         request.getHospitalId());
@@ -58,39 +58,14 @@ public class PostTagApiController {
 
     //병원 연결 태그 보기.
     @GetMapping("/hospital/tag/view/{hospitalId}")
-    public List<hospitalTagViewResponse> hospitalTagView(
+    public List<PostTagViewHospitalTagResponse> hospitalTagView(
             @PathVariable("hospitalId") Long hospitalId) {
         List<PostTag> postTags = postTagService.viewHospitalTag(hospitalId);
-        List<hospitalTagViewResponse> result = postTags.stream()
-                .map(p -> new hospitalTagViewResponse(p))
+        List<PostTagViewHospitalTagResponse> result = postTags.stream()
+                .map(p -> PostTagViewHospitalTagResponse.from(p))
                 .collect(Collectors.toList());
 
         return result;
-    }
-
-    /* DTO */
-    @Data
-    private static class StaffLinkTagRequest {
-
-        private Long memberId;
-        @NotNull(message = "태그 번호를 입력해주세요.")
-        private Long tagId;
-        @NotNull(message = "병원 번호를 입력해주세요.")
-        private Long hospitalId;
-    }
-
-
-    /* DTO */
-    @Data
-    private static class hospitalTagViewResponse {
-
-        private String tagName;
-        private Long tagId;
-
-        public hospitalTagViewResponse(PostTag postTag) {
-            this.tagName = postTag.getTag().getName();
-            this.tagId = postTag.getTag().getId();
-        }
     }
 
 }

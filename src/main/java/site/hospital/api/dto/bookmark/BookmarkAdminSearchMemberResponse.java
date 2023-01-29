@@ -9,10 +9,10 @@ import site.hospital.domain.Bookmark;
 @Builder(access = AccessLevel.PRIVATE)
 public class BookmarkAdminSearchMemberResponse {
 
-    private Long bookmarkId;
-    private String memberIdName;
-    private String nickName;
-    private String phoneNumber;
+    private final Long bookmarkId;
+    private final String memberIdName;
+    private final String nickName;
+    private final String phoneNumber;
 
     public static BookmarkAdminSearchMemberResponse from(Bookmark bookmark) {
         return BookmarkAdminSearchMemberResponse

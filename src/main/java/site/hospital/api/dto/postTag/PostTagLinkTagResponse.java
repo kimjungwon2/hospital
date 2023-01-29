@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder(access = AccessLevel.PRIVATE)
 public class PostTagLinkTagResponse {
 
-    private Long postTagId;
+    private final Long postTagId;
 
     public static PostTagLinkTagResponse from(long postTagId) {
         return PostTagLinkTagResponse

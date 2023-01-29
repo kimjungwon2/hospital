@@ -11,10 +11,10 @@ import site.hospital.domain.StaffHosInformation;
 @Builder(access = AccessLevel.PRIVATE)
 public class StaffHospitalViewResponse {
 
-    private String introduction;
-    private String consultationHour;
-    private String abnormality;
-    private List<StaffHospitalDoctorDTO> doctors;
+    private final String introduction;
+    private final String consultationHour;
+    private final String abnormality;
+    private final List<StaffHospitalDoctorDTO> doctors;
 
     public static StaffHospitalViewResponse from(StaffHosInformation staffHosInformation) {
         return StaffHospitalViewResponse

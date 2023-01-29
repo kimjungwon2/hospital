@@ -2,10 +2,6 @@ package site.hospital.api;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,6 +22,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.api.dto.member.MemberAdminCreateRequest;
+import site.hospital.api.dto.member.MemberAdminModifyRequest;
+import site.hospital.api.dto.member.MemberAdminViewInfoResponse;
+import site.hospital.api.dto.member.MemberCreateRequest;
+import site.hospital.api.dto.member.MemberCreateResponse;
+import site.hospital.api.dto.member.MemberLoginRequest;
+import site.hospital.api.dto.member.MemberLoginResponse;
+import site.hospital.api.dto.member.MemberModifyRequest;
+import site.hospital.api.dto.member.MemberSearchResponse;
+import site.hospital.api.dto.member.MemberViewInfoResponse;
 import site.hospital.domain.member.Member;
 import site.hospital.domain.member.MemberStatus;
 import site.hospital.dto.AdminMemberSearchCondition;
@@ -43,8 +49,8 @@ public class MemberApiController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginMemberResponse> loginMember(
-            @RequestBody @Validated site.hospital.dto.LoginMemberRequest request) {
+    public ResponseEntity<MemberLoginResponse> loginMember(
+            @RequestBody @Validated MemberLoginRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(request.getMemberIdName(),
                         request.getPassword());
@@ -68,12 +74,13 @@ public class MemberApiController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(new LoginMemberResponse(user.getMemberId(), user.getNickName(),
-                user.getMemberStatus(), jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(MemberLoginResponse
+                .from(user.getMemberId(), user.getNickName(), user.getMemberStatus(), jwt),
+                httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/signup")
-    public CreateMemberResponse saveMember(@RequestBody @Validated CreateMemberRequest request) {
+    public MemberCreateResponse saveMember(@RequestBody @Validated MemberCreateRequest request) {
         Member member = Member.builder()
                 .memberIdName(request.getMemberIdName())
                 .password(request.getPassword())
@@ -83,14 +90,14 @@ public class MemberApiController {
                 .build();
         Long id = memberService.signUp(member);
 
-        return new CreateMemberResponse(id);
+        return MemberCreateResponse.from(id);
     }
 
     //유저 정보 상세 보기
     @GetMapping("/user/{memberId}/view")
-    public ViewMemberInformation userViewInformation(@PathVariable("memberId") Long memberId) {
+    public MemberViewInfoResponse userViewInformation(@PathVariable("memberId") Long memberId) {
         Member member = memberService.viewMember(memberId);
-        ViewMemberInformation viewMemberInformation = new ViewMemberInformation(member);
+        MemberViewInfoResponse viewMemberInformation = MemberViewInfoResponse.from(member);
 
         return viewMemberInformation;
     }
@@ -99,7 +106,7 @@ public class MemberApiController {
     //유저 정보 수정하기
     @PutMapping("/user/{memberId}/modify")
     public void userModifyInformation(@PathVariable("memberId") Long memberId,
-            @RequestBody @Validated UserModifyRequest request) {
+            @RequestBody @Validated MemberModifyRequest request) {
         Member member = Member.builder().phoneNumber(request.getPhoneNumber())
                 .nickName(request.getNickName())
                 .userName(request.getUserName()).build();
@@ -109,7 +116,7 @@ public class MemberApiController {
 
     //관리자 유저 검색
     @GetMapping("/admin/user/search")
-    public Page<MemberSearchResult> adminSearchMembers(
+    public Page<MemberSearchResponse> adminSearchMembers(
             @RequestParam(value = "allSearch", required = false) String allSearch,
             @RequestParam(value = "memberId", required = false) Long memberId,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
@@ -128,8 +135,8 @@ public class MemberApiController {
                 .hospitalNumber(hospitalNumber).build();
 
         Page<Member> members = memberService.adminSearchMembers(condition, pageable);
-        List<MemberSearchResult> result = members.stream()
-                .map(m -> new MemberSearchResult(m)).collect(Collectors.toList());
+        List<MemberSearchResponse> result = members.stream()
+                .map(m -> MemberSearchResponse.from(m)).collect(Collectors.toList());
 
         Long total = members.getTotalElements();
 
@@ -138,17 +145,17 @@ public class MemberApiController {
 
     //관리자 유저 상세 보기
     @GetMapping("/admin/user/view/{memberId}")
-    public adminViewMember adminViewMember(@PathVariable("memberId") Long memberId) {
+    public MemberAdminViewInfoResponse adminViewMember(@PathVariable("memberId") Long memberId) {
         Member member = memberService.viewMember(memberId);
-        adminViewMember adminViewMember = new adminViewMember(member);
+        MemberAdminViewInfoResponse adminViewMember = MemberAdminViewInfoResponse.from(member);
 
         return adminViewMember;
     }
 
     //관리자 멤버 생성
     @PostMapping("/admin/signup")
-    public CreateMemberResponse adminSaveMember(
-            @RequestBody @Validated AdminCreateMemberRequest request) {
+    public MemberCreateResponse adminSaveMember(
+            @RequestBody @Validated MemberAdminCreateRequest request) {
         Member member = Member.builder()
                 .memberIdName(request.getMemberIdName())
                 .password(request.getPassword())
@@ -160,7 +167,7 @@ public class MemberApiController {
                 .build();
         Long id = memberService.adminSignUp(member);
 
-        return new CreateMemberResponse(id);
+        return MemberCreateResponse.from(id);
     }
 
     //관리자 멤버 삭제
@@ -172,7 +179,7 @@ public class MemberApiController {
     //관리자 멤버 수정하기
     @PutMapping("/admin/user/modify/{memberId}")
     public void adminModifyMember(@PathVariable("memberId") Long memberId,
-            @RequestBody @Validated AdminModifyMemberRequest request) {
+            @RequestBody @Validated MemberAdminModifyRequest request) {
         Member member = Member.builder().phoneNumber(request.getPhoneNumber())
                 .memberStatus(request.getMemberStatus())
                 .nickName(request.getNickName())
@@ -213,168 +220,4 @@ public class MemberApiController {
         }
     }
 
-    /* DTO */
-    @Data
-    private static class CreateMemberResponse {
-
-        Long memberId;
-
-        public CreateMemberResponse(long memberId) {
-            this.memberId = memberId;
-        }
-    }
-
-    @Data
-    private static class CreateMemberRequest {
-
-        //회원 이름
-        @NotNull(message = "이름을 입력해주세요.")
-        private String userName;
-        //회원 아이디
-        @Email(message = "올바른 이메일 형태가 아닙니다.")
-        @NotBlank(message = "공백없이 아이디를 입력해주세요.")
-        private String memberIdName;
-        @NotNull(message = "비밀번호를 입력해주세요.")
-        private String password;
-        @NotNull(message = "닉네임을 입력해주세요.")
-        private String nickName;
-        @NotNull(message = "전화번호를 입력해주세요.")
-        private String phoneNumber;
-    }
-
-    @Data
-    private static class LoginMemberRequest {
-
-        @Email(message = "올바른 이메일 형태가 아닙니다.")
-        @NotBlank(message = "공백없이 아이디를 입력해주세요.")
-        String memberIdName;
-
-        @NotNull(message = "비밀번호를 입력해주세요.")
-        String password;
-    }
-
-    @Data
-    private static class LoginMemberResponse {
-
-        Long memberId;
-        String nickName;
-        MemberStatus memberStatus;
-        String token;
-
-        public LoginMemberResponse(Long memberId, String nickName, MemberStatus memberStatus,
-                String token) {
-            this.memberId = memberId;
-            this.nickName = nickName;
-            this.memberStatus = memberStatus;
-            this.token = token;
-        }
-    }
-
-    @Data
-    public static class MemberSearchResult {
-
-        private Long memberId;
-        private String memberIdName;
-        private String userName;
-        private MemberStatus memberStatus;
-        private Long hospitalNumber;
-
-        public MemberSearchResult(Member member) {
-            this.memberId = member.getId();
-            this.memberIdName = member.getMemberIdName();
-            this.userName = member.getUserName();
-            this.memberStatus = member.getMemberStatus();
-            this.hospitalNumber = member.getHospitalNumber();
-        }
-    }
-
-    @Data
-    private static class ViewMemberInformation {
-
-        private Long id;
-        private String memberIdName;
-        private String userName;
-        private String nickName;
-        private String phoneNumber;
-        private MemberStatus memberStatus;
-
-        public ViewMemberInformation(Member member) {
-            this.id = member.getId();
-            this.memberIdName = member.getMemberIdName();
-            this.userName = member.getUserName();
-            this.nickName = member.getNickName();
-            this.phoneNumber = member.getPhoneNumber();
-            this.memberStatus = member.getMemberStatus();
-        }
-    }
-
-    @Data
-    private static class adminViewMember {
-
-        private Long id;
-        private String memberIdName;
-        private String userName;
-        private String nickName;
-        private String phoneNumber;
-        private Long hospitalNumber;
-        private MemberStatus memberStatus;
-
-        public adminViewMember(Member member) {
-            this.id = member.getId();
-            this.memberIdName = member.getMemberIdName();
-            this.userName = member.getUserName();
-            this.nickName = member.getNickName();
-            this.phoneNumber = member.getPhoneNumber();
-            this.hospitalNumber = member.getHospitalNumber();
-            this.memberStatus = member.getMemberStatus();
-        }
-    }
-
-    @Data
-    private static class AdminMemberAuthorizeRequest {
-
-        private MemberStatus memberStatus;
-        private Long hospitalNumber;
-    }
-
-    @Data
-    private static class UserModifyRequest {
-
-        private String nickName;
-        private String phoneNumber;
-        private String userName;
-    }
-
-    @Data
-    private static class AdminModifyMemberRequest {
-
-        @NotNull(message = "권한을 넣어주세요.")
-        private MemberStatus memberStatus;
-        private String nickName;
-        private String phoneNumber;
-        private String userName;
-        private Long hospitalId;
-    }
-
-    @Data
-    private static class AdminCreateMemberRequest {
-
-        //회원 이름
-        @NotNull(message = "이름을 입력해주세요.")
-        private String userName;
-        //회원 아이디
-        @Email(message = "올바른 이메일 형태가 아닙니다.")
-        @NotBlank(message = "공백없이 아이디를 입력해주세요.")
-        private String memberIdName;
-        @NotNull(message = "비밀번호를 입력해주세요.")
-        private String password;
-        @NotNull(message = "닉네임을 입력해주세요.")
-        private String nickName;
-        @NotNull(message = "전화번호를 입력해주세요.")
-        private String phoneNumber;
-        @NotNull(message = "권한을 넣어주세요.")
-        private MemberStatus memberStatus;
-        @NotNull(message = "병원 번호를 넣어주세요.")
-        private Long hospitalId;
-    }
 }

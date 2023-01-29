@@ -11,15 +11,15 @@ import site.hospital.domain.hospital.BusinessCondition;
 @Builder(access = AccessLevel.PRIVATE)
 public class BookmarkSearchResponse {
 
-    private Long bookmarkId;
-    private Long hospitalId;
-    private Long memberId;
-    private String medicalSubjectInformation;
-    private BusinessCondition businessCondition;
-    private String cityName;
-    private String userName;
-    private String hospitalName;
-    private LocalDateTime createTime;
+    private final Long bookmarkId;
+    private final Long hospitalId;
+    private final Long memberId;
+    private final String medicalSubjectInformation;
+    private final BusinessCondition businessCondition;
+    private final String cityName;
+    private final String userName;
+    private final String hospitalName;
+    private final LocalDateTime createTime;
 
     public static BookmarkSearchResponse from(Bookmark bookmark) {
         return BookmarkSearchResponse

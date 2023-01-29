@@ -13,10 +13,10 @@ import site.hospital.domain.review.ReviewAuthentication;
 @Builder(access = AccessLevel.PRIVATE)
 public class ReviewViewByMemberResponse {
 
-    private Long reviewId;
-    private ReviewAuthentication authenticationStatus;
-    private LocalDateTime createdDate;
-    private List<ReviewViewByMemberUserDTO> reviewHospitals;
+    private final Long reviewId;
+    private final ReviewAuthentication authenticationStatus;
+    private final LocalDateTime createdDate;
+    private final List<ReviewViewByMemberUserDTO> reviewHospitals;
 
     public static ReviewViewByMemberResponse from(Review reviews) {
         return ReviewViewByMemberResponse
