@@ -1,12 +1,31 @@
 package site.hospital.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.api.dto.member.MemberAdminCreateRequest;
+import site.hospital.api.dto.member.MemberAdminModifyRequest;
+import site.hospital.api.dto.member.MemberAdminViewInfoResponse;
+import site.hospital.api.dto.member.MemberCreateRequest;
+import site.hospital.api.dto.member.MemberCreateResponse;
+import site.hospital.api.dto.member.MemberLoginRequest;
+import site.hospital.api.dto.member.MemberLoginResponse;
+import site.hospital.api.dto.member.MemberModifyRequest;
+import site.hospital.api.dto.member.MemberSearchResponse;
+import site.hospital.api.dto.member.MemberViewInfoResponse;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.domain.member.Authority;
 import site.hospital.domain.member.Authorization;
@@ -14,6 +33,9 @@ import site.hospital.domain.member.Member;
 import site.hospital.domain.member.MemberAuthority;
 import site.hospital.domain.member.MemberStatus;
 import site.hospital.dto.AdminMemberSearchCondition;
+import site.hospital.jwtToken.CustomUserDetail;
+import site.hospital.jwtToken.JwtFilter;
+import site.hospital.jwtToken.TokenProvider;
 import site.hospital.repository.AuthorityRepository;
 import site.hospital.repository.MemberAuthorityRepository;
 import site.hospital.repository.hospital.HospitalRepository;
@@ -29,10 +51,80 @@ public class MemberService {
     private final AuthorityRepository authorityRepository;
     private final MemberAuthorityRepository memberAuthorityRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final TokenProvider tokenProvider;
+
+    //로그인
+    public ResponseEntity<MemberLoginResponse> loginMember(MemberLoginRequest request) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(request.getMemberIdName(),
+                        request.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject()
+                .authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        //커스텀 사용자 객체 가져오기
+        CustomUserDetail user =
+                (CustomUserDetail) authentication.getPrincipal();
+
+        //jwt Token
+        String jwt = GetJWToken(authentication, user);
+
+        //토큰 null 체크.
+        if (jwt == null) {
+            throw new IllegalStateException("토큰 값이 null 입니다.");
+        }
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return new ResponseEntity<>(MemberLoginResponse
+                .from(user.getMemberId(), user.getNickName(), user.getMemberStatus(), jwt),
+                httpHeaders, HttpStatus.OK);
+    }
+
+    //토큰 획득
+    private String GetJWToken(Authentication authentication, CustomUserDetail user) {
+        //멤버 권한이 일반 유저라면
+        if (!authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER")) &&
+
+                authentication.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_USER"))
+        ) {
+            return tokenProvider.createToken(authentication, user.getPhoneNumber());
+        }
+        //멤버 권한이 STAFF 전용 토큰 만들기
+        else if (!authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) &&
+
+                authentication.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))
+        ) {
+            return tokenProvider.createStaffToken(authentication,
+                    user.getPhoneNumber(), user.getHospitalNumber());
+        }
+        //멤버 권한이 관리자라면
+        else if (authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return tokenProvider.createToken(authentication, user.getPhoneNumber());
+        } else {
+            throw new IllegalStateException("권한이 존재하지 않습니다.");
+        }
+    }
 
     //회원등록
     @Transactional
-    public Long signUp(Member memberDto) {
+    public MemberCreateResponse signUp(MemberCreateRequest request) {
+        Member memberDto = Member.builder()
+                .memberIdName(request.getMemberIdName())
+                .password(request.getPassword())
+                .nickName(request.getNickName())
+                .userName(request.getUserName())
+                .phoneNumber(request.getPhoneNumber())
+                .build();
+
         validateDuplicateMember(memberDto);
 
         Member member = Member.builder().userName(memberDto.getUserName())
@@ -55,7 +147,7 @@ public class MemberService {
 
         memberAuthorityRepository.save(memberAuthority);
 
-        return member.getId();
+        return MemberCreateResponse.from(member.getId());
     }
 
     //중복 아이디 검사
@@ -69,7 +161,13 @@ public class MemberService {
 
     //멤버 수정하기
     @Transactional
-    public void modifyMember(Long memberId, Member modifyMember) {
+    public void modifyMember(Long memberId, MemberModifyRequest request) {
+        Member modifyMember = Member.builder()
+                .phoneNumber(request.getPhoneNumber())
+                .nickName(request.getNickName())
+                .userName(request.getUserName())
+                .build();
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
@@ -78,7 +176,14 @@ public class MemberService {
 
     //멤버 수정하기
     @Transactional
-    public void adminModifyMember(Long memberId, Member modifyMember) {
+    public void adminModifyMember(Long memberId, MemberAdminModifyRequest request) {
+        Member modifyMember = Member.builder().phoneNumber(request.getPhoneNumber())
+                .memberStatus(request.getMemberStatus())
+                .nickName(request.getNickName())
+                .hospitalNumber(request.getHospitalId())
+                .userName(request.getUserName())
+                .build();
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
@@ -149,22 +254,70 @@ public class MemberService {
 
 
     //관리자 멤버 검색
-    public Page<Member> adminSearchMembers(AdminMemberSearchCondition condition,
-            Pageable pageable) {
-        return memberRepository.adminSearchMembers(condition, pageable);
+    public Page<MemberSearchResponse> adminSearchMembers(
+            String allSearch,
+            Long memberId,
+            String memberIdName,
+            String nickName,
+            String userName,
+            String phoneNumber,
+            MemberStatus memberStatus,
+            Long hospitalNumber,
+            Pageable pageable
+    ) {
+        AdminMemberSearchCondition condition =
+                AdminMemberSearchCondition
+                        .builder()
+                        .allSearch(allSearch)
+                        .memberId(memberId)
+                        .memberIdName(memberIdName)
+                        .nickName(nickName)
+                        .userName(userName)
+                        .phoneNumber(phoneNumber)
+                        .memberStatus(memberStatus)
+                        .hospitalNumber(hospitalNumber)
+                        .build();
+
+        Page<Member> members = memberRepository.adminSearchMembers(condition, pageable);
+
+        List<MemberSearchResponse> result =
+                members.stream()
+                        .map(m -> MemberSearchResponse.from(m))
+                        .collect(Collectors.toList());
+
+        Long total = members.getTotalElements();
+
+        return new PageImpl(result, pageable, total);
     }
 
-    //멤버 상세정보 보기
-    public Member viewMember(Long memberId) {
+    //유저 멤버 상세정보 보기
+    public MemberViewInfoResponse userViewMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
-        return member;
+        return MemberViewInfoResponse.from(member);
+    }
+
+    //관리자 멤버 상세정보 보기
+    public MemberAdminViewInfoResponse adminViewMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        return MemberAdminViewInfoResponse.from(member);
     }
 
     //관리자 회원등록
     @Transactional
-    public Long adminSignUp(Member memberDto) {
+    public MemberCreateResponse adminSignUp(MemberAdminCreateRequest request) {
+        Member memberDto = Member.builder()
+                .memberIdName(request.getMemberIdName())
+                .password(request.getPassword())
+                .nickName(request.getNickName())
+                .userName(request.getUserName())
+                .memberStatus(request.getMemberStatus())
+                .phoneNumber(request.getPhoneNumber())
+                .hospitalNumber(request.getHospitalId())
+                .build();
 
         validateDuplicateMember(memberDto);
 
@@ -241,7 +394,7 @@ public class MemberService {
             memberAuthorityRepository.save(adminAuthority);
         }
 
-        return member.getId();
+        return MemberCreateResponse.from(member.getId());
     }
 
     //관리자 멤버 삭제하기
