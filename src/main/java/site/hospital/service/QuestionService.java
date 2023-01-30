@@ -1,12 +1,17 @@
 package site.hospital.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.api.dto.question.QuestionCreateRequest;
+import site.hospital.api.dto.question.QuestionCreateResponse;
+import site.hospital.api.dto.question.QuestionSearchResponse;
 import site.hospital.domain.Answer;
 import site.hospital.domain.Question;
 import site.hospital.domain.hospital.Hospital;
@@ -40,16 +45,16 @@ public class QuestionService {
 
     //Question 작성
     @Transactional
-    public Long questionCreate(Long memberId, Long hospitalId, String content) {
-        Member member = memberRepository.findById(memberId)
+    public QuestionCreateResponse questionCreate(QuestionCreateRequest request) {
+        Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
-        Hospital hospital = hospitalRepository.findById(hospitalId)
+        Hospital hospital = hospitalRepository.findById(request.getHospitalId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
-        Question question = Question.CreateQuestion(member, hospital, content);
+        Question question = Question.CreateQuestion(member, hospital, request.getContent());
         questionRepository.save(question);
 
-        return question.getId();
+        return QuestionCreateResponse.from(question.getId());
     }
 
     //QandA 수정
@@ -88,19 +93,58 @@ public class QuestionService {
     }
 
     //병원 관계자 Question 검색
-    public Page<Question> staffSearchHospitalQuestion(ServletRequest servletRequest,
-            StaffQuestionSearchCondition condition, Pageable pageable) {
+    public Page<Question> staffSearchHospitalQuestion(
+            ServletRequest servletRequest,
+            String nickName,
+            String memberIdName,
+            Pageable pageable
+    ) {
+        StaffQuestionSearchCondition condition = StaffQuestionSearchCondition
+                .builder()
+                .nickName(nickName)
+                .memberIdName(memberIdName)
+                .build();
+
         Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
 
-        return questionRepository.staffSearchHospitalQuestion(JwtHospitalId, condition, pageable);
+        Page<Question> questions = questionRepository
+                .staffSearchHospitalQuestion(JwtHospitalId, condition, pageable);
+
+        List<QuestionSearchResponse> result = questions.stream()
+                .map(q -> QuestionSearchResponse.from(q))
+                .collect(Collectors.toList());
+
+        Long total = questions.getTotalElements();
+
+        return new PageImpl(result, pageable, total);
     }
 
     //병원 관계자 미답변 Question 검색
-    public Page<Question> staffSearchNoQuestion(ServletRequest servletRequest,
-            StaffQuestionSearchCondition condition, Pageable pageable) {
+    public Page<Question> staffSearchNoQuestion(
+            ServletRequest servletRequest,
+            String nickName,
+            String memberIdName,
+            Pageable pageable
+    ) {
+        StaffQuestionSearchCondition condition =
+                StaffQuestionSearchCondition
+                        .builder()
+                        .nickName(nickName)
+                        .memberIdName(memberIdName)
+                        .build();
+
         Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
 
-        return questionRepository.staffSearchNoQuestion(JwtHospitalId, condition, pageable);
+        Page<Question> questions = questionRepository
+                .staffSearchNoQuestion(JwtHospitalId, condition, pageable);
+
+        List<QuestionSearchResponse> result = questions.stream()
+                .map(q -> QuestionSearchResponse.from(q))
+                .collect(Collectors.toList());
+
+        Long total = questions.getTotalElements();
+
+        return new PageImpl(result, pageable, total);
     }
 
     //병원 관계자 미답변 question 갯수 확인
@@ -111,8 +155,14 @@ public class QuestionService {
     }
 
     //관리자 병원 Question 검색
-    public Page<AdminSearchQuestionDto> adminSearchQuestions(AdminQuestionSearchCondition condition,
-            Pageable pageable) {
+    public Page<AdminSearchQuestionDto> adminSearchQuestions(
+            String nickName,
+            String hospitalName,
+            String memberIdName,
+            Pageable pageable
+    ) {
+        AdminQuestionSearchCondition condition = AdminQuestionSearchCondition.builder()
+                .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
         return adminQuestionSearchRepository.adminSearchQuestions(condition, pageable);
     }
 

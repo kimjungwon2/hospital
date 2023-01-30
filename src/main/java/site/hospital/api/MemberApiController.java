@@ -125,7 +125,8 @@ public class MemberApiController {
             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
             @RequestParam(value = "authorizationStatus", required = false) MemberStatus memberStatus,
             @RequestParam(value = "hospitalNumber", required = false) Long hospitalNumber,
-            Pageable pageable) {
+            Pageable pageable
+    ) {
 
         //받은 값들 생성자로 생성.
         AdminMemberSearchCondition condition = AdminMemberSearchCondition.builder()

@@ -1,10 +1,15 @@
 package site.hospital.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.api.dto.postTag.PostTagLinkTagRequest;
+import site.hospital.api.dto.postTag.PostTagLinkTagResponse;
+import site.hospital.api.dto.postTag.PostTagStaffLinkTagRequest;
+import site.hospital.api.dto.postTag.PostTagViewHospitalTagResponse;
 import site.hospital.domain.PostTag;
 import site.hospital.domain.Tag;
 import site.hospital.domain.hospital.Hospital;
@@ -25,13 +30,12 @@ public class PostTagService {
 
     //병원 관계자 태그 연결
     @Transactional
-    public Long staffTagLink(ServletRequest servletRequest, Long tagId, Long memberId,
-            Long hospitalId) {
-        jwtStaffAccessService.staffAccessFunction(servletRequest, memberId, hospitalId);
+    public PostTagLinkTagResponse staffTagLink(ServletRequest servletRequest, PostTagStaffLinkTagRequest request) {
+        jwtStaffAccessService.staffAccessFunction(servletRequest, request.getMemberId(), request.getHospitalId());
 
-        Tag tag = tagRepository.findById(tagId)
+        Tag tag = tagRepository.findById(request.getTagId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
-        Hospital hospital = hospitalRepository.findById(hospitalId)
+        Hospital hospital = hospitalRepository.findById(request.getHospitalId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         validateDuplicateLinkTag(tag, hospital);
@@ -39,7 +43,7 @@ public class PostTagService {
         PostTag postTag = PostTag.createPostTag(tag, hospital);
         postTagRepository.save(postTag);
 
-        return postTag.getId();
+        return PostTagLinkTagResponse.from(postTag.getId());
     }
 
     //병원 관계자 등록 태그 삭제
@@ -55,10 +59,10 @@ public class PostTagService {
     }
 
     @Transactional
-    public Long tagLink(Long tagId, Long hospitalId) {
-        Tag tag = tagRepository.findById(tagId)
+    public PostTagLinkTagResponse tagLink(PostTagLinkTagRequest request) {
+        Tag tag = tagRepository.findById(request.getTagId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
-        Hospital hospital = hospitalRepository.findById(hospitalId)
+        Hospital hospital = hospitalRepository.findById(request.getHospitalId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         validateDuplicateLinkTag(tag, hospital);
@@ -66,13 +70,16 @@ public class PostTagService {
         PostTag postTag = PostTag.createPostTag(tag, hospital);
         postTagRepository.save(postTag);
 
-        return postTag.getId();
+        return PostTagLinkTagResponse.from(postTag.getId());
     }
 
-    public List<PostTag> viewHospitalTag(Long hospitalId) {
+    public List<PostTagViewHospitalTagResponse> viewHospitalTag(Long hospitalId) {
         List<PostTag> PostTags = postTagRepository.listPostTag(hospitalId);
+        List<PostTagViewHospitalTagResponse> result = PostTags.stream()
+                .map(p -> PostTagViewHospitalTagResponse.from(p))
+                .collect(Collectors.toList());
 
-        return PostTags;
+        return result;
     }
 
     //관리자 병원 등록 태그 삭제

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.api.dto.staffHospital.StaffHospitalViewResponse;
-import site.hospital.domain.StaffHosInformation;
 import site.hospital.dto.hospital.staff.StaffModifyStaffHosRequest;
 import site.hospital.dto.staffHosInfo.AdminModifyStaffHosRequest;
 import site.hospital.service.StaffHosService;
@@ -24,37 +23,36 @@ public class StaffHosApiController {
 
     //병원 추가 정보 보기(고객)
     @GetMapping("/hospital/staffHosInfo/{staffHosId}")
-    public StaffHospitalViewResponse viewStaffHosInfo(@PathVariable("staffHosId") Long staffHosId) {
-        StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
-        StaffHospitalViewResponse staffHosInfoView = StaffHospitalViewResponse
-                .from(staffHosInformation);
-
-        return staffHosInfoView;
+    public StaffHospitalViewResponse viewStaffHosInfo(
+            @PathVariable("staffHosId") Long staffHosId
+    ) {
+        return staffHosService.viewStaffHosInfo(staffHosId);
     }
 
     //병원 관계자 추가 정보 보기
     @GetMapping("/staff/staffHosInfo/{staffHosId}")
     public StaffHospitalViewResponse staffViewStaffHosInfo(
             @PathVariable("staffHosId") Long staffHosId) {
-        StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
-        StaffHospitalViewResponse staffHosInfoView = StaffHospitalViewResponse
-                .from(staffHosInformation);
-
-        return staffHosInfoView;
+        return staffHosService.viewStaffHosInfo(staffHosId);
     }
 
     //병원 관계자 추가 정보 수정하기
     @PutMapping("/staff/staffHosInfo/modify/{staffHosId}")
-    public void staffModifyStaffHosInfo(ServletRequest servletRequest,
+    public void staffModifyStaffHosInfo(
+            ServletRequest servletRequest,
             @PathVariable("staffHosId") Long staffHosId,
-            @RequestBody @Validated StaffModifyStaffHosRequest request) {
+            @RequestBody @Validated StaffModifyStaffHosRequest request
+    ) {
         staffHosService.staffModifyStaffHosInfo(servletRequest, staffHosId, request);
     }
 
     //병원 관계자 추가 정보 삭제하기
     @DeleteMapping("/staff/{memberId}/staffHosInfo/delete/{staffHosId}")
-    public void staffDeleteStaffHosInfo(ServletRequest servletRequest,
-            @PathVariable("memberId") Long memberId, @PathVariable("staffHosId") Long staffHosId) {
+    public void staffDeleteStaffHosInfo(
+            ServletRequest servletRequest,
+            @PathVariable("memberId") Long memberId,
+            @PathVariable("staffHosId") Long staffHosId
+    ) {
         staffHosService.staffDeleteStaffHosInfo(servletRequest, memberId, staffHosId);
     }
 
@@ -62,17 +60,15 @@ public class StaffHosApiController {
     @GetMapping("/admin/staffHosInfo/{staffHosId}")
     public StaffHospitalViewResponse adminViewStaffHosInfo(
             @PathVariable("staffHosId") Long staffHosId) {
-        StaffHosInformation staffHosInformation = staffHosService.viewStaffHosInfo(staffHosId);
-        StaffHospitalViewResponse staffHosInfoView = StaffHospitalViewResponse
-                .from(staffHosInformation);
-
-        return staffHosInfoView;
+        return staffHosService.viewStaffHosInfo(staffHosId);
     }
 
     //관리자 추가 정보 수정하기
     @PutMapping("/admin/staffHosInfo/modify/{staffHosId}")
-    public void modifyStaffHosInfo(@PathVariable("staffHosId") Long staffHosId,
-            @RequestBody @Validated AdminModifyStaffHosRequest request) {
+    public void modifyStaffHosInfo(
+            @PathVariable("staffHosId") Long staffHosId,
+            @RequestBody @Validated AdminModifyStaffHosRequest request
+    ) {
         staffHosService.adminModifyStaffHosInfo(staffHosId, request);
     }
 

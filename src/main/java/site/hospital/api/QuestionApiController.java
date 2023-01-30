@@ -1,11 +1,9 @@
 package site.hospital.api;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.api.dto.question.QuestionCreateRequest;
 import site.hospital.api.dto.question.QuestionCreateResponse;
-import site.hospital.api.dto.question.QuestionSearchResponse;
-import site.hospital.domain.Question;
-import site.hospital.dto.AdminQuestionSearchCondition;
-import site.hospital.dto.StaffQuestionSearchCondition;
 import site.hospital.repository.question.adminSearchQuery.AdminSearchQuestionDto;
 import site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO;
 import site.hospital.repository.question.userQuery.SearchUserQuestionDTO;
@@ -37,9 +31,7 @@ public class QuestionApiController {
     @PostMapping("/user/hospital/question/register")
     public QuestionCreateResponse createQuestion(
             @RequestBody @Validated QuestionCreateRequest request) {
-        Long id = questionService.questionCreate(request.getMemberId(), request.getHospitalId(),
-                request.getContent());
-        return QuestionCreateResponse.from(id);
+        return questionService.questionCreate(request);
     }
 
     //병원 Question 조회.
@@ -60,49 +52,28 @@ public class QuestionApiController {
     public Page staffSearchQuestions(ServletRequest servletRequest,
             @RequestParam(value = "nickName", required = false) String nickName,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
-            Pageable pageable) {
-        StaffQuestionSearchCondition condition = StaffQuestionSearchCondition.builder()
-                .nickName(nickName).memberIdName(memberIdName).build();
-
-        Page<Question> questions = questionService
-                .staffSearchHospitalQuestion(servletRequest, condition, pageable);
-
-        List<QuestionSearchResponse> result = questions.stream()
-                .map(q -> QuestionSearchResponse.from(q))
-                .collect(Collectors.toList());
-
-        Long total = questions.getTotalElements();
-
-        return new PageImpl<>(result, pageable, total);
+            Pageable pageable
+    ) {
+        return questionService
+                .staffSearchHospitalQuestion(servletRequest, nickName, memberIdName, pageable);
     }
 
     //병원 관계자 답변 없는 Questions 검색
     @GetMapping("/staff/question/noAnswer/search")
-    public Page staffSearchNoQuestion(ServletRequest servletRequest,
+    public Page staffSearchNoQuestion(
+            ServletRequest servletRequest,
             @RequestParam(value = "nickName", required = false) String nickName,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
-            Pageable pageable) {
-        StaffQuestionSearchCondition condition = StaffQuestionSearchCondition.builder()
-                .nickName(nickName).memberIdName(memberIdName).build();
-
-        Page<Question> questions = questionService
-                .staffSearchNoQuestion(servletRequest, condition, pageable);
-
-        List<QuestionSearchResponse> result = questions.stream()
-                .map(q -> QuestionSearchResponse.from(q))
-                .collect(Collectors.toList());
-
-        Long total = questions.getTotalElements();
-
-        return new PageImpl<>(result, pageable, total);
+            Pageable pageable
+    ) {
+        return questionService
+                .staffSearchNoQuestion(servletRequest, nickName, memberIdName, pageable);
     }
 
     //병원 관계자 미답변 question 수 받아오기
     @GetMapping("/staff/question/count")
     public Long staffQuestionNoAnswer(ServletRequest servletRequest) {
-        Long questionCount = questionService.staffQuestionNoAnswer(servletRequest);
-
-        return questionCount;
+        return questionService.staffQuestionNoAnswer(servletRequest);
     }
 
     //관리자 Questions 검색
@@ -111,18 +82,17 @@ public class QuestionApiController {
             @RequestParam(value = "nickName", required = false) String nickName,
             @RequestParam(value = "hospitalName", required = false) String hospitalName,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
-            Pageable pageable) {
-        AdminQuestionSearchCondition condition = AdminQuestionSearchCondition.builder()
-                .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
-
-        return questionService.adminSearchQuestions(condition, pageable);
+            Pageable pageable
+    ) {
+        return questionService.adminSearchQuestions(nickName, hospitalName, memberIdName, pageable);
     }
 
     //관리자 Question 삭제
     @DeleteMapping("/admin/question/delete")
     public void deleteQuestion(
             @RequestParam(value = "questionId", required = false) Long questionId,
-            @RequestParam(value = "answerId", required = false) Long answerId) {
+            @RequestParam(value = "answerId", required = false) Long answerId
+    ) {
         questionService.questionDelete(questionId, answerId);
     }
 

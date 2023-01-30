@@ -4,6 +4,7 @@ import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.api.dto.staffHospital.StaffHospitalViewResponse;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.dto.hospital.staff.StaffModifyStaffHosRequest;
@@ -23,12 +24,12 @@ public class StaffHosService {
     private final JwtStaffAccessService jwtStaffAccessService;
 
     //병원 추가 정보 보기(고객)
-    public StaffHosInformation viewStaffHosInfo(Long staffHosId) {
+    public StaffHospitalViewResponse viewStaffHosInfo(Long staffHosId) {
         StaffHosInformation staffHosInformation = staffHosRepository.findById(staffHosId)
                 .orElseThrow(
                         () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
-        return staffHosInformation;
+        return StaffHospitalViewResponse.from(staffHosInformation);
     }
 
     //병원 관계자 추가 정보 수정
