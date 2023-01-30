@@ -18,7 +18,8 @@ public class AnswerApiController {
     private final AnswerService answerService;
 
     @PostMapping("/staff/question/answer")
-    public AnswerCreateResponse registerAnswer(ServletRequest servletRequest,
+    public AnswerCreateResponse registerAnswer(
+            ServletRequest servletRequest,
             @RequestBody @Validated AnswerCreateRequest request
     ) {
         Long id = answerService

@@ -67,7 +67,8 @@ public class BookmarkApiController {
     //즐겨찾기 조회(사용자)
     @GetMapping("/user/{memberId}/bookmarks")
     public List<BookmarkSearchMemberResponse> searchMemberBookmark(
-            @PathVariable("memberId") Long memberId) {
+            @PathVariable("memberId") Long memberId
+    ) {
         return bookmarkService.searchMemberBookmark(memberId);
     }
 

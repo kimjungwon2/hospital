@@ -4,6 +4,9 @@ import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.api.dto.doctor.DoctorAdminModifyRequest;
+import site.hospital.api.dto.doctor.DoctorCreateResponse;
+import site.hospital.api.dto.doctor.DoctorStaffModifyRequest;
 import site.hospital.domain.Doctor;
 import site.hospital.domain.StaffHosInformation;
 import site.hospital.domain.hospital.Hospital;
@@ -25,7 +28,7 @@ public class DoctorService {
 
     //병원 관계자 doctor 생성
     @Transactional
-    public Long staffCreateDoctor(ServletRequest servletRequest, StaffCreateDoctorRequest request) {
+    public DoctorCreateResponse staffCreateDoctor(ServletRequest servletRequest, StaffCreateDoctorRequest request) {
         //해당 id 값을 가지고 있는 병원 검색
         Hospital hospital = hospitalRepository.findByStaffHosId(request.getStaffHosId());
 
@@ -47,19 +50,27 @@ public class DoctorService {
 
         doctorRepository.save(doctor);
 
-        return doctor.getId();
+        return DoctorCreateResponse.from(doctor.getId());
     }
 
     //병원 관계자 의사 수정
     @Transactional
-    public Long staffModifyDoctor(ServletRequest servletRequest, Long memberId, Long doctorId,
-            Doctor modifyDoctor) {
+    public Long staffModifyDoctor(
+            ServletRequest servletRequest,
+            Long memberId,
+            Long doctorId,
+            DoctorStaffModifyRequest request
+    ) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 의사가 존재하지 않습니다."));
 
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
 
         jwtStaffAccessService.staffAccessFunction(servletRequest, memberId, hospital.getId());
+
+        Doctor modifyDoctor = Doctor.builder()
+                .history(request.getHistory())
+                .name(request.getName()).build();
 
         doctor.modifyDoctor(modifyDoctor);
 
@@ -79,7 +90,7 @@ public class DoctorService {
 
     //doctor 생성
     @Transactional
-    public Long createDoctor(CreateDoctorRequest request) {
+    public DoctorCreateResponse createDoctor(CreateDoctorRequest request) {
         StaffHosInformation staffHosInformation = staffHosRepository
                 .findById(request.getStaffHosId())
                 .orElseThrow(
@@ -91,14 +102,19 @@ public class DoctorService {
 
         doctorRepository.save(doctor);
 
-        return doctor.getId();
+        return DoctorCreateResponse.from(doctor.getId());
     }
 
     //의사 수정
     @Transactional
-    public Long modifyDoctor(Long doctorId, Doctor modifyDoctor) {
+    public Long modifyDoctor(Long doctorId, DoctorAdminModifyRequest request) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 의사가 존재하지 않습니다."));
+
+        Doctor modifyDoctor = Doctor.builder()
+                .history(request.getHistory())
+                .name(request.getName()).build();
+
         doctor.modifyDoctor(modifyDoctor);
 
         return doctor.getId();

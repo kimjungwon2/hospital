@@ -25,45 +25,44 @@ public class DoctorApiController {
 
     //병원 관계자 의사 등록
     @PostMapping("/staff/doctor/register")
-    public DoctorCreateResponse staffSaveDoctor(ServletRequest servletRequest,
-            @RequestBody @Validated StaffCreateDoctorRequest request) {
-        Long id = doctorService.staffCreateDoctor(servletRequest, request);
-        return DoctorCreateResponse.from(id);
+    public DoctorCreateResponse staffSaveDoctor(
+            ServletRequest servletRequest,
+            @RequestBody @Validated StaffCreateDoctorRequest request
+    ) {
+        return doctorService.staffCreateDoctor(servletRequest, request);
     }
 
     //병원 관계자 의사 수정
     @PutMapping("/staff/doctor/modify/{doctorId}")
-    public void staffModifyDoctor(ServletRequest servletRequest,
+    public void staffModifyDoctor(
+            ServletRequest servletRequest,
             @PathVariable("doctorId") Long doctorId,
-            @RequestBody @Validated DoctorStaffModifyRequest request) {
-        Doctor doctor = Doctor.builder()
-                .history(request.getHistory())
-                .name(request.getName()).build();
-
-        doctorService.staffModifyDoctor(servletRequest, request.getMemberId(), doctorId, doctor);
+            @RequestBody @Validated DoctorStaffModifyRequest request
+    ) {
+        doctorService.staffModifyDoctor(servletRequest, request.getMemberId(), doctorId, request);
     }
 
     //병원 관계자 의사 삭제
     @DeleteMapping("/staff/{memberId}/doctor/delete/{doctorId}")
-    public void staffDeleteDoctor(ServletRequest servletRequest,
-            @PathVariable("memberId") Long memberId, @PathVariable("doctorId") Long doctorId) {
+    public void staffDeleteDoctor(
+            ServletRequest servletRequest,
+            @PathVariable("memberId") Long memberId,
+            @PathVariable("doctorId") Long doctorId
+    ) {
         doctorService.staffDeleteDoctor(servletRequest, memberId, doctorId);
     }
 
     @PostMapping("/admin/doctor/register")
     public DoctorCreateResponse saveDoctor(@RequestBody @Validated CreateDoctorRequest request) {
-        Long id = doctorService.createDoctor(request);
-        return DoctorCreateResponse.from(id);
+        return doctorService.createDoctor(request);
     }
 
     @PutMapping("/admin/doctor/modify/{doctorId}")
-    public void modifyDoctor(@PathVariable("doctorId") Long doctorId,
-            @RequestBody @Validated DoctorAdminModifyRequest request) {
-        Doctor doctor = Doctor.builder()
-                .history(request.getHistory())
-                .name(request.getName()).build();
-
-        doctorService.modifyDoctor(doctorId, doctor);
+    public void modifyDoctor(
+            @PathVariable("doctorId") Long doctorId,
+            @RequestBody @Validated DoctorAdminModifyRequest request
+    ) {
+        doctorService.modifyDoctor(doctorId, request);
     }
 
     @DeleteMapping("/admin/doctor/delete/{doctorId}")

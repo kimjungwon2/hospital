@@ -4,6 +4,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.api.dto.estimation.EstimationAdminModifyRequest;
+import site.hospital.api.dto.estimation.EstimationCreateRequest;
+import site.hospital.api.dto.estimation.EstimationCreateResponse;
 import site.hospital.domain.estimation.Estimation;
 import site.hospital.domain.hospital.Hospital;
 import site.hospital.repository.estimation.EstimationRepository;
@@ -19,15 +22,25 @@ public class EstimationService {
 
     //병원 FK 없이 등록
     @Transactional
-    public Long createNoHospitalEstimation(Estimation estimation) {
-        estimationRepository.save(estimation);
+    public EstimationCreateResponse createNoHospitalEstimation(EstimationCreateRequest request) {
+        Estimation estimation = Estimation.builder().cityName(request.getCityName())
+                .hospitalName(request.getHospitalName()).estimationList(request.getEstimationList())
+                .distinctionGrade(request.getDistinctionGrade()).build();
 
-        return estimation.getId();
+        //병원 아이디를 기입 안 할 경우.
+        if (request.getHospitalId() == null) {
+            estimationRepository.save(estimation);
+            return EstimationCreateResponse.from(estimation.getId());
+        } else {
+            createHospitalEstimation(request.getHospitalId(), estimation);
+            return EstimationCreateResponse.from(estimation.getId());
+        }
+
     }
 
     //병원 FK 있을 때, 등록.
     @Transactional
-    public Long createHospitalEstimation(Long hospitalId, Estimation estimation) {
+    private Long createHospitalEstimation(Long hospitalId, Estimation estimation) {
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 병원은 존재하지 않습니다."));
@@ -57,17 +70,14 @@ public class EstimationService {
 
     //평가 수정하기
     @Transactional
-    public void adminModifyEstimation(Long estimationId, Estimation estimation) {
+    public void adminModifyEstimation(Long estimationId, EstimationAdminModifyRequest request) {
+        Estimation estimation = Estimation.builder().distinctionGrade(request.getDistinctionGrade())
+                .estimationList(request.getEstimationList()).build();
+
         Estimation findEstimation = estimationRepository.findById(estimationId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 평가가 존재하지 않습니다."));
 
         findEstimation.modifyEstimation(estimation);
     }
 
-
-    //평가 전체 보기(관리자)
-    public List<Estimation> viewEstimation() {
-        List<Estimation> estimationList = estimationRepository.findAll();
-        return estimationList;
-    }
 }
