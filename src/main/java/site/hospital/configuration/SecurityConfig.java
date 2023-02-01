@@ -35,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //허용 url
     private static final String[] PUBLIC_URI = {
-            "/login", "/signup", "/search/hospital/**", "/search/review/**", "/hospital/view/**",
+            "/api/test/**",
+            "/login", "/signup", "/test/**","/search/hospital/**", "/search/review/**", "/hospital/view/**",
             "/hospital/staffHosInfo/**", "/hospital/review/**",
             "/hospital/question/**"
     };
@@ -86,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // - (3)
-        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("http://3.37.47.173/api");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
