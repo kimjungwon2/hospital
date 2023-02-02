@@ -1,8 +1,10 @@
 package site.hospital.api.dto.review.member;
 
+import lombok.Data;
 import site.hospital.domain.reviewHospital.Recommendation;
 import site.hospital.domain.reviewHospital.ReviewHospital;
 
+@Data
 public class ReviewViewByMemberUserDTO {
     private Long hospitalId;
     private String hospitalName;
