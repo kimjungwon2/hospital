@@ -1,13 +1,19 @@
 package site.hospital.configuration;
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.util.regex.Pattern;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -69,6 +75,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //만들었던 JwtFilter 적용.
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+
+        firewall.setAllowUrlEncodedSlash(true);
+        firewall.setAllowBackSlash(true);
+        firewall.setAllowUrlEncodedPercent(true);
+        firewall.setAllowUrlEncodedPeriod(true);
+        firewall.setAllowSemicolon(true);
+
+        // Allow UTF-8 values
+        Pattern allowed = Pattern.compile("[\\p{IsAssigned}&&[^\\p{IsControl}]]*");
+        firewall.setAllowedHeaderValues((header) -> {
+            String parsed = new String(header.getBytes(ISO_8859_1), UTF_8);
+            return allowed.matcher(parsed).matches();
+        });
+
+        web.httpFirewall(firewall);
     }
 
     //비밀번호 암호화
