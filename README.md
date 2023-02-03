@@ -5,11 +5,11 @@
 </br>
 
 ## 1. 프로젝트 요약 
-![프로젝트 요약](https://user-images.githubusercontent.com/40010165/210128114-d2d8e450-c7cc-4373-9978-c401a92ef01e.png)
+![Project Summary](https://user-images.githubusercontent.com/40010165/216533775-86625161-12c3-4f45-b7f2-4bc8fcd17a9c.png)
 </br>
 
 ## 2. 프로젝트 구조
-![프로젝트 아키텍처](https://user-images.githubusercontent.com/40010165/203363494-6f842235-088b-4124-a2d5-c647fa8c96ff.png)
+![architecture](https://user-images.githubusercontent.com/40010165/216532852-b428aa72-c4da-4ad1-aca3-93b17f6b73c6.png)
 
 ### 2.1. Back-end :mag_right: [구조 확인](https://github.com/kimjungwon2/hospital/tree/4d39e3c12ba04a1de79a0574a1c49897216eaf11/src/main/java/site/hospital)
 <details>
