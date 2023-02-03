@@ -11,38 +11,6 @@
 ## 2. 프로젝트 구조
 ![architecture](https://user-images.githubusercontent.com/40010165/216532852-b428aa72-c4da-4ad1-aca3-93b17f6b73c6.png)
 
-### 2.1. Back-end :mag_right: [구조 확인](https://github.com/kimjungwon2/hospital/tree/4d39e3c12ba04a1de79a0574a1c49897216eaf11/src/main/java/site/hospital)
-<details>
-<summary>패키지 설명</summary>
-<div markdown="1">
-
-- **api**: Controller 계층(애플리케이션).
-- **configuration**: AWS S3, MultiPart, springBoot Security, AuditorAware 설정.
-- **domain**: domain 계층.
-- **dto**: 기존의 도메인을 변형. 계층 간 데이터 교환 역할. 모든 계층에서 사용된다.
-- **exception**: Exception 처리.
-- **jwtToken**: JWT 관리.
-- **repository**: repository 계층.
-- **service**: Service 계층.
-</div>
-</details>
-
-### 2.2. Front-end :mag_right: [구조 확인](https://github.com/kimjungwon2/hospital/tree/4d39e3c12ba04a1de79a0574a1c49897216eaf11/src/frontend/src)
-<details>
-<summary>패키지 설명</summary>
-<div markdown="1">
-
-- **api**: Axios를 통해 서버에 데이터 요청. 
-- **assets**: 사이트에 사용되는 기본 이미지들을 모았습니다.
-- **components**: 페이지들의 구성요소인 컴포넌트들을 보관.
-- **css**: 공통으로 사용되는 css입니다.
-- **routes**: 각각의 url과 vue의 페이지들을 매칭시켜주는 역할.
-- **store**: vue의 store 관련 함수.
-- **utils**: 쿠키, 필터(숫자를 받아 날짜로 변경해주는), 이메일 문자열인지 검증해주는 코드들.
-- **views**: 각각의 페이지들을 모아둔 파일.
-</div>
-</details>
-
 ## 3. ERD 설계
 ![ERD](https://user-images.githubusercontent.com/40010165/194764130-5e4caaff-892f-47a0-a871-78929755aeb7.png)
 <details>
