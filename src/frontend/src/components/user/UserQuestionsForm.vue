@@ -1,20 +1,35 @@
 <template>
-  <div>
-      <ul v-for="contentItem in contentItems" :key="contentItem.questionId">
-        <li @click="routeViewHospital(contentItem)">
-            병원: {{ contentItem.hospitalName }} | 등록 닉네임: {{contentItem.nickName}}
-        </li>
-        <li>
-            질문 내용: {{contentItem.content}}
-        </li>
-        <li v-if="contentItem.answerId !==null">
-            답변 내용: {{contentItem.answerContent}}    
-        </li>
-        <li v-else>
-            <h3>아직 답변이 등록되지 않았습니다.</h3>
-        </li>
-       </ul>
-  </div>
+  <section id="userQuestionLists">
+      <div class="userQuestionLists__item" v-for="contentItem in contentItems" :key="contentItem.questionId">
+        <div class="item__hospitalName" @click="routeViewHospital(contentItem)">
+            <h1>{{ contentItem.hospitalName }}</h1>
+        </div>
+        <div class="item__question">
+            <img src='@/assets/question.png' alt="question" class="question__image">
+            <div class="question__speech-bubble">
+                <p>{{contentItem.content}}</p>
+                <p class="nickName">{{contentItem.nickName}}</p>
+            </div>
+        </div>
+
+
+        <div class="item_answer" v-if="contentItem.answerId !==null">
+            <div class="answer__speech-bubble">
+                {{contentItem.answerContent}}
+                <p class="nickName">병원 관리자</p>
+                
+            </div>
+            <img src='@/assets/answer.png' alt="answer" class="answer__image">    
+        </div>
+        <div class="item_answer" v-else>
+            <div class="answer__speech-bubble">
+                <h3>아직 답변이 등록되지 않았습니다.</h3>
+                <p class="nickName">병원 관리자</p>
+            </div>
+            <img src='@/assets/answer.png' alt="answer" class="answer__image">
+        </div>
+       </div>
+  </section>
 </template>
 
 <script>
@@ -45,5 +60,64 @@ export default {
 </script>
 
 <style>
+.userQuestionLists__item{
+  position:relative;
+  text-align:left;
+  margin-top:20px;
+  margin-bottom:20px;
+  border-bottom: 1px solid #dee2e6!important;
+  padding-bottom: 20px;
+  left:12%;
+  width:73%;
+}
+
+.userQuestionLists__item .item__question{
+  display:flex;
+  margin:32px 0;
+}
+
+
+.item__question .question__image{
+  margin-right:20px;
+  width:100px;
+  height:100px;
+}
+
+.item_answer .answer__image{
+  margin-right:20px;
+  width:100px;
+  height:100px;
+}
+
+.item__question .question__speech-bubble{
+  padding:18px;
+  background-color:#fbceb1;
+  border-radius:20px;
+  word-break:break-all;
+}
+
+.question__speech-bubble .nickName{
+  color:palevioletred;
+  text-align:right;
+}
+
+.item_answer .answer__speech-bubble{
+  padding:18px;
+  background-color:#fbceb1;
+  border-radius:30px;
+  word-break:break-all;
+}
+
+.item_answer{
+  display:flex;
+  margin-left:10px;
+  width:100%;
+  justify-content: flex-end;
+}
+
+.answer__speech-bubble .nickName{
+  color:palevioletred;
+  text-align:right;
+}
 
 </style>

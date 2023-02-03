@@ -1,41 +1,42 @@
 <template>
-  <div>
-      <ul v-for="contentItem in contentItems" :key="contentItem.reviewId">
-        <li @click="routeViewHospital(contentItem)">
+  <section id="myReview">
+      <div class="myReview__content" v-for="contentItem in contentItems" :key="contentItem.reviewId">
+        
+        <div @click="routeViewHospital(contentItem)">
             {{ contentItem.reviewHospitals[0].hospitalName }} | 
             <span v-if="contentItem.authenticationStatus !==null">인증 상태: {{contentItem.authenticationStatus}}</span>
             <span v-else>인증 NO</span>
-        </li>
-        <li>
+        </div>
+        <div>
             질병: {{ contentItem.reviewHospitals[0].disease }} | 등록일: {{contentItem.createdDate|formatDate}}
-        </li>
-        <li>
+        </div>
+        <div>
             리뷰 내용: {{ contentItem.reviewHospitals[0].content }}
-        </li>
+        </div>
         <h4>평가 내역</h4>
-        <li>
+        <div>
             추천/비추천: {{ contentItem.reviewHospitals[0].recommendationStatus }}
-        </li>
-        <li>
+        </div>
+        <div>
             청결: {{ contentItem.reviewHospitals[0].cleanliness }}
-        </li>
-        <li>
+        </div>
+        <div>
             친절함: {{ contentItem.reviewHospitals[0].kindness }}
-        </li>
-        <li>
+        </div>
+        <div>
             가격: {{ contentItem.reviewHospitals[0].sumPrice }}
-        </li>
-        <li>
+        </div>
+        <div>
             증상 완화: {{ contentItem.reviewHospitals[0].symptomRelief }}
-        </li>
-        <li>
+        </div>
+        <div>
             대기 시간: {{ contentItem.reviewHospitals[0].waitTime }}
-        </li>
-        <li>
+        </div>
+        <div>
             평균 점수: {{ contentItem.reviewHospitals[0].averageRate }}
-        </li>
-       </ul>
-  </div>
+        </div>
+       </div>
+  </section>
 </template>
 
 <script>
@@ -67,5 +68,19 @@ export default {
 </script>
 
 <style>
+#myReview{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+}
+
+.myReview__content{
+    margin-top:20px;
+    display:flex;
+    margin-bottom:20px;
+    border-bottom: 1px solid #dee2e6!important;
+    padding-bottom: 20px;
+}
 
 </style>

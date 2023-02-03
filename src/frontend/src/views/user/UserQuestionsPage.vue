@@ -1,8 +1,7 @@
 <template>
-  <div>
-      <h1>질문 목록</h1>
-      <UserQuestionsForm></UserQuestionsForm>
-  </div>
+    <div>
+        <UserQuestionsForm></UserQuestionsForm>
+    </div>
 </template>
 
 <script>
@@ -17,5 +16,6 @@ export default {
 </script>
 
 <style>
+
 
 </style>

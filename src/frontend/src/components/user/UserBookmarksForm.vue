@@ -1,17 +1,17 @@
 <template>
-  <div>
-      <ul v-for="contentItem in contentItems" :key="contentItem.bookmarkId">
-        <li @click="routeViewHospital(contentItem)">
-            {{ contentItem.hospitalName }} | 상태: {{contentItem.businessCondition}}
-        </li>
-        <li>
+  <section id="bookmarkLists">
+      <div class = "bookmarkLists__hospital" @click="routeViewHospital (contentItem)" v-for="contentItem in contentItems" :key="contentItem.bookmarkId">
+        <div class = "hospital__item" >
+            {{ contentItem.hospitalName }}({{contentItem.businessCondition}})
+        </div>
+        <div class = "hospital__item">
             진료 과목:{{contentItem.medicalSubjectInformation}}
-        </li>
-        <li>
+        </div>
+        <div class = "hospital__item">
             등록일: {{contentItem.createTime|formatDate}}
-        </li>
-       </ul>
-  </div>
+        </div>
+      </div>
+  </section>
 </template>
 
 <script>
@@ -43,5 +43,22 @@ export default {
 </script>
 
 <style>
+.bookmarkLists__hospital{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+  margin-top:10px;
+  border-top: 1px solid #dee2e6!important;
+  border-bottom: 1px solid #dee2e6!important;
+}
+
+.bookmarkLists__hospital .hospital__item{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+  margin-top:10px;
+}
 
 </style>

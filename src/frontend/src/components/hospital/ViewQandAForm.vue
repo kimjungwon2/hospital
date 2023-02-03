@@ -1,6 +1,9 @@
 <template>
   <section v-if="this.staffHosInfoId!==null" id="QandA">
-    <button v-if="isLogin || isStaff || isAdmin" @click.prevent="routeRegisterQuestion">질문 작성</button>
+    <button class="functionBox__writeQuestion" v-if="isLogin || isStaff || isAdmin" @click.prevent="routeRegisterQuestion">
+      <font-awesome-icon icon="pen"/> 질문 작성
+    </button>
+
     <div class="QandA" v-for="QandA in QandAs" :key="QandA.reviewId">
         <div class="question">
             <img src='@/assets/question.png' alt="question" class="question__image">
@@ -12,14 +15,14 @@
         <div class="answer" v-if="QandA.answerId!==null">
             <div class="answer__speech-bubble">
               <p>{{QandA.answerContent}}</p>
-              <p class="nickName">관리자</p>
+              <p class="nickName">병원 관리자</p>
             </div>
             <img src='@/assets/answer.png' alt="answer" class="answer__image">
         </div>
         <div class="answer" v-else>
             <div class="answer__speech-bubble"> 
               <h4>답변 대기중</h4>
-              <p class="nickName">관리자</p>
+              <p class="nickName">병원 관리자</p>
             </div>
             <img src='@/assets/answer.png' alt="answer" class="answer__image">
         </div>
@@ -31,7 +34,11 @@
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core';
 import { viewHospitalQandA } from '@/api/hospital';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faPen);
 
 export default {
   props: {
@@ -103,6 +110,16 @@ export default {
 .question__speech-bubble .nickName{
   color:palevioletred;
   text-align:right;
+}
+
+.functionBox__writeQuestion{
+  background-color:#b0b8fb; 
+  color: white; 
+  font-size: 15px; 
+  height: 32px; 
+  line-height: 32px;
+  margin-right:10px;
+  border-radius:10px;
 }
 
 
