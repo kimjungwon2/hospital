@@ -86,9 +86,11 @@ public class ReviewHospital extends BaseTimeEntity {
         //리뷰 병원 등록
         ReviewHospital reviewHospital = ReviewHospital.builder()
                 .hospital(hospital)
-                .content(reviewHospitalDTO.getContent()).disease(reviewHospitalDTO.getDisease())
+                .content(reviewHospitalDTO.getContent())
+                .disease(reviewHospitalDTO.getDisease())
                 .evCriteria(evaluationCriteria)
-                .recommendationStatus(reviewHospitalDTO.getRecommendationStatus()).build();
+                .recommendationStatus(reviewHospitalDTO.getRecommendationStatus())
+                .build();
 
         return reviewHospital;
     }

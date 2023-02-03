@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.api.dto.staffHospital.StaffHospitalViewResponse;
 import site.hospital.dto.hospital.staff.StaffModifyStaffHosRequest;
@@ -16,6 +17,7 @@ import site.hospital.service.StaffHosService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class StaffHosApiController {
 
     private final StaffHosService staffHosService;

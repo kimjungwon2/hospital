@@ -1,13 +1,19 @@
 package site.hospital.configuration;
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.util.regex.Pattern;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,9 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //허용 url
     private static final String[] PUBLIC_URI = {
-            "/login", "/signup", "/search/hospital/**", "/search/review/**", "/hospital/view/**",
-            "/hospital/staffHosInfo/**", "/hospital/review/**",
-            "/hospital/question/**","/test"
+            "/api/test/**",
+            "/api/login", "/api/signup", "/api/search/hospital/**", "/api/search/review/**", "/api/hospital/view/**",
+            "/api/hospital/staffHosInfo/**", "/api/hospital/review/**",
+            "/api/hospital/question/**"
     };
 
     @Override
@@ -70,6 +77,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(new JwtSecurityConfig(tokenProvider));
     }
 
+    @Override
+    public void configure(WebSecurity web) {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+
+        firewall.setAllowUrlEncodedSlash(true);
+        firewall.setAllowBackSlash(true);
+        firewall.setAllowUrlEncodedPercent(true);
+        firewall.setAllowUrlEncodedPeriod(true);
+        firewall.setAllowSemicolon(true);
+
+        // Allow UTF-8 values
+        Pattern allowed = Pattern.compile("[\\p{IsAssigned}&&[^\\p{IsControl}]]*");
+        firewall.setAllowedHeaderValues((header) -> {
+            String parsed = new String(header.getBytes(ISO_8859_1), UTF_8);
+            return allowed.matcher(parsed).matches();
+        });
+
+        web.httpFirewall(firewall);
+    }
+
     //비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -86,6 +113,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // - (3)
+        configuration.addAllowedOrigin("http://3.37.47.173");
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

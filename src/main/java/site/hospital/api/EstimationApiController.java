@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.api.dto.estimation.EstimationAdminModifyRequest;
 import site.hospital.api.dto.estimation.EstimationCreateRequest;
@@ -15,6 +16,7 @@ import site.hospital.service.EstimationService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class EstimationApiController {
 
     private final EstimationService estimationService;

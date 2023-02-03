@@ -75,7 +75,7 @@ public class ReviewService {
                 .saveReviewHospital(hospital, reviewHospital);
 
         //리뷰 생성
-        Review review = Review.createReview(member, reviewHospital);
+        Review review = Review.createReview(member, createdReviewHospital);
         reviewRepository.save(review);
 
         //영수증 파일 저장.

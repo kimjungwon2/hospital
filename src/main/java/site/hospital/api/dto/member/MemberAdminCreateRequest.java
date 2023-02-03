@@ -22,6 +22,5 @@ public class MemberAdminCreateRequest {
     private String phoneNumber;
     @NotNull(message = "권한을 넣어주세요.")
     private MemberStatus memberStatus;
-    @NotNull(message = "병원 번호를 넣어주세요.")
     private Long hospitalId;
 }
