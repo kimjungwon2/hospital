@@ -22,74 +22,46 @@
                     <div class="item__title">가격</div>
                     <div class="item__number">
                         <span v-if="review.reviewHospitals[0].sumPrice==10">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 5" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==9">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==8">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==7">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==6">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==5">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==4">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==3">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==2">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].sumPrice==1">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                     </div>
                 </div>
@@ -97,74 +69,46 @@
                     <div class="item__title">친절함</div>
                     <div class="item__number">
                     <span v-if="review.reviewHospitals[0].kindness==10">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 5" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==9">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==8">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==7">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==6">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==5">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==4">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==3">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==2">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].kindness==1">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                     </div>
                 </div>
@@ -172,74 +116,46 @@
                     <div class="item__title">증상완화</div>
                     <div class="item__number">
                         <span v-if="review.reviewHospitals[0].symptomRelief==10">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 5" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==9">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==8">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==7">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==6">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==5">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==4">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==3">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==2">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].symptomRelief==1">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                     </div>
                 </div>
@@ -247,74 +163,46 @@
                     <div class="item__title">청결</div>
                     <div class="item__number">
                         <span v-if="review.reviewHospitals[0].cleanliness==10">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 5" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==9">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==8">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==7">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==6">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==5">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==4">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==3">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==2">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].cleanliness==1">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                     </div>
                 </div>
@@ -322,74 +210,46 @@
                     <div class="item__title">대기시간</div>
                     <div class="item__number">
                         <span v-if="review.reviewHospitals[0].waitTime==10">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 5" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==9">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==8">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 4" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==7">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
                             <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==6">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==5">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==4">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 2" :key="count" src='@/assets/꽉찬별.png' alt="star" class="number__star">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==3">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 3" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==2">
                             <img src='@/assets/꽉찬별.png' alt="star" class="number__star">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                         <span v-else-if="review.reviewHospitals[0].waitTime==1">
                             <img src='@/assets/반쪽별.png' alt="star" class="number__halfStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
-                            <img src='@/assets/빈별.png' alt="star" class="number__voidStar">
+                            <img v-for="count in 4" :key="count" src='@/assets/빈별.png' alt="star" class="number__voidStar">
                         </span>
                     </div>
                 </div>

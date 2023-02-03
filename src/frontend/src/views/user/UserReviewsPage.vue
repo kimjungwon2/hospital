@@ -1,6 +1,5 @@
 <template>
   <div>
-      <h1>리뷰 목록</h1>
       <UserReviewsForm></UserReviewsForm>
   </div>
 </template>
