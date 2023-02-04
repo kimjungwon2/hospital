@@ -1,11 +1,11 @@
 <template>
-<div>
-   <div class="staff__hospital__categories">
+<section id="staffModifyHospitalImages">
+   <section class="staffModifyHospital__categories">
     <button class="hospital__category__btn" @click.prevent=viewHospital> 병원 정보 </button>
     <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
     <button class="hospital__category__btn" @click.prevent="viewThumbnail"> 병원 섬네일 </button>
     <button class="hospital__category__btn" > 병원 이미지</button>
-  </div>
+  </section>
 
 
   <section id="imageUpload">
@@ -25,9 +25,9 @@
      
      <div v-else class="imageUpload__image-notice">
         <ul class="imageUpload__image-wrapper">
-            <li>가로 사이즈는 600px, 세로 사이즈는 200px인 사진을 권고합니다.</li>
-            <li>최대 높이는 200px로 나옵니다.</li>
-            <li>사진 용량은 사진 한 장당 10MB 까지 등록이 가능합니다.</li>
+                <li>실내 병원 이미지를 여러 개 등록할 수 있습니다.</li>
+                <li>너무 사이즈가 큰 사진은 지양해주세요.</li>
+                <li>이미지 파일만 등록이 가능합니다.</li>
         </ul>
     </div>
 
@@ -59,7 +59,7 @@
         <button class ="imageUpload__image-button" type="submit">등록</button>
     </form>
   </section>
-</div>
+</section>
 </template>
 
 <script>
@@ -162,6 +162,7 @@ export default {
             }
             data.append("hospitalId",this.$route.query.hospitalId);
             await staffCreateHospitalImage(data);
+            this.$router.push(`/staff/view/hospital`);
             this.$router.go();
         },
 
@@ -198,6 +199,48 @@ export default {
 </script>
 
 <style>
+#staffModifyHospitalImages{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+}
+
+#staffModifyHospitalImages .staffModifyHospital__categories .hospital__category__btn.active,
+#staffModifyHospitalImages .staffModifyHospital__categories .hospital__category__btn:hover{
+  background-color:#006ab0;
+  color:white;
+}
+
+#staffModifyHospitalImages .staffModifyHospital__categories .hospital__category__btn{
+  border-top: 1px solid #dee2e6!important;
+  border-bottom: 1px solid #dee2e6!important;
+  margin:5px;
+  width: 20%;
+  font-size:14px;
+  border-radius: 4px;
+  padding: 8px 48px;
+  size:35px;
+  height:50px;
+}
+
+#staffModifyHospitalImages .staffModifyHospital__categories{
+  margin-left:12%;
+  margin-top:1%;
+  margin-bottom:1%;
+  position: relative;
+  text-align: left;
+}
+
+#staffModifyHospitalImages .imageUpload__image-button{
+    width:100%;
+    height:40px;
+    cursor: pointer;
+    background-color:#006ab0;
+    color:white;
+    border-radius: 20px;
+}
+
 .image__hospital{
     width:600px;
     height:200px;

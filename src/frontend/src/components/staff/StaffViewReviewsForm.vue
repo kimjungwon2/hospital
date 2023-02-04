@@ -1,13 +1,13 @@
 <template>
-  <div>
-    등록된 리뷰 갯수: {{reviews.totalElements}}<br>
+  <section id="staffViewReviews">
+    등록된 리뷰 수: {{reviews.totalElements}}<br>
     <form @submit.prevent="submitForm">
             <select name="searchCondition" v-model="searchCondition">
                   <option value="memberIdName">아이디</option>
                   <option value="nickName" >닉네임</option>
             </select>
         <input id="keyword" type="text" v-model="keyword"/><button type="submit">검색하기</button>
-	</form>
+	  </form>
 
     <ul v-for="review in reviews.content" :key="review.reviewId" >
       <div>
@@ -29,7 +29,7 @@
         다음
       </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -108,5 +108,11 @@ export default {
 </script>
 
 <style>
+#staffViewReviews{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;    
+}
 
 </style>

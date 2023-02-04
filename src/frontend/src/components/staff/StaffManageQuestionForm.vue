@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section id="questionAndAnswer">
     <form @submit.prevent="submitForm">
             <select name="searchCondition" v-model="searchCondition">
                   <option value="nickName">닉네임</option>
@@ -43,7 +43,7 @@
         다음
       </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -153,5 +153,12 @@ export default {
 </script>
 
 <style>
+
+#questionAndAnswer{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;  
+}
 
 </style>

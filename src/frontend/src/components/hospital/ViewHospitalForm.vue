@@ -47,8 +47,6 @@
                     <div class="hospital__content">{{ hospital.numberPatientRoom}}</div>
                 </div>
           </div>
-          
-
       </section>
 
       <section class="hospitalInformation__estimation" v-if="estimations.length===0">
@@ -125,7 +123,7 @@
                     <span class="sort__explanation"><font-awesome-icon icon="question-circle" /></span>
                     <p class="sort__arrox-box">등급 숫자가 작을수록 처방전당 약품목수가 적은 의료기관입니다.</p>
                   </div>
-                  <div class="item__grade">
+              <div class="item__grade">
                       {{estimation.distinctionGrade}}
                       <span class="sort__explanation"><font-awesome-icon icon="question-circle" /></span>
                         <div class="sort__arrox-box">

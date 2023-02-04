@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section id="staffViewBookmarkUser">
     즐겨찾기한 유저 수: {{users.totalElements}}<br>
     <form @submit.prevent="submitForm">
             <select name="searchCondition" v-model="searchCondition">
@@ -28,7 +28,7 @@
         다음
       </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -106,5 +106,11 @@ export default {
 </script>
 
 <style>
+#staffViewBookmarkUser{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;    
+}
 
 </style>

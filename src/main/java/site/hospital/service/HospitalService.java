@@ -252,6 +252,7 @@ public class HospitalService {
     }
 
     //병원 관계자 병원 추가 정보 등록
+    @Transactional
     public HospitalResponse staffCreateStaffHosInfo(
             ServletRequest servletRequest,
             HospitalManagerCreateStaffHosInfoRequest request

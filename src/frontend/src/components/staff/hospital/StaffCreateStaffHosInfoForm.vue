@@ -1,35 +1,64 @@
 <template>
+<section id="staffCreateStaffHosInfo">
     <form @submit.prevent="submitForm">
-        <div>
-            <label for="introduction">소개문:</label>
-            <input id="introduction" type="text" required v-model="introduction">
-        </div>
-        <div>
-            <label for="consultationHour">영업 시간:</label>
-            <input id="consultationHour" type="text" required v-model="consultationHour">
-        </div>
-        <div>
-            <label for="abnormality">특이 사항:</label>
-            <input id="abnormality" type="text" required v-model="abnormality">
-        </div>
-        <h2>의사 {{doctorNumber}}</h2>
-        <div v-if="doctorNumber!==0">
-            <div v-for="n in doctorNumber" :key="n">
-                <p>의사 {{n}}</p>
-                <div>
-                    <label for="name">이름:</label>
-                    <input id="name" type="text" required v-model="name[n-1]">
-                </div>
-                <div>
-                    <label for="history">이력:</label>
-                    <input id="history" type="text" required v-model="history[n-1]">
+        <section class="staffCreateStaffHosInfo__introduction">
+            <div class="introduction__title">
+                <label for="introduction"><b>소개문</b></label>
+            </div>
+            <div class="introduction__content">
+                <textarea id="introduction" type="text" required v-model="introduction"></textarea>
+            </div>
+        </section>
+
+        <section class="staffCreateStaffHosInfo__businessHours">
+            <div class="businessHours__title">
+                <label for="businessHours"><b>영업 시간</b></label>
+            </div>
+            <div class="businessHours__content">
+                <textarea id="businessHours" type="text" required v-model="consultationHour"></textarea>
+            </div>
+        </section>
+
+        <section class="staffCreateStaffHosInfo__remarks">
+            <div class="remarks__title">
+                <label for="remarks"><b>특이 사항</b></label>
+            </div>
+            <div class="remarks__content">
+                <textarea id="remarks" type="text" required v-model="abnormality"></textarea>
+            </div>
+        </section>
+
+        <section class="staffCreateStaffHosInfo__doctors">
+            <h2>의사 {{doctorNumber}}</h2>
+            <div class="doctors__item" v-if="doctorNumber!==0">
+                <div class="item__doctor" v-for="n in doctorNumber" :key="n">
+                    <b>의사 {{n}}</b>
+                    <div class="doctor__name">
+                        <label for="name"><b>이름: </b></label>
+                        <input id="name" type="text" required v-model="name[n-1]">
+                    </div>
+                    <div class="doctor__history">
+                        <div class="history__title">
+                            <label for="history"><b>이력</b></label>
+                        </div>
+                        <div class="history__content">
+                            <textarea id="history" type="text" required v-model="history[n-1]"/>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <button @click.prevent="addDoctor">의사 추가하기</button><br>
-        <button v-if="doctorNumber>0" @click.prevent="minusDoctor">의사 제거</button><br>
-        <button type="submit">정보 등록하기</button>
+
+            <div class="doctrs__button">
+                <button id="button__add" @click.prevent="addDoctor">의사 추가하기</button><br>
+                <button id="button__delete" v-if="doctorNumber>0" @click.prevent="minusDoctor">의사 제거</button><br>
+            </div>
+        </section>
+
+        <section class="staffCreateStaffHosInfo__registerButton">
+            <button id="staffHosInfo" type="submit">정보 등록하기</button>
+        </section>
     </form>
+</section>
 </template>
 
 <script>
@@ -100,5 +129,82 @@ export default {
 </script>
 
 <style>
+#staffCreateStaffHosInfo{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+  bottom:-50px;
+}
+
+.introduction__content #introduction{
+    width:100%;
+    height:150px;
+    border-radius: 10px;
+}
+
+.businessHours__content #businessHours{
+    width:100%;
+    height:50px;
+    border-radius: 10px;
+}
+
+.remarks__content #remarks{
+    width:100%;
+    height:150px;
+    border-radius: 10px;
+}
+
+.staffCreateStaffHosInfo__registerButton{
+    position:relative;
+    bottom:-25px;
+    text-align:right;
+}
+
+.staffCreateStaffHosInfo__doctors{
+    border-top: 1px solid #dee2e6!important;
+      position:relative;
+      bottom:-15px;
+}
+
+.doctrs__button{
+    text-align: center;
+}
+
+.doctrs__button #button__add{
+  
+  background-color:#0067a3; 
+  color: white; 
+  font-size: 15px; 
+  height: 32px; 
+  line-height: 32px;
+  margin-right:10px;
+  border-radius:10px;
+}
+
+.doctrs__button #button__delete{
+  position:relative;
+  bottom:-8px;
+  background-color:#0067a3; 
+  color: white; 
+  font-size: 15px; 
+  height: 32px; 
+  line-height: 32px;
+  margin-right:10px;
+  border-radius:10px;
+}
+
+.staffCreateStaffHosInfo__registerButton #staffHosInfo{
+    background-color:#b0b8fb; 
+    color: white; 
+    border-radius:10px;
+    height:30px;
+}
+
+.history__content #history{
+    width:100%;
+    height:70px;
+    border-radius: 10px;
+}
 
 </style>

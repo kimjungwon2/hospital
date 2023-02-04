@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <div class="staff__hospital__categories">
+  <section id="staffModifyThumbnail">
+    <section class="staffModifyHospital__categories">
         <button class="hospital__category__btn" @click.prevent=viewHospital> 병원 정보 </button>
         <button class="hospital__category__btn" @click.prevent="viewStaffHospital"> 추가 병원 정보 </button>
         <button class="hospital__category__btn"> 병원 섬네일 </button>
         <button class="hospital__category__btn" @click.prevent="viewHospitalImage"> 병원 이미지</button>
-    </div>
-     <h1>이미지 섬네일 업로드</h1>
+    </section>
 
     <!-- 섬네일이 없는 경우 -->
-    <div v-if="thumbnailId===null">
+    <section v-if="thumbnailId===null">
         <div class="image-notice">
                 <ul class="image-wrapper">
-                    <li>
-                        너무 사이즈가 큰 사진은 지양해주세요. (가로 사이즈 최소 800px)
-                    </li>
-                    <li>사진 용량은 사진 한 장당 10MB 까지 등록이 가능합니다.</li>
+                    <li>섬네일 이미지라 하나만 등록이 가능합니다.</li>
+                    <li>너무 사이즈가 큰 사진은 지양해주세요.</li>
+                    <li>이미지 파일만 등록이 가능합니다.</li>
                 </ul>
             </div>
 
@@ -43,16 +41,16 @@
 
                 <button class ="image-button" type="submit">등록</button>
             </form>
-    </div>
+    </section>
 
     <!--등록된 섬네일 보기 -->
-    <div v-else>
+    <section v-else>
         <h3>등록된 섬네일</h3>
-        <img :src="imageUrl"/>
+        <img :src="imageUrl"/><br>
         <button @click.prevent="deleteThumbnail(thumbnailId)">이미지 삭제</button>
-    </div>
+    </section>
 
-  </div>
+  </section>
 </template>
 
 <script>
@@ -118,6 +116,7 @@ export default {
 
             //페이지 이동
             this.$router.push(`/staff/view/hospital`);
+            this.$router.go();
         },
 
         //섬네일 삭제 버튼
@@ -145,6 +144,39 @@ export default {
 </script>
 
 <style>
+#staffModifyThumbnail{
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+}
+
+#staffModifyThumbnail .staffModifyHospital__categories .hospital__category__btn.active,
+#staffModifyThumbnail .staffModifyHospital__categories .hospital__category__btn:hover{
+  background-color:#006ab0;
+  color:white;
+}
+
+#staffModifyThumbnail .staffModifyHospital__categories .hospital__category__btn{
+  border-top: 1px solid #dee2e6!important;
+  border-bottom: 1px solid #dee2e6!important;
+  margin:5px;
+  width: 20%;
+  font-size:14px;
+  border-radius: 4px;
+  padding: 8px 48px;
+  size:35px;
+  height:50px;
+}
+
+#staffModifyThumbnail .staffModifyHospital__categories{
+  margin-left:12%;
+  margin-top:1%;
+  margin-bottom:1%;
+  position: relative;
+  text-align: left;
+}
+
 .image-dropper{
     border: 1px dashed green;
     height: 200px;
@@ -171,10 +203,13 @@ export default {
     transition:0.5s;
 }
 
-.image-button{
+#staffModifyThumbnail .image-button{
     width:100%;
     height:40px;
     cursor: pointer;
+    background-color:#006ab0;
+    color:white;
+    border-radius: 20px;
 }
 
 .image-notice {

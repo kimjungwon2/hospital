@@ -2,7 +2,7 @@
   <section id="myReview" v-if="contentItems.length!==0">
       <div class="myReview__content" v-for="contentItem in contentItems" :key ="contentItem.reviewId">
           <div class="content__leftBox">
-              <div @click="routeViewHospital(contentItem)" class="leftBox__nickName">
+              <div @click="routeViewHospital(contentItem)" class="leftBox__hospitalName">
                 병원: {{contentItem.reviewHospitals[0].hospitalName}}
               </div>
               <div class="leftBox__sumRating">
@@ -331,7 +331,7 @@ export default {
     padding-bottom: 20px;
 }
 
-.myReview__content .leftBox__nickName{
+.myReview__content .leftBox__hospitalName{
     text-align:center;
     letter-spacing: -0.9px;
     color: #000000;  
