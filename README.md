@@ -4,7 +4,7 @@
 >사이트 주소: http://3.37.47.173/ </br>
 
 - 병원 관계자(엘병원) 계정: ID = manager53@naver.com. PW = aoslwj5. </br>
-- 관리자 계정: mac20010@naver.com 메일로 요청하시면 아이디와 패스워드를 제공하겠습니다.</br>
+- 관리자 계정: 악용을 방지하기 위해서 mac20010@naver.com 메일로 요청하시면 아이디와 패스워드를 제공하겠습니다.</br>
 
 ## 1. 프로젝트 요약 
 ![Project Summary](https://user-images.githubusercontent.com/40010165/216533775-86625161-12c3-4f45-b7f2-4bc8fcd17a9c.png)
