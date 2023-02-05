@@ -1,6 +1,6 @@
 # :pushpin: 병원 조회 웹사이트
 >병원 정보, 위치(지도), 리뷰, Q&A 등의 기능이 있는 웹사이트. </br>
->[경기데이터드림](https://data.gg.go.kr/portal/mainPage.do)의 DB를 활용하여 남양주시와 의정부시의 병원 정보를 기재했습니다. 
+>[경기데이터드림](https://data.gg.go.kr/portal/mainPage.do)의 DB를 활용하여 남양주시와 의정부시의 병원 정보를 기재했습니다.</br> 
 >사이트 주소: http://3.37.47.173/ </br>
 
 - 병원 관계자(엘병원) 계정: ID = manager53@naver.com. PW = aoslwj5. </br>
