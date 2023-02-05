@@ -1,26 +1,35 @@
 <template>
   <section id="staffViewReviews">
-    등록된 리뷰 수: {{reviews.totalElements}}<br>
-    <form @submit.prevent="submitForm">
-            <select name="searchCondition" v-model="searchCondition">
-                  <option value="memberIdName">아이디</option>
-                  <option value="nickName" >닉네임</option>
-            </select>
-        <input id="keyword" type="text" v-model="keyword"/><button type="submit">검색하기</button>
-	  </form>
+    <section class="staffViewReviews__count">
+      <h1>등록된 리뷰 수: {{reviews.totalElements}}</h1><br><br>
+    </section>
 
-    <ul v-for="review in reviews.content" :key="review.reviewId" >
-      <div>
-        <li @click="routeStaffViewReview(review.reviewId)">리뷰 번호: {{ review.reviewId }} </li>
-        <li>작성 아이디: {{ review.memberIdName}}</li>
-        <li>작성 닉네임: {{ review.nickName }}</li>
-        <li>인증 상태: {{ review.reviewAuthentication}}</li>
-        <li>좋아요 수: {{ review.reviewLike.length}}</li>
-        <li>평균 평가: {{ review.reviewHospitals[0].averageRate}}</li>
+    <section class="staffViewReviews__search">
+      <form @submit.prevent="submitForm">
+              <select name="searchCondition" v-model="searchCondition">
+                    <option value="memberIdName">아이디</option>
+                    <option value="nickName" >닉네임</option>
+              </select>
+          <input id="keyword" type="text" v-model="keyword"/>
+          <button type="submit">
+            <font-awesome-icon icon="search"/>
+          </button>
+          <br><br>
+	    </form>
+    </section>
+
+    <section class="staffViewReviews__review">
+      <div class="review__item" v-for="review in reviews.content" :key="review.reviewId" @click="routeStaffViewReview(review.reviewId)">
+          리뷰 번호: {{ review.reviewId }} <br>
+          작성 아이디: {{ review.memberIdName}}<br>
+          작성 닉네임: {{ review.nickName }}<br>
+          평균 평가: {{ review.reviewHospitals[0].averageRate}}<br>
+          인증 상태: {{ review.reviewAuthentication}}<br>
+          좋아요 수: {{ review.reviewLike.length}}
       </div>
-    </ul>
+    </section>
 
-    <div>
+    <section class="staffViewReviews__page" v-if="totalPageNum!==0">
       <button :disabled="pageNum === 0" @click.prevent="prevPage">
         이전
       </button>
@@ -28,12 +37,15 @@
       <button :disabled="pageNum >= totalPageNum - 1" @click.prevent="nextPage">
         다음
       </button>
-    </div>
+    </section>
   </section>
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { staffSearchReviewLists} from '@/api/staff';
+library.add(faSearch)
 
 export default {
    data() {
@@ -113,6 +125,28 @@ export default {
   text-align:left;
   left:12%;
   width:73%;    
+}
+
+#staffViewReviews .staffViewReviews__count{
+  text-align: center;
+}
+
+#staffViewReviews .staffViewReviews__search{
+  text-align: center;
+}
+
+.staffViewReviews__page{
+  text-align: center;
+}
+
+.staffViewReviews__review .review__item{
+  margin-bottom: 20px;
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+  border: 2px solid #0067a3;
+  border-radius:10px;
 }
 
 </style>

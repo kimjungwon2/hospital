@@ -17,7 +17,6 @@
             <div class="answer__speech-bubble">
                 {{contentItem.answerContent}}
                 <p class="nickName">병원 관리자</p>
-                
             </div>
             <img src='@/assets/answer.png' alt="answer" class="answer__image">    
         </div>

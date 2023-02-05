@@ -1,24 +1,33 @@
 <template>
   <section id="staffViewBookmarkUser">
-    즐겨찾기한 유저 수: {{users.totalElements}}<br>
-    <form @submit.prevent="submitForm">
-            <select name="searchCondition" v-model="searchCondition">
-                  <option value="nickName">닉네임</option>
-                  <option value="memberIdName" >회원 아이디</option>
-                  <option value="phoneNumber" >전화번호</option>
-            </select>
-        <input id="keyword" type="text" required  v-model="keyword"/><button type="submit">검색하기</button>
-	</form>
+    <section class="staffViewBookmarkUser__count">
+      <h1>즐겨찾기한 유저 수: {{users.totalElements}}</h1><br><br>
+    </section>
 
-    <ul v-for="user in users.content" :key="user.bookmarkId" >
-      <div>
-        <li>아이디: {{ user.memberIdName}}</li>
-        <li>닉네임: {{ user.nickName }}</li>
-        <li>전화번호: {{ user.phoneNumber}}</li>
+    <section class="staffViewBookmarkUser__search">
+      <form @submit.prevent="submitForm">
+              <select name="searchCondition" v-model="searchCondition">
+                    <option value="nickName">닉네임</option>
+                    <option value="memberIdName" >회원 아이디</option>
+                    <option value="phoneNumber" >전화번호</option>
+              </select>
+          <input id="keyword" type="text" required  v-model="keyword"/>
+          <button type="submit">
+            <font-awesome-icon icon="search"/>
+          </button>
+          <br><br>
+	    </form>
+    </section>
+
+    <section class="staffViewBookmarkUser__user">
+      <div class="user__item" v-for="user in users.content" :key="user.bookmarkId" >
+          <b>아이디</b> {{ user.memberIdName}}<br>
+          <b>닉네임</b> {{ user.nickName }}<br>
+          <b>전화번호</b> {{ user.phoneNumber}}<br>
       </div>
-    </ul>
+    </section>
 
-    <div>
+    <section class="staffViewBookmarkUser__page" v-if="totalPageNum!==0">
       <button :disabled="pageNum === 0" @click.prevent="prevPage">
         이전
       </button>
@@ -27,12 +36,15 @@
       <button :disabled="pageNum >= totalPageNum - 1" @click.prevent="nextPage">
         다음
       </button>
-    </div>
+    </section>
   </section>
 </template>
 
 <script>
 import { staffSearchBookmarkUsers} from '@/api/staff';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+library.add(faSearch)
 
 
 export default {
@@ -111,6 +123,28 @@ export default {
   text-align:left;
   left:12%;
   width:73%;    
+}
+
+#staffViewBookmarkUser .staffViewBookmarkUser__count{
+  text-align: center;
+}
+
+#staffViewBookmarkUser .staffViewBookmarkUser__search{
+  text-align: center;
+}
+
+#staffViewBookmarkUser .staffViewBookmarkUser__page{
+  text-align: center;
+}
+
+.staffViewBookmarkUser__user .user__item{
+  margin-bottom: 20px;
+  position:relative;
+  text-align:left;
+  left:12%;
+  width:73%;
+  border: 2px solid #0067a3;
+  border-radius:10px;
 }
 
 </style>

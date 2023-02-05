@@ -418,4 +418,23 @@ export default {
     width:75%;
 }
 
+#myReview .topContent__Noreceipt{
+    text-align:left;
+    border: 2px solid #1d458d; 
+    font-size: 12px; 
+    padding-top:2px; 
+    padding-bottom: 1px;
+    border-radius:4px;
+}
+
+#myReview .topContent__receipt{
+    text-align:left;
+    background-color: #1d458d; 
+    color:#FFFFFF;
+    font-size: 12px; 
+    padding-top:2px; 
+    padding-bottom: 1px;
+    border-radius:4px;
+}
+
 </style>

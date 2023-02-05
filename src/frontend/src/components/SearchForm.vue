@@ -42,7 +42,7 @@ export default {
     margin: 10px 0;
     padding: 10px 12px;
 }
-.fa-search {
+.main__searchHospital .fa-search {
     position: absolute;
     right: 5px;    
     top: 20px;
