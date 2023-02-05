@@ -1,5 +1,9 @@
 <template>
   <section id="userQuestionLists">
+    <div class="userQuestionLists__title">
+        <h1>질문 목록</h1>
+    </div>
+
       <div class="userQuestionLists__item" v-for="contentItem in contentItems" :key="contentItem.questionId">
         <div class="item__hospitalName" @click="routeViewHospital(contentItem)">
             <h1>{{ contentItem.hospitalName }}</h1>
@@ -28,6 +32,11 @@
             <img src='@/assets/answer.png' alt="answer" class="answer__image">
         </div>
        </div>
+
+      <div class="userQuestionLists__title" v-if="contentItems.length===0">
+        <br>
+        <h3> 등록된 질문이 없습니다. </h3>
+      </div>
   </section>
 </template>
 
@@ -59,6 +68,10 @@ export default {
 </script>
 
 <style>
+.userQuestionLists__title{
+  text-align:center;
+}
+
 .userQuestionLists__item{
   position:relative;
   text-align:left;

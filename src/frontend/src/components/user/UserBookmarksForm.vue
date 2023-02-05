@@ -14,6 +14,11 @@
             <b>등록일</b> {{contentItem.createTime|formatDate}}
         </div>
       </div>
+
+    <div class="bookmarkLists__title" v-if="contentItems.length===0">
+        <br>
+        <h3> 등록된 즐겨찾기가 없습니다. </h3>
+      </div>
   </section>
 </template>
 

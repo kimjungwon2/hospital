@@ -1,5 +1,9 @@
 <template>
   <section id="myReview" v-if="contentItems.length!==0">
+    <div class="myReview__title">
+        <h1>리뷰 목록</h1>
+    </div>
+
       <div class="myReview__content" v-for="contentItem in contentItems" :key ="contentItem.reviewId">
           <div class="content__leftBox">
               <div @click="routeViewHospital(contentItem)" class="leftBox__hospitalName">
@@ -282,8 +286,11 @@
           </div>
       </div>
   </section>
-  <section v-else>
-      <h1> 등록된 리뷰가 없습니다. </h1>
+  <section id="myReview" v-else>
+    <div class="myReview__title">
+        <h1>리뷰 목록</h1><br>
+        <h3>등록된 리뷰가 없습니다.</h3>
+    </div>
   </section>
 </template>
 
@@ -321,6 +328,10 @@ export default {
   text-align:left;
   left:12%;
   width:73%;
+}
+
+#myReview .myReview__title{
+    text-align:center;
 }
 
 .myReview__content{
