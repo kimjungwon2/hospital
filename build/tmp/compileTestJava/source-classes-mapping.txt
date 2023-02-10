@@ -1,2 +1,0 @@
-site/hospital/service/MemberServiceTest.java
- site.hospital.service.MemberServiceTest
