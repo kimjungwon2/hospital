@@ -6,13 +6,6 @@ plugins {
 	id 'java'
 }
 
-node {
-	version = '14.17.3'
-	npmVersion ='6.14.13'
-	workDir = file("./src/frontend")
-	npmWorkDir = file("./src/frontend")
-	nodeModulesDir = file("./src/frontend")
-}
 
 group = 'site'
 version = '0.0.1-SNAPSHOT'
@@ -94,4 +87,14 @@ configurations {
 	querydsl.extendsFrom compileClasspath}
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
+}
+
+bootJar {
+	mainClassName = 'site.hospital.HospitalApplication'
+}
+
+//profiles 설정
+bootRun {
+	String activeProfile = System.properties['spring.profiles.active']
+	systemProperty "spring.profiles.active", activeProfile
 }
