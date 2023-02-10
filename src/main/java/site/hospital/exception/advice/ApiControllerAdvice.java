@@ -1,7 +1,6 @@
 package site.hospital.exception.advice;
 
 import lombok.extern.slf4j.Slf4j;
-import org.omg.CORBA.UserException;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -29,13 +28,6 @@ public class ApiControllerAdvice {
     @ExceptionHandler
     public ErrorResponse illegalStateHandle(IllegalStateException e) {
         log.error("IllegalStateException:", e);
-        return new ErrorResponse("BAD_REQUEST", e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler
-    public ErrorResponse userHandle(UserException e) {
-        log.error("UserException:", e);
         return new ErrorResponse("BAD_REQUEST", e.getMessage());
     }
 
