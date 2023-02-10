@@ -6,7 +6,6 @@ plugins {
 	id 'java'
 }
 
-
 group = 'site'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -56,20 +55,6 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
 }
 
-task setUp(type: NpmTask){
-	description = "Install Node.js packages"
-	args = ['install']
-	inputs.files file('package.json')
-	outputs.files file('node_modules')
-}
-
-task buildFrontEnd(type: NpmTask, dependsOn: setUp){
-	description = "Build vue.js"
-	args = ['run', 'build']
-}
-
-processResources.dependsOn 'buildFrontEnd'
-
 test {
 	useJUnitPlatform()
 }
@@ -89,6 +74,7 @@ compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
 
+//빌드
 bootJar {
 	mainClassName = 'site.hospital.HospitalApplication'
 }
