@@ -46,3 +46,4 @@ application-aws.yml
 /build/test-results/
 /build/tmp/
 /build/bootJarMainClassName
+/build/

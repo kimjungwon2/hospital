@@ -74,13 +74,3 @@ compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
 
-//빌드
-bootJar {
-	mainClassName = 'site.hospital.HospitalApplication'
-}
-
-//profiles 설정
-bootRun {
-	String activeProfile = System.properties['spring.profiles.active']
-	systemProperty "spring.profiles.active", activeProfile
-}

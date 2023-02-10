@@ -10,15 +10,15 @@ site/hospital/configuration/UserAuditorAware.java
  site.hospital.configuration.UserAuditorAware
 site/hospital/HospitalApplication.java
  site.hospital.HospitalApplication
-site/hospital/api/dto/staffHospital/StaffHospitalDoctorDTO.java
- site.hospital.api.dto.staffHospital.StaffHospitalDoctorDTO
+site/hospital/dto/hospital/admin/AdminHospitalView.java
+ site.hospital.dto.hospital.admin.AdminHospitalView
 site/hospital/api/dto/bookmark/BookmarkCheckResponse.java
  site.hospital.api.dto.bookmark.BookmarkCheckResponse
  site.hospital.api.dto.bookmark.BookmarkCheckResponse$BookmarkCheckResponseBuilder
 site/hospital/api/dto/review/ReviewLikeButtonRequest.java
  site.hospital.api.dto.review.ReviewLikeButtonRequest
-site/hospital/domain/reviewHospital/QEvaluationCriteria.java
- site.hospital.domain.reviewHospital.QEvaluationCriteria
+site/hospital/repository/reviewLike/ReviewLikeRepository.java
+ site.hospital.repository.reviewLike.ReviewLikeRepository
 site/hospital/exception/CustomAuthFailureHandler.java
  site.hospital.exception.CustomAuthFailureHandler
 site/hospital/configuration/MultipartConfig.java
@@ -26,9 +26,8 @@ site/hospital/configuration/MultipartConfig.java
 site/hospital/domain/estimation/Estimation.java
  site.hospital.domain.estimation.Estimation
  site.hospital.domain.estimation.Estimation$EstimationBuilder
-site/hospital/domain/reviewHospital/EvaluationCriteria.java
- site.hospital.domain.reviewHospital.EvaluationCriteria
- site.hospital.domain.reviewHospital.EvaluationCriteria$EvaluationCriteriaBuilder
+site/hospital/repository/review/ReviewRepositoryCustom.java
+ site.hospital.repository.review.ReviewRepositoryCustom
 site/hospital/api/dto/tag/TagAdminViewAllResponse.java
  site.hospital.api.dto.tag.TagAdminViewAllResponse
  site.hospital.api.dto.tag.TagAdminViewAllResponse$TagAdminViewAllResponseBuilder
@@ -60,32 +59,33 @@ site/hospital/domain/estimation/EstimationList.java
  site.hospital.domain.estimation.EstimationList
 site/hospital/domain/member/QMember.java
  site.hospital.domain.member.QMember
-site/hospital/domain/reviewHospital/Recommendation.java
- site.hospital.domain.reviewHospital.Recommendation
+site/hospital/repository/reviewLike/ReviewLikeRepositoryImpl.java
+ site.hospital.repository.reviewLike.ReviewLikeRepositoryImpl
 site/hospital/domain/member/MemberStatus.java
  site.hospital.domain.member.MemberStatus
 site/hospital/domain/member/QMemberAuthority.java
  site.hospital.domain.member.QMemberAuthority
-site/hospital/configuration/SecurityConfig.java
- site.hospital.configuration.SecurityConfig
+site/hospital/domain/reviewHospital/ReviewHospital.java
+ site.hospital.domain.reviewHospital.ReviewHospital
+ site.hospital.domain.reviewHospital.ReviewHospital$ReviewHospitalBuilder
 site/hospital/dto/review/QStaffSearchReviewDTO.java
  site.hospital.dto.review.QStaffSearchReviewDTO
 site/hospital/repository/bookmark/BookmarkRepository.java
  site.hospital.repository.bookmark.BookmarkRepository
-site/hospital/repository/postTag/PostTagRepository.java
- site.hospital.repository.postTag.PostTagRepository
+site/hospital/api/dto/review/searchReviews/ReviewSearchListsLikeDTO.java
+ site.hospital.api.dto.review.searchReviews.ReviewSearchListsLikeDTO
 site/hospital/repository/hospital/viewQuery/QHospitalEstimationDTO.java
  site.hospital.repository.hospital.viewQuery.QHospitalEstimationDTO
 site/hospital/repository/hospital/viewQuery/HospitalViewRepository.java
  site.hospital.repository.hospital.viewQuery.HospitalViewRepository
 site/hospital/repository/hospital/searchQuery/QPostTagDto.java
  site.hospital.repository.hospital.searchQuery.QPostTagDto
-site/hospital/repository/question/simpleQuery/HospitalQuestionRepository.java
- site.hospital.repository.question.simpleQuery.HospitalQuestionRepository
+site/hospital/domain/hospital/QHospital.java
+ site.hospital.domain.hospital.QHospital
 site/hospital/service/EstimationService.java
  site.hospital.service.EstimationService
-site/hospital/dto/staffHosInfo/AdminDoctorDTO.java
- site.hospital.dto.staffHosInfo.AdminDoctorDTO
+site/hospital/service/ReviewService.java
+ site.hospital.service.ReviewService
 site/hospital/repository/hospital/viewQuery/QHospitalTagDTO.java
  site.hospital.repository.hospital.viewQuery.QHospitalTagDTO
 site/hospital/dto/hospital/admin/AdminHospitalTagDTO.java
@@ -94,8 +94,8 @@ site/hospital/repository/review/query/QReviewLikeSearchDTO.java
  site.hospital.repository.review.query.QReviewLikeSearchDTO
 site/hospital/repository/hospital/viewQuery/HospitalImageDTO.java
  site.hospital.repository.hospital.viewQuery.HospitalImageDTO
-site/hospital/api/dto/hospital/HospitalManagerCreateStaffHosInfoRequest.java
- site.hospital.api.dto.hospital.HospitalManagerCreateStaffHosInfoRequest
+site/hospital/api/dto/member/MemberAdminCreateRequest.java
+ site.hospital.api.dto.member.MemberAdminCreateRequest
 site/hospital/api/dto/postTag/PostTagLinkTagResponse.java
  site.hospital.api.dto.postTag.PostTagLinkTagResponse
  site.hospital.api.dto.postTag.PostTagLinkTagResponse$PostTagLinkTagResponseBuilder
@@ -124,9 +124,8 @@ site/hospital/repository/hospital/searchQuery/ReviewHospitalDto.java
  site.hospital.repository.hospital.searchQuery.ReviewHospitalDto
 site/hospital/domain/QQuestion.java
  site.hospital.domain.QQuestion
-site/hospital/api/dto/member/MemberViewInfoResponse.java
- site.hospital.api.dto.member.MemberViewInfoResponse
- site.hospital.api.dto.member.MemberViewInfoResponse$MemberViewInfoResponseBuilder
+site/hospital/api/dto/review/viewLists/ReviewViewListsLikeDTO.java
+ site.hospital.api.dto.review.viewLists.ReviewViewListsLikeDTO
 site/hospital/domain/QHospitalThumbnail.java
  site.hospital.domain.QHospitalThumbnail
 site/hospital/domain/member/MemberAuthority.java
@@ -134,12 +133,12 @@ site/hospital/domain/member/MemberAuthority.java
  site.hospital.domain.member.MemberAuthority$MemberAuthorityBuilder
 site/hospital/dto/hospital/staff/StaffHospitalTagDTO.java
  site.hospital.dto.hospital.staff.StaffHospitalTagDTO
-site/hospital/domain/QAnswer.java
- site.hospital.domain.QAnswer
+site/hospital/api/DoctorApiController.java
+ site.hospital.api.DoctorApiController
 site/hospital/api/dto/hospital/HospitalCreateDetailedHosInfoRequest.java
  site.hospital.api.dto.hospital.HospitalCreateDetailedHosInfoRequest
-site/hospital/jwtToken/JwtFilter.java
- site.hospital.jwtToken.JwtFilter
+site/hospital/api/dto/review/searchReviews/ReviewSearchListsHospitalDTO.java
+ site.hospital.api.dto.review.searchReviews.ReviewSearchListsHospitalDTO
 site/hospital/dto/hospital/staff/StaffHospitalEstimationDTO.java
  site.hospital.dto.hospital.staff.StaffHospitalEstimationDTO
 site/hospital/domain/baseEntity/BaseTimeEntity.java
@@ -158,8 +157,8 @@ site/hospital/repository/question/adminSearchQuery/AdminQuestionSearchRepository
  site.hospital.repository.question.adminSearchQuery.AdminQuestionSearchRepository
 site/hospital/api/dto/review/ReviewCreateRequest.java
  site.hospital.api.dto.review.ReviewCreateRequest
-site/hospital/repository/hospital/HospitalRepository.java
- site.hospital.repository.hospital.HospitalRepository
+site/hospital/dto/hospital/admin/AdminReviewHospitalDTO.java
+ site.hospital.dto.hospital.admin.AdminReviewHospitalDTO
 site/hospital/dto/ModifyStaffHospitalRequest.java
  site.hospital.dto.ModifyStaffHospitalRequest
 site/hospital/api/dto/doctor/DoctorAdminModifyRequest.java
@@ -171,8 +170,8 @@ site/hospital/domain/detailedHosInformation/QHospitalLocation.java
  site.hospital.domain.detailedHosInformation.QHospitalLocation
 site/hospital/domain/QReviewLike.java
  site.hospital.domain.QReviewLike
-site/hospital/jwtToken/CustomUserDetail.java
- site.hospital.jwtToken.CustomUserDetail
+site/hospital/domain/ReviewLike.java
+ site.hospital.domain.ReviewLike
 site/hospital/domain/hospital/BusinessCondition.java
  site.hospital.domain.hospital.BusinessCondition
 site/hospital/domain/QDoctor.java
@@ -212,15 +211,15 @@ site/hospital/domain/QBookmark.java
 site/hospital/dto/AdminHospitalSearchCondition.java
  site.hospital.dto.AdminHospitalSearchCondition
  site.hospital.dto.AdminHospitalSearchCondition$AdminHospitalSearchConditionBuilder
-site/hospital/api/dto/member/MemberSearchResponse.java
- site.hospital.api.dto.member.MemberSearchResponse
- site.hospital.api.dto.member.MemberSearchResponse$MemberSearchResponseBuilder
+site/hospital/api/AnswerApiController.java
+ site.hospital.api.AnswerApiController
 site/hospital/service/BookmarkService.java
  site.hospital.service.BookmarkService
 site/hospital/service/DoctorService.java
  site.hospital.service.DoctorService
-site/hospital/repository/question/adminSearchQuery/QAdminSearchQuestionDto.java
- site.hospital.repository.question.adminSearchQuery.QAdminSearchQuestionDto
+site/hospital/domain/ReviewImage.java
+ site.hospital.domain.ReviewImage
+ site.hospital.domain.ReviewImage$ReviewImageBuilder
 site/hospital/repository/member/MemberRepositoryImpl.java
  site.hospital.repository.member.MemberRepositoryImpl
 site/hospital/service/AnswerService.java
@@ -260,25 +259,25 @@ site/hospital/jwtToken/JwtAuthenticationEntryPoint.java
  site.hospital.jwtToken.JwtAuthenticationEntryPoint
 site/hospital/repository/hospital/viewQuery/HospitalTagDTO.java
  site.hospital.repository.hospital.viewQuery.HospitalTagDTO
-site/hospital/repository/AnswerRepository.java
- site.hospital.repository.AnswerRepository
+site/hospital/api/EstimationApiController.java
+ site.hospital.api.EstimationApiController
 site/hospital/api/dto/postTag/PostTagStaffLinkTagRequest.java
  site.hospital.api.dto.postTag.PostTagStaffLinkTagRequest
 site/hospital/repository/postTag/PostTagRepositoryCustom.java
  site.hospital.repository.postTag.PostTagRepositoryCustom
 site/hospital/dto/review/ReviewViewDTO.java
  site.hospital.dto.review.ReviewViewDTO
-site/hospital/api/dto/tag/TagCreateResponse.java
- site.hospital.api.dto.tag.TagCreateResponse
- site.hospital.api.dto.tag.TagCreateResponse$TagCreateResponseBuilder
-site/hospital/repository/StaffHosRepository.java
- site.hospital.repository.StaffHosRepository
+site/hospital/api/MemberApiController.java
+ site.hospital.api.MemberApiController
+site/hospital/api/ReviewApiController.java
+ site.hospital.api.ReviewApiController
 site/hospital/configuration/JpaAuditingConfig.java
  site.hospital.configuration.JpaAuditingConfig
 site/hospital/dto/doctor/CreateDoctorRequest.java
  site.hospital.dto.doctor.CreateDoctorRequest
-site/hospital/dto/LoginMemberResponse.java
- site.hospital.dto.LoginMemberResponse
+site/hospital/api/dto/review/member/ReviewViewByMemberResponse.java
+ site.hospital.api.dto.review.member.ReviewViewByMemberResponse
+ site.hospital.api.dto.review.member.ReviewViewByMemberResponse$ReviewViewByMemberResponseBuilder
 site/hospital/repository/review/query/ReviewLikeSearchDTO.java
  site.hospital.repository.review.query.ReviewLikeSearchDTO
 site/hospital/repository/question/adminSearchQuery/AdminSearchQuestionDto.java
@@ -288,9 +287,8 @@ site/hospital/api/dto/review/ReviewCreateResponse.java
  site.hospital.api.dto.review.ReviewCreateResponse$ReviewCreateResponseBuilder
 site/hospital/domain/detailedHosInformation/QDetailedHosInformation.java
  site.hospital.domain.detailedHosInformation.QDetailedHosInformation
-site/hospital/domain/Doctor.java
- site.hospital.domain.Doctor
- site.hospital.domain.Doctor$DoctorBuilder
+site/hospital/exception/advice/MemberApiControllerAdvice.java
+ site.hospital.exception.advice.MemberApiControllerAdvice
 site/hospital/domain/member/Member.java
  site.hospital.domain.member.Member
  site.hospital.domain.member.Member$MemberBuilder
@@ -306,8 +304,10 @@ site/hospital/dto/StaffReviewSearchCondition.java
 site/hospital/domain/Tag.java
  site.hospital.domain.Tag
  site.hospital.domain.Tag$TagBuilder
-site/hospital/domain/baseEntity/QBaseTimeEntity.java
- site.hospital.domain.baseEntity.QBaseTimeEntity
+site/hospital/service/HospitalService.java
+ site.hospital.service.HospitalService
+site/hospital/api/TespApiController.java
+ site.hospital.api.TespApiController
 site/hospital/repository/hospital/searchQuery/QHospitalSearchDto.java
  site.hospital.repository.hospital.searchQuery.QHospitalSearchDto
 site/hospital/domain/QStaffHosInformation.java
@@ -348,14 +348,15 @@ site/hospital/dto/doctor/StaffCreateDoctorRequest.java
 site/hospital/api/dto/member/MemberAdminViewInfoResponse.java
  site.hospital.api.dto.member.MemberAdminViewInfoResponse
  site.hospital.api.dto.member.MemberAdminViewInfoResponse$MemberAdminViewInfoResponseBuilder
-site/hospital/exception/ErrorResponse.java
- site.hospital.exception.ErrorResponse
+site/hospital/configuration/SecurityConfig.java
+ site.hospital.configuration.SecurityConfig
 site/hospital/domain/detailedHosInformation/QHospitalAddress.java
  site.hospital.domain.detailedHosInformation.QHospitalAddress
 site/hospital/repository/question/QuestionRepositoryImpl.java
  site.hospital.repository.question.QuestionRepositoryImpl
-site/hospital/service/TagService.java
- site.hospital.service.TagService
+site/hospital/api/dto/review/viewLists/ReviewViewListsResponse.java
+ site.hospital.api.dto.review.viewLists.ReviewViewListsResponse
+ site.hospital.api.dto.review.viewLists.ReviewViewListsResponse$ReviewViewListsResponseBuilder
 site/hospital/api/dto/member/MemberAdminModifyRequest.java
  site.hospital.api.dto.member.MemberAdminModifyRequest
 site/hospital/repository/hospital/viewQuery/QHospitalReviewDTO.java
@@ -370,11 +371,13 @@ site/hospital/api/dto/tag/TagCreateRequest.java
  site.hospital.api.dto.tag.TagCreateRequest
 site/hospital/api/dto/hospital/HospitalManagerCreateDetailHosInfoRequest.java
  site.hospital.api.dto.hospital.HospitalManagerCreateDetailHosInfoRequest
-site/hospital/repository/hospital/viewQuery/ViewHospitalDTO.java
- site.hospital.repository.hospital.viewQuery.ViewHospitalDTO
+site/hospital/api/TagApiController.java
+ site.hospital.api.TagApiController
 site/hospital/api/dto/estimation/EstimationCreateResponse.java
  site.hospital.api.dto.estimation.EstimationCreateResponse
  site.hospital.api.dto.estimation.EstimationCreateResponse$EstimationCreateResponseBuilder
+site/hospital/api/TestApiController.java
+ site.hospital.api.TestApiController
 site/hospital/api/dto/bookmark/BookmarkSearchMemberResponse.java
  site.hospital.api.dto.bookmark.BookmarkSearchMemberResponse
  site.hospital.api.dto.bookmark.BookmarkSearchMemberResponse$BookmarkSearchMemberResponseBuilder
@@ -386,8 +389,8 @@ site/hospital/domain/estimation/QEstimation.java
  site.hospital.domain.estimation.QEstimation
 site/hospital/api/dto/answer/AnswerCreateRequest.java
  site.hospital.api.dto.answer.AnswerCreateRequest
-site/hospital/domain/review/ReviewAuthentication.java
- site.hospital.domain.review.ReviewAuthentication
+site/hospital/service/ImageManagementService.java
+ site.hospital.service.ImageManagementService
 site/hospital/repository/review/query/ReviewSearchRepository.java
  site.hospital.repository.review.query.ReviewSearchRepository
 site/hospital/domain/PostTag.java
@@ -397,13 +400,12 @@ site/hospital/domain/StaffHosInformation.java
  site.hospital.domain.StaffHosInformation$StaffHosInformationBuilder
 site/hospital/api/dto/member/MemberCreateRequest.java
  site.hospital.api.dto.member.MemberCreateRequest
-site/hospital/dto/StaffBookmarkSearchCondition.java
- site.hospital.dto.StaffBookmarkSearchCondition
- site.hospital.dto.StaffBookmarkSearchCondition$StaffBookmarkSearchConditionBuilder
-site/hospital/repository/question/userQuery/UserQuestionRepository.java
- site.hospital.repository.question.userQuery.UserQuestionRepository
-site/hospital/exception/advice/ApiControllerAdvice.java
- site.hospital.exception.advice.ApiControllerAdvice
+site/hospital/exception/advice/HospitalApiControllerAdvice.java
+ site.hospital.exception.advice.HospitalApiControllerAdvice
+site/hospital/api/HospitalApiController.java
+ site.hospital.api.HospitalApiController
+site/hospital/domain/review/QReview.java
+ site.hospital.domain.review.QReview
 site/hospital/service/PostTagService.java
  site.hospital.service.PostTagService
 site/hospital/api/dto/bookmark/BookmarkSearchResponse.java
@@ -411,25 +413,23 @@ site/hospital/api/dto/bookmark/BookmarkSearchResponse.java
  site.hospital.api.dto.bookmark.BookmarkSearchResponse$BookmarkSearchResponseBuilder
 site/hospital/configuration/AmazonS3Config.java
  site.hospital.configuration.AmazonS3Config
-site/hospital/api/dto/hospital/HospitalViewImageResponse.java
- site.hospital.api.dto.hospital.HospitalViewImageResponse
- site.hospital.api.dto.hospital.HospitalViewImageResponse$HospitalViewImageResponseBuilder
-site/hospital/repository/question/simpleQuery/SearchHospitalQuestionDTO.java
- site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO
+site/hospital/api/dto/review/viewDetail/ReviewViewDetailHospitalDTO.java
+ site.hospital.api.dto.review.viewDetail.ReviewViewDetailHospitalDTO
+site/hospital/api/dto/review/viewLists/ReviewViewListsHospitalDTO.java
+ site.hospital.api.dto.review.viewLists.ReviewViewListsHospitalDTO
 site/hospital/repository/review/query/ReviewHospitalDTO2.java
  site.hospital.repository.review.query.ReviewHospitalDTO2
 site/hospital/service/StaffHosService.java
  site.hospital.service.StaffHosService
 site/hospital/repository/member/MemberRepositoryCustom.java
  site.hospital.repository.member.MemberRepositoryCustom
-site/hospital/service/JwtUserDetailsService.java
- site.hospital.service.JwtUserDetailsService
+site/hospital/api/QuestionApiController.java
+ site.hospital.api.QuestionApiController
 site/hospital/api/dto/member/MemberCreateResponse.java
  site.hospital.api.dto.member.MemberCreateResponse
  site.hospital.api.dto.member.MemberCreateResponse$MemberCreateResponseBuilder
-site/hospital/domain/HospitalThumbnail.java
- site.hospital.domain.HospitalThumbnail
- site.hospital.domain.HospitalThumbnail$HospitalThumbnailBuilder
+site/hospital/api/dto/review/member/ReviewViewByMemberUserDTO.java
+ site.hospital.api.dto.review.member.ReviewViewByMemberUserDTO
 site/hospital/repository/MemberAuthorityRepository.java
  site.hospital.repository.MemberAuthorityRepository
 site/hospital/repository/question/simpleQuery/QSearchHospitalQuestionDTO.java
@@ -454,8 +454,8 @@ site/hospital/repository/hospital/viewQuery/HospitalReviewDTO.java
  site.hospital.repository.hospital.viewQuery.HospitalReviewDTO
 site/hospital/api/dto/review/ReviewAdminApproveAuthenticationRequest.java
  site.hospital.api.dto.review.ReviewAdminApproveAuthenticationRequest
-site/hospital/domain/QReviewImage.java
- site.hospital.domain.QReviewImage
+site/hospital/repository/review/ReviewRepository.java
+ site.hospital.repository.review.ReviewRepository
 site/hospital/domain/baseEntity/BaseEntity.java
  site.hospital.domain.baseEntity.BaseEntity
 site/hospital/repository/HospitalImageRepository.java
@@ -464,102 +464,102 @@ site/hospital/repository/DoctorRepository.java
  site.hospital.repository.DoctorRepository
 site/hospital/repository/review/query/QReviewHospitalDTO2.java
  site.hospital.repository.review.query.QReviewHospitalDTO2
-site/hospital/domain/detailedHosInformation/DetailedHosInformation.java
- site.hospital.domain.detailedHosInformation.DetailedHosInformation
- site.hospital.domain.detailedHosInformation.DetailedHosInformation$DetailedHosInformationBuilder
-site/hospital/api/MemberApiController.java
- site.hospital.api.MemberApiController
-site/hospital/api/ReviewApiController.java
- site.hospital.api.ReviewApiController
-site/hospital/repository/reviewLike/ReviewLikeRepositoryImpl.java
- site.hospital.repository.reviewLike.ReviewLikeRepositoryImpl
+site/hospital/service/MemberService.java
+ site.hospital.service.MemberService
+site/hospital/api/dto/hospital/HospitalManagerCreateStaffHosInfoRequest.java
+ site.hospital.api.dto.hospital.HospitalManagerCreateStaffHosInfoRequest
+site/hospital/dto/LoginMemberResponse.java
+ site.hospital.dto.LoginMemberResponse
+site/hospital/domain/reviewHospital/QEvaluationCriteria.java
+ site.hospital.domain.reviewHospital.QEvaluationCriteria
+site/hospital/domain/reviewHospital/Recommendation.java
+ site.hospital.domain.reviewHospital.Recommendation
+site/hospital/repository/postTag/PostTagRepository.java
+ site.hospital.repository.postTag.PostTagRepository
+site/hospital/api/dto/staffHospital/StaffHospitalDoctorDTO.java
+ site.hospital.api.dto.staffHospital.StaffHospitalDoctorDTO
+site/hospital/api/dto/hospital/HospitalViewImageResponse.java
+ site.hospital.api.dto.hospital.HospitalViewImageResponse
+ site.hospital.api.dto.hospital.HospitalViewImageResponse$HospitalViewImageResponseBuilder
+site/hospital/repository/question/simpleQuery/HospitalQuestionRepository.java
+ site.hospital.repository.question.simpleQuery.HospitalQuestionRepository
+site/hospital/jwtToken/JwtFilter.java
+ site.hospital.jwtToken.JwtFilter
+site/hospital/service/TagService.java
+ site.hospital.service.TagService
+site/hospital/domain/review/Review.java
+ site.hospital.domain.review.Review
+site/hospital/repository/question/adminSearchQuery/QAdminSearchQuestionDto.java
+ site.hospital.repository.question.adminSearchQuery.QAdminSearchQuestionDto
+site/hospital/api/dto/member/MemberViewInfoResponse.java
+ site.hospital.api.dto.member.MemberViewInfoResponse
+ site.hospital.api.dto.member.MemberViewInfoResponse$MemberViewInfoResponseBuilder
+site/hospital/exception/ErrorResponse.java
+ site.hospital.exception.ErrorResponse
 site/hospital/api/dto/review/viewDetail/ReviewViewDetailResponse.java
  site.hospital.api.dto.review.viewDetail.ReviewViewDetailResponse
  site.hospital.api.dto.review.viewDetail.ReviewViewDetailResponse$ReviewViewDetailResponseBuilder
-site/hospital/domain/reviewHospital/ReviewHospital.java
- site.hospital.domain.reviewHospital.ReviewHospital
- site.hospital.domain.reviewHospital.ReviewHospital$ReviewHospitalBuilder
-site/hospital/api/dto/review/viewLists/ReviewViewListsLikeDTO.java
- site.hospital.api.dto.review.viewLists.ReviewViewListsLikeDTO
+site/hospital/repository/question/simpleQuery/SearchHospitalQuestionDTO.java
+ site.hospital.repository.question.simpleQuery.SearchHospitalQuestionDTO
 site/hospital/repository/review/ReviewRepositoryImpl.java
  site.hospital.repository.review.ReviewRepositoryImpl
-site/hospital/api/QuestionApiController.java
- site.hospital.api.QuestionApiController
-site/hospital/api/dto/review/member/ReviewViewByMemberUserDTO.java
- site.hospital.api.dto.review.member.ReviewViewByMemberUserDTO
-site/hospital/api/DoctorApiController.java
- site.hospital.api.DoctorApiController
-site/hospital/api/dto/review/viewLists/ReviewViewListsResponse.java
- site.hospital.api.dto.review.viewLists.ReviewViewListsResponse
- site.hospital.api.dto.review.viewLists.ReviewViewListsResponse$ReviewViewListsResponseBuilder
-site/hospital/api/AnswerApiController.java
- site.hospital.api.AnswerApiController
-site/hospital/api/dto/review/member/ReviewViewByMemberResponse.java
- site.hospital.api.dto.review.member.ReviewViewByMemberResponse
- site.hospital.api.dto.review.member.ReviewViewByMemberResponse$ReviewViewByMemberResponseBuilder
-site/hospital/api/dto/review/searchReviews/ReviewSearchListsLikeDTO.java
- site.hospital.api.dto.review.searchReviews.ReviewSearchListsLikeDTO
-site/hospital/domain/ReviewImage.java
- site.hospital.domain.ReviewImage
- site.hospital.domain.ReviewImage$ReviewImageBuilder
-site/hospital/api/dto/review/searchReviews/ReviewSearchListsHospitalDTO.java
- site.hospital.api.dto.review.searchReviews.ReviewSearchListsHospitalDTO
+site/hospital/service/JwtUserDetailsService.java
+ site.hospital.service.JwtUserDetailsService
+site/hospital/exception/advice/ApiControllerAdvice.java
+ site.hospital.exception.advice.ApiControllerAdvice
+site/hospital/domain/detailedHosInformation/DetailedHosInformation.java
+ site.hospital.domain.detailedHosInformation.DetailedHosInformation
+ site.hospital.domain.detailedHosInformation.DetailedHosInformation$DetailedHosInformationBuilder
+site/hospital/domain/HospitalThumbnail.java
+ site.hospital.domain.HospitalThumbnail
+ site.hospital.domain.HospitalThumbnail$HospitalThumbnailBuilder
+site/hospital/repository/AnswerRepository.java
+ site.hospital.repository.AnswerRepository
 site/hospital/api/BookmarkApiController.java
  site.hospital.api.BookmarkApiController
-site/hospital/dto/hospital/admin/AdminHospitalView.java
- site.hospital.dto.hospital.admin.AdminHospitalView
-site/hospital/repository/reviewLike/ReviewLikeRepository.java
- site.hospital.repository.reviewLike.ReviewLikeRepository
-site/hospital/exception/advice/MemberApiControllerAdvice.java
- site.hospital.exception.advice.MemberApiControllerAdvice
-site/hospital/domain/hospital/QHospital.java
- site.hospital.domain.hospital.QHospital
-site/hospital/repository/review/ReviewRepositoryCustom.java
- site.hospital.repository.review.ReviewRepositoryCustom
-site/hospital/service/ReviewService.java
- site.hospital.service.ReviewService
-site/hospital/repository/review/ReviewRepository.java
- site.hospital.repository.review.ReviewRepository
+site/hospital/jwtToken/CustomUserDetail.java
+ site.hospital.jwtToken.CustomUserDetail
+site/hospital/domain/baseEntity/QBaseTimeEntity.java
+ site.hospital.domain.baseEntity.QBaseTimeEntity
+site/hospital/repository/hospital/HospitalRepository.java
+ site.hospital.repository.hospital.HospitalRepository
 site/hospital/api/PostTagApiController.java
  site.hospital.api.PostTagApiController
-site/hospital/api/TagApiController.java
- site.hospital.api.TagApiController
-site/hospital/dto/hospital/admin/AdminReviewHospitalDTO.java
- site.hospital.dto.hospital.admin.AdminReviewHospitalDTO
-site/hospital/service/HospitalService.java
- site.hospital.service.HospitalService
-site/hospital/api/TestApiController.java
- site.hospital.api.TestApiController
-site/hospital/service/MemberService.java
- site.hospital.service.MemberService
-site/hospital/api/TespApiController.java
- site.hospital.api.TespApiController
-site/hospital/api/dto/member/MemberAdminCreateRequest.java
- site.hospital.api.dto.member.MemberAdminCreateRequest
-site/hospital/domain/ReviewLike.java
- site.hospital.domain.ReviewLike
-site/hospital/service/ImageManagementService.java
- site.hospital.service.ImageManagementService
+site/hospital/dto/staffHosInfo/AdminDoctorDTO.java
+ site.hospital.dto.staffHosInfo.AdminDoctorDTO
+site/hospital/domain/reviewHospital/EvaluationCriteria.java
+ site.hospital.domain.reviewHospital.EvaluationCriteria
+ site.hospital.domain.reviewHospital.EvaluationCriteria$EvaluationCriteriaBuilder
+site/hospital/repository/StaffHosRepository.java
+ site.hospital.repository.StaffHosRepository
+site/hospital/repository/hospital/viewQuery/ViewHospitalDTO.java
+ site.hospital.repository.hospital.viewQuery.ViewHospitalDTO
+site/hospital/domain/QReviewImage.java
+ site.hospital.domain.QReviewImage
 site/hospital/api/dto/review/searchReviews/ReviewSearchListsResponse.java
  site.hospital.api.dto.review.searchReviews.ReviewSearchListsResponse
  site.hospital.api.dto.review.searchReviews.ReviewSearchListsResponse$ReviewSearchListsResponseBuilder
+site/hospital/domain/Doctor.java
+ site.hospital.domain.Doctor
+ site.hospital.domain.Doctor$DoctorBuilder
+site/hospital/repository/question/userQuery/UserQuestionRepository.java
+ site.hospital.repository.question.userQuery.UserQuestionRepository
 site/hospital/api/StaffHosApiController.java
  site.hospital.api.StaffHosApiController
-site/hospital/exception/advice/HospitalApiControllerAdvice.java
- site.hospital.exception.advice.HospitalApiControllerAdvice
-site/hospital/api/HospitalApiController.java
- site.hospital.api.HospitalApiController
-site/hospital/domain/review/QReview.java
- site.hospital.domain.review.QReview
-site/hospital/api/EstimationApiController.java
- site.hospital.api.EstimationApiController
+site/hospital/dto/StaffBookmarkSearchCondition.java
+ site.hospital.dto.StaffBookmarkSearchCondition
+ site.hospital.dto.StaffBookmarkSearchCondition$StaffBookmarkSearchConditionBuilder
+site/hospital/domain/review/ReviewAuthentication.java
+ site.hospital.domain.review.ReviewAuthentication
+site/hospital/api/dto/member/MemberSearchResponse.java
+ site.hospital.api.dto.member.MemberSearchResponse
+ site.hospital.api.dto.member.MemberSearchResponse$MemberSearchResponseBuilder
+site/hospital/domain/QAnswer.java
+ site.hospital.domain.QAnswer
 site/hospital/repository/reviewLike/ReviewLikeRepositoryCustom.java
  site.hospital.repository.reviewLike.ReviewLikeRepositoryCustom
-site/hospital/api/dto/review/viewDetail/ReviewViewDetailHospitalDTO.java
- site.hospital.api.dto.review.viewDetail.ReviewViewDetailHospitalDTO
-site/hospital/api/dto/review/viewLists/ReviewViewListsHospitalDTO.java
- site.hospital.api.dto.review.viewLists.ReviewViewListsHospitalDTO
-site/hospital/domain/review/Review.java
- site.hospital.domain.review.Review
+site/hospital/api/dto/tag/TagCreateResponse.java
+ site.hospital.api.dto.tag.TagCreateResponse
+ site.hospital.api.dto.tag.TagCreateResponse$TagCreateResponseBuilder
 site/hospital/domain/reviewHospital/QReviewHospital.java
  site.hospital.domain.reviewHospital.QReviewHospital
