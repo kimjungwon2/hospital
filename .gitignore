@@ -1,6 +1,5 @@
 HELP.md
 .gradle
-build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -27,7 +26,6 @@ application-aws.yml
 *.iws
 *.iml
 *.ipr
-out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
@@ -40,3 +38,11 @@ out/
 
 ### VS Code ###
 .vscode/
+/out/
+/build/classes/
+/build/libs/
+/build/reports/
+/build/resources/
+/build/test-results/
+/build/tmp/
+/build/bootJarMainClassName
