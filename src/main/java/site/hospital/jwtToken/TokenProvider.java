@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:application-jwt.properties")
+@PropertySource("classpath:application-jwt.yml")
 public class TokenProvider implements Serializable {
 
     private static final long serialVersionUID = -798416586417070603L;
