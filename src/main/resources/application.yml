@@ -8,16 +8,16 @@ spring:
       - jwt
       - aws
 
-jpa:
-  hibernate:
-    ddl-auto: none
+  jpa:
+    hibernate:
+      ddl-auto: none
+      properties:
     properties:
-  properties:
-    format_sql: true
-    use_sql_comments: true
-    default_batch_fetch_size: 500
-  database: mysql
-  database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+      format_sql: true
+      use_sql_comments: true
+      default_batch_fetch_size: 500
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
 logging.level:
   org.hibernate.SQL: debug
