@@ -17,7 +17,7 @@ public class TestApiController {
 
     @GetMapping("/test")
     public String test1(){
-        return "CI/CD 완료";
+        return "CI/CD 완료 2.";
     }
 
     @GetMapping("/test/{memberId}")
