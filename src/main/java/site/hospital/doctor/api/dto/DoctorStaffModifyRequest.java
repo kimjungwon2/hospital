@@ -1,0 +1,12 @@
+package site.hospital.doctor.api.dto;
+
+import lombok.Data;
+
+@Data
+public class DoctorStaffModifyRequest {
+
+    private Long memberId;
+    private String history;
+    private String name;
+
+}
