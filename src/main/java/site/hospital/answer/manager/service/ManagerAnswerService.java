@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.answer.manager.api.dto.AnswerCreateRequest;
 import site.hospital.answer.manager.domain.Answer;
 import site.hospital.answer.manager.repository.AnswerRepository;
-import site.hospital.question.domain.Question;
+import site.hospital.question.user.domain.Question;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.repository.MemberRepository;
-import site.hospital.question.repository.QuestionRepository;
+import site.hospital.question.user.repository.QuestionRepository;
 import site.hospital.common.service.ManagerJwtAccessService;
 
 @Service

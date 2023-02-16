@@ -3,34 +3,27 @@ package site.hospital.review.user.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.hospital.common.service.ImageManagementService;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.hospital.user.domain.Hospital;
+import site.hospital.hospital.user.repository.HospitalRepository;
+import site.hospital.member.user.domain.Member;
+import site.hospital.member.user.repository.MemberRepository;
 import site.hospital.review.user.api.dto.ReviewConfirmLikeResponse;
 import site.hospital.review.user.api.dto.ReviewCreateRequest;
 import site.hospital.review.user.api.dto.ReviewCreateResponse;
 import site.hospital.review.user.api.dto.member.ReviewViewByMemberResponse;
-import site.hospital.review.user.api.dto.searchReviews.ReviewSearchListsResponse;
 import site.hospital.review.user.api.dto.viewDetail.ReviewViewDetailResponse;
 import site.hospital.review.user.api.dto.viewLists.ReviewViewListsResponse;
-import site.hospital.review.user.domain.ReviewLike;
-import site.hospital.hospital.user.domain.Hospital;
-import site.hospital.member.user.domain.Member;
 import site.hospital.review.user.domain.Review;
-import site.hospital.review.user.domain.ReviewAuthentication;
+import site.hospital.review.user.domain.ReviewLike;
 import site.hospital.review.user.domain.reviewHospital.EvaluationCriteria;
 import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
-import site.hospital.review.admin.repository.dto.AdminReviewSearchCondition;
-import site.hospital.review.user.repository.dto.StaffReviewSearchCondition;
-import site.hospital.hospital.user.repository.HospitalRepository;
-import site.hospital.member.user.repository.MemberRepository;
 import site.hospital.review.user.repository.ReviewRepository;
 import site.hospital.review.user.repository.query.ReviewSearchDto;
 import site.hospital.review.user.repository.query.ReviewSearchRepository;
@@ -46,7 +39,6 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
     private final ReviewSearchRepository reviewSearchRepository;
-    private final ManagerJwtAccessService managerJwtAccessService;
     private final ImageManagementService imageManagementService;
 
     //리뷰 등록
@@ -165,86 +157,10 @@ public class ReviewService {
         return reviewSearchRepository.searchReview(searchName, pageable);
     }
 
-    //병원 관계자 리뷰 검색
-    public Page<ReviewSearchListsResponse> staffSearchReviews(
-            ServletRequest servletRequest,
-            String nickName,
-            String memberIdName,
-            Pageable pageable
-    ) {
-        StaffReviewSearchCondition condition = StaffReviewSearchCondition.builder()
-                .nickName(nickName).memberIdName(memberIdName).build();
-
-        Long hospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
-        Page<Review> reviews = reviewRepository.staffSearchReviews(hospitalId, condition, pageable);
-
-        List<ReviewSearchListsResponse> result = reviews.stream()
-                .map(r -> ReviewSearchListsResponse.from(r))
-                .collect(Collectors.toList());
-
-        Long total = reviews.getTotalElements();
-
-        return new PageImpl(result, pageable, total);
-    }
-
-    //관리자 리뷰 검색
-    public Page<ReviewSearchListsResponse> adminSearchReviews(
-            String nickName,
-            String hospitalName,
-            String memberIdName,
-            Pageable pageable
-    ) {
-        AdminReviewSearchCondition condition = AdminReviewSearchCondition.builder()
-                .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
-
-        Page<Review> reviews = reviewRepository.adminSearchReviews(condition, pageable);
-
-        List<ReviewSearchListsResponse> result = reviews.stream()
-                .map(r -> ReviewSearchListsResponse.from(r))
-                .collect(Collectors.toList());
-
-        Long total = reviews.getTotalElements();
-
-        return new PageImpl(result, pageable, total);
-    }
-
-    //관리자 미승인 리뷰 갯수
-    public Long adminUnapprovedReviewCount() {
-        return reviewRepository.adminUnapprovedReviewCount();
-    }
-
-    //관리자 승인 대기 리뷰 검색
-    public Page<ReviewSearchListsResponse> adminSearchUnapprovedReviews(Pageable pageable) {
-        Page<Review> reviews = reviewRepository.adminSearchUnapprovedReviews(pageable);
-        List<ReviewSearchListsResponse> result = reviews.stream()
-                .map(r -> ReviewSearchListsResponse.from(r))
-                .collect(Collectors.toList());
-
-        Long total = reviews.getTotalElements();
-
-        return new PageImpl(result, pageable, total);
-    }
-
-    //관리자 리뷰 승인해주기
-    @Transactional
-    public void approve(Long reviewId, ReviewAuthentication reviewAuthentication) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
-        review.approveCertification(reviewAuthentication);
-    }
-
     //리뷰 상세 보기
     public ReviewViewDetailResponse viewHospitalReview(Long reviewId) {
         Review review = reviewRepository.viewHospitalReview(reviewId);
         return ReviewViewDetailResponse.from(review);
     }
 
-    //관리자 리뷰 삭제
-    @Transactional
-    public void deleteReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
-
-        reviewRepository.deleteById(reviewId);
-    }
 }

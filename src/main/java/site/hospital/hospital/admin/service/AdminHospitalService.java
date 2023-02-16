@@ -26,7 +26,7 @@ import site.hospital.hospital.user.repository.HospitalAdditionalInfoRepository;
 import site.hospital.hospital.admin.repository.adminSearchQuery.AdminHospitalSearchRepository;
 import site.hospital.hospital.admin.repository.adminSearchQuery.AdminSearchHospitalDto;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalSearchCondition;
-import site.hospital.question.repository.QuestionRepository;
+import site.hospital.question.user.repository.QuestionRepository;
 import site.hospital.review.user.repository.ReviewRepository;
 
 @Service

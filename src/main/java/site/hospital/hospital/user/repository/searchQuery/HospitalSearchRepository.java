@@ -2,8 +2,8 @@ package site.hospital.hospital.user.repository.searchQuery;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static site.hospital.hospital.user.domain.QHospitalThumbnail.hospitalThumbnail;
-import static site.hospital.tag.domain.QPostTag.postTag;
-import static site.hospital.tag.domain.QTag.tag;
+import static site.hospital.tag.manager.domain.QPostTag.postTag;
+import static site.hospital.tag.manager.domain.QTag.tag;
 import static site.hospital.hospital.user.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.hospital.user.domain.QHospital.hospital;
 import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;

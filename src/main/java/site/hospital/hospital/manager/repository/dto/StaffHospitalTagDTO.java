@@ -1,7 +1,7 @@
 package site.hospital.hospital.manager.repository.dto;
 
 import lombok.Data;
-import site.hospital.tag.domain.PostTag;
+import site.hospital.tag.manager.domain.PostTag;
 
 @Data
 public class StaffHospitalTagDTO {
