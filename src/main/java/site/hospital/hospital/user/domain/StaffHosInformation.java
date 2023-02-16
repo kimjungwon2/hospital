@@ -17,7 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.common.domain.BaseEntity;
-import site.hospital.doctor.domain.Doctor;
+import site.hospital.doctor.manager.domain.Doctor;
 
 
 @Entity

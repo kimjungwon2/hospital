@@ -2,7 +2,7 @@ package site.hospital.hospital.user.repository.viewQuery;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
-import site.hospital.estimation.domain.EstimationList;
+import site.hospital.estimation.admin.domain.EstimationList;
 
 @Data
 public class HospitalEstimationDTO {

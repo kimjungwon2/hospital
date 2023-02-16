@@ -19,12 +19,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.hospital.bookmark.domain.Bookmark;
+import site.hospital.bookmark.user.domain.Bookmark;
 import site.hospital.tag.domain.PostTag;
 import site.hospital.question.domain.Question;
 import site.hospital.common.domain.BaseEntity;
 import site.hospital.hospital.user.domain.detailedHosInformation.DetailedHosInformation;
-import site.hospital.estimation.domain.Estimation;
+import site.hospital.estimation.admin.domain.Estimation;
 import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
 
 @Entity

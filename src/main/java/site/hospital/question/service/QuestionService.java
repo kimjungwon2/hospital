@@ -9,17 +9,17 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.common.service.JwtStaffAccessService;
+import site.hospital.common.service.ManagerJwtAccessService;
 import site.hospital.question.api.dto.QuestionCreateRequest;
 import site.hospital.question.api.dto.QuestionCreateResponse;
 import site.hospital.question.api.dto.QuestionSearchResponse;
-import site.hospital.answer.domain.Answer;
+import site.hospital.answer.manager.domain.Answer;
 import site.hospital.question.domain.Question;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.member.user.domain.Member;
 import site.hospital.question.repository.dto.AdminQuestionSearchCondition;
 import site.hospital.question.repository.dto.StaffQuestionSearchCondition;
-import site.hospital.answer.repository.AnswerRepository;
+import site.hospital.answer.manager.repository.AnswerRepository;
 import site.hospital.hospital.user.repository.HospitalRepository;
 import site.hospital.member.user.repository.MemberRepository;
 import site.hospital.question.repository.QuestionRepository;
@@ -42,7 +42,7 @@ public class QuestionService {
     private final UserQuestionRepository userQuestionRepository;
     private final AdminQuestionSearchRepository adminQuestionSearchRepository;
     private final AnswerRepository answerRepository;
-    private final JwtStaffAccessService jwtStaffAccessService;
+    private final ManagerJwtAccessService managerJwtAccessService;
 
     //Question 작성
     @Transactional
@@ -106,7 +106,7 @@ public class QuestionService {
                 .memberIdName(memberIdName)
                 .build();
 
-        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
         Page<Question> questions = questionRepository
                 .staffSearchHospitalQuestion(JwtHospitalId, condition, pageable);
@@ -134,7 +134,7 @@ public class QuestionService {
                         .memberIdName(memberIdName)
                         .build();
 
-        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
         Page<Question> questions = questionRepository
                 .staffSearchNoQuestion(JwtHospitalId, condition, pageable);
@@ -150,7 +150,7 @@ public class QuestionService {
 
     //병원 관계자 미답변 question 갯수 확인
     public Long staffQuestionNoAnswer(ServletRequest servletRequest) {
-        Long JwtHospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
         return questionRepository.staffQuestionNoAnswer(JwtHospitalId);
     }

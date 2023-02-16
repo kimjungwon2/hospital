@@ -3,7 +3,7 @@ package site.hospital.hospital.user.api.dto;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import site.hospital.doctor.repository.dto.CreateDoctorRequest;
+import site.hospital.doctor.manager.repository.dto.CreateDoctorRequest;
 
 @Data
 public class HospitalCreateStaffHosInfoRequest {

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.hospital.common.service.ImageManagementService;
-import site.hospital.common.service.JwtStaffAccessService;
+import site.hospital.common.service.ManagerJwtAccessService;
 import site.hospital.review.user.api.dto.ReviewConfirmLikeResponse;
 import site.hospital.review.user.api.dto.ReviewCreateRequest;
 import site.hospital.review.user.api.dto.ReviewCreateResponse;
@@ -46,7 +46,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
     private final ReviewSearchRepository reviewSearchRepository;
-    private final JwtStaffAccessService jwtStaffAccessService;
+    private final ManagerJwtAccessService managerJwtAccessService;
     private final ImageManagementService imageManagementService;
 
     //리뷰 등록
@@ -175,7 +175,7 @@ public class ReviewService {
         StaffReviewSearchCondition condition = StaffReviewSearchCondition.builder()
                 .nickName(nickName).memberIdName(memberIdName).build();
 
-        Long hospitalId = jwtStaffAccessService.getHospitalNumber(servletRequest);
+        Long hospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
         Page<Review> reviews = reviewRepository.staffSearchReviews(hospitalId, condition, pageable);
 
         List<ReviewSearchListsResponse> result = reviews.stream()

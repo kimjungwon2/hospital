@@ -7,11 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import site.hospital.hospital.user.api.HospitalApiController;
+import site.hospital.hospital.user.api.HospitalController;
 import site.hospital.common.exception.ErrorResponse;
 
 @Slf4j
-@ControllerAdvice(assignableTypes = HospitalApiController.class)
+@ControllerAdvice(assignableTypes = HospitalController.class)
 @Order(2)
 public class HospitalApiControllerAdvice {
 

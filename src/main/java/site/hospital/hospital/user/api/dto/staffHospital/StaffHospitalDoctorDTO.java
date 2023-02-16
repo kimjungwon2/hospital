@@ -1,7 +1,7 @@
 package site.hospital.hospital.user.api.dto.staffHospital;
 
 import lombok.Data;
-import site.hospital.doctor.domain.Doctor;
+import site.hospital.doctor.manager.domain.Doctor;
 
 @Data
 public class StaffHospitalDoctorDTO {
