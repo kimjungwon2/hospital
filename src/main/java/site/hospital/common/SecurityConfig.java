@@ -41,7 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //허용 url
     private static final String[] PUBLIC_URI = {
-            "/api/test",
             "/api/login", "/api/signup", "/api/search/hospital/**", "/api/search/review/**", "/api/hospital/view/**",
             "/api/hospital/staffHosInfo/**", "/api/hospital/review/**",
             "/api/hospital/question/**"
