@@ -10,11 +10,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import site.hospital.member.user.api.MemberApiController;
+import site.hospital.member.user.api.MemberController;
 import site.hospital.common.exception.ErrorResponse;
 
 @Slf4j
-@ControllerAdvice(assignableTypes = MemberApiController.class)
+@ControllerAdvice(assignableTypes = MemberController.class)
 @Order(1)
 public class MemberApiControllerAdvice {
 

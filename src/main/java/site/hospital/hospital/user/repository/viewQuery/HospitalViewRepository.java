@@ -1,8 +1,8 @@
 package site.hospital.hospital.user.repository.viewQuery;
 
 import static site.hospital.hospital.user.domain.QHospitalImage.hospitalImage;
-import static site.hospital.tag.domain.QPostTag.postTag;
-import static site.hospital.tag.domain.QTag.tag;
+import static site.hospital.tag.manager.domain.QPostTag.postTag;
+import static site.hospital.tag.manager.domain.QTag.tag;
 import static site.hospital.hospital.user.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.estimation.admin.domain.QEstimation.estimation;
 import static site.hospital.hospital.user.domain.QHospital.hospital;

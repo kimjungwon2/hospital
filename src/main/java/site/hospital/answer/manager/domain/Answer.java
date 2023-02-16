@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.common.domain.BaseTimeEntity;
 import site.hospital.member.user.domain.Member;
-import site.hospital.question.domain.Question;
+import site.hospital.question.user.domain.Question;
 
 @Entity
 @Getter
