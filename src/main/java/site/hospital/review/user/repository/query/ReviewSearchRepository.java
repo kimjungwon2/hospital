@@ -1,11 +1,11 @@
 package site.hospital.review.user.repository.query;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
-import static site.hospital.domain.QReviewLike.reviewLike;
-import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.review.QReview.review;
-import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.review.user.domain.QReviewLike.reviewLike;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
+import static site.hospital.member.user.domain.QMember.member;
+import static site.hospital.review.user.domain.QReview.review;
+import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -19,9 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import site.hospital.review.user.domain.Review;
-import site.hospital.repository.review.query.QReviewHospitalDTO2;
-import site.hospital.repository.review.query.QReviewLikeSearchDTO;
-import site.hospital.repository.review.query.QReviewSearchDto;
 
 @Repository
 public class ReviewSearchRepository {

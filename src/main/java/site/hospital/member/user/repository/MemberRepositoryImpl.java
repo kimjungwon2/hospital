@@ -1,8 +1,8 @@
 package site.hospital.member.user.repository;
 
-import static site.hospital.domain.member.QAuthority.authority;
-import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.member.QMemberAuthority.memberAuthority;
+import static site.hospital.member.user.domain.QAuthority.authority;
+import static site.hospital.member.user.domain.QMember.member;
+import static site.hospital.member.user.domain.QMemberAuthority.memberAuthority;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;

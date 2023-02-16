@@ -1,9 +1,9 @@
 package site.hospital.question.repository;
 
-import static site.hospital.domain.QAnswer.answer;
-import static site.hospital.domain.QQuestion.question;
-import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.member.QMember.member;
+import static site.hospital.answer.manager.domain.QAnswer.answer;
+import static site.hospital.question.domain.QQuestion.question;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
+import static site.hospital.member.user.domain.QMember.member;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;

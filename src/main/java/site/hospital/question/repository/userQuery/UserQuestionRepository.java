@@ -1,16 +1,16 @@
 package site.hospital.question.repository.userQuery;
 
-import static site.hospital.domain.QAnswer.answer;
-import static site.hospital.domain.QQuestion.question;
-import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.member.QMember.member;
+import static site.hospital.answer.manager.domain.QAnswer.answer;
+import static site.hospital.question.domain.QQuestion.question;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
+import static site.hospital.member.user.domain.QMember.member;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import site.hospital.repository.question.userQuery.QSearchUserQuestionDTO;
+
 
 @Repository
 public class UserQuestionRepository {

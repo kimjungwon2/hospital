@@ -1,8 +1,8 @@
 package site.hospital.tag.repository;
 
-import static site.hospital.domain.QPostTag.postTag;
-import static site.hospital.domain.QTag.tag;
-import static site.hospital.domain.hospital.QHospital.hospital;
+import static site.hospital.tag.domain.QPostTag.postTag;
+import static site.hospital.tag.domain.QTag.tag;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

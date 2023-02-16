@@ -1,9 +1,9 @@
 package site.hospital.hospital.admin.repository.adminSearchQuery;
 
-import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
-import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
-import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
-import static site.hospital.domain.hospital.QHospital.hospital;
+import static site.hospital.hospital.user.domain.QHospitalThumbnail.hospitalThumbnail;
+import static site.hospital.hospital.user.domain.QStaffHosInformation.staffHosInformation;
+import static site.hospital.hospital.user.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import site.hospital.hospital.user.domain.BusinessCondition;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalSearchCondition;
-import site.hospital.repository.hospital.adminSearchQuery.QAdminSearchHospitalDto;
 
 @Repository
 public class AdminHospitalSearchRepository {
