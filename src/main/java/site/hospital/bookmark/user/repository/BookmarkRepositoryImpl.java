@@ -1,6 +1,10 @@
 package site.hospital.bookmark.user.repository;
 
 
+import static site.hospital.bookmark.user.domain.QBookmark.bookmark;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
+import static site.hospital.member.user.domain.QMember.member;
+
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
