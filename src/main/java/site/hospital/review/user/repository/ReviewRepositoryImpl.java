@@ -1,10 +1,10 @@
 package site.hospital.review.user.repository;
 
 
-import static site.hospital.domain.QReviewImage.reviewImage;
-import static site.hospital.domain.member.QMember.member;
-import static site.hospital.domain.review.QReview.review;
-import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.review.user.domain.QReviewImage.reviewImage;
+import static site.hospital.member.user.domain.QMember.member;
+import static site.hospital.review.user.domain.QReview.review;
+import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;

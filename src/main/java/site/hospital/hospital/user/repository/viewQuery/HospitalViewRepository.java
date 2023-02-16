@@ -1,23 +1,18 @@
 package site.hospital.hospital.user.repository.viewQuery;
 
-import static site.hospital.domain.QHospitalImage.hospitalImage;
-import static site.hospital.domain.QPostTag.postTag;
-import static site.hospital.domain.QTag.tag;
-import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
-import static site.hospital.domain.estimation.QEstimation.estimation;
-import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.hospital.user.domain.QHospitalImage.hospitalImage;
+import static site.hospital.tag.domain.QPostTag.postTag;
+import static site.hospital.tag.domain.QTag.tag;
+import static site.hospital.hospital.user.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
+import static site.hospital.estimation.admin.domain.QEstimation.estimation;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
+import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import site.hospital.repository.hospital.viewQuery.QHospitalEstimationDTO;
-import site.hospital.repository.hospital.viewQuery.QHospitalImageDTO;
-import site.hospital.repository.hospital.viewQuery.QHospitalReviewDTO;
-import site.hospital.repository.hospital.viewQuery.QHospitalTagDTO;
-import site.hospital.repository.hospital.viewQuery.QViewHospitalDTO;
 
 @Repository
 public class HospitalViewRepository {

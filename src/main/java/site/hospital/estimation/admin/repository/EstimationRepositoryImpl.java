@@ -1,6 +1,6 @@
 package site.hospital.estimation.admin.repository;
 
-import static site.hospital.domain.estimation.QEstimation.estimation;
+import static site.hospital.estimation.admin.domain.QEstimation.estimation;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

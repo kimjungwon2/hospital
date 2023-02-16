@@ -1,6 +1,6 @@
 package site.hospital.review.user.repository.reviewLike;
 
-import static site.hospital.domain.QReviewLike.reviewLike;
+import static site.hospital.review.user.domain.QReviewLike.reviewLike;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

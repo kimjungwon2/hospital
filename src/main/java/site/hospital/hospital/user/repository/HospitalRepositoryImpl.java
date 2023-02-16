@@ -1,9 +1,9 @@
 package site.hospital.hospital.user.repository;
 
-import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
-import static site.hospital.domain.QStaffHosInformation.staffHosInformation;
-import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
-import static site.hospital.domain.hospital.QHospital.hospital;
+import static site.hospital.hospital.user.domain.QHospitalThumbnail.hospitalThumbnail;
+import static site.hospital.hospital.user.domain.QStaffHosInformation.staffHosInformation;
+import static site.hospital.hospital.user.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

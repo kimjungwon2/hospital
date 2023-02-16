@@ -1,8 +1,5 @@
 package site.hospital.bookmark.user.repository;
 
-import static site.hospital.domain.QBookmark.bookmark;
-import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.member.QMember.member;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;

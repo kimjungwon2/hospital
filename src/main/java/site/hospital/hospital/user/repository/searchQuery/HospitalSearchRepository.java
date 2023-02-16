@@ -1,12 +1,12 @@
 package site.hospital.hospital.user.repository.searchQuery;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
-import static site.hospital.domain.QHospitalThumbnail.hospitalThumbnail;
-import static site.hospital.domain.QPostTag.postTag;
-import static site.hospital.domain.QTag.tag;
-import static site.hospital.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
-import static site.hospital.domain.hospital.QHospital.hospital;
-import static site.hospital.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.hospital.user.domain.QHospitalThumbnail.hospitalThumbnail;
+import static site.hospital.tag.domain.QPostTag.postTag;
+import static site.hospital.tag.domain.QTag.tag;
+import static site.hospital.hospital.user.domain.detailedHosInformation.QDetailedHosInformation.detailedHosInformation;
+import static site.hospital.hospital.user.domain.QHospital.hospital;
+import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -20,10 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import site.hospital.hospital.user.domain.Hospital;
-import site.hospital.repository.hospital.searchQuery.QHospitalSearchDto;
-import site.hospital.repository.hospital.searchQuery.QPostTagDto;
-import site.hospital.repository.hospital.searchQuery.QReviewHospitalDto;
-
 
 @Repository
 public class HospitalSearchRepository {
