@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import site.hospital.hospital.user.api.dto.searchver2.HospitalSearchListsVer2Response;
+import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.hospital.user.repository.searchQuery.HospitalSearchDto;
 import site.hospital.hospital.user.repository.viewQuery.ViewHospitalDTO;
 import site.hospital.hospital.user.service.HospitalService;
@@ -27,6 +29,16 @@ public class HospitalController {
     ) {
         return hospitalService.searchHospital(searchName, pageable);
     }
+
+    //병원 검색 버전 2
+    @GetMapping("/search/hospital/v2/{searchName}")
+    public Page<HospitalSearchListsVer2Response> searchHospitalVer2(
+            @PathVariable("searchName") String searchName,
+            Pageable pageable
+    ) {
+        return hospitalService.searchHospitalVer2(searchName, pageable);
+    }
+
 
     //병원 정보 보기(고객)
     @GetMapping("/hospital/view/{hospitalId}")
