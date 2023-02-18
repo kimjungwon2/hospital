@@ -30,6 +30,10 @@ public class HospitalService {
         return hospitalSearchRepository.searchHospital(searchName, pageable);
     }
 
+    public Page<HospitalSearchDto> searchHospitalVer1(String searchName, Pageable pageable){
+        return hospitalRepository.searchHospitalVer1(searchName,pageable);
+    }
+
     //병원 검색 실험
     public Page<HospitalSearchListsVer2Response> searchHospitalVer2(String searchName, Pageable pageable) {
         Page<Hospital> hospitals = hospitalRepository.searchHospitalVer2(searchName,pageable);

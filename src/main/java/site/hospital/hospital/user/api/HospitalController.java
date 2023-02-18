@@ -30,6 +30,15 @@ public class HospitalController {
         return hospitalService.searchHospital(searchName, pageable);
     }
 
+    //병원 검색 버전 1
+    @GetMapping("/search/hospital/v1/{searchName}")
+    public Page<HospitalSearchDto> searchHospitalVer1(
+            @PathVariable("searchName") String searchName,
+            Pageable pageable
+    ) {
+        return hospitalService.searchHospitalVer1(searchName, pageable);
+    }
+
     //병원 검색 버전 2
     @GetMapping("/search/hospital/v2/{searchName}")
     public Page<HospitalSearchListsVer2Response> searchHospitalVer2(
