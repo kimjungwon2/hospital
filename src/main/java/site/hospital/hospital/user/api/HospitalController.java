@@ -33,5 +33,4 @@ public class HospitalController {
     public ViewHospitalDTO viewsHospital(@PathVariable("hospitalId") Long hospitalId) {
         return hospitalService.viewHospital(hospitalId);
     }
-
 }
