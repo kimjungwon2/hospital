@@ -34,6 +34,5 @@ public class ReviewSearchListsResponse {
                         .map(reviewHospital -> new ReviewSearchListsHospitalDTO(reviewHospital))
                         .collect(Collectors.toList()))
                 .build();
-
     }
 }
