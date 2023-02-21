@@ -33,7 +33,7 @@ public class ManagerHospitalAdditionalInfoService {
         Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
 
         managerJwtAccessService
-                .staffAccessFunction(servletRequest, request.getMemberId(), hospital.getId());
+                .managerAccess(servletRequest, request.getMemberId(), hospital.getId());
 
         StaffHosInformation modifyStaffHosInformation = StaffHosInformation.builder()
                 .abnormality(request.getAbnormality())
@@ -55,7 +55,7 @@ public class ManagerHospitalAdditionalInfoService {
         Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
 
         //토큰의 권한과 authority의 병원 번호가 일치한지 확인.
-        managerJwtAccessService.staffAccessFunction(servletRequest, memberId, hospital.getId());
+        managerJwtAccessService.managerAccess(servletRequest, memberId, hospital.getId());
 
         //외래키 삭제
         hospital.deleteStaffHosId();

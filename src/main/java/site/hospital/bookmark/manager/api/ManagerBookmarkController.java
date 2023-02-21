@@ -17,9 +17,8 @@ public class ManagerBookmarkController {
 
     private final ManagerBookmarkService managerBookmarkService;
 
-    //병원 관계자 즐겨찾기한 유저 검색
     @GetMapping("/staff/bookmark/search/user")
-    public Page staffSearchBookmarkUsers(ServletRequest servletRequest,
+    public Page managerSearchBookmarkUsers(ServletRequest servletRequest,
             @RequestParam(value = "nickName", required = false) String nickName,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
@@ -27,7 +26,7 @@ public class ManagerBookmarkController {
     ) {
 
         return managerBookmarkService
-                .staffSearchBookmarkUsers(
+                .managerSearchBookmarkUsers(
                         servletRequest,
                         nickName,
                         memberIdName,

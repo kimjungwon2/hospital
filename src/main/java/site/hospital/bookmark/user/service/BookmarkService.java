@@ -24,64 +24,64 @@ public class BookmarkService {
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
 
-    //북마크 여부 확인.
-    public BookmarkCheckResponse isBookmark(Long memberId, Long hospitalId) {
-        Boolean isBookmark = false;
 
-        Bookmark bookmark = bookmarkRepository.isUserBookmark(memberId, hospitalId);
+    public BookmarkCheckResponse userCheckBookmark(Long memberId, Long hospitalId) {
+        Bookmark checkBookmark = bookmarkRepository.userCheckBookmark(memberId, hospitalId);
+        Boolean bookmarkExistence = bookmarkPresent(checkBookmark);
 
-        //북마크가 있으면 true 반환.
+        return BookmarkCheckResponse.from(bookmarkExistence);
+    }
+
+    private Boolean bookmarkPresent(Bookmark bookmark) {
+        Boolean checkBookmark = false;
+
         if (bookmark != null) {
-            isBookmark = true;
+            checkBookmark = true;
         }
-
-        return BookmarkCheckResponse.from(isBookmark);
+        return checkBookmark;
     }
 
     @Transactional
-    public void bookmark(BookmarkCreateRequest request) {
+    public void userRegisterBookmark(BookmarkCreateRequest request) {
 
-        //북마크 했는지 체크 여부
-        Boolean existence = false;
+        Bookmark checkBookmark = bookmarkRepository
+                                .userCheckBookmark(request.getMemberId(), request.getHospitalId());
 
-        //북마크 있는지 확인.
-        Bookmark isBookmark = bookmarkRepository
-                .isUserBookmark(request.getMemberId(), request.getHospitalId());
+        Boolean bookmarkExistence = bookmarkPresent(checkBookmark);
 
-        //북마크 존재 시, true
-        if (isBookmark != null) {
-            existence = true;
+        if (bookmarkExistence == true) {
+            deleteBookmark(checkBookmark);
         }
-
-        //북마크가 있으면 삭제.
-        if (existence == true) {
-            bookmarkRepository.delete(isBookmark);
-        }
-
-        //북마크 여부가 없으면 북마크 저장
         else {
-            Member member = memberRepository
-                    .findById(request.getMemberId())
-                    .orElseThrow(
-                            () -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
-
-            Hospital hospital = hospitalRepository
-                    .findById(request.getHospitalId())
-                    .orElseThrow(
-                            () -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
-            Bookmark bookmark = Bookmark.createBookmark(member, hospital);
-            bookmarkRepository.save(bookmark);
+            saveBookmark(request);
         }
     }
 
+    private void deleteBookmark(Bookmark checkBookmark) {
+        bookmarkRepository.delete(checkBookmark);
+    }
 
-    //멤버 즐겨찾기 조회
-    public List<BookmarkSearchMemberResponse> searchMemberBookmark(Long memberId) {
+    private void saveBookmark(BookmarkCreateRequest request) {
+        Member member = memberRepository
+                .findById(request.getMemberId())
+                .orElseThrow(
+                        () -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+
+        Hospital hospital = hospitalRepository
+                .findById(request.getHospitalId())
+                .orElseThrow(
+                        () -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+
+        Bookmark bookmark = Bookmark.createBookmark(member, hospital);
+        bookmarkRepository.save(bookmark);
+    }
+
+    public List<BookmarkSearchMemberResponse> searchUserBookmarks(Long memberId) {
         List<Bookmark> bookmarks = bookmarkRepository.searchBookmark(memberId, null);
-        List<BookmarkSearchMemberResponse> result = bookmarks.stream()
-                .map(b -> BookmarkSearchMemberResponse.from(b))
-                .collect(Collectors.toList());
 
-        return result;
+        return bookmarks
+                .stream()
+                .map(bookmark -> BookmarkSearchMemberResponse.from(bookmark))
+                .collect(Collectors.toList());
     }
 }

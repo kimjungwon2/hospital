@@ -26,7 +26,7 @@ public class ManagerJwtAccessService {
     private final MemberRepository memberRepository;
 
     //staff 권한 접근.
-    public void staffAccessFunction(ServletRequest servletRequest, Long memberId,
+    public void managerAccess(ServletRequest servletRequest, Long memberId,
             Long existingHospitalId) {
 
         //토큰의 병원 번호

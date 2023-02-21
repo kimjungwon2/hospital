@@ -17,14 +17,12 @@ public class AdminBookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
 
-    //관리자 즐겨찾기 조회
-    public List<BookmarkSearchResponse> searchAdminBookmark() {
+    public List<BookmarkSearchResponse> adminSearchBookmarkUsers() {
         List<Bookmark> bookmarks = bookmarkRepository.searchBookmark(null, null);
-        List<BookmarkSearchResponse> result =
-                bookmarks.stream()
-                        .map(b -> BookmarkSearchResponse.from(b))
-                        .collect(Collectors.toList());
 
-        return result;
+        return bookmarks
+                .stream()
+                .map(bookmark -> BookmarkSearchResponse.from(bookmark))
+                .collect(Collectors.toList());
     }
 }

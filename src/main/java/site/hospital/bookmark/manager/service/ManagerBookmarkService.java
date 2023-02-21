@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.bookmark.user.api.dto.BookmarkAdminSearchMemberResponse;
 import site.hospital.bookmark.user.domain.Bookmark;
 import site.hospital.bookmark.user.repository.BookmarkRepository;
-import site.hospital.bookmark.user.repository.dto.StaffBookmarkSearchCondition;
+import site.hospital.bookmark.user.repository.dto.ManagerBookmarkSearchCondition;
 import site.hospital.common.service.ManagerJwtAccessService;
 
 @Service
@@ -24,16 +24,40 @@ public class ManagerBookmarkService {
     private final ManagerJwtAccessService managerJwtAccessService;
     private final BookmarkRepository bookmarkRepository;
 
-    //병원 관계자 즐겨찾기 검색
-    public Page<Bookmark> staffSearchBookmarkUsers(
+    public Page<Bookmark> managerSearchBookmarkUsers(
             ServletRequest servletRequest,
             String nickName,
             String memberIdName,
             String phoneNumber,
             Pageable pageable
     ) {
-        StaffBookmarkSearchCondition condition =
-                StaffBookmarkSearchCondition
+        Page<Bookmark> managerSearchBookmarkUsers = getManagerSearchBookmarkUsers(
+                                                servletRequest,
+                                                nickName,
+                                                memberIdName,
+                                                phoneNumber,
+                                                pageable);
+
+        List<BookmarkAdminSearchMemberResponse> content =
+                        managerSearchBookmarkUsers
+                        .stream()
+                        .map(b -> BookmarkAdminSearchMemberResponse.from(b))
+                        .collect(Collectors.toList());
+
+        Long totalPage = managerSearchBookmarkUsers.getTotalElements();
+
+        return new PageImpl(content, pageable, totalPage);
+    }
+
+    private Page<Bookmark> getManagerSearchBookmarkUsers(
+            ServletRequest servletRequest,
+            String nickName,
+            String memberIdName,
+            String phoneNumber,
+            Pageable pageable
+    ) {
+        ManagerBookmarkSearchCondition searchCondition =
+                ManagerBookmarkSearchCondition
                         .builder()
                         .nickName(nickName)
                         .memberIdName(memberIdName)
@@ -42,16 +66,9 @@ public class ManagerBookmarkService {
 
         Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
-        Page<Bookmark> bookmarks = bookmarkRepository
-                .staffSearchBookmark(JwtHospitalId, condition, pageable);
+        Page<Bookmark> findSearchBookmarkUsers = bookmarkRepository
+                .managerSearchBookmarkUsers(JwtHospitalId, searchCondition, pageable);
 
-        List<BookmarkAdminSearchMemberResponse> content =
-                bookmarks.stream()
-                        .map(b -> BookmarkAdminSearchMemberResponse.from(b))
-                        .collect(Collectors.toList());
-
-        Long total = bookmarks.getTotalElements();
-
-        return new PageImpl(content, pageable, total);
+        return findSearchBookmarkUsers;
     }
 }

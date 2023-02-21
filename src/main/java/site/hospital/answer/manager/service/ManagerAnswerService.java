@@ -29,25 +29,34 @@ public class ManagerAnswerService {
             ServletRequest servletRequest,
             AnswerCreateRequest request
     ) {
-        Member member = memberRepository
-                .findById(request.getMemberId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+        Member member = memberRepository.findById(request.getMemberId())
+                                        .orElseThrow(
+                                                () -> new IllegalStateException("Member not exist"));
 
-        Question question = questionRepository
-                .findById(request.getQuestionId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 질문이 존재하지 않습니다."));
+        Question question = questionRepository.findById(request.getQuestionId())
+                                              .orElseThrow(
+                                                      () -> new IllegalStateException("Question not exist"));
 
-        managerJwtAccessService
-                .staffAccessFunction(servletRequest, member.getId(),
-                        question.getHospital().getId());
+        managerJwtAccessService.managerAccess(servletRequest,
+                                              member.getId(),
+                                              question.getHospital().getId());
 
-        Answer answer = Answer.builder().answerContent(request.getAnswerContent()).build();
-
-        answer.changeMember(member);
-
-        answerRepository.save(answer);
-        question.changeAnswer(answer);
+        Answer answer = createAnswer(request, member, question);
 
         return answer.getId();
+    }
+
+    private Answer createAnswer(AnswerCreateRequest request,
+                               Member member,
+                                Question question
+    ) {
+        Answer answer = Answer.builder()
+                              .answerContent(request.getAnswerContent())
+                              .build();
+
+        answer.changeMember(member);
+        answerRepository.save(answer);
+        question.changeAnswer(answer);
+        return answer;
     }
 }

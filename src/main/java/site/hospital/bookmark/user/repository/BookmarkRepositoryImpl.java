@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import site.hospital.bookmark.user.domain.Bookmark;
-import site.hospital.bookmark.user.repository.dto.StaffBookmarkSearchCondition;
+import site.hospital.bookmark.user.repository.dto.ManagerBookmarkSearchCondition;
 
 public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 
@@ -24,22 +24,21 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    //고객의 즐겨찾기 유무 확인
-    public Bookmark isUserBookmark(Long memberId, Long hospitalId) {
-        Bookmark result = queryFactory
+    public Bookmark userCheckBookmark(Long memberId, Long hospitalId) {
+        return queryFactory
                 .select(bookmark)
                 .from(bookmark)
                 .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
                 .fetchOne();
-
-        return result;
     }
 
-    //병원 관계자 북마크 확인.
-    public Page<Bookmark> staffSearchBookmark(Long hospitalId,
-            StaffBookmarkSearchCondition condition,
-            Pageable pageable) {
-        QueryResults<Bookmark> result = queryFactory
+    public Page<Bookmark> managerSearchBookmarkUsers(
+            Long hospitalId,
+            ManagerBookmarkSearchCondition condition,
+            Pageable pageable
+    ) {
+        QueryResults<Bookmark> result =
+                queryFactory
                 .select(bookmark)
                 .from(bookmark)
                 .join(bookmark.member, member).fetchJoin()
@@ -52,13 +51,13 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 
         List<Bookmark> content = result.getResults();
 
-        long total = result.getTotal();
+        long totalPage = result.getTotal();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(content, pageable, totalPage);
     }
 
     public List<Bookmark> searchBookmark(Long memberId, Long hospitalId) {
-        List<Bookmark> result = queryFactory
+        return queryFactory
                 .select(bookmark)
                 .from(bookmark)
                 .join(bookmark.member, member).fetchJoin()
@@ -66,7 +65,6 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
                 .where(memberIdEq(memberId), hospitalIdEq(hospitalId))
                 .fetch();
 
-        return result;
     }
 
     private BooleanExpression memberIdNameLike(String memberIdName) {
