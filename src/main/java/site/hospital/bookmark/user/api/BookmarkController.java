@@ -21,27 +21,23 @@ public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-    //북마크 등록 + 삭제
     @PostMapping("/user/hospital/bookmark/register")
-    public void saveBookmark(@RequestBody @Validated BookmarkCreateRequest request) {
-        bookmarkService.bookmark(request);
+    public void userRegisterBookmark(@RequestBody @Validated BookmarkCreateRequest request) {
+        bookmarkService.userRegisterBookmark(request);
     }
 
-    //북마크 여부 확인.
     @GetMapping(value = {"/user/{memberId}/bookmark/hospital/{hospitalId}"})
-    public BookmarkCheckResponse isNullBookmark(
+    public BookmarkCheckResponse userCheckBookmark(
             @PathVariable("memberId") Long memberId,
             @PathVariable("hospitalId") Long hospitalId
     ) {
-        return bookmarkService.isBookmark(memberId, hospitalId);
+        return bookmarkService.userCheckBookmark(memberId, hospitalId);
     }
 
-    //즐겨찾기 조회(사용자)
     @GetMapping("/user/{memberId}/bookmarks")
-    public List<BookmarkSearchMemberResponse> searchMemberBookmark(
+    public List<BookmarkSearchMemberResponse> userSearchBookmark(
             @PathVariable("memberId") Long memberId
     ) {
-        return bookmarkService.searchMemberBookmark(memberId);
+        return bookmarkService.searchUserBookmarks(memberId);
     }
-
 }

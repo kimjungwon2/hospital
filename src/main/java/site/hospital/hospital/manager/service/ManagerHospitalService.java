@@ -98,7 +98,7 @@ public class ManagerHospitalService {
     ) {
         Long memberId = request.getMemberId();
 
-        managerJwtAccessService.staffAccessFunction(servletRequest, memberId, hospitalId);
+        managerJwtAccessService.managerAccess(servletRequest, memberId, hospitalId);
 
         Hospital modifyHospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
@@ -145,7 +145,7 @@ public class ManagerHospitalService {
             StaffHosInformation staffHosInformation,
             List<Doctor> doctors) {
 
-        managerJwtAccessService.staffAccessFunction(servletRequest, memberId, hospitalId);
+        managerJwtAccessService.managerAccess(servletRequest, memberId, hospitalId);
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
@@ -201,7 +201,7 @@ public class ManagerHospitalService {
             Long hospitalId,
             StaffHosInformation staffHosInformation) {
 
-        managerJwtAccessService.staffAccessFunction(servletRequest, memberId, hospitalId);
+        managerJwtAccessService.managerAccess(servletRequest, memberId, hospitalId);
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
@@ -234,7 +234,7 @@ public class ManagerHospitalService {
                 .hospitalLocation(request.getHospitalLocation())
                 .hospitalAddress(request.getHospitalAddress()).build();
 
-        managerJwtAccessService.staffAccessFunction(servletRequest, request.getMemberId(),
+        managerJwtAccessService.managerAccess(servletRequest, request.getMemberId(),
                 request.getHospitalId());
 
         Hospital hospital = hospitalRepository.findById(request.getHospitalId()).
@@ -261,7 +261,7 @@ public class ManagerHospitalService {
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 상세 정보가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findByDetailedHosInformation(detailedHosInformation);
 
-        managerJwtAccessService.staffAccessFunction(servletRequest, memberId, hospital.getId());
+        managerJwtAccessService.managerAccess(servletRequest, memberId, hospital.getId());
 
         hospital.deleteDetailedHosId();
 

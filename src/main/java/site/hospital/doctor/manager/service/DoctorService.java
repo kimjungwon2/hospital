@@ -38,7 +38,7 @@ public class DoctorService {
         }
 
         managerJwtAccessService
-                .staffAccessFunction(servletRequest, request.getMemberId(), hospital.getId());
+                .managerAccess(servletRequest, request.getMemberId(), hospital.getId());
 
         StaffHosInformation staffHosInformation = hospitalAdditionalInfoRepository
                 .findById(request.getStaffHosId())
@@ -67,7 +67,7 @@ public class DoctorService {
 
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
 
-        managerJwtAccessService.staffAccessFunction(servletRequest, memberId, hospital.getId());
+        managerJwtAccessService.managerAccess(servletRequest, memberId, hospital.getId());
 
         Doctor modifyDoctor = Doctor.builder()
                 .history(request.getHistory())
@@ -83,7 +83,7 @@ public class DoctorService {
     public void staffDeleteDoctor(ServletRequest servletRequest, Long memberId, Long doctorId) {
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
 
-        managerJwtAccessService.staffAccessFunction(servletRequest, memberId, hospital.getId());
+        managerJwtAccessService.managerAccess(servletRequest, memberId, hospital.getId());
 
         doctorRepository.deleteById(doctorId);
     }

@@ -15,10 +15,9 @@ public class AdminBookmarkController {
 
     private final AdminBookmarkService adminBookmarkService;
 
-    //즐겨찾기 목록 전체 조회(관리자)
     @GetMapping("/admin/bookmark/search")
-    public List<BookmarkSearchResponse> searchBookmark() {
-        return adminBookmarkService.searchAdminBookmark();
+    public List<BookmarkSearchResponse> adminSearchBookmarkUsers() {
+        return adminBookmarkService.adminSearchBookmarkUsers();
     }
 
 }

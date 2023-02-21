@@ -24,7 +24,7 @@ public class ManagerAnswerController {
             @RequestBody @Validated AnswerCreateRequest request
     ) {
         Long id = managerAnswerService
-                .registerAnswer(servletRequest, request);
+                  .registerAnswer(servletRequest, request);
 
         return AnswerCreateResponse.from(id);
     }

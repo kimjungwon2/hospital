@@ -33,7 +33,7 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
-    //== 연관 관계 메서드 ==/
+    //== 연관 관계 메서드 ==//
     public void changeMember(Member member) {
         this.member = member;
         member.getBookmarks().add(this);
@@ -44,7 +44,7 @@ public class Bookmark extends BaseTimeEntity {
         hospital.getBookmarks().add(this);
     }
 
-    //생성 메서드
+
     public static Bookmark createBookmark(Member member, Hospital hospital) {
         Bookmark bookmark = new Bookmark();
         bookmark.changeMember(member);

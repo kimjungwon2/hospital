@@ -45,15 +45,14 @@ public class Answer extends BaseTimeEntity {
         this.question = question;
     }
 
-    @Builder
-    public Answer(String answerContent) {
-        this.answerContent = answerContent;
-    }
-
     public void changeMember(Member member) {
         this.member = member;
         member.getAnswers().add(this);
     }
 
+    @Builder
+    public Answer(String answerContent) {
+        this.answerContent = answerContent;
+    }
 
 }
