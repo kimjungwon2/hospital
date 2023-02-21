@@ -51,9 +51,9 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 
         List<Bookmark> content = result.getResults();
 
-        long totalPage = result.getTotal();
+        long total = result.getTotal();
 
-        return new PageImpl<>(content, pageable, totalPage);
+        return new PageImpl<>(content, pageable, total);
     }
 
     public List<Bookmark> searchBookmark(Long memberId, Long hospitalId) {

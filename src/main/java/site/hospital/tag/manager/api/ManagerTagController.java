@@ -21,15 +21,13 @@ public class ManagerTagController {
 
     private final ManagerTagService managerTagService;
 
-    //관계자 태그 생성
     @PostMapping("/staff/tag/create")
-    public TagCreateResponse staffSaveTag(@RequestBody @Validated TagCreateRequest request) {
-        return managerTagService.tagCreate(request);
+    public TagCreateResponse managerCreateTag(@RequestBody @Validated TagCreateRequest request) {
+        return managerTagService.createTag(request);
     }
 
-    //관계자 태그 검색
     @GetMapping("/staff/tag/search/{tagName}")
-    public Page staffSearchTagName(
+    public Page managerSearchTagName(
             @PathVariable("tagName") String tagName,
             Pageable pageable
     ) {

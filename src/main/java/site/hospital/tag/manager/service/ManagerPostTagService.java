@@ -28,9 +28,11 @@ public class ManagerPostTagService {
     private final HospitalRepository hospitalRepository;
     private final ManagerJwtAccessService managerJwtAccessService;
 
-    //병원 관계자 태그 연결
     @Transactional
-    public PostTagLinkTagResponse staffTagLink(ServletRequest servletRequest, PostTagStaffLinkTagRequest request) {
+    public PostTagLinkTagResponse managerLinkTag(
+            ServletRequest servletRequest,
+            PostTagStaffLinkTagRequest request
+    ) {
         managerJwtAccessService.managerAccess(servletRequest, request.getMemberId(), request.getHospitalId());
 
         Tag tag = tagRepository.findById(request.getTagId())
@@ -39,35 +41,40 @@ public class ManagerPostTagService {
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         validateDuplicateLinkTag(tag, hospital);
-
-        PostTag postTag = PostTag.createPostTag(tag, hospital);
-        postTagRepository.save(postTag);
+        PostTag postTag = linkTag(tag, hospital);
 
         return PostTagLinkTagResponse.from(postTag.getId());
     }
 
-    //병원 관계자 등록 태그 삭제
+    public PostTag linkTag(Tag tag, Hospital hospital) {
+        PostTag postTag = PostTag.createPostTag(tag, hospital);
+        postTagRepository.save(postTag);
+        return postTag;
+    }
+
     @Transactional
-    public void staffPostTagDelete(ServletRequest servletRequest, Long memberId, Long postTagId) {
+    public void managerDeletePostTag(
+            ServletRequest servletRequest,
+            Long memberId,
+            Long postTagId
+    ) {
         PostTag postTag = postTagRepository.findById(postTagId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 연결 태그가 존재하지 않습니다."));
 
-        managerJwtAccessService
-                .managerAccess(servletRequest, memberId, postTag.getHospital().getId());
+        managerJwtAccessService.managerAccess(servletRequest, memberId, postTag.getHospital().getId());
 
         postTagRepository.deleteById(postTagId);
     }
 
     public List<PostTagViewHospitalTagResponse> viewHospitalTag(Long hospitalId) {
-        List<PostTag> PostTags = postTagRepository.listPostTag(hospitalId);
-        List<PostTagViewHospitalTagResponse> result = PostTags.stream()
+        List<PostTag> PostTags = postTagRepository.viewPostTags(hospitalId);
+
+        return PostTags
+                .stream()
                 .map(p -> PostTagViewHospitalTagResponse.from(p))
                 .collect(Collectors.toList());
-
-        return result;
     }
 
-    //태그 연결 중복 확인.
     public void validateDuplicateLinkTag(Tag tag, Hospital hospital) {
         PostTag findLinkTag = postTagRepository.findByTagAndHospital(tag, hospital);
 

@@ -21,15 +21,14 @@ public class AdminPostTagController {
     private final AdminPostTagService adminPostTagService;
 
 
-    //병원 태그 연결
     @PostMapping("/admin/hospital/tag/link")
-    public PostTagLinkTagResponse linkTag(@RequestBody @Validated PostTagLinkTagRequest request) {
-        return adminPostTagService.tagLink(request);
+    public PostTagLinkTagResponse adminLinkTag(@RequestBody @Validated PostTagLinkTagRequest request) {
+        return adminPostTagService.adminLinkTag(request);
     }
 
     //병원 태그 삭제
     @DeleteMapping("/admin/hospital/tag/delete/{postTagId}")
-    public void postTagDelete(@PathVariable("postTagId") Long postTagId) {
-        adminPostTagService.postTagDelete(postTagId);
+    public void adminDeletePostTag(@PathVariable("postTagId") Long postTagId) {
+        adminPostTagService.adminDeletePostTag(postTagId);
     }
 }

@@ -32,7 +32,6 @@ public class PostTag extends BaseEntity {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
-    //생성 메서드
     public static PostTag createPostTag(Tag tag, Hospital hospital) {
         PostTag postTag = new PostTag();
         postTag.changeTag(tag);

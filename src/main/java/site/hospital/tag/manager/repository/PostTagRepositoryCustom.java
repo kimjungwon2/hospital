@@ -5,5 +5,5 @@ import site.hospital.tag.manager.domain.PostTag;
 
 public interface PostTagRepositoryCustom {
 
-    List<PostTag> listPostTag(Long hospitalId);
+    List<PostTag> viewPostTags(Long hospitalId);
 }
