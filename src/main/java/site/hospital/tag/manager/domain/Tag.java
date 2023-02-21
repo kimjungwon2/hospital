@@ -31,7 +31,6 @@ public class Tag extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    //태그 생성
     @Builder
     public Tag(String name) {
         this.name = name;

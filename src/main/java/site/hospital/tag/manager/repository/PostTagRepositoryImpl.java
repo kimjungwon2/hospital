@@ -20,7 +20,7 @@ public class PostTagRepositoryImpl implements PostTagRepositoryCustom {
     }
 
     @Override
-    public List<PostTag> listPostTag(Long hospitalId) {
+    public List<PostTag> viewPostTags(Long hospitalId) {
         return queryFactory
                 .select(postTag)
                 .from(postTag)

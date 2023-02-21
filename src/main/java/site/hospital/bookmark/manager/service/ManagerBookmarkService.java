@@ -44,9 +44,9 @@ public class ManagerBookmarkService {
                         .map(b -> BookmarkAdminSearchMemberResponse.from(b))
                         .collect(Collectors.toList());
 
-        Long totalPage = managerSearchBookmarkUsers.getTotalElements();
+        Long totalAmount = managerSearchBookmarkUsers.getTotalElements();
 
-        return new PageImpl(content, pageable, totalPage);
+        return new PageImpl(content, pageable, totalAmount);
     }
 
     private Page<Bookmark> getManagerSearchBookmarkUsers(
@@ -64,10 +64,10 @@ public class ManagerBookmarkService {
                         .phoneNumber(phoneNumber)
                         .build();
 
-        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
+        Long hospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
         Page<Bookmark> findSearchBookmarkUsers = bookmarkRepository
-                .managerSearchBookmarkUsers(JwtHospitalId, searchCondition, pageable);
+                .managerSearchBookmarkUsers(hospitalId, searchCondition, pageable);
 
         return findSearchBookmarkUsers;
     }

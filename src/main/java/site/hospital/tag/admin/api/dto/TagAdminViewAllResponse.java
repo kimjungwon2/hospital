@@ -1,4 +1,4 @@
-package site.hospital.tag.manager.api.dto.tag;
+package site.hospital.tag.admin.api.dto;
 
 import java.time.LocalDateTime;
 import lombok.AccessLevel;

@@ -22,7 +22,7 @@ public class ManagerTagService {
     private final TagRepository tagRepository;
 
     @Transactional
-    public TagCreateResponse tagCreate(TagCreateRequest request) {
+    public TagCreateResponse createTag(TagCreateRequest request) {
         Tag tag = Tag.builder().name(request.getTagName()).build();
 
         validateDuplicateTag(tag);
@@ -32,20 +32,23 @@ public class ManagerTagService {
     }
 
     public Page<Tag> searchTagName(String tagName, Pageable pageable) {
-        Page<Tag> findTags = tagRepository.findOneByName(tagName, pageable);
+        Page<Tag> searchTag = tagRepository.findOneByName(tagName, pageable);
 
-        List<TagSearchTagnameResponse> responseSearchTagName = findTags.stream()
+        List<TagSearchTagnameResponse> searchTagName =
+                searchTag
+                .stream()
                 .map(t -> TagSearchTagnameResponse.from(t))
                 .collect(Collectors.toList());
-        Long total = findTags.getTotalElements();
 
-        return new PageImpl(responseSearchTagName, pageable, total);
+        Long totalAmount = searchTag.getTotalElements();
+
+        return new PageImpl(searchTagName, pageable, totalAmount);
     }
 
     private void validateDuplicateTag(Tag tag) {
         List<Tag> findTag = tagRepository.findByName(tag.getName());
-        if (!findTag.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 태그이름.");
+        if (findTag != null && !findTag.isEmpty()) {
+            throw new IllegalStateException("이미 존재하는 태그");
         }
     }
 }

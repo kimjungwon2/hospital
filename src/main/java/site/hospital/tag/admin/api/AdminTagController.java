@@ -24,25 +24,21 @@ public class AdminTagController {
     private final ManagerTagService managerTagService;
     private final AdminTagService adminTagService;
 
-    //관리자 태그 생성
     @PostMapping("/admin/tag/create")
-    public TagCreateResponse saveTag(@RequestBody @Validated TagCreateRequest request) {
-        return managerTagService.tagCreate(request);
+    public TagCreateResponse adminCreateTag(@RequestBody @Validated TagCreateRequest request) {
+        return managerTagService.createTag(request);
     }
 
-    //관리자 태그 삭제
     @DeleteMapping("/admin/tag/delete/{tagId}")
-    public void deleteTag(@PathVariable("tagId") Long tagId) {
-        adminTagService.tagDelete(tagId);
+    public void adminDeleteTag(@PathVariable("tagId") Long tagId) {
+        adminTagService.adminDeleteTag(tagId);
     }
 
-    //관리자 태그 보기
     @GetMapping("/admin/tags")
-    public Page allSearchTag(Pageable pageable) {
-        return adminTagService.allSearchTag(pageable);
+    public Page adminSearchTags(Pageable pageable) {
+        return adminTagService.adminSearchTags(pageable);
     }
 
-    //관리자 태그 검색
     @GetMapping("/admin/tag/search/{tagName}")
     public Page searchTagName(
             @PathVariable("tagName") String tagName,

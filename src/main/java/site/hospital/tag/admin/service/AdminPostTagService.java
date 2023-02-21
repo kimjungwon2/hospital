@@ -24,25 +24,23 @@ public class AdminPostTagService {
     private final PostTagRepository postTagRepository;
 
     @Transactional
-    public PostTagLinkTagResponse tagLink(PostTagLinkTagRequest request) {
+    public PostTagLinkTagResponse adminLinkTag(PostTagLinkTagRequest request) {
         Tag tag = tagRepository.findById(request.getTagId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findById(request.getHospitalId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
         managerPostTagService.validateDuplicateLinkTag(tag, hospital);
-
-        PostTag postTag = PostTag.createPostTag(tag, hospital);
-        postTagRepository.save(postTag);
+        PostTag postTag = managerPostTagService.linkTag(tag,hospital);
 
         return PostTagLinkTagResponse.from(postTag.getId());
     }
 
-    //관리자 병원 등록 태그 삭제
     @Transactional
-    public void postTagDelete(Long postTagId) {
-        PostTag postTag = postTagRepository.findById(postTagId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 연결 태그가 존재하지 않습니다."));
+    public void adminDeletePostTag(Long postTagId) {
+        postTagRepository.findById(postTagId)
+                .orElseThrow(
+                        () -> new IllegalStateException("해당 id에 속하는 연결 태그가 존재하지 않습니다."));
         postTagRepository.deleteById(postTagId);
     }
 

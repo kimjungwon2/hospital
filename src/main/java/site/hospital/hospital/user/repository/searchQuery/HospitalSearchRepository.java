@@ -35,7 +35,7 @@ public class HospitalSearchRepository {
         Page<HospitalSearchDto> result = findHospitals(searchName, pageable);
 
         //비어있으면 바로 반환.
-        if (result.getContent().isEmpty()) {
+        if ( result.getContent()!=null && result.getContent().isEmpty()) {
             return result;
         }
 

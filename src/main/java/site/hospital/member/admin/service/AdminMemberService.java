@@ -268,7 +268,7 @@ public class AdminMemberService {
     private void validateDuplicateMember(Member member) {
         List<Member> findMembers = memberRepository.findByMemberIdName(member.getMemberIdName());
 
-        if (!findMembers.isEmpty()) {
+        if (findMembers!=null && !findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원.");
         }
     }

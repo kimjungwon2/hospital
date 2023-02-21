@@ -34,7 +34,7 @@ public class ReviewSearchRepository {
         Page<ReviewSearchDto> result = findReviews(searchName, pageable);
 
         //비어있으면 바로 반환.
-        if (result.getContent().isEmpty()) {
+        if (result!=null && result.getContent().isEmpty()) {
             return result;
         }
 

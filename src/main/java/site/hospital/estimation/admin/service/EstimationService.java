@@ -49,7 +49,7 @@ public class EstimationService {
                 estimation.getEstimationList());
 
         // 이미 중복된 평가 리스트인지 확인한다.
-        if (!estimationList.isEmpty()) {
+        if (estimationList!= null && !estimationList.isEmpty()) {
             throw new IllegalStateException("이미 등록된 평가 리스트입니다.");
         }
 
