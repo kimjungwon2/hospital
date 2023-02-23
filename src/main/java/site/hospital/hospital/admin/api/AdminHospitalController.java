@@ -151,7 +151,7 @@ public class AdminHospitalController {
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
         List<String> ImageURLS = hospitalImagesService
-                .uploadImages(imageFiles, "hospitalImage", hospitalId);
+                .uploadImage(imageFiles, "hospitalImage", hospitalId);
 
         return ImageURLS;
     }
