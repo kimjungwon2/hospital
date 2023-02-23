@@ -27,11 +27,10 @@ public abstract class ImageManagementService {
 
     abstract public String uploadImage(
             MultipartFile multipartFile,
-            String dirName,
             Long hospitalId)
             throws IOException;
 
-    abstract public void deleteImage(Long imageId, String dirName);
+    abstract public void deleteImage(Long imageId);
 
     protected String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
@@ -76,7 +75,7 @@ public abstract class ImageManagementService {
     }
 
     protected String getImageKey(String dirName, String imageName) {
-        String key = imageName.replace(dirName + "/", ""); // 키 값 저장.
+        String key = imageName.replace(dirName + "/", "");
         return key;
     }
 

@@ -96,7 +96,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.httpFirewall(firewall);
     }
 
-    //비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -107,11 +106,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomAuthFailureHandler();
     }
 
-    //CORS 정책 시행.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // - (3)
         configuration.addAllowedOrigin("http://3.37.47.173");
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedMethod("*");

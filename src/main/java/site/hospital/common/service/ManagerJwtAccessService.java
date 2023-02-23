@@ -29,7 +29,6 @@ public class ManagerJwtAccessService {
     public void managerAccess(ServletRequest servletRequest, Long memberId,
             Long existingHospitalId) {
 
-        //토큰의 병원 번호
         Long JwtHospitalId = getJwtHospitalNumber(servletRequest);
 
         //멤버 권한의 병원 번호

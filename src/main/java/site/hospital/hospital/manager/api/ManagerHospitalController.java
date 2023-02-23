@@ -89,7 +89,7 @@ public class ManagerHospitalController {
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
-        return hospitalThumbnailImageService.uploadImage(imageFile, "thumbnail", hospitalId);
+        return hospitalThumbnailImageService.uploadImage(imageFile, hospitalId);
     }
 
     //관계자 섬네일 보기
@@ -104,7 +104,7 @@ public class ManagerHospitalController {
     //관계자 섬네일 삭제
     @DeleteMapping("/staff/hospital/delete/thumbnail/{thumbnailId}")
     public void staffDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId) {
-        hospitalThumbnailImageService.deleteImage(thumbnailId, "thumbnail");
+        hospitalThumbnailImageService.deleteImage(thumbnailId);
     }
 
     //관계자 이미지 등록
@@ -114,7 +114,7 @@ public class ManagerHospitalController {
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
         List<String> ImageURLS = hospitalImagesService
-                .uploadImage(imageFiles, "hospitalImage", hospitalId);
+                .uploadImage(imageFiles, hospitalId);
 
         return ImageURLS;
     }
@@ -129,7 +129,7 @@ public class ManagerHospitalController {
     //관계자 병원 이미지 삭제
     @DeleteMapping("/staff/hospital/delete/hospitalImages/{hospitalImageId}")
     public void staffDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId) {
-        hospitalImagesService.deleteImage(hospitalImageId, "hospitalImage");
+        hospitalImagesService.deleteImage(hospitalImageId);
     }
 
 }
