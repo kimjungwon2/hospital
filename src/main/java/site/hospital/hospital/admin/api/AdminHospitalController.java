@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import site.hospital.common.service.ImageManagementService;
+import site.hospital.common.service.image.HospitalImagesService;
+import site.hospital.common.service.image.HospitalThumbnailImageService;
+import site.hospital.hospital.admin.repository.adminSearchQuery.AdminSearchHospitalDto;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalView;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.admin.service.AdminHospitalService;
@@ -29,7 +31,6 @@ import site.hospital.hospital.user.api.dto.HospitalResponse;
 import site.hospital.hospital.user.api.dto.HospitalViewImageResponse;
 import site.hospital.hospital.user.domain.BusinessCondition;
 import site.hospital.hospital.user.domain.HospitalThumbnail;
-import site.hospital.hospital.admin.repository.adminSearchQuery.AdminSearchHospitalDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,8 +39,8 @@ public class AdminHospitalController {
 
     private final AdminHospitalService adminHospitalService;
     private final ManagerHospitalService managerHospitalService;
-    private final ImageManagementService imageManagementService;
-
+    private final HospitalThumbnailImageService hospitalThumbnailImageService;
+    private final HospitalImagesService hospitalImagesService;
 
     //관리자 병원 검색
     @GetMapping("/admin/hospital/search")
@@ -122,8 +123,7 @@ public class AdminHospitalController {
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
-        String ImageURL = imageManagementService
-                .thumbnailUpload(imageFile, "thumbnail", hospitalId);
+        String ImageURL = hospitalThumbnailImageService.uploadImage(imageFile, "thumbnail", hospitalId);
 
         return ImageURL;
     }
@@ -141,7 +141,7 @@ public class AdminHospitalController {
     //관리자 섬네일 삭제
     @DeleteMapping("/admin/hospital/delete/thumbnail/{thumbnailId}")
     public void adminDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId) {
-        imageManagementService.deleteThumbnail(thumbnailId, "thumbnail");
+        hospitalThumbnailImageService.deleteImage(thumbnailId, "thumbnail");
     }
 
     //관리자 이미지 등록
@@ -150,8 +150,8 @@ public class AdminHospitalController {
             @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
-        List<String> ImageURLS = imageManagementService
-                .hospitalImageUpload(imageFiles, "hospitalImage", hospitalId);
+        List<String> ImageURLS = hospitalImagesService
+                .uploadImages(imageFiles, "hospitalImage", hospitalId);
 
         return ImageURLS;
     }
@@ -166,7 +166,7 @@ public class AdminHospitalController {
     //관리자 병원 이미지 삭제
     @DeleteMapping("/admin/hospital/delete/hospitalImages/{hospitalImageId}")
     public void adminDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId) {
-        imageManagementService.deleteHospitalImage(hospitalImageId, "hospitalImage");
+        hospitalImagesService.deleteImage(hospitalImageId, "hospitalImage");
     }
 
 }

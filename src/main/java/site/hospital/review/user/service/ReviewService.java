@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import site.hospital.common.service.ImageManagementService;
+import site.hospital.common.service.image.ReviewReceiptImageService;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.hospital.user.repository.HospitalRepository;
 import site.hospital.member.user.domain.Member;
@@ -39,7 +39,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final HospitalRepository hospitalRepository;
     private final ReviewSearchRepository reviewSearchRepository;
-    private final ImageManagementService imageManagementService;
+    private final ReviewReceiptImageService reviewReceiptImageService;
 
     //리뷰 등록
     @Transactional
@@ -74,7 +74,7 @@ public class ReviewService {
 
         //영수증 파일 저장.
         if (imageFile != null) {
-            imageManagementService.reviewReceiptUpload(imageFile, "receipt", review.getId());
+            reviewReceiptImageService.uploadImage(imageFile, "receipt", review.getId());
         }
 
         return ReviewCreateResponse.from(review.getId());
