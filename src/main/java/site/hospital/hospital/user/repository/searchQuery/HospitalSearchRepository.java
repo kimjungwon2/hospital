@@ -9,6 +9,7 @@ import static site.hospital.hospital.user.domain.QHospital.hospital;
 import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -48,7 +49,7 @@ public class HospitalSearchRepository {
         List<ReviewHospitalDto> reviewHospitalDtos =
                 queryFactory
                         .select(new QReviewHospitalDto(reviewHospital.hospital.id,
-                                reviewHospital.evCriteria.averageRate.avg(),
+                                MathExpressions.round(reviewHospital.evCriteria.averageRate.avg(),2) ,
                                 reviewHospital.count()))
                         .from(reviewHospital)
                         .join(reviewHospital.hospital, hospital)
