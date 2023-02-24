@@ -7,6 +7,9 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +72,7 @@ public abstract class ImageManagementService {
         String uploadImageName = uploadFile.getName();
         String extension = getExtension(uploadImageName);
 
-        confirmImage(extension);
+        confirmImage(extension,uploadFile);
 
         return extension;
     }
@@ -106,13 +109,13 @@ public abstract class ImageManagementService {
         return extension;
     }
 
-    private void confirmImage(String extension) {
-        if (!extension.equals("bmp") && !extension.equals("rle") && !extension.equals("dib")
-                && !extension.equals("jpeg") && !extension.equals("jpg")
-                && !extension.equals("png") && !extension.equals("gif")
-                && !extension.equals("jfif") && !extension.equals("tif")
-                && !extension.equals("tiff") && !extension
-                .equals("raw")) {
+    private void confirmImage(String extension, File uploadFile) {
+        List<String> imageExtensions = new ArrayList<>
+                (Arrays.asList("bmp","rle","dib","jpeg","jpg","png","gif",
+                        "jfif","tif","tiff", "raw"));
+
+        if (!imageExtensions.contains(extension)) {
+            removeLocalImage(uploadFile);
             throw new IllegalStateException("이미지 확장자가 아닙니다.");
         }
     }

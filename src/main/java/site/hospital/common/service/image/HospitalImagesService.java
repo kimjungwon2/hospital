@@ -53,10 +53,10 @@ public class HospitalImagesService extends ImageManagementService{
     }
 
     public List<String> uploadImage(
-            List<MultipartFile> multiparFile,
+            List<MultipartFile> multipartFile,
             Long hospitalId
     ) throws IOException {
-        List<File> uploadFile = uploadLocalMultipleFile(multiparFile);
+        List<File> uploadFile = uploadLocalMultipleFile(multipartFile);
 
         return uploadHospitalImages(uploadFile, hospitalId);
     }

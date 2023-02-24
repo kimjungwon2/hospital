@@ -42,7 +42,8 @@ dependencies {
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
 	//junit 5
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
-	testCompileOnly 'org.junit.jupiter:junit-jupiter-params:5.5.2'
+    testImplementation 'org.projectlombok:lombok:1.18.24'
+    testCompileOnly 'org.junit.jupiter:junit-jupiter-params:5.5.2'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 
 	compileOnly 'org.projectlombok:lombok'
