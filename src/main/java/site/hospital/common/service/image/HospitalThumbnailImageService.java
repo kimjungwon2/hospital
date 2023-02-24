@@ -16,6 +16,7 @@ public class HospitalThumbnailImageService extends ImageManagementService{
 
     private final HospitalRepository hospitalRepository;
     private final HospitalThumbnailRepository hospitalThumbnailRepository;
+    private final String dirName = "thumbnail";
 
     public HospitalThumbnailImageService(
             AmazonS3Client amazonS3Client,
@@ -28,24 +29,24 @@ public class HospitalThumbnailImageService extends ImageManagementService{
     }
 
     @Override
-    public String uploadImage(MultipartFile multipartFile
-            , String dirName
+    public String uploadImage(
+            MultipartFile multipartFile
             , Long hospitalId
     ) throws IOException {
         File uploadImageFile = uploadLocal(multipartFile).orElseThrow(
                 () -> new IllegalArgumentException(
                         "error: MultipartFile -> File convert fail"));
 
-        return uploadThumbnail(uploadImageFile, dirName, hospitalId);
+        return uploadThumbnail(uploadImageFile, hospitalId);
     }
 
     @Override
-    public void deleteImage(Long imageId, String dirName) {
+    public void deleteImage(Long imageId) {
         HospitalThumbnail hospitalThumbnail = hospitalThumbnailRepository.findById(imageId)
                 .orElseThrow(() -> new IllegalStateException("등록되지 않은 섬네일입니다."));
         
         String imageKey = hospitalThumbnail.getImageKey();
-        deleteS3Images(dirName, imageKey);
+        deleteS3Images(this.dirName, imageKey);
         deleteHospitalThumbnail(imageId, hospitalThumbnail);
     }
 
@@ -81,16 +82,16 @@ public class HospitalThumbnailImageService extends ImageManagementService{
         }
     }
 
-    private String uploadThumbnail(File uploadFile, String dirName, Long hospitalId) {
+    private String uploadThumbnail(File uploadFile, Long hospitalId) {
 
         String extension = confirmImageExtension(uploadFile);
 
-        String imageName = createUUIDName(dirName, extension);
+        String imageName = createUUIDName(this.dirName, extension);
         String uploadImageUrl = putS3(uploadFile, imageName);
 
         removeLocalImage(uploadFile);
 
-        String imageKey = getImageKey(dirName, imageName);
+        String imageKey = getImageKey(this.dirName, imageName);
 
         registerThumbnailKey(uploadFile, hospitalId, imageKey);
 

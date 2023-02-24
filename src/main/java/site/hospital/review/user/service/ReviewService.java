@@ -74,7 +74,7 @@ public class ReviewService {
 
         //영수증 파일 저장.
         if (imageFile != null) {
-            reviewReceiptImageService.uploadImage(imageFile, "receipt", review.getId());
+            reviewReceiptImageService.uploadImage(imageFile, review.getId());
         }
 
         return ReviewCreateResponse.from(review.getId());

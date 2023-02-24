@@ -17,6 +17,7 @@ public class ReviewReceiptImageService extends ImageManagementService{
 
     private final ReviewImageRepository reviewImageRepository;
     private final ReviewRepository reviewRepository;
+    private final String dirName = "receipt";
 
     public ReviewReceiptImageService(
             AmazonS3Client amazonS3Client,
@@ -31,23 +32,22 @@ public class ReviewReceiptImageService extends ImageManagementService{
     @Override
     public String uploadImage(
             MultipartFile multipartFile,
-            String dirName,
             Long reviewId
     ) throws IOException {
         File uploadImageFile = uploadLocal(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "error: MultipartFile -> File convert fail"));
 
-        return uploadReviewReceiptImage(uploadImageFile, dirName, reviewId);
+        return uploadReviewReceiptImage(uploadImageFile, reviewId);
     }
 
     @Override
-    public void deleteImage(Long imageId, String dirName) {
+    public void deleteImage(Long imageId) {
         ReviewImage reviewImage = reviewImageRepository.findById(imageId)
                 .orElseThrow(() -> new IllegalStateException("등록되지 않은 영수증 사진."));
 
         String imageKey = reviewImage.getImageKey();
-        deleteS3Images(dirName, imageKey);
+        deleteS3Images(this.dirName, imageKey);
         deleteReviewReceiptImage(imageId);
     }
 
@@ -82,15 +82,15 @@ public class ReviewReceiptImageService extends ImageManagementService{
         reviewImageRepository.save(reviewImage);
     }
 
-    private String uploadReviewReceiptImage(File uploadFile, String dirName, Long reviewId) {
+    private String uploadReviewReceiptImage(File uploadFile, Long reviewId) {
 
         String extension = confirmImageExtension(uploadFile);
 
-        String imageName = createUUIDName(dirName, extension);
+        String imageName = createUUIDName(this.dirName, extension);
         String uploadImageUrl = putS3(uploadFile, imageName);
         removeLocalImage(uploadFile);
 
-        String imageKey = getImageKey(dirName, imageName);
+        String imageKey = getImageKey(this.dirName, imageName);
 
 
         ReviewImage reviewImage =

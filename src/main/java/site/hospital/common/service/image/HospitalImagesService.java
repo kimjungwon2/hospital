@@ -19,6 +19,7 @@ public class HospitalImagesService extends ImageManagementService{
 
     private final HospitalRepository hospitalRepository;
     private final HospitalImageRepository hospitalImageRepository;
+    private final String dirName = "hospitalImage";
 
 
     public HospitalImagesService(
@@ -34,32 +35,30 @@ public class HospitalImagesService extends ImageManagementService{
     @Override
     public String uploadImage(
             MultipartFile multipartFile,
-            String dirName,
             Long hospitalId
     ) {
         return null;
     }
 
     @Override
-    public void deleteImage(Long imageId, String dirName) {
+    public void deleteImage(Long imageId) {
         HospitalImage hospitalImage = hospitalImageRepository
                 .findById(imageId)
                 .orElseThrow(
                         () -> new IllegalStateException("등록되지 않은 병원 이미지입니다."));
 
         String imageKey = hospitalImage.getImageKey();
-        deleteS3Images(dirName, imageKey);
+        deleteS3Images(this.dirName, imageKey);
         deleteHospitalImage(imageId);
     }
 
     public List<String> uploadImage(
-            List<MultipartFile> multiparFile,
-            String dirName,
+            List<MultipartFile> multipartFile,
             Long hospitalId
     ) throws IOException {
-        List<File> uploadFile = uploadLocalMultipleFile(multiparFile);
+        List<File> uploadFile = uploadLocalMultipleFile(multipartFile);
 
-        return uploadHospitalImages(uploadFile, dirName, hospitalId);
+        return uploadHospitalImages(uploadFile, hospitalId);
     }
 
     @Transactional
@@ -79,20 +78,25 @@ public class HospitalImagesService extends ImageManagementService{
                 findById(hospitalImageId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 이미지가 존재하지 않습니다."));
 
-        hospitalImageRepository.deleteById(hospitalImageId);
+        hospitalImageRepository.deleteById(hospitalImage.getId());
     }
 
     private HospitalImage saveHospitalImage(String originalName, String key, Hospital hospital) {
-        HospitalImage hospitalImage = HospitalImage.builder()
+        HospitalImage hospitalImage = HospitalImage
+                .builder()
                 .originalName(originalName)
-                .imageKey(key).hospital(hospital).build();
+                .imageKey(key)
+                .hospital(hospital)
+                .build();
 
         hospitalImageRepository.save(hospitalImage);
         return hospitalImage;
     }
 
-    private List<String> uploadHospitalImages(List<File> uploadFiles, String dirName,
-            Long hospitalId) {
+    private List<String> uploadHospitalImages(
+            List<File> uploadFiles,
+            Long hospitalId
+    ) {
 
         List<String> uploadImageUrls = new ArrayList<>();
 
@@ -100,13 +104,13 @@ public class HospitalImagesService extends ImageManagementService{
 
             String imageExtension = confirmImageExtension(uploadFile);
 
-            String imageName = createUUIDName(dirName, imageExtension);
+            String imageName = createUUIDName(this.dirName, imageExtension);
             String uploadImageUrl = putS3(uploadFile, imageName);
             removeLocalImage(uploadFile);
 
             uploadImageUrls.add(uploadImageUrl);
 
-            String imageKey = getImageKey(dirName, imageName);
+            String imageKey = getImageKey(this.dirName, imageName);
 
             registerHospitalImage(uploadFile.getName(), imageKey, hospitalId);
         }
