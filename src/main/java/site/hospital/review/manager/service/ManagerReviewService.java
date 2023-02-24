@@ -14,7 +14,7 @@ import site.hospital.common.service.ManagerJwtAccessService;
 import site.hospital.review.user.api.dto.searchReviews.ReviewSearchListsResponse;
 import site.hospital.review.user.domain.Review;
 import site.hospital.review.user.repository.ReviewRepository;
-import site.hospital.review.user.repository.dto.StaffReviewSearchCondition;
+import site.hospital.review.manager.repository.dto.ManagerReviewSearchCondition;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,28 +24,43 @@ public class ManagerReviewService {
     private final ManagerJwtAccessService managerJwtAccessService;
     private final ReviewRepository reviewRepository;
 
-    //병원 관계자 리뷰 검색
-    public Page<ReviewSearchListsResponse> staffSearchReviews(
+    public Page<ReviewSearchListsResponse> managerSearchReviews(
             ServletRequest servletRequest,
             String nickName,
             String memberIdName,
             Pageable pageable
     ) {
-        StaffReviewSearchCondition condition = StaffReviewSearchCondition.builder()
-                .nickName(nickName).memberIdName(memberIdName).build();
-
         Long hospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
-        Page<Review> reviews = reviewRepository.staffSearchReviews(hospitalId, condition, pageable);
 
-        List<ReviewSearchListsResponse> result = reviews.stream()
+        Page<Review> reviews = getSearchReviewResults(nickName, memberIdName, pageable, hospitalId);
+
+        List<ReviewSearchListsResponse> searchResults =
+                reviews
+                .stream()
                 .map(r -> ReviewSearchListsResponse.from(r))
                 .collect(Collectors.toList());
 
-        Long total = reviews.getTotalElements();
+        Long totalCounts = reviews.getTotalElements();
 
-        return new PageImpl(result, pageable, total);
+        return new PageImpl(searchResults, pageable, totalCounts);
     }
 
+    private Page<Review> getSearchReviewResults(
+            String nickName,
+            String memberIdName,
+            Pageable pageable,
+            Long hospitalId
+    ) {
+        ManagerReviewSearchCondition searchCondition =
+                ManagerReviewSearchCondition
+                        .builder()
+                        .nickName(nickName)
+                        .memberIdName(memberIdName)
+                        .build();
 
+        Page<Review> reviews = reviewRepository.managerSearchReviews(hospitalId, searchCondition, pageable);
+
+        return reviews;
+    }
 
 }

@@ -26,7 +26,6 @@ public class AdminReviewController {
     private final ReviewService reviewService;
     private final AdminReviewService adminReviewService;
 
-    //관리자 리뷰 검색
     @GetMapping("/admin/review/search")
     public Page<ReviewSearchListsResponse> adminSearchReviews(
             @RequestParam(value = "nickName", required = false) String nickName,
@@ -34,38 +33,35 @@ public class AdminReviewController {
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
             Pageable pageable
     ) {
-        return adminReviewService.adminSearchReviews(nickName, hospitalName, memberIdName, pageable);
+        return adminReviewService.searchReviews(nickName, hospitalName, memberIdName, pageable);
     }
 
-    //관리자 미승인 리뷰 갯수
     @GetMapping("/admin/review/unapproved/count")
-    public Long adminUnapprovedReviewCount() {
-        return adminReviewService.adminUnapprovedReviewCount();
+    public Long adminCountUnapprovedReviews() {
+        return adminReviewService.countUnapprovedReviews();
     }
 
-    //관리자 미승인 리뷰 검색
     @GetMapping("/admin/review/unapproved/search")
-    public Page<ReviewSearchListsResponse> adminSearchReviews(Pageable pageable) {
-        return adminReviewService.adminSearchUnapprovedReviews(pageable);
+    public Page<ReviewSearchListsResponse> adminSearchUnapprovedReviews(Pageable pageable) {
+        return adminReviewService.searchUnapprovedReviews(pageable);
     }
 
-    //관리자 리뷰 승인해주기
     @PutMapping("/admin/review/approve/{reviewId}")
-    public void approveReview(@PathVariable("reviewId") Long reviewId,
-            @RequestBody @Validated ReviewAdminApproveAuthenticationRequest request) {
-        adminReviewService.approve(reviewId, request.getReviewAuthentication());
+    public void adminApproveReview(
+            @PathVariable("reviewId") Long reviewId,
+            @RequestBody @Validated ReviewAdminApproveAuthenticationRequest request
+    ) {
+        adminReviewService.approveReview(reviewId, request.getReviewAuthentication());
     }
 
-    //관리자 리뷰 삭제
     @DeleteMapping("/admin/review/delete/{reviewId}")
     public void deleteReview(@PathVariable("reviewId") Long reviewId) {
         adminReviewService.deleteReview(reviewId);
     }
 
-    //관리자 리뷰 상세보기
     @GetMapping("/admin/review/view/{reviewId}")
-    public ReviewViewDetailResponse adminViewReview(@PathVariable("reviewId") Long reviewId) {
-        return reviewService.viewHospitalReview(reviewId);
+    public ReviewViewDetailResponse adminViewDetailedReview(@PathVariable("reviewId") Long reviewId) {
+        return reviewService.viewDetailedReview(reviewId);
     }
 
 }

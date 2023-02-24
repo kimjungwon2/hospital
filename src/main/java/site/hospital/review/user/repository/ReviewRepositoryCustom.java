@@ -6,23 +6,25 @@ import org.springframework.data.domain.Pageable;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.review.user.domain.Review;
 import site.hospital.review.admin.repository.dto.AdminReviewSearchCondition;
-import site.hospital.review.user.repository.dto.StaffReviewSearchCondition;
+import site.hospital.review.manager.repository.dto.ManagerReviewSearchCondition;
 
 
 public interface ReviewRepositoryCustom {
 
-    List<Review> hospitalReviewSearch(Long hospitalId, Long memberId);
+    List<Review> searchHospitalReviews(Long hospitalId, Long memberId);
 
     Page<Review> adminSearchReviews(AdminReviewSearchCondition condition, Pageable pageable);
 
     Review viewHospitalReview(Long reviewId);
 
-    Page<Review> staffSearchReviews(Long hospitalId, StaffReviewSearchCondition condition,
+    Page<Review> managerSearchReviews(
+            Long hospitalId,
+            ManagerReviewSearchCondition condition,
             Pageable pageable);
 
     Page<Review> adminSearchUnapprovedReviews(Pageable pageable);
 
-    Long adminUnapprovedReviewCount();
+    Long adminCountUnapprovedReview();
 
     void adminDeleteReviewHospital(Hospital hospital);
 }

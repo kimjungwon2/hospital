@@ -23,7 +23,6 @@ public class ManagerAnswerService {
     private final AnswerRepository answerRepository;
     private final ManagerJwtAccessService managerJwtAccessService;
 
-    //답변 등록
     @Transactional
     public Long registerAnswer(
             ServletRequest servletRequest,

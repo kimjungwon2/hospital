@@ -1,16 +1,16 @@
-package site.hospital.review.user.repository.dto;
+package site.hospital.review.manager.repository.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class StaffReviewSearchCondition {
+public class ManagerReviewSearchCondition {
 
     private String nickName;
     private String memberIdName;
 
     @Builder
-    public StaffReviewSearchCondition(String nickName, String memberIdName) {
+    public ManagerReviewSearchCondition(String nickName, String memberIdName) {
         this.nickName = nickName;
         this.memberIdName = memberIdName;
     }

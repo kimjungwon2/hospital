@@ -1,4 +1,4 @@
-package site.hospital.review.user.repository.query;
+package site.hospital.review.user.repository.search;
 
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
@@ -7,18 +7,22 @@ import lombok.Data;
 import site.hospital.review.user.domain.ReviewAuthentication;
 
 @Data
-public class ReviewSearchDto {
+public class ReviewSearchSelectQuery {
 
     private Long reviewId;
     private String nickName;
     private LocalDateTime createdDate;
     private ReviewAuthentication authenticationStatus;
-    private List<ReviewHospitalDTO2> reviewHospitals;
-    private List<ReviewLikeSearchDTO> reviewLikes;
+    private List<ReviewSearchReviewHospitalDTO> reviewHospitals;
+    private List<ReviewSearchLikeDTO> reviewLikes;
 
     @QueryProjection
-    public ReviewSearchDto(Long reviewId, String nickName, LocalDateTime createdDate,
-            ReviewAuthentication authenticationStatus) {
+    public ReviewSearchSelectQuery(
+            Long reviewId,
+            String nickName,
+            LocalDateTime createdDate,
+            ReviewAuthentication authenticationStatus
+    ) {
         this.reviewId = reviewId;
         this.nickName = nickName;
         this.createdDate = createdDate;

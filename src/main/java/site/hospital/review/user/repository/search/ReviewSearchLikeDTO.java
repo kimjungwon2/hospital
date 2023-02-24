@@ -1,16 +1,16 @@
-package site.hospital.review.user.repository.query;
+package site.hospital.review.user.repository.search;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class ReviewLikeSearchDTO {
+public class ReviewSearchLikeDTO {
 
     Long reviewLikeId;
     Long reviewId;
 
     @QueryProjection
-    public ReviewLikeSearchDTO(Long reviewLikeId, Long reviewId) {
+    public ReviewSearchLikeDTO(Long reviewLikeId, Long reviewId) {
         this.reviewLikeId = reviewLikeId;
         this.reviewId = reviewId;
     }

@@ -21,61 +21,73 @@ public class AdminReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    //관리자 리뷰 삭제
     @Transactional
     public void deleteReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
+        reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
 
         reviewRepository.deleteById(reviewId);
     }
 
-    //관리자 리뷰 승인해주기
     @Transactional
-    public void approve(Long reviewId, ReviewAuthentication reviewAuthentication) {
+    public void approveReview(Long reviewId, ReviewAuthentication reviewAuthentication) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
-        review.approveCertification(reviewAuthentication);
+        review.approveReviewCertification(reviewAuthentication);
     }
 
-    //관리자 승인 대기 리뷰 검색
-    public Page<ReviewSearchListsResponse> adminSearchUnapprovedReviews(Pageable pageable) {
+    public Page<ReviewSearchListsResponse> searchUnapprovedReviews(Pageable pageable) {
         Page<Review> reviews = reviewRepository.adminSearchUnapprovedReviews(pageable);
-        List<ReviewSearchListsResponse> result = reviews.stream()
+
+        List<ReviewSearchListsResponse> searchResults =
+                reviews
+                .stream()
                 .map(r -> ReviewSearchListsResponse.from(r))
                 .collect(Collectors.toList());
 
-        Long total = reviews.getTotalElements();
+        Long totalCounts = reviews.getTotalElements();
 
-        return new PageImpl(result, pageable, total);
+        return new PageImpl(searchResults, pageable, totalCounts);
     }
 
-    //관리자 미승인 리뷰 갯수
-    public Long adminUnapprovedReviewCount() {
-        return reviewRepository.adminUnapprovedReviewCount();
+    public Long countUnapprovedReviews() {
+        return reviewRepository.adminCountUnapprovedReview();
     }
 
-
-
-    //관리자 리뷰 검색
-    public Page<ReviewSearchListsResponse> adminSearchReviews(
+    public Page<ReviewSearchListsResponse> searchReviews(
             String nickName,
             String hospitalName,
             String memberIdName,
             Pageable pageable
     ) {
-        AdminReviewSearchCondition condition = AdminReviewSearchCondition.builder()
-                .nickName(nickName).hospitalName(hospitalName).memberIdName(memberIdName).build();
+        Page<Review> reviews = getSearchReviews(nickName, hospitalName, memberIdName, pageable);
 
-        Page<Review> reviews = reviewRepository.adminSearchReviews(condition, pageable);
-
-        List<ReviewSearchListsResponse> result = reviews.stream()
+        List<ReviewSearchListsResponse> searchResults =
+                reviews
+                .stream()
                 .map(r -> ReviewSearchListsResponse.from(r))
                 .collect(Collectors.toList());
 
-        Long total = reviews.getTotalElements();
+        Long totalCounts = reviews.getTotalElements();
 
-        return new PageImpl(result, pageable, total);
+        return new PageImpl(searchResults, pageable, totalCounts);
     }
 
+    private Page<Review> getSearchReviews(
+            String nickName,
+            String hospitalName,
+            String memberIdName,
+            Pageable pageable
+    ) {
+        AdminReviewSearchCondition condition =
+                AdminReviewSearchCondition
+                .builder()
+                .nickName(nickName)
+                .hospitalName(hospitalName)
+                .memberIdName(memberIdName)
+                .build();
+
+        Page<Review> reviews = reviewRepository.adminSearchReviews(condition, pageable);
+        return reviews;
+    }
 }

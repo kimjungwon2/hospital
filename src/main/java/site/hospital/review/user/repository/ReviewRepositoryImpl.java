@@ -18,7 +18,7 @@ import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.review.user.domain.Review;
 import site.hospital.review.user.domain.ReviewAuthentication;
 import site.hospital.review.admin.repository.dto.AdminReviewSearchCondition;
-import site.hospital.review.user.repository.dto.StaffReviewSearchCondition;
+import site.hospital.review.manager.repository.dto.ManagerReviewSearchCondition;
 
 
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
@@ -30,7 +30,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     }
 
     @Override
-    public List<Review> hospitalReviewSearch(Long hospitalId, Long memberId) {
+    public List<Review> searchHospitalReviews(Long hospitalId, Long memberId) {
         List<Review> result = queryFactory
                 .select(review)
                 .from(review)
@@ -55,8 +55,11 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     }
 
     @Override
-    public Page<Review> staffSearchReviews(Long hospitalId, StaffReviewSearchCondition condition,
-            Pageable pageable) {
+    public Page<Review> managerSearchReviews(
+            Long hospitalId,
+            ManagerReviewSearchCondition condition,
+            Pageable pageable
+    ) {
         QueryResults<Review> result = queryFactory
                 .select(review)
                 .from(review)
@@ -78,27 +81,22 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     @Override
     public void adminDeleteReviewHospital(Hospital hospital) {
-        //리뷰 아이디
-        List<Long> reviewIds = queryFactory
+        List<Long> reviewIds =
+                queryFactory
                 .select(reviewHospital.review.id)
                 .from(reviewHospital)
                 .where(reviewHospital.hospital.eq(hospital))
                 .fetch();
 
-        //리뷰 hospital 먼저 삭제
-        queryFactory.delete(reviewHospital)
-                .where(reviewHospital.hospital.eq(hospital))
-                .execute();
-
-        //리뷰 삭제.
-        queryFactory.delete(review)
-                .where(review.id.in(reviewIds))
-                .execute();
+        deleteReviewHospital(hospital);
+        deleteReviews(reviewIds);
     }
 
     @Override
-    public Page<Review> adminSearchReviews(AdminReviewSearchCondition condition,
-            Pageable pageable) {
+    public Page<Review> adminSearchReviews(
+            AdminReviewSearchCondition condition,
+            Pageable pageable
+    ) {
         QueryResults<Review> result = queryFactory
                 .select(review)
                 .from(review)
@@ -117,16 +115,14 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         return new PageImpl<>(content, pageable, total);
     }
 
-    //미승인 리뷰의 갯수
     @Override
-    public Long adminUnapprovedReviewCount() {
+    public Long adminCountUnapprovedReview() {
         return queryFactory.select(review)
                 .from(review)
                 .where(review.authenticationStatus.eq(ReviewAuthentication.WAITING))
                 .fetchCount();
     }
 
-    //미승인 리뷰만 보이기
     @Override
     public Page<Review> adminSearchUnapprovedReviews(Pageable pageable) {
         QueryResults<Review> result = queryFactory
@@ -143,6 +139,20 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         long total = result.getTotal();
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+    private void deleteReviews(List<Long> reviewIds) {
+        queryFactory
+                .delete(review)
+                .where(review.id.in(reviewIds))
+                .execute();
+    }
+
+    private void deleteReviewHospital(Hospital hospital) {
+        queryFactory
+                .delete(reviewHospital)
+                .where(reviewHospital.hospital.eq(hospital))
+                .execute();
     }
 
     private BooleanExpression memberIdEq(Long id) {

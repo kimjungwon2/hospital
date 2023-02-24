@@ -33,7 +33,6 @@ public class Review extends BaseEntity {
     @Column(name = "review_id")
     private long id;
 
-    //인증 상태[NONE, WAITING,CERTIFIED]
     @Enumerated(EnumType.STRING)
     @NotNull
     private ReviewAuthentication authenticationStatus;
@@ -68,13 +67,11 @@ public class Review extends BaseEntity {
     }
 
 
-    //리뷰 인증 상태 변경
     public void changeAuthenticationStatus(ReviewAuthentication authenticationStatus) {
         this.authenticationStatus = authenticationStatus;
     }
 
-    //리뷰 인증 승인
-    public void approveCertification(ReviewAuthentication authenticationStatus) {
+    public void approveReviewCertification(ReviewAuthentication authenticationStatus) {
         this.authenticationStatus = authenticationStatus;
     }
 
@@ -86,9 +83,7 @@ public class Review extends BaseEntity {
     }
 
     public static Review createReview(Member member, ReviewHospital... reviewHospitals) {
-        //인증 상태 NONE으로 변경
         Review review = new Review(ReviewAuthentication.NONE);
-
         review.changeMember(member);
 
         for (ReviewHospital reviewHospital : reviewHospitals) {
@@ -96,10 +91,6 @@ public class Review extends BaseEntity {
         }
 
         return review;
-    }
-
-    public void approve() {
-        this.authenticationStatus = authenticationStatus.CERTIFIED;
     }
 
 }

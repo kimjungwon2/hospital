@@ -40,7 +40,7 @@ public class EstimationService {
 
     //병원 FK 있을 때, 등록.
     @Transactional
-    private Long createHospitalEstimation(Long hospitalId, Estimation estimation) {
+    protected Long createHospitalEstimation(Long hospitalId, Estimation estimation) {
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 병원은 존재하지 않습니다."));

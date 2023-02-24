@@ -25,9 +25,9 @@ import site.hospital.review.user.domain.ReviewLike;
 import site.hospital.review.user.domain.reviewHospital.EvaluationCriteria;
 import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
 import site.hospital.review.user.repository.ReviewRepository;
-import site.hospital.review.user.repository.query.ReviewSearchDto;
-import site.hospital.review.user.repository.query.ReviewSearchRepository;
-import site.hospital.review.user.repository.reviewLike.ReviewLikeRepository;
+import site.hospital.review.user.repository.search.ReviewSearchSelectQuery;
+import site.hospital.review.user.repository.search.ReviewSearchRepository;
+import site.hospital.review.user.repository.reviewlike.ReviewLikeRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,126 +41,129 @@ public class ReviewService {
     private final ReviewSearchRepository reviewSearchRepository;
     private final ReviewReceiptImageService reviewReceiptImageService;
 
-    //리뷰 등록
     @Transactional
-    public ReviewCreateResponse reviewRegister(
+    public ReviewCreateResponse registerReview(
             MultipartFile imageFile,
             ReviewCreateRequest requestData
     ) throws IOException {
-        EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
-                .sumPrice(requestData.getSumPrice()).kindness(requestData.getKindness())
-                .symptomRelief(requestData.getSymptomRelief())
-                .cleanliness(requestData.getCleanliness())
-                .waitTime(requestData.getWaitTime()).build();
-
-        ReviewHospital reviewHospital = ReviewHospital.builder()
-                .content(requestData.getContent()).disease(requestData.getDisease())
-                .recommendationStatus(requestData.getRecommendationStatus())
-                .evCriteria(evaluationCriteria)
-                .build();
 
         Member member = memberRepository.findById(requestData.getMemberId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findById(requestData.getHospitalId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
-        //리뷰 병원 생성
-        ReviewHospital createdReviewHospital = ReviewHospital
-                .saveReviewHospital(hospital, reviewHospital);
-
-        //리뷰 생성
-        Review review = Review.createReview(member, createdReviewHospital);
-        reviewRepository.save(review);
-
-        //영수증 파일 저장.
-        if (imageFile != null) {
-            reviewReceiptImageService.uploadImage(imageFile, review.getId());
-        }
+        ReviewHospital reviewHospital = createReviewHospital(requestData, hospital);
+        Review review = createReview(member, reviewHospital);
+        checkReceiptImage(imageFile, review);
 
         return ReviewCreateResponse.from(review.getId());
     }
 
-    //리뷰 좋아요 여부 확인.
-    public ReviewConfirmLikeResponse isLikeReview(Long memberId, Long reviewId) {
-        Boolean isLikeReview = false;
-        ReviewLike reviewLike = reviewLikeRepository.isLikeReview(memberId, reviewId);
+    public ReviewConfirmLikeResponse checkReviewLike(Long memberId, Long reviewId) {
+        ReviewLike reviewLike = reviewLikeRepository.checkReviewLike(memberId, reviewId);
 
-        if (reviewLike != null) {
-            isLikeReview = true;
-        }
-
-        return ReviewConfirmLikeResponse.from(isLikeReview);
+        return ReviewConfirmLikeResponse.from(checkLike(reviewLike));
     }
 
-    //리뷰 좋아요 + 취소하기
     @Transactional
     public void likeReview(Long memberId, Long reviewId) {
-        Boolean existence = false;
+        ReviewLike reviewLike = reviewLikeRepository.checkReviewLike(memberId, reviewId);
 
-        //리뷰에 좋아요 있는지 확인.
-        ReviewLike isLike = reviewLikeRepository.isLikeReview(memberId, reviewId);
+        Boolean isReviewLike = checkLike(reviewLike);
 
-        //리뷰에 좋아요 존재 시, true
-        if (isLike != null) {
-            existence = true;
+        if (isReviewLike == true) {
+            deleteReviewLike(reviewLike);
         }
-
-        //좋아요가 있으면 삭제.
-        if (existence == true) {
-            reviewLikeRepository.delete(isLike);
-        }
-        //좋아요 데이터가 없으면 저장.
         else {
-            Member member = memberRepository.findById(memberId)
-                    .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
-            Review review = reviewRepository.findById(reviewId)
-                    .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
-
-            ReviewLike reviewLike = ReviewLike.createReviewLike(member, review);
-            reviewLikeRepository.save(reviewLike);
+            registerReviewLike(memberId, reviewId);
         }
-
     }
 
-    //리뷰 인증 승인(관리자)
-    @Transactional
-    public void approval(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
-        review.approve();
-    }
+    public List<ReviewViewListsResponse> viewHospitalReviews(Long hospitalId) {
+        List<Review> reviews = reviewRepository.searchHospitalReviews(hospitalId, null);
 
-    //병원에 등록된 리뷰 검색
-    public List<ReviewViewListsResponse> hospitalReviewList(Long hospitalId) {
-        List<Review> review = reviewRepository.hospitalReviewSearch(hospitalId, null);
-
-        List<ReviewViewListsResponse> result = review.stream()
+        List<ReviewViewListsResponse> reviewLists =
+                reviews
+                .stream()
                 .map(r -> ReviewViewListsResponse.from(r))
                 .collect(Collectors.toList());
 
-        return result;
+        return reviewLists;
     }
 
-    //유저가 등록한 리뷰 검색
-    public List<ReviewViewByMemberResponse> userReviewSearch(Long memberId) {
-        List<Review> review = reviewRepository.hospitalReviewSearch(null, memberId);
+    public List<ReviewViewByMemberResponse> viewReviewsByUser(Long memberId) {
+        List<Review> review = reviewRepository.searchHospitalReviews(null, memberId);
 
-        List<ReviewViewByMemberResponse> result = review.stream()
+        List<ReviewViewByMemberResponse> reviewListsByUser =
+                review
+                .stream()
                 .map(r -> ReviewViewByMemberResponse.from(r))
                 .collect(Collectors.toList());
 
-        return result;
+        return reviewListsByUser;
     }
 
-    //병원 리뷰 전체 검색
-    public Page<ReviewSearchDto> searchReview(String searchName, Pageable pageable) {
-        return reviewSearchRepository.searchReview(searchName, pageable);
+    public Page<ReviewSearchSelectQuery> searchReviews(String searchName, Pageable pageable) {
+        return reviewSearchRepository.searchReviews(searchName, pageable);
     }
 
-    //리뷰 상세 보기
-    public ReviewViewDetailResponse viewHospitalReview(Long reviewId) {
+    public ReviewViewDetailResponse viewDetailedReview(Long reviewId) {
         Review review = reviewRepository.viewHospitalReview(reviewId);
         return ReviewViewDetailResponse.from(review);
+    }
+
+    private ReviewHospital createReviewHospital(ReviewCreateRequest requestData, Hospital hospital) {
+        EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
+                .sumPrice(requestData.getSumPrice()).kindness(requestData.getKindness())
+                .symptomRelief(requestData.getSymptomRelief())
+                .cleanliness(requestData.getCleanliness())
+                .waitTime(requestData.getWaitTime()).build();
+
+        ReviewHospital reviewHospital = ReviewHospital
+                .builder()
+                .content(requestData.getContent())
+                .disease(requestData.getDisease())
+                .recommendationStatus(requestData.getRecommendationStatus())
+                .evCriteria(evaluationCriteria)
+                .build();
+
+        ReviewHospital createdReviewHospital = ReviewHospital.saveReviewHospital(hospital, reviewHospital);
+        return createdReviewHospital;
+    }
+
+    private void checkReceiptImage(MultipartFile receiptImage, Review review) throws IOException {
+        if (receiptImage != null) {
+            reviewReceiptImageService.uploadImage(receiptImage, review.getId());
+        }
+    }
+
+    private Review createReview(Member member, ReviewHospital createdReviewHospital) {
+        Review review = Review.createReview(member, createdReviewHospital);
+        reviewRepository.save(review);
+        return review;
+    }
+
+    private Boolean checkLike(ReviewLike reviewLike) {
+        Boolean isReviewLike = false;
+
+        if (reviewLike != null) {
+            isReviewLike = true;
+        }
+        return isReviewLike;
+    }
+
+    private void registerReviewLike(Long memberId, Long reviewId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
+
+        ReviewLike reviewLike = ReviewLike.createReviewLike(member, review);
+        reviewLikeRepository.save(reviewLike);
+    }
+
+    private void deleteReviewLike(ReviewLike reviewLike) {
+        reviewLikeRepository.delete(reviewLike);
     }
 
 }
