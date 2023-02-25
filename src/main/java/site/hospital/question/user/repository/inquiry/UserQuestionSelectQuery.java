@@ -1,10 +1,10 @@
-package site.hospital.question.user.repository.userQuery;
+package site.hospital.question.user.repository.inquiry;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class SearchUserQuestionDTO {
+public class UserQuestionSelectQuery {
 
     private Long questionId;
     private Long hospitalId;
@@ -15,8 +15,15 @@ public class SearchUserQuestionDTO {
     private String answerContent;
 
     @QueryProjection
-    public SearchUserQuestionDTO(Long questionId, Long hospitalId, String hospitalName,
-            String nickName, String content, Long answerId, String answerContent) {
+    public UserQuestionSelectQuery(
+            Long questionId,
+            Long hospitalId,
+            String hospitalName,
+            String nickName,
+            String content,
+            Long answerId,
+            String answerContent
+    ) {
         this.questionId = questionId;
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;

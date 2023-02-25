@@ -1,4 +1,4 @@
-package site.hospital.question.user.repository.dto;
+package site.hospital.question.admin.repository.dto;
 
 import lombok.Builder;
 import lombok.Data;

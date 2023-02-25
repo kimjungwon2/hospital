@@ -1,10 +1,10 @@
-package site.hospital.question.user.repository.adminSearchQuery;
+package site.hospital.question.admin.repository.search;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class AdminSearchQuestionDto {
+public class AdminQuestionSearchSelectQuery {
 
     private Long questionId;
     private String memberIdName;
@@ -15,9 +15,15 @@ public class AdminSearchQuestionDto {
     private String answerContent;
 
     @QueryProjection
-    public AdminSearchQuestionDto(Long questionId, String memberIdName, String nickName,
-            String hospitalName, String content,
-            Long answerId, String answerContent) {
+    public AdminQuestionSearchSelectQuery(
+            Long questionId,
+            String memberIdName,
+            String nickName,
+            String hospitalName,
+            String content,
+            Long answerId,
+            String answerContent
+    ) {
         this.questionId = questionId;
         this.memberIdName = memberIdName;
         this.nickName = nickName;

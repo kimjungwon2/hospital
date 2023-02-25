@@ -1,4 +1,4 @@
-package site.hospital.question.user.repository.userQuery;
+package site.hospital.question.user.repository.inquiry;
 
 import static site.hospital.answer.manager.domain.QAnswer.answer;
 import static site.hospital.question.user.domain.QQuestion.question;
@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import site.hospital.question.user.repository.userQuery.QSearchUserQuestionDTO;
 
 
 @Repository
@@ -22,12 +21,17 @@ public class UserQuestionRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<SearchUserQuestionDTO> viewUserQuestion(Long memberId) {
+    public List<UserQuestionSelectQuery> inquireQuestionsByUser(Long memberId) {
 
-        List<SearchUserQuestionDTO> result = queryFactory
-                .select(new QSearchUserQuestionDTO(question.id, hospital.id, hospital.hospitalName,
+        List<UserQuestionSelectQuery> result = queryFactory
+                .select(new QUserQuestionSelectQuery(
+                        question.id,
+                        hospital.id,
+                        hospital.hospitalName,
                         member.nickName,
-                        question.content, question.answer.id, answer.answerContent))
+                        question.content,
+                        question.answer.id,
+                        answer.answerContent))
                 .from(question)
                 .join(question.member, member)
                 .join(question.hospital, hospital)

@@ -1,4 +1,4 @@
-package site.hospital.question.user.repository.adminSearchQuery;
+package site.hospital.question.admin.repository.search;
 
 import static site.hospital.answer.manager.domain.QAnswer.answer;
 import static site.hospital.question.user.domain.QQuestion.question;
@@ -14,8 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import site.hospital.question.user.repository.adminSearchQuery.QAdminSearchQuestionDto;
-import site.hospital.question.user.repository.dto.AdminQuestionSearchCondition;
+import site.hospital.question.admin.repository.dto.AdminQuestionSearchCondition;
 
 @Repository
 public class AdminQuestionSearchRepository {
@@ -26,12 +25,16 @@ public class AdminQuestionSearchRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
-    public Page<AdminSearchQuestionDto> adminSearchQuestions(AdminQuestionSearchCondition condition,
-            Pageable pageable) {
-        QueryResults<AdminSearchQuestionDto> result = queryFactory
-                .select(new QAdminSearchQuestionDto(question.id, member.memberIdName,
-                        member.nickName, hospital.hospitalName, question.content, answer.id,
+    public Page<AdminQuestionSearchSelectQuery> adminSearchQuestions(
+            AdminQuestionSearchCondition condition,
+            Pageable pageable
+    ) {
+        QueryResults<AdminQuestionSearchSelectQuery> result = queryFactory
+                .select(new QAdminQuestionSearchSelectQuery(question.id,
+                        member.memberIdName,
+                        member.nickName,
+                        hospital.hospitalName,
+                        question.content, answer.id,
                         answer.answerContent))
                 .from(question)
                 .join(question.member, member)
@@ -44,12 +47,18 @@ public class AdminQuestionSearchRepository {
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
-        List<AdminSearchQuestionDto> content = result.getResults();
+        return convertPaging(pageable, result);
+    }
+
+    private PageImpl<AdminQuestionSearchSelectQuery> convertPaging(
+            Pageable pageable,
+            QueryResults<AdminQuestionSearchSelectQuery> result
+    ) {
+        List<AdminQuestionSearchSelectQuery> content = result.getResults();
         Long total = result.getTotal();
 
         return new PageImpl<>(content, pageable, total);
     }
-
 
     private BooleanExpression memberIdNameLike(String memberIdName) {
         return memberIdName == null ? null : question.member.memberIdName.contains(memberIdName);

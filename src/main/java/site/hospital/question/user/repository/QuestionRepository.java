@@ -5,5 +5,4 @@ import site.hospital.question.user.domain.Question;
 
 public interface QuestionRepository extends JpaRepository<Question, Long>,
         QuestionRepositoryCustom {
-
 }
