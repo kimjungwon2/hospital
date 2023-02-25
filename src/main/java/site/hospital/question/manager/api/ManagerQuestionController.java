@@ -17,32 +17,29 @@ public class ManagerQuestionController {
 
     private final ManagerQuestionService managerQuestionService;
 
-    //병원 관계자 Questions 검색
     @GetMapping("/staff/question/search")
-    public Page staffSearchQuestions(ServletRequest servletRequest,
+    public Page managerSearchHospitalQuestions(ServletRequest servletRequest,
             @RequestParam(value = "nickName", required = false) String nickName,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
             Pageable pageable
     ) {
         return managerQuestionService
-                .staffSearchHospitalQuestion(servletRequest, nickName, memberIdName, pageable);
+                .searchHospitalQuestions(servletRequest, nickName, memberIdName, pageable);
     }
 
-    //병원 관계자 답변 없는 Questions 검색
     @GetMapping("/staff/question/noAnswer/search")
-    public Page staffSearchNoQuestion(
+    public Page managerSearchNoQuestions(
             ServletRequest servletRequest,
             @RequestParam(value = "nickName", required = false) String nickName,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
             Pageable pageable
     ) {
         return managerQuestionService
-                .staffSearchNoQuestion(servletRequest, nickName, memberIdName, pageable);
+                .searchNoQuestions(servletRequest, nickName, memberIdName, pageable);
     }
 
-    //병원 관계자 미답변 question 수 받아오기
     @GetMapping("/staff/question/count")
-    public Long staffQuestionNoAnswer(ServletRequest servletRequest) {
-        return managerQuestionService.staffQuestionNoAnswer(servletRequest);
+    public Long managerQuestionNoAnswer(ServletRequest servletRequest) {
+        return managerQuestionService.countQuestionsWithNoAnswer(servletRequest);
     }
 }

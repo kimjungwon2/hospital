@@ -13,7 +13,7 @@ import site.hospital.common.service.ManagerJwtAccessService;
 import site.hospital.question.user.api.dto.QuestionSearchResponse;
 import site.hospital.question.user.domain.Question;
 import site.hospital.question.user.repository.QuestionRepository;
-import site.hospital.question.user.repository.dto.StaffQuestionSearchCondition;
+import site.hospital.question.manager.repository.dto.ManagerQuestionSearchCondition;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,42 +23,54 @@ public class ManagerQuestionService {
     private final QuestionRepository questionRepository;
     private final ManagerJwtAccessService managerJwtAccessService;
 
-    //병원 관계자 Question 검색
-    public Page<Question> staffSearchHospitalQuestion(
+    public Page<Question> searchHospitalQuestions(
             ServletRequest servletRequest,
             String nickName,
             String memberIdName,
             Pageable pageable
     ) {
-        StaffQuestionSearchCondition condition = StaffQuestionSearchCondition
-                .builder()
-                .nickName(nickName)
-                .memberIdName(memberIdName)
-                .build();
+        Page<Question> questions = getHospitalQuestions(servletRequest, nickName, memberIdName, pageable);
 
+        return getPagingQuestions(pageable, questions);
+    }
+
+    public Page<Question> searchNoQuestions(
+            ServletRequest servletRequest,
+            String nickName,
+            String memberIdName,
+            Pageable pageable
+    ) {
+        Page<Question> questions = getNoQuestions(servletRequest, nickName, memberIdName, pageable);
+
+        return getPagingQuestions(pageable, questions);
+    }
+    
+    public Long countQuestionsWithNoAnswer(ServletRequest servletRequest) {
         Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
-        Page<Question> questions = questionRepository
-                .staffSearchHospitalQuestion(JwtHospitalId, condition, pageable);
+        return questionRepository.managerCountQuestionsWithNoAnswer(JwtHospitalId);
+    }
 
-        List<QuestionSearchResponse> result = questions.stream()
-                .map(q -> QuestionSearchResponse.from(q))
-                .collect(Collectors.toList());
+    private PageImpl getPagingQuestions(Pageable pageable, Page<Question> questions) {
+        List<QuestionSearchResponse> result =
+                questions
+                        .stream()
+                        .map(q -> QuestionSearchResponse.from(q))
+                        .collect(Collectors.toList());
 
         Long total = questions.getTotalElements();
 
         return new PageImpl(result, pageable, total);
     }
 
-    //병원 관계자 미답변 Question 검색
-    public Page<Question> staffSearchNoQuestion(
+    private Page<Question> getNoQuestions(
             ServletRequest servletRequest,
             String nickName,
             String memberIdName,
             Pageable pageable
     ) {
-        StaffQuestionSearchCondition condition =
-                StaffQuestionSearchCondition
+        ManagerQuestionSearchCondition condition =
+                ManagerQuestionSearchCondition
                         .builder()
                         .nickName(nickName)
                         .memberIdName(memberIdName)
@@ -67,22 +79,29 @@ public class ManagerQuestionService {
         Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
         Page<Question> questions = questionRepository
-                .staffSearchNoQuestion(JwtHospitalId, condition, pageable);
-
-        List<QuestionSearchResponse> result = questions.stream()
-                .map(q -> QuestionSearchResponse.from(q))
-                .collect(Collectors.toList());
-
-        Long total = questions.getTotalElements();
-
-        return new PageImpl(result, pageable, total);
+                .managerSearchNoQuestion(JwtHospitalId, condition, pageable);
+        
+        return questions;
     }
 
-    //병원 관계자 미답변 question 갯수 확인
-    public Long staffQuestionNoAnswer(ServletRequest servletRequest) {
+    private Page<Question> getHospitalQuestions(
+            ServletRequest servletRequest, 
+            String nickName,
+            String memberIdName, Pageable pageable
+    ) {
+        ManagerQuestionSearchCondition condition =
+                ManagerQuestionSearchCondition
+                        .builder()
+                        .nickName(nickName)
+                        .memberIdName(memberIdName)
+                        .build();
+
         Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
 
-        return questionRepository.staffQuestionNoAnswer(JwtHospitalId);
+        Page<Question> questions = questionRepository
+                .managerSearchHospitalQuestion(JwtHospitalId, condition, pageable);
+        
+        return questions;
     }
 
 }

@@ -2,8 +2,6 @@ package site.hospital.question.user.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.hospital.user.domain.Hospital;
@@ -14,10 +12,10 @@ import site.hospital.question.user.api.dto.QuestionCreateRequest;
 import site.hospital.question.user.api.dto.QuestionCreateResponse;
 import site.hospital.question.user.domain.Question;
 import site.hospital.question.user.repository.QuestionRepository;
-import site.hospital.question.user.repository.simpleQuery.HospitalQuestionRepository;
-import site.hospital.question.user.repository.simpleQuery.SearchHospitalQuestionDTO;
-import site.hospital.question.user.repository.userQuery.SearchUserQuestionDTO;
-import site.hospital.question.user.repository.userQuery.UserQuestionRepository;
+import site.hospital.question.user.repository.hospital.HospitalQuestionRepository;
+import site.hospital.question.user.repository.hospital.HospitalQuestionSelectQuery;
+import site.hospital.question.user.repository.inquiry.UserQuestionSelectQuery;
+import site.hospital.question.user.repository.inquiry.UserQuestionRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,53 +28,29 @@ public class QuestionService {
     private final HospitalQuestionRepository hospitalQuestionRepository;
     private final UserQuestionRepository userQuestionRepository;
 
-    //Question 작성
     @Transactional
-    public QuestionCreateResponse questionCreate(QuestionCreateRequest request) {
+    public QuestionCreateResponse createQuestion(QuestionCreateRequest request) {
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findById(request.getHospitalId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
 
-        Question question = Question.CreateQuestion(member, hospital, request.getContent());
-        questionRepository.save(question);
+        Question question = createQuestion(request, member, hospital);
 
         return QuestionCreateResponse.from(question.getId());
     }
 
-    //QandA 수정
-    @Transactional
-    public Long modifyQandA(Long qanda_id, String content) {
-        Question question = questionRepository.findById(qanda_id)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 질문이 존재하지 않습니다."));
-        question.modifyQandA(content);
-
-        return question.getId();
+    public List<UserQuestionSelectQuery> inquireQuestionsByUser(Long memberId) {
+        return userQuestionRepository.inquireQuestionsByUser(memberId);
     }
 
-    //QandA 삭제
-    @Transactional
-    public void deleteQandA(Long id) {
-        questionRepository.deleteById(id);
+    public List<HospitalQuestionSelectQuery> inquireHospitalQuestions(Long hospitalId) {
+        return hospitalQuestionRepository.inquireHospitalQuestions(hospitalId);
     }
 
-    //병원 Question user가 조회
-    public List<SearchUserQuestionDTO> searchUserQuestion(Long memberId) {
-        List<SearchUserQuestionDTO> question = userQuestionRepository.viewUserQuestion(memberId);
-
+    private Question createQuestion(QuestionCreateRequest request, Member member, Hospital hospital) {
+        Question question = Question.CreateQuestion(member, hospital, request.getContent());
+        questionRepository.save(question);
         return question;
     }
-
-    //병원 Question 조회
-    public List<SearchHospitalQuestionDTO> searchHospitalQuestion(Long hospitalId) {
-        return hospitalQuestionRepository.viewHospitalQuestion(hospitalId);
-    }
-
-    //멤버 자신의 Question 조회
-    public Page<Question> searchMemberQuestion(Long memberId, Pageable pageable) {
-        Page<Question> question = questionRepository.searchQuestion(memberId, pageable);
-
-        return question;
-    }
-
 }
