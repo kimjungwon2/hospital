@@ -44,12 +44,10 @@ public class ReviewHospital extends BaseTimeEntity {
     @NotNull
     private String disease;
 
-    //평가 항목
     @Embedded
     @NotNull
     private EvaluationCriteria evCriteria;
 
-    //병원 추천 비추천 상태 [RECOMMENDATION, DECOMMENDATION]
     @Enumerated(EnumType.STRING)
     @NotNull
     private Recommendation recommendationStatus;
@@ -60,7 +58,6 @@ public class ReviewHospital extends BaseTimeEntity {
     }
 
     //== 생성 메서드 ==//
-
     @Builder
     public ReviewHospital(Hospital hospital, String content, String disease,
             EvaluationCriteria evCriteria,
@@ -72,10 +69,8 @@ public class ReviewHospital extends BaseTimeEntity {
         this.recommendationStatus = recommendationStatus;
     }
 
-    //리뷰 병원 작성
     public static ReviewHospital saveReviewHospital(Hospital hospital,
             ReviewHospital reviewHospitalDTO) {
-        //평가 기준 적용
         EvaluationCriteria evaluationCriteria = EvaluationCriteria.builder()
                 .sumPrice(reviewHospitalDTO.getEvCriteria().getSumPrice())
                 .kindness(reviewHospitalDTO.getEvCriteria().getKindness())
@@ -83,7 +78,6 @@ public class ReviewHospital extends BaseTimeEntity {
                 .cleanliness(reviewHospitalDTO.getEvCriteria().getCleanliness())
                 .waitTime(reviewHospitalDTO.getEvCriteria().getWaitTime()).build();
 
-        //리뷰 병원 등록
         ReviewHospital reviewHospital = ReviewHospital.builder()
                 .hospital(hospital)
                 .content(reviewHospitalDTO.getContent())

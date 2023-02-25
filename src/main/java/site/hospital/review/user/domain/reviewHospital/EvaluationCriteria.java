@@ -26,8 +26,13 @@ public class EvaluationCriteria {
     private double averageRate;
 
     @Builder
-    public EvaluationCriteria(int sumPrice, int kindness, int symptomRelief,
-            int cleanliness, int waitTime) {
+    public EvaluationCriteria(
+            int sumPrice,
+            int kindness,
+            int symptomRelief,
+            int cleanliness,
+            int waitTime
+    ) {
         this.sumPrice = sumPrice;
         this.kindness = kindness;
         this.symptomRelief = symptomRelief;

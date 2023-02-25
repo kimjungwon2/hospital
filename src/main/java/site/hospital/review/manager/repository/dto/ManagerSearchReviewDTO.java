@@ -1,11 +1,11 @@
-package site.hospital.review.user.repository.dto;
+package site.hospital.review.manager.repository.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import site.hospital.review.user.domain.ReviewAuthentication;
 
 @Data
-public class StaffSearchReviewDTO {
+public class ManagerSearchReviewDTO {
 
     private Long reviewId;
     private ReviewAuthentication reviewAuthentication;
@@ -14,7 +14,7 @@ public class StaffSearchReviewDTO {
     private Long likeNumber;
 
     @QueryProjection
-    public StaffSearchReviewDTO(Long reviewId, ReviewAuthentication reviewAuthentication,
+    public ManagerSearchReviewDTO(Long reviewId, ReviewAuthentication reviewAuthentication,
             String memberIdName, String nickName, Long likeNumber) {
         this.reviewId = reviewId;
         this.reviewAuthentication = reviewAuthentication;

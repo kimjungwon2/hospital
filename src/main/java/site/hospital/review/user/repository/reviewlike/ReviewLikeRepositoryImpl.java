@@ -1,4 +1,4 @@
-package site.hospital.review.user.repository.reviewLike;
+package site.hospital.review.user.repository.reviewlike;
 
 import static site.hospital.review.user.domain.QReviewLike.reviewLike;
 
@@ -15,9 +15,7 @@ public class ReviewLikeRepositoryImpl implements ReviewLikeRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
-    //고객의 즐겨찾기 유무 확인
-    public ReviewLike isLikeReview(Long memberId, Long reviewId) {
+    public ReviewLike checkReviewLike(Long memberId, Long reviewId) {
         ReviewLike result = queryFactory
                 .select(reviewLike)
                 .from(reviewLike)

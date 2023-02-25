@@ -1,10 +1,10 @@
-package site.hospital.review.user.repository.query;
+package site.hospital.review.user.repository.search;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class ReviewHospitalDTO2 {
+public class ReviewSearchReviewHospitalDTO {
 
     private Long reviewId;
     private String content;
@@ -14,8 +14,14 @@ public class ReviewHospitalDTO2 {
     private String hospitalName;
 
     @QueryProjection
-    public ReviewHospitalDTO2(Long reviewId, String content, String disease,
-            Double averageRate, Long hospitalId, String hospitalName) {
+    public ReviewSearchReviewHospitalDTO(
+            Long reviewId,
+            String content,
+            String disease,
+            Double averageRate,
+            Long hospitalId,
+            String hospitalName
+    ) {
         this.reviewId = reviewId;
         this.content = content;
         this.disease = disease;
