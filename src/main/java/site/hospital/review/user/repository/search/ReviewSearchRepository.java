@@ -19,9 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import site.hospital.review.user.domain.Review;
-import site.hospital.review.user.repository.query.QReviewHospitalDTO2;
-import site.hospital.review.user.repository.query.QReviewLikeSearchDTO;
-import site.hospital.review.user.repository.query.QReviewSearchDto;
 
 @Repository
 public class ReviewSearchRepository {
@@ -53,7 +50,7 @@ public class ReviewSearchRepository {
 
     private Page<ReviewSearchSelectQuery> findReviews(String searchWord, Pageable pageable) {
         List<ReviewSearchSelectQuery> content = queryFactory
-                .select(new QReviewSearchDto(
+                .select(new QReviewSearchSelectQuery(
                         review.id,
                         member.nickName,
                         review.createdDate,
@@ -76,7 +73,7 @@ public class ReviewSearchRepository {
     private void insertReviewLike(Page<ReviewSearchSelectQuery> result, List<Long> reviewIds) {
         List<ReviewSearchLikeDTO> reviewSearchLikeDTO =
                 queryFactory
-                        .select(new QReviewLikeSearchDTO(reviewLike.id, review.id))
+                        .select(new QReviewSearchLikeDTO(reviewLike.id, review.id))
                         .from(reviewLike)
                         .join(reviewLike.review, review)
                         .where(reviewLike.review.id.in(reviewIds))
@@ -94,11 +91,12 @@ public class ReviewSearchRepository {
     private void insertReviewHospital(Page<ReviewSearchSelectQuery> result, List<Long> reviewIds) {
         List<ReviewSearchReviewHospitalDTO> reviewHospitalDto =
                 queryFactory
-                        .select(new QReviewHospitalDTO2(review.id
-                                , reviewHospital.content, reviewHospital.disease,
+                        .select(new QReviewSearchReviewHospitalDTO(review.id
+                                , reviewHospital.content,
+                                reviewHospital.disease,
                                 reviewHospital.evCriteria.averageRate,
-                                hospital.id
-                                , hospital.hospitalName))
+                                hospital.id,
+                                hospital.hospitalName))
                         .from(reviewHospital)
                         .join(reviewHospital.review, review)
                         .join(reviewHospital.hospital, hospital)
