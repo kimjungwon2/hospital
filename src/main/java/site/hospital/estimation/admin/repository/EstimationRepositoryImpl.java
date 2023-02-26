@@ -18,7 +18,7 @@ public class EstimationRepositoryImpl implements EstimationRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<Estimation> searchEstimation(Hospital hospital, EstimationList estimationList) {
+    public List<Estimation> searchEstimations(Hospital hospital, EstimationList estimationList) {
         List<Estimation> result = queryFactory
                 .select(estimation)
                 .from(estimation)

@@ -7,7 +7,7 @@ import site.hospital.hospital.user.domain.Hospital;
 
 public interface EstimationRepositoryCustom {
 
-    List<Estimation> searchEstimation(Hospital hospital, EstimationList estimationList);
+    List<Estimation> searchEstimations(Hospital hospital, EstimationList estimationList);
 
     void adminDeleteEstimation(Hospital hospital);
 }
