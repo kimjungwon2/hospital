@@ -31,7 +31,7 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
         return result;
     }
 
-    public Hospital findByStaffHosId(Long staffHosId) {
+    public Hospital findHospitalAdditionalInfoId(Long staffHosId) {
         Hospital result = queryFactory
                 .selectFrom(hospital)
                 .where(staffHosInEq(staffHosId))

@@ -23,7 +23,7 @@ public class AdminHospitalAdditionalInfoService {
         StaffHosInformation staffHosInformation = hospitalAdditionalInfoRepository.findById(staffHosId)
                 .orElseThrow(
                         () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
-        Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
+        Hospital hospital = hospitalRepository.findHospitalAdditionalInfoId(staffHosId);
         hospital.deleteStaffHosId();
 
         hospitalAdditionalInfoRepository.deleteById(staffHosId);

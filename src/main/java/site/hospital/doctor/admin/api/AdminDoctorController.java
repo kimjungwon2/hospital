@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.hospital.doctor.manager.api.dto.DoctorAdminModifyRequest;
+import site.hospital.doctor.admin.service.AdminDoctorService;
+import site.hospital.doctor.admin.api.dto.DoctorAdminModifyRequest;
 import site.hospital.doctor.manager.api.dto.DoctorCreateResponse;
-import site.hospital.doctor.manager.repository.dto.CreateDoctorRequest;
-import site.hospital.doctor.manager.service.DoctorService;
+import site.hospital.doctor.admin.api.dto.DoctorAdminCreateRequest;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class AdminDoctorController {
 
-    private final DoctorService doctorService;
+    private final AdminDoctorService adminDoctorService;
 
     @PostMapping("/admin/doctor/register")
-    public DoctorCreateResponse saveDoctor(@RequestBody @Validated CreateDoctorRequest request) {
-        return doctorService.createDoctor(request);
+    public DoctorCreateResponse saveDoctor(@RequestBody @Validated DoctorAdminCreateRequest request) {
+        return adminDoctorService.createDoctor(request);
     }
 
     @PutMapping("/admin/doctor/modify/{doctorId}")
@@ -31,12 +31,12 @@ public class AdminDoctorController {
             @PathVariable("doctorId") Long doctorId,
             @RequestBody @Validated DoctorAdminModifyRequest request
     ) {
-        doctorService.modifyDoctor(doctorId, request);
+        adminDoctorService.modifyDoctor(doctorId, request);
     }
 
     @DeleteMapping("/admin/doctor/delete/{doctorId}")
     public void deleteDoctor(@PathVariable("doctorId") Long doctorId) {
-        doctorService.deleteDoctor(doctorId);
+        adminDoctorService.deleteDoctor(doctorId);
     }
 
 }

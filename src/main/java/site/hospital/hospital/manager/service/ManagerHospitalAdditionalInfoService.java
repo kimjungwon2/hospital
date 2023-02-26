@@ -30,7 +30,7 @@ public class ManagerHospitalAdditionalInfoService {
                         () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         //해당 id 값을 가지고 있는 병원 검색
-        Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
+        Hospital hospital = hospitalRepository.findHospitalAdditionalInfoId(staffHosId);
 
         managerJwtAccessService
                 .managerAccess(servletRequest, request.getMemberId(), hospital.getId());
@@ -52,7 +52,7 @@ public class ManagerHospitalAdditionalInfoService {
                         () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
 
         //병원 검색
-        Hospital hospital = hospitalRepository.findByStaffHosId(staffHosId);
+        Hospital hospital = hospitalRepository.findHospitalAdditionalInfoId(staffHosId);
 
         //토큰의 권한과 authority의 병원 번호가 일치한지 확인.
         managerJwtAccessService.managerAccess(servletRequest, memberId, hospital.getId());

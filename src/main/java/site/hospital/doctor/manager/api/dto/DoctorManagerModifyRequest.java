@@ -3,7 +3,7 @@ package site.hospital.doctor.manager.api.dto;
 import lombok.Data;
 
 @Data
-public class DoctorStaffModifyRequest {
+public class DoctorManagerModifyRequest {
 
     private Long memberId;
     private String history;

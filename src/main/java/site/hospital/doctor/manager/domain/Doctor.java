@@ -14,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.common.domain.BaseEntity;
-import site.hospital.doctor.manager.repository.dto.CreateDoctorRequest;
+import site.hospital.doctor.admin.api.dto.DoctorAdminCreateRequest;
 import site.hospital.hospital.user.domain.StaffHosInformation;
 
 @Entity
@@ -45,7 +45,7 @@ public class Doctor extends BaseEntity {
     }
 
 
-    public Doctor(CreateDoctorRequest request) {
+    public Doctor(DoctorAdminCreateRequest request) {
         this.name = request.getName();
         this.history = request.getHistory();
     }
@@ -55,7 +55,6 @@ public class Doctor extends BaseEntity {
         this.staffHosInformation = staffHosInformation;
     }
 
-    //수정 메서드
     public void modifyDoctor(Doctor doctor) {
         this.name = doctor.getName();
         this.history = doctor.getHistory();

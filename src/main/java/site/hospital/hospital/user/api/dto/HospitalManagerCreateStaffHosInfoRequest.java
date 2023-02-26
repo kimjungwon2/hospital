@@ -2,7 +2,7 @@ package site.hospital.hospital.user.api.dto;
 
 import java.util.List;
 import lombok.Data;
-import site.hospital.doctor.manager.repository.dto.CreateDoctorRequest;
+import site.hospital.doctor.admin.api.dto.DoctorAdminCreateRequest;
 
 @Data
 public class HospitalManagerCreateStaffHosInfoRequest {
@@ -12,5 +12,5 @@ public class HospitalManagerCreateStaffHosInfoRequest {
     private String introduction;
     private String consultationHour;
     private String abnormality;
-    private List<CreateDoctorRequest> doctors;
+    private List<DoctorAdminCreateRequest> doctors;
 }

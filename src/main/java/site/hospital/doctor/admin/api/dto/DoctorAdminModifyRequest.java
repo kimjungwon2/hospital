@@ -1,4 +1,4 @@
-package site.hospital.doctor.manager.api.dto;
+package site.hospital.doctor.admin.api.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;

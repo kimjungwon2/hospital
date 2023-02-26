@@ -11,44 +11,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.doctor.manager.api.dto.DoctorCreateResponse;
-import site.hospital.doctor.manager.api.dto.DoctorStaffModifyRequest;
-import site.hospital.doctor.manager.repository.dto.StaffCreateDoctorRequest;
-import site.hospital.doctor.manager.service.DoctorService;
+import site.hospital.doctor.manager.api.dto.DoctorManagerModifyRequest;
+import site.hospital.doctor.manager.api.dto.DoctorManagerCreateRequest;
+import site.hospital.doctor.manager.service.ManagerDoctorService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ManagerDoctorController {
 
-    private final DoctorService doctorService;
+    private final ManagerDoctorService managerDoctorService;
 
-    //병원 관계자 의사 등록
     @PostMapping("/staff/doctor/register")
-    public DoctorCreateResponse staffSaveDoctor(
+    public DoctorCreateResponse managerRegisterDoctor(
             ServletRequest servletRequest,
-            @RequestBody @Validated StaffCreateDoctorRequest request
+            @RequestBody @Validated DoctorManagerCreateRequest request
     ) {
-        return doctorService.staffCreateDoctor(servletRequest, request);
+        return managerDoctorService.createDoctor(servletRequest, request);
     }
 
-    //병원 관계자 의사 수정
     @PutMapping("/staff/doctor/modify/{doctorId}")
-    public void staffModifyDoctor(
+    public void managerModifyDoctor(
             ServletRequest servletRequest,
             @PathVariable("doctorId") Long doctorId,
-            @RequestBody @Validated DoctorStaffModifyRequest request
+            @RequestBody @Validated DoctorManagerModifyRequest request
     ) {
-        doctorService.staffModifyDoctor(servletRequest, request.getMemberId(), doctorId, request);
+        managerDoctorService.modifyDoctor(doctorId,servletRequest, request);
     }
 
-    //병원 관계자 의사 삭제
     @DeleteMapping("/staff/{memberId}/doctor/delete/{doctorId}")
-    public void staffDeleteDoctor(
+    public void managerDeleteDoctor(
             ServletRequest servletRequest,
             @PathVariable("memberId") Long memberId,
             @PathVariable("doctorId") Long doctorId
     ) {
-        doctorService.staffDeleteDoctor(servletRequest, memberId, doctorId);
+        managerDoctorService.deleteDoctor(servletRequest, memberId, doctorId);
     }
 
 

@@ -3,7 +3,7 @@ package site.hospital.hospital.user.api.dto;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import site.hospital.doctor.manager.repository.dto.CreateDoctorRequest;
+import site.hospital.doctor.admin.api.dto.DoctorAdminCreateRequest;
 
 @Data
 public class HospitalCreateStaffHosInfoRequest {
@@ -16,5 +16,5 @@ public class HospitalCreateStaffHosInfoRequest {
     private String consultationHour;
     @NotNull(message = "특이사항을 입력해주세요.")
     private String abnormality;
-    private List<CreateDoctorRequest> doctors;
+    private List<DoctorAdminCreateRequest> doctors;
 }
