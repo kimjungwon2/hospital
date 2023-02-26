@@ -1,8 +1,8 @@
 package site.hospital.hospital.manager.repository.dto;
 
 import lombok.Data;
-import site.hospital.estimation.admin.domain.Estimation;
-import site.hospital.estimation.admin.domain.EstimationList;
+import site.hospital.estimation.user.domain.Estimation;
+import site.hospital.estimation.user.domain.EstimationList;
 
 @Data
 public class StaffHospitalEstimationDTO {

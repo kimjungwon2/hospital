@@ -7,22 +7,22 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.estimation.admin.api.dto.EstimationAdminModifyRequest;
 import site.hospital.estimation.admin.api.dto.EstimationCreateRequest;
 import site.hospital.estimation.admin.api.dto.EstimationCreateResponse;
-import site.hospital.estimation.admin.domain.Estimation;
+import site.hospital.estimation.user.domain.Estimation;
 import site.hospital.hospital.user.domain.Hospital;
-import site.hospital.estimation.admin.repository.EstimationRepository;
+import site.hospital.estimation.user.repository.EstimationRepository;
 import site.hospital.hospital.user.repository.HospitalRepository;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class EstimationService {
+public class AdminEstimationService {
 
     private final EstimationRepository estimationRepository;
     private final HospitalRepository hospitalRepository;
 
     //병원 FK 없이 등록
     @Transactional
-    public EstimationCreateResponse createNoHospitalEstimation(EstimationCreateRequest request) {
+    public EstimationCreateResponse registerHospitalEstimation(EstimationCreateRequest request) {
         Estimation estimation = Estimation.builder().cityName(request.getCityName())
                 .hospitalName(request.getHospitalName()).estimationList(request.getEstimationList())
                 .distinctionGrade(request.getDistinctionGrade()).build();
@@ -61,7 +61,7 @@ public class EstimationService {
 
     //평가 삭제하기.
     @Transactional
-    public void adminDeleteEstimation(Long estimationId) {
+    public void deleteEstimation(Long estimationId) {
         Estimation estimation = estimationRepository.findById(estimationId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 평가가 존재하지 않습니다."));
 
@@ -70,7 +70,7 @@ public class EstimationService {
 
     //평가 수정하기
     @Transactional
-    public void adminModifyEstimation(Long estimationId, EstimationAdminModifyRequest request) {
+    public void modifyEstimation(Long estimationId, EstimationAdminModifyRequest request) {
         Estimation estimation = Estimation.builder().distinctionGrade(request.getDistinctionGrade())
                 .estimationList(request.getEstimationList()).build();
 

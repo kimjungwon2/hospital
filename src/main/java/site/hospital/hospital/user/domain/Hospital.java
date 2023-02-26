@@ -24,7 +24,7 @@ import site.hospital.tag.manager.domain.PostTag;
 import site.hospital.question.user.domain.Question;
 import site.hospital.common.domain.BaseEntity;
 import site.hospital.hospital.user.domain.detailedHosInformation.DetailedHosInformation;
-import site.hospital.estimation.admin.domain.Estimation;
+import site.hospital.estimation.user.domain.Estimation;
 import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
 
 @Entity

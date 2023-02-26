@@ -15,7 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.hospital.answer.manager.domain.Answer;
+import site.hospital.answer.user.domain.Answer;
 import site.hospital.common.domain.BaseTimeEntity;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.member.user.domain.Member;

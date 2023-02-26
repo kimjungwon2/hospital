@@ -1,4 +1,4 @@
-package site.hospital.estimation.admin.domain;
+package site.hospital.estimation.user.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

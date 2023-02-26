@@ -1,4 +1,4 @@
-package site.hospital.answer.manager.domain;
+package site.hospital.answer.user.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

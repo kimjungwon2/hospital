@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.hospital.estimation.admin.service.EstimationService;
+import site.hospital.estimation.admin.service.AdminEstimationService;
 import site.hospital.estimation.admin.api.dto.EstimationAdminModifyRequest;
 import site.hospital.estimation.admin.api.dto.EstimationCreateRequest;
 import site.hospital.estimation.admin.api.dto.EstimationCreateResponse;
@@ -17,30 +17,27 @@ import site.hospital.estimation.admin.api.dto.EstimationCreateResponse;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class EstimationController {
+public class AdminEstimationController {
 
-    private final EstimationService estimationService;
+    private final AdminEstimationService adminEstimationService;
 
-    //평가 등록
     @PostMapping("/admin/estimation/register")
-    public EstimationCreateResponse createEstimation(
+    public EstimationCreateResponse adminCreateEstimation(
             @RequestBody @Validated EstimationCreateRequest request) {
-        return estimationService.createNoHospitalEstimation(request);
+        return adminEstimationService.registerHospitalEstimation(request);
     }
 
-    //평가 삭제
     @DeleteMapping("/admin/estimation/delete/{estimationId}")
     public void adminDeleteEstimation(@PathVariable("estimationId") Long estimationId) {
-        estimationService.adminDeleteEstimation(estimationId);
+        adminEstimationService.deleteEstimation(estimationId);
     }
 
-    //관리자 평가 수정하기
     @PutMapping("/admin/estimation/modify/{estimationId}")
     public void adminModifyMember(
             @PathVariable("estimationId") Long estimationId,
             @RequestBody @Validated EstimationAdminModifyRequest request
     ) {
-        estimationService.adminModifyEstimation(estimationId, request);
+        adminEstimationService.modifyEstimation(estimationId, request);
     }
 
 }

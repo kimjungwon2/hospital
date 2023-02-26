@@ -16,7 +16,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.hospital.answer.manager.domain.Answer;
+import site.hospital.answer.user.domain.Answer;
 import site.hospital.bookmark.user.domain.Bookmark;
 import site.hospital.question.user.domain.Question;
 import site.hospital.review.user.domain.ReviewLike;

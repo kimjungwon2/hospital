@@ -1,13 +1,13 @@
 package site.hospital.estimation.admin.repository;
 
-import static site.hospital.estimation.admin.domain.QEstimation.estimation;
+import static site.hospital.estimation.user.domain.QEstimation.estimation;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
-import site.hospital.estimation.admin.domain.Estimation;
-import site.hospital.estimation.admin.domain.EstimationList;
+import site.hospital.estimation.user.domain.Estimation;
+import site.hospital.estimation.user.domain.EstimationList;
 import site.hospital.hospital.user.domain.Hospital;
 
 public class EstimationRepositoryImpl implements EstimationRepositoryCustom {

@@ -1,6 +1,6 @@
 package site.hospital.question.user.repository;
 
-import static site.hospital.answer.manager.domain.QAnswer.answer;
+import static site.hospital.answer.user.domain.QAnswer.answer;
 import static site.hospital.member.user.domain.QMember.member;
 import static site.hospital.question.user.domain.QQuestion.question;
 

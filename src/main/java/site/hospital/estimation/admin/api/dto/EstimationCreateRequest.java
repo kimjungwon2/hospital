@@ -2,7 +2,7 @@ package site.hospital.estimation.admin.api.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import site.hospital.estimation.admin.domain.EstimationList;
+import site.hospital.estimation.user.domain.EstimationList;
 
 @Data
 public class EstimationCreateRequest {
