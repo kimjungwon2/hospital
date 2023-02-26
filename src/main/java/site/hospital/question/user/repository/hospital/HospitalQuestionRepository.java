@@ -22,7 +22,7 @@ public class HospitalQuestionRepository {
     public List<HospitalQuestionSelectQuery> inquireHospitalQuestions(Long hospitalId) {
 
         List<HospitalQuestionSelectQuery> result = queryFactory
-                .select(new QSearchHospitalQuestionDTO(
+                .select(new QHospitalQuestionSelectQuery(
                         question.id,
                         member.nickName,
                         question.content,
