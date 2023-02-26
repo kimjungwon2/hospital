@@ -33,7 +33,7 @@ public class ManagerJwtAccessService {
 
         //멤버 권한의 병원 번호
         MemberAuthority findMemberManager = memberRepository
-                .findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
+                .findManagerAuthority(memberId, Authorization.ROLE_MANAGER);
 
         if (findMemberManager == null) {
             throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");

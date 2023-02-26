@@ -25,10 +25,9 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     public MemberRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
-
-    //권한 찾기
+    
     @Override
-    public List<MemberAuthority> memberAuthorities(String memberIdName) {
+    public List<MemberAuthority> findMemberAuthorities(String memberIdName) {
         return queryFactory
                 .select(memberAuthority)
                 .from(memberAuthority)
@@ -38,10 +37,9 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetch();
     }
 
-
-    //STAFF 권한 유무 확인권한 찾기
+    
     @Override
-    public MemberAuthority findMemberStaffAuthority(Long memberId, Authorization authorization) {
+    public MemberAuthority findManagerAuthority(Long memberId, Authorization authorization) {
         return queryFactory
                 .select(memberAuthority)
                 .from(memberAuthority)
@@ -53,65 +51,72 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 )
                 .fetchOne();
     }
-
-
-    //권한 삭제.
+    
     @Override
-    public void adminDeleteMemberAuthority(Member member) {
+    public void adminDeleteAllAuthority(Member member) {
         queryFactory.delete(memberAuthority)
                 .where(memberEq(member))
                 .execute();
     }
-
-
+    
     @Override
-    public Page<Member> adminSearchMembers(AdminMemberSearchCondition condition,
-            Pageable pageable) {
-
-        //모두 검색(아이디+닉네임+유저이름+폰번호)
-        if (condition.getAllSearch() != null) {
-            QueryResults<Member> result = queryFactory
-                    .select(member)
-                    .from(member)
-                    .where(
-                            memberNickNameEq(condition.getAllSearch())
-                                    .or(memberIdNameLike(condition.getAllSearch()))
-                                    .or(memberUserNameEq(condition.getAllSearch()))
-                                    .or(memberPhoneNumberEq(condition.getAllSearch()))
-                    )
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetchResults();
-
-            List<Member> content = result.getResults();
-            long total = result.getTotal();
-
-            return new PageImpl<>(content, pageable, total);
+    public Page<Member> adminSearchMembers(
+            AdminMemberSearchCondition condition,
+            Pageable pageable
+    ) {
+        if (searchAllConditions(condition)) {
+            return searchUserWithAllConditions(condition, pageable);
         }
-        //각자 검색
         else {
-            QueryResults<Member> result = queryFactory
-                    .select(member)
-                    .from(member)
-                    .where(
-                            memberIdEq(condition.getMemberId())
-                            , (memberIdNameLike(condition.getMemberIdName()))
-                            , (memberNickNameEq(condition.getNickName()))
-                            , (memberUserNameEq(condition.getUserName()))
-                            , (memberPhoneNumberEq(condition.getPhoneNumber()))
-                            , (memberHospitalNumberEq(condition.getHospitalNumber()))
-                            , (memberStatusEq(condition.getMemberStatus()))
-                    )
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetchResults();
-
-            List<Member> content = result.getResults();
-            long total = result.getTotal();
-
-            return new PageImpl<>(content, pageable, total);
+            return searchEachCondition(condition, pageable);
         }
+    }
 
+    private PageImpl<Member> searchEachCondition(AdminMemberSearchCondition condition, Pageable pageable) {
+        QueryResults<Member> result = queryFactory
+                .select(member)
+                .from(member)
+                .where(
+                        memberIdEq(condition.getMemberId())
+                        , (memberIdNameLike(condition.getMemberIdName()))
+                        , (memberNickNameEq(condition.getNickName()))
+                        , (memberUserNameEq(condition.getUserName()))
+                        , (memberPhoneNumberEq(condition.getPhoneNumber()))
+                        , (memberHospitalNumberEq(condition.getHospitalNumber()))
+                        , (memberStatusEq(condition.getMemberStatus()))
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Member> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    private boolean searchAllConditions(AdminMemberSearchCondition condition) {
+        return condition.getAllSearch() != null;
+    }
+
+    private PageImpl<Member> searchUserWithAllConditions(AdminMemberSearchCondition condition, Pageable pageable) {
+        QueryResults<Member> result = queryFactory
+                .select(member)
+                .from(member)
+                .where(
+                        memberNickNameEq(condition.getAllSearch())
+                                .or(memberIdNameLike(condition.getAllSearch()))
+                                .or(memberUserNameEq(condition.getAllSearch()))
+                                .or(memberPhoneNumberEq(condition.getAllSearch()))
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Member> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     private BooleanExpression memberEq(Member member) {

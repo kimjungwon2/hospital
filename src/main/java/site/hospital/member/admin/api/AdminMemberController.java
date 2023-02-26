@@ -28,7 +28,6 @@ public class AdminMemberController {
 
     private final AdminMemberService adminMemberService;
 
-    //관리자 유저 검색
     @GetMapping("/admin/user/search")
     public Page<MemberSearchResponse> adminSearchMembers(
             @RequestParam(value = "allSearch", required = false) String allSearch,
@@ -41,37 +40,40 @@ public class AdminMemberController {
             @RequestParam(value = "hospitalNumber", required = false) Long hospitalNumber,
             Pageable pageable
     ) {
-        return adminMemberService.adminSearchMembers(allSearch, memberId, memberIdName,
-                nickName, userName, phoneNumber, memberStatus,
-                hospitalNumber, pageable);
+        return adminMemberService.searchMembers(
+                allSearch,
+                memberId,
+                memberIdName,
+                nickName,
+                userName,
+                phoneNumber,
+                memberStatus,
+                hospitalNumber,
+                pageable);
     }
 
-    //관리자 유저 상세 보기
     @GetMapping("/admin/user/view/{memberId}")
     public MemberAdminViewInfoResponse adminViewMember(@PathVariable("memberId") Long memberId) {
-        return adminMemberService.adminViewMember(memberId);
+        return adminMemberService.viewMemberInformation(memberId);
     }
 
-    //관리자 멤버 생성
     @PostMapping("/admin/signup")
     public MemberCreateResponse adminSaveMember(
             @RequestBody @Validated MemberAdminCreateRequest request) {
-        return adminMemberService.adminSignUp(request);
+        return adminMemberService.signup(request);
     }
 
-    //관리자 멤버 삭제
     @DeleteMapping("/admin/user/delete/{memberId}")
     public void adminDeleteMember(@PathVariable("memberId") Long memberId) {
-        adminMemberService.adminDeleteMember(memberId);
+        adminMemberService.deleteMember(memberId);
     }
 
-    //관리자 멤버 수정하기
     @PutMapping("/admin/user/modify/{memberId}")
     public void adminModifyMember(
             @PathVariable("memberId") Long memberId,
             @RequestBody @Validated MemberAdminModifyRequest request
     ) {
-        adminMemberService.adminModifyMember(memberId, request);
+        adminMemberService.modifyMember(memberId, request);
     }
 
 }

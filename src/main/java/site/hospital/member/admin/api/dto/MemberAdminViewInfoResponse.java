@@ -29,6 +29,5 @@ public class MemberAdminViewInfoResponse {
                 .hospitalNumber(member.getHospitalNumber())
                 .memberStatus(member.getMemberStatus())
                 .build();
-
     }
 }

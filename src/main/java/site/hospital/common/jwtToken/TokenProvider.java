@@ -60,7 +60,7 @@ public class TokenProvider implements Serializable {
     }
 
     //STAFF 토큰 생성
-    public String createStaffToken(Authentication authentication, String phoneNumber,
+    public String createManagerToken(Authentication authentication, String phoneNumber,
             Long hospitalNumber) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

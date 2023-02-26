@@ -6,5 +6,4 @@ import site.hospital.member.user.domain.MemberAuthority;
 
 public interface MemberAuthorityRepository extends JpaRepository<MemberAuthority, Long> {
 
-    List<MemberAuthority> findByMemberId(Long memberId);
 }

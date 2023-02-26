@@ -54,27 +54,29 @@ public class Member extends BaseTimeEntity {
     private String password;
     @NotNull
     private String nickName;
-    //회원 이름
     @NotNull
     private String userName;
     @NotNull
     private String phoneNumber;
 
-    //병원 번호
+
     private Long hospitalNumber;
 
-    //멤버 권한.
     @Enumerated(EnumType.STRING)
     @NotNull
     MemberStatus memberStatus;
 
-    /*
-        생성자
-    */
-    //회원 생성
+
     @Builder
-    public Member(String memberIdName, String password, String userName, String nickName,
-            String phoneNumber, MemberStatus memberStatus, Long hospitalNumber) {
+    public Member(
+            String memberIdName,
+            String password,
+            String userName,
+            String nickName,
+            String phoneNumber,
+            MemberStatus memberStatus,
+            Long hospitalNumber
+    ) {
         this.memberIdName = memberIdName;
         this.password = password;
         this.userName = userName;
@@ -87,7 +89,6 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    //수정하기
     public void adminModifyMember(Member member) {
         this.nickName = member.getNickName();
         this.phoneNumber = member.getPhoneNumber();
@@ -99,7 +100,6 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    //수정하기
     public void modifyMember(Member member) {
         this.nickName = member.getNickName();
         this.phoneNumber = member.getPhoneNumber();

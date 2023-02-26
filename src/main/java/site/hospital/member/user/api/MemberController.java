@@ -26,29 +26,26 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseEntity<MemberLoginResponse> loginMember(
-            @RequestBody @Validated MemberLoginRequest request) {
-        return memberService.loginMember(request);
+    public ResponseEntity<MemberLoginResponse> login(@RequestBody @Validated MemberLoginRequest request) {
+        return memberService.login(request);
     }
 
     @PostMapping("/signup")
-    public MemberCreateResponse saveMember(@RequestBody @Validated MemberCreateRequest request) {
-        return memberService.signUp(request);
+    public MemberCreateResponse signup(@RequestBody @Validated MemberCreateRequest request) {
+        return memberService.signup(request);
     }
 
-    //유저 정보 상세 보기
     @GetMapping("/user/{memberId}/view")
-    public MemberViewInfoResponse userViewInformation(@PathVariable("memberId") Long memberId) {
-        return memberService.userViewMember(memberId);
+    public MemberViewInfoResponse viewUserInformation(@PathVariable("memberId") Long memberId) {
+        return memberService.viewUserInformation(memberId);
     }
 
-    //유저 정보 수정하기
     @PutMapping("/user/{memberId}/modify")
-    public void userModifyInformation(
+    public void modifyMemberByUser(
             @PathVariable("memberId") Long memberId,
             @RequestBody @Validated MemberModifyRequest request
     ) {
-        memberService.modifyMember(memberId, request);
+        memberService.modifyMemberByUser(memberId, request);
     }
 
 }

@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.hospital.user.repository.HospitalRepository;
 import site.hospital.member.admin.api.dto.MemberAdminCreateRequest;
 import site.hospital.member.admin.api.dto.MemberAdminModifyRequest;
@@ -25,34 +24,34 @@ import site.hospital.member.user.domain.MemberStatus;
 import site.hospital.member.user.repository.AuthorityRepository;
 import site.hospital.member.user.repository.MemberAuthorityRepository;
 import site.hospital.member.user.repository.MemberRepository;
+import site.hospital.member.user.service.MemberService;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AdminMemberService {
 
+    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final AuthorityRepository authorityRepository;
     private final MemberAuthorityRepository memberAuthorityRepository;
     private final HospitalRepository hospitalRepository;
     private final PasswordEncoder passwordEncoder;
 
-    //관리자 멤버 삭제하기
     @Transactional
-    public void adminDeleteMember(Long memberId) {
+    public void deleteMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
-        //멤버 권리부터 삭제.
-        memberRepository.adminDeleteMemberAuthority(member);
+        memberRepository.adminDeleteAllAuthority(member);
         memberRepository.deleteById(memberId);
     }
 
-
-    //멤버 수정하기
     @Transactional
-    public void adminModifyMember(Long memberId, MemberAdminModifyRequest request) {
-        Member modifyMember = Member.builder().phoneNumber(request.getPhoneNumber())
+    public void modifyMember(Long memberId, MemberAdminModifyRequest request) {
+        Member memberChange = Member
+                .builder()
+                .phoneNumber(request.getPhoneNumber())
                 .memberStatus(request.getMemberStatus())
                 .nickName(request.getNickName())
                 .hospitalNumber(request.getHospitalId())
@@ -62,74 +61,28 @@ public class AdminMemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
-        //권한이 같다면 권한 수정을 안 한다.
-        if (member.getMemberStatus() == modifyMember.getMemberStatus() &&
-                modifyMember.getMemberStatus() != MemberStatus.STAFF) {
-            member.modifyMember(modifyMember);
-        }
-        //관리자는 권한 수정을 못 하게 한다.
-        else if (modifyMember.getMemberStatus() == MemberStatus.ADMIN) {
-            member.modifyMember(modifyMember);
-        } else if (modifyMember.getMemberStatus() == MemberStatus.NORMAL) {
-            //모든 권한 삭제
-            memberRepository.adminDeleteMemberAuthority(member);
+        if (confirmSameAuthority(memberChange, member)) {
+            member.modifyMember(memberChange);
+        } else if (confirmAdminAuthority(memberChange)) {
+            member.modifyMember(memberChange);
+        } else if (confirmUserAuthority(memberChange)) {
+            memberRepository.adminDeleteAllAuthority(member);
 
-            //ROLE_USER 권한 주기
-            Authority authority_USER = authorityRepository
-                    .findByAuthorizationStatus(Authorization.ROLE_USER);
-            if (authority_USER == null) {
-                throw new IllegalStateException("USER 권한 데이터가 없습니다.");
-            }
+            giveUserAuthority(member);
+            member.adminModifyMember(memberChange);
+        } else if (confirmManagerAuthority(memberChange)) {
+            memberRepository.adminDeleteAllAuthority(member);
 
-            MemberAuthority memberAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_USER).build();
-
-            memberAuthorityRepository.save(memberAuthority);
-
-            //member 데이터 변환
-            member.adminModifyMember(modifyMember);
-
-        } else if (modifyMember.getMemberStatus() == MemberStatus.STAFF) {
-            //모든 권한 삭제
-            memberRepository.adminDeleteMemberAuthority(member);
-
-            //ROLE_USER, ROLE_MANAGER 권한 주기
-            Authority authority_USER = authorityRepository
-                    .findByAuthorizationStatus(Authorization.ROLE_USER);
-            if (authority_USER == null) {
-                throw new IllegalStateException("USER 권한 데이터가 없습니다.");
-            }
-
-            MemberAuthority memberAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_USER).build();
-
-            memberAuthorityRepository.save(memberAuthority);
-
-            //병원 있는지 여부 찾기
-            Hospital hospital = hospitalRepository.findById(modifyMember.getHospitalNumber())
-                    .orElseThrow(() -> new IllegalStateException("해당 번호에 속하는 병원이 존재하지 않습니다."));
-
-            Authority authority_STAFF = authorityRepository
-                    .findByAuthorizationStatus(Authorization.ROLE_MANAGER);
-            if (authority_STAFF == null) {
-                throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
-            }
-
-            MemberAuthority managerAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_STAFF)
-                    .hospitalNo(modifyMember.getHospitalNumber()).build();
-
-            memberAuthorityRepository.save(managerAuthority);
-
-            //member 데이터 변환
-            member.adminModifyMember(modifyMember);
+            giveUserAuthority(member);
+            confirmHospitalPresence(memberChange);
+            giveManagerAuthority(memberChange, member);
+            
+            member.adminModifyMember(memberChange);
         }
 
     }
 
-
-    //관리자 멤버 검색
-    public Page<MemberSearchResponse> adminSearchMembers(
+    public Page<MemberSearchResponse> searchMembers(
             String allSearch,
             Long memberId,
             String memberIdName,
@@ -140,7 +93,7 @@ public class AdminMemberService {
             Long hospitalNumber,
             Pageable pageable
     ) {
-        AdminMemberSearchCondition condition =
+        AdminMemberSearchCondition searchCondition =
                 AdminMemberSearchCondition
                         .builder()
                         .allSearch(allSearch)
@@ -153,24 +106,17 @@ public class AdminMemberService {
                         .hospitalNumber(hospitalNumber)
                         .build();
 
-        Page<Member> members = memberRepository.adminSearchMembers(condition, pageable);
+        Page<Member> searchedMembers = memberRepository.adminSearchMembers(searchCondition, pageable);
 
-        List<MemberSearchResponse> result =
-                members.stream()
-                        .map(m -> MemberSearchResponse.from(m))
-                        .collect(Collectors.toList());
-
-        Long total = members.getTotalElements();
-
-        return new PageImpl(result, pageable, total);
+        return getPagingMember(pageable, searchedMembers);
     }
 
-    //관리자 회원등록
     @Transactional
-    public MemberCreateResponse adminSignUp(MemberAdminCreateRequest request) {
-        Member memberDto = Member.builder()
+    public MemberCreateResponse signup(MemberAdminCreateRequest request) {
+        Member createdMember = Member
+                .builder()
                 .memberIdName(request.getMemberIdName())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .nickName(request.getNickName())
                 .userName(request.getUserName())
                 .memberStatus(request.getMemberStatus())
@@ -178,99 +124,159 @@ public class AdminMemberService {
                 .hospitalNumber(request.getHospitalId())
                 .build();
 
-        validateDuplicateMember(memberDto);
+        memberService.validateDuplicateMember(createdMember);
 
-        Member member = Member.builder().userName(memberDto.getUserName())
-                .hospitalNumber(memberDto.getHospitalNumber())
-                .nickName(memberDto.getNickName()).phoneNumber(memberDto.getPhoneNumber())
-                .memberIdName(memberDto.getMemberIdName()).memberStatus(memberDto.getMemberStatus())
-                .password(passwordEncoder.encode(memberDto.getPassword())).build();
-
-        //USER 권한 주기
-        if (member.getMemberStatus() == MemberStatus.NORMAL ||
-                member.getMemberStatus() == MemberStatus.STAFF ||
-                member.getMemberStatus() == MemberStatus.ADMIN) {
-            //USER 권한 찾기
-            Authority authority_USER = authorityRepository
-                    .findByAuthorizationStatus(Authorization.ROLE_USER);
-            if (authority_USER == null) {
-                throw new IllegalStateException("USER 권한 데이터가 없습니다.");
-            }
-            memberRepository.save(member);
-
-            //새로 생성한 멤버에게 USER 권한 주기.
-            MemberAuthority userAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_USER).build();
-
-            memberAuthorityRepository.save(userAuthority);
+        if (confirmUserAuthority(createdMember) ||
+           confirmManagerAuthority(createdMember) ||
+           confirmAdminAuthority(createdMember)
+        ) {
+            memberRepository.save(createdMember);
+            giveUserAuthority(createdMember);
         }
 
-        //MANAGER 권한 주기(staff)
-        if (member.getMemberStatus() == MemberStatus.STAFF) {
-
-            //병원 번호 있는지 여부 찾기
-            Hospital hospital = hospitalRepository.findById(member.getHospitalNumber())
-                    .orElseThrow(() -> new IllegalStateException("해당 번호에 속하는 병원이 존재하지 않습니다."));
-
-            Authority authority_STAFF = authorityRepository
-                    .findByAuthorizationStatus(Authorization.ROLE_MANAGER);
-            if (authority_STAFF == null) {
-                throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
-            }
-
-            MemberAuthority managerAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_STAFF)
-                    .hospitalNo(member.getHospitalNumber()).build();
-
-            memberAuthorityRepository.save(managerAuthority);
+        if (confirmManagerAuthority(createdMember)){
+            confirmHospitalPresence(createdMember);
+            giveManagerAuthority(createdMember);
         }
-        //MANAGER 권한 주기(관리자만)
-        if (member.getMemberStatus() == MemberStatus.ADMIN) {
-            Authority authority_STAFF = authorityRepository
-                    .findByAuthorizationStatus(Authorization.ROLE_MANAGER);
-            if (authority_STAFF == null) {
-                throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
-            }
-
-            MemberAuthority managerAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_STAFF).build();
-
-            memberAuthorityRepository.save(managerAuthority);
+        else if (confirmAdminAuthority(createdMember)) {
+            giveManagerAuthorityByAdmin(createdMember);
         }
 
-        //ADMIN 권한 주기(관리자만)
-        if (member.getMemberStatus() == MemberStatus.ADMIN) {
-            Authority authority_ADMIN = authorityRepository
-                    .findByAuthorizationStatus(Authorization.ROLE_ADMIN);
-            if (authority_ADMIN == null) {
-                throw new IllegalStateException("ADMIN 권한 데이터가 없습니다.");
-            }
-
-            //admin 권한 저장하기
-            MemberAuthority adminAuthority = MemberAuthority.builder()
-                    .member(member).authority(authority_ADMIN).build();
-
-            memberAuthorityRepository.save(adminAuthority);
+        if (confirmAdminAuthority(createdMember)) {
+            giveAdminAuthority(createdMember);
         }
 
-        return MemberCreateResponse.from(member.getId());
+        return MemberCreateResponse.from(createdMember.getId());
     }
 
-
-    //관리자 멤버 상세정보 보기
-    public MemberAdminViewInfoResponse adminViewMember(Long memberId) {
+    public MemberAdminViewInfoResponse viewMemberInformation(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
 
         return MemberAdminViewInfoResponse.from(member);
     }
 
-    private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByMemberIdName(member.getMemberIdName());
+    private void giveAdminAuthority(Member createdMember) {
+        Authority authority_ADMIN = findAdminAuthority();
 
-        if (findMembers!=null && !findMembers.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원.");
+        MemberAuthority adminAuthority = MemberAuthority.builder()
+                .member(createdMember).authority(authority_ADMIN).build();
+
+        memberAuthorityRepository.save(adminAuthority);
+    }
+
+    private Authority findAdminAuthority() {
+        Authority authority_ADMIN = authorityRepository
+                .findByAuthorizationStatus(Authorization.ROLE_ADMIN);
+
+        if (authority_ADMIN == null) {
+            throw new IllegalStateException("ADMIN 권한 데이터가 없습니다.");
         }
+        return authority_ADMIN;
+    }
+
+    private void giveManagerAuthorityByAdmin(Member createdMember) {
+        Authority authority_MANAGER = findManagerAuthority();
+
+        MemberAuthority managerAuthority = MemberAuthority
+                .builder()
+                .member(createdMember)
+                .authority(authority_MANAGER)
+                .build();
+
+        memberAuthorityRepository.save(managerAuthority);
+    }
+
+
+    private void giveManagerAuthority(Member modifyMember, Member member) {
+        Authority authority_MANAGER = findManagerAuthority();
+
+        MemberAuthority managerAuthority = MemberAuthority
+                .builder()
+                .member(member)
+                .authority(authority_MANAGER)
+                .hospitalNo(modifyMember.getHospitalNumber())
+                .build();
+
+        memberAuthorityRepository.save(managerAuthority);
+    }
+
+    private void giveManagerAuthority(Member member) {
+        Authority authority_MANAGER = findManagerAuthority();
+
+        MemberAuthority managerAuthority = MemberAuthority
+                .builder()
+                .member(member)
+                .authority(authority_MANAGER)
+                .hospitalNo(member.getHospitalNumber())
+                .build();
+
+        memberAuthorityRepository.save(managerAuthority);
+    }
+
+    private Authority findManagerAuthority() {
+        Authority authority_MANAGER = authorityRepository
+                .findByAuthorizationStatus(Authorization.ROLE_MANAGER);
+
+        if (authority_MANAGER == null) {
+            throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
+        }
+        return authority_MANAGER;
+    }
+
+    private void confirmHospitalPresence(Member member) {
+        hospitalRepository.findById(member.getHospitalNumber())
+                .orElseThrow(() -> new IllegalStateException("해당 번호에 속하는 병원이 존재하지 않습니다."));
+    }
+
+    private boolean confirmManagerAuthority(Member modifyMember) {
+        return modifyMember.getMemberStatus() == MemberStatus.STAFF;
+    }
+
+    private void giveUserAuthority(Member member) {
+        Authority authority_USER = findUserAuthority();
+
+        MemberAuthority memberAuthority = MemberAuthority
+                .builder()
+                .member(member)
+                .authority(authority_USER)
+                .build();
+
+        memberAuthorityRepository.save(memberAuthority);
+    }
+
+    private Authority findUserAuthority() {
+        Authority authority_USER = authorityRepository
+                .findByAuthorizationStatus(Authorization.ROLE_USER);
+
+        if (authority_USER == null) {
+            throw new IllegalStateException("USER 권한 데이터가 없습니다.");
+        }
+        return authority_USER;
+    }
+
+    private boolean confirmUserAuthority(Member modifyMember) {
+        return modifyMember.getMemberStatus() == MemberStatus.NORMAL;
+    }
+
+    private boolean confirmAdminAuthority(Member modifyMember) {
+        return modifyMember.getMemberStatus() == MemberStatus.ADMIN;
+    }
+
+    private boolean confirmSameAuthority(Member modifyMember, Member member) {
+        return member.getMemberStatus() == modifyMember.getMemberStatus() &&
+                modifyMember.getMemberStatus() != MemberStatus.STAFF;
+    }
+
+    private PageImpl getPagingMember(Pageable pageable, Page<Member> searchedMembers) {
+        List<MemberSearchResponse> result = searchedMembers
+                .stream()
+                .map(m -> MemberSearchResponse.from(m))
+                .collect(Collectors.toList());
+
+        Long total = searchedMembers.getTotalElements();
+
+        return new PageImpl(result, pageable, total);
     }
 
 }

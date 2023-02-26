@@ -35,8 +35,7 @@ public class MemberAuthority {
     @JoinColumn(name = "authority_id")
     private Authority authority;
 
-    //병원 번호
-    private long hospitalNo;
+    private Long hospitalNo;
 
     @Builder
     public MemberAuthority(Member member, Authority authority, long hospitalNo) {
@@ -49,7 +48,6 @@ public class MemberAuthority {
         this.hospitalNo = hospitalNo;
     }
 
-    //권한을 주기
     public void giveAuthority(Authority authority) {
         this.authority = authority;
     }

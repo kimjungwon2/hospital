@@ -30,7 +30,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         Member member = memberOptional
                 .orElseThrow(() -> new IllegalStateException("로그인하려는 아이디가 존재하지 않습니다."));
 
-        List<MemberAuthority> memberAuthorities = memberRepository.memberAuthorities(name);
+        List<MemberAuthority> memberAuthorities = memberRepository.findMemberAuthorities(name);
 
         List<GrantedAuthority> grantedAuthorities = memberAuthorities.stream()
                 .map(a -> new SimpleGrantedAuthority(

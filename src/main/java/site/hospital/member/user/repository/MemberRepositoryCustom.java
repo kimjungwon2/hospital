@@ -12,9 +12,9 @@ public interface MemberRepositoryCustom {
 
     Page<Member> adminSearchMembers(AdminMemberSearchCondition condition, Pageable pageable);
 
-    List<MemberAuthority> memberAuthorities(String memberIdName);
+    List<MemberAuthority> findMemberAuthorities(String memberIdName);
 
-    MemberAuthority findMemberStaffAuthority(Long memberId, Authorization authorization);
+    MemberAuthority findManagerAuthority(Long memberId, Authorization authorization);
 
-    void adminDeleteMemberAuthority(Member member);
+    void adminDeleteAllAuthority(Member member);
 }
