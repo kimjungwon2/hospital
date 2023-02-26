@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.doctor.manager.domain.Doctor;
-import site.hospital.estimation.user.repository.EstimationRepository;
+import site.hospital.estimation.admin.repository.EstimationRepository;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalView;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.user.api.dto.HospitalCreateDetailedHosInfoRequest;

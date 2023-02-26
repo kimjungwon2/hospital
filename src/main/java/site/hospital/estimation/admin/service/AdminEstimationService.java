@@ -9,7 +9,7 @@ import site.hospital.estimation.admin.api.dto.EstimationCreateRequest;
 import site.hospital.estimation.admin.api.dto.EstimationCreateResponse;
 import site.hospital.estimation.user.domain.Estimation;
 import site.hospital.hospital.user.domain.Hospital;
-import site.hospital.estimation.user.repository.EstimationRepository;
+import site.hospital.estimation.admin.repository.EstimationRepository;
 import site.hospital.hospital.user.repository.HospitalRepository;
 
 @Service
