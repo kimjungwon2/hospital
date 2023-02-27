@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.tag.admin.service.AdminPostTagService;
-import site.hospital.tag.manager.api.dto.postTag.PostTagLinkTagRequest;
-import site.hospital.tag.manager.api.dto.postTag.PostTagLinkTagResponse;
+import site.hospital.tag.manager.api.dto.posttag.PostTagLinkTagRequest;
+import site.hospital.tag.manager.api.dto.posttag.PostTagLinkTagResponse;
 
 @RestController
 @RequiredArgsConstructor

@@ -18,10 +18,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import site.hospital.common.exception.CustomAuthFailureHandler;
-import site.hospital.common.jwtToken.JwtAccessDeniedHandler;
-import site.hospital.common.jwtToken.JwtAuthenticationEntryPoint;
-import site.hospital.common.jwtToken.JwtSecurityConfig;
-import site.hospital.common.jwtToken.TokenProvider;
+import site.hospital.common.jwt.JwtAccessDeniedHandler;
+import site.hospital.common.jwt.JwtAuthenticationEntryPoint;
+import site.hospital.common.jwt.JwtSecurityConfig;
+import site.hospital.common.jwt.TokenProvider;
 
 @EnableWebSecurity
 @Configuration
@@ -31,18 +31,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    public SecurityConfig(TokenProvider tokenProvider,
+    public SecurityConfig(
+            TokenProvider tokenProvider,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler) {
+            JwtAccessDeniedHandler jwtAccessDeniedHandler
+    ) {
         this.tokenProvider = tokenProvider;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
-    //허용 url
     private static final String[] PUBLIC_URI = {
-            "/api/login", "/api/signup", "/api/search/hospital/**", "/api/search/review/**", "/api/hospital/view/**",
-            "/api/hospital/staffHosInfo/**", "/api/hospital/review/**",
+            "/api/login",
+            "/api/signup",
+            "/api/search/hospital/**",
+            "/api/search/review/**",
+            "/api/hospital/view/**",
+            "/api/hospital/staffHosInfo/**",
+            "/api/hospital/review/**",
             "/api/hospital/question/**"
     };
 

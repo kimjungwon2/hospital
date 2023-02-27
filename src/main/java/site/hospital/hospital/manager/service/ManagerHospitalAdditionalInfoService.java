@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.common.service.ManagerJwtAccessService;
-import site.hospital.hospital.manager.repository.dto.StaffModifyStaffHosRequest;
+import site.hospital.hospital.manager.api.dto.StaffModifyStaffHosRequest;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.hospital.user.domain.StaffHosInformation;
 import site.hospital.hospital.user.repository.HospitalRepository;
@@ -21,45 +21,50 @@ public class ManagerHospitalAdditionalInfoService {
     private final HospitalAdditionalInfoRepository hospitalAdditionalInfoRepository;
 
 
-    //병원 관계자 추가 정보 수정
     @Transactional
-    public void staffModifyStaffHosInfo(ServletRequest servletRequest, Long staffHosId,
-            StaffModifyStaffHosRequest request) {
-        StaffHosInformation staffHosInformation = hospitalAdditionalInfoRepository.findById(staffHosId)
+    public void modifyHospitalAdditionalInfo(
+            ServletRequest servletRequest,
+            Long hosAdditionalInfoId,
+            StaffModifyStaffHosRequest request
+    ) {
+        StaffHosInformation hospitalAdditionalInfo = hospitalAdditionalInfoRepository.findById(hosAdditionalInfoId)
                 .orElseThrow(
-                        () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
+                        () -> new IllegalStateException("병원 추가 정보가 존재하지 않습니다."));
 
-        //해당 id 값을 가지고 있는 병원 검색
-        Hospital hospital = hospitalRepository.findHospitalAdditionalInfoId(staffHosId);
+        Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(hosAdditionalInfoId);
 
         managerJwtAccessService
-                .managerAccess(servletRequest, request.getMemberId(), hospital.getId());
+                .accessManager(servletRequest, request.getMemberId(), hospital.getId());
 
-        StaffHosInformation modifyStaffHosInformation = StaffHosInformation.builder()
+        StaffHosInformation modifiedHospitalAdditionalInfo = StaffHosInformation
+                .builder()
                 .abnormality(request.getAbnormality())
                 .consultationHour(request.getConsultationHour())
-                .introduction(request.getIntroduction()).build();
+                .introduction(request.getIntroduction())
+                .build();
 
-        staffHosInformation.modifyStaffHosInformation(modifyStaffHosInformation);
+        hospitalAdditionalInfo.modifyHospitalAdditionalInfo(modifiedHospitalAdditionalInfo);
     }
 
-    //병원 관계자 추가 정보 삭제
     @Transactional
-    public void staffDeleteStaffHosInfo(ServletRequest servletRequest, Long memberId,
-            Long staffHosId) {
-        StaffHosInformation staffHosInformation = hospitalAdditionalInfoRepository.findById(staffHosId)
+    public void deleteHospitalAdditionalInfo(
+            ServletRequest servletRequest,
+            Long memberId,
+            Long hosAdditionalInfoId
+    ) {
+        hospitalAdditionalInfoRepository.findById(hosAdditionalInfoId)
                 .orElseThrow(
-                        () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
+                        () -> new IllegalStateException("병원 추가 정보가 존재하지 않습니다."));
 
-        //병원 검색
-        Hospital hospital = hospitalRepository.findHospitalAdditionalInfoId(staffHosId);
+        Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(hosAdditionalInfoId);
 
-        //토큰의 권한과 authority의 병원 번호가 일치한지 확인.
-        managerJwtAccessService.managerAccess(servletRequest, memberId, hospital.getId());
+        managerJwtAccessService.accessManager(servletRequest, memberId, hospital.getId());
 
-        //외래키 삭제
-        hospital.deleteStaffHosId();
+        deleteHosAdditionalInfoInHospital(hosAdditionalInfoId, hospital);
+    }
 
+    private void deleteHosAdditionalInfoInHospital(Long staffHosId, Hospital hospital) {
+        hospital.deleteHospitalAdditionalInfo();
         hospitalAdditionalInfoRepository.deleteById(staffHosId);
     }
 }

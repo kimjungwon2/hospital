@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.hospital.admin.service.AdminHospitalAdditionalInfoService;
-import site.hospital.hospital.user.api.dto.staffHospital.StaffHospitalViewResponse;
+import site.hospital.hospital.user.api.dto.additionalinfo.HospitalAdditionalInfoViewResponse;
 import site.hospital.hospital.admin.repository.dto.hospitalAdditionalInfo.AdminModifyStaffHosRequest;
 import site.hospital.hospital.user.service.HospitalAdditionalInfoService;
 
@@ -24,9 +24,9 @@ public class AdminHospitalAdditionalInfoController {
 
     //관리자 병원 추가 정보 보기
     @GetMapping("/admin/staffHosInfo/{staffHosId}")
-    public StaffHospitalViewResponse adminViewStaffHosInfo(
+    public HospitalAdditionalInfoViewResponse adminViewStaffHosInfo(
             @PathVariable("staffHosId") Long staffHosId) {
-        return hospitalAdditionalInfoService.viewStaffHosInfo(staffHosId);
+        return hospitalAdditionalInfoService.viewHospitalAdditionalInfo(staffHosId);
     }
 
     //관리자 추가 정보 수정하기

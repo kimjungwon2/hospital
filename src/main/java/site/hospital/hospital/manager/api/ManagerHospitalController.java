@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import site.hospital.common.service.image.HospitalImagesService;
 import site.hospital.common.service.image.HospitalThumbnailImageService;
-import site.hospital.hospital.manager.repository.dto.StaffHospitalView;
-import site.hospital.hospital.manager.repository.dto.StaffModifyHospitalRequest;
+import site.hospital.hospital.manager.api.dto.ManagerHospitalView;
+import site.hospital.hospital.manager.api.dto.StaffModifyHospitalRequest;
 import site.hospital.hospital.manager.service.ManagerHospitalService;
 import site.hospital.hospital.user.api.dto.HospitalAdminViewThumbnailResponse;
 import site.hospital.hospital.user.api.dto.HospitalManagerCreateDetailHosInfoRequest;
@@ -37,10 +37,9 @@ public class ManagerHospitalController {
     private final ManagerHospitalService managerHospitalService;
 
 
-    //병원 관계자 병원 보기
     @GetMapping("/staff/hospital/view")
-    public StaffHospitalView viewHospital(ServletRequest servletRequest) {
-        return managerHospitalService.staffViewHospital(servletRequest);
+    public ManagerHospitalView viewHospital(ServletRequest servletRequest) {
+        return managerHospitalService.viewHospital(servletRequest);
     }
 
     //병원 관계자 병원 수정

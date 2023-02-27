@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberAuthority;
-import site.hospital.common.jwtToken.CustomUserDetail;
+import site.hospital.common.jwt.CustomUserDetail;
 import site.hospital.member.user.repository.MemberRepository;
 
 @Service

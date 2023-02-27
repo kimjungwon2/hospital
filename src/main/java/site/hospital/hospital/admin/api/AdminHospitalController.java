@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import site.hospital.common.service.image.HospitalImagesService;
 import site.hospital.common.service.image.HospitalThumbnailImageService;
-import site.hospital.hospital.admin.repository.adminSearchQuery.AdminSearchHospitalDto;
+import site.hospital.hospital.admin.repository.search.AdminSearchHospitalDto;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalView;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.admin.service.AdminHospitalService;

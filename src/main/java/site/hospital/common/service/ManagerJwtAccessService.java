@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import site.hospital.member.user.domain.Authorization;
 import site.hospital.member.user.domain.MemberAuthority;
-import site.hospital.common.jwtToken.JwtFilter;
-import site.hospital.common.jwtToken.TokenProvider;
+import site.hospital.common.jwt.JwtFilter;
+import site.hospital.common.jwt.TokenProvider;
 import site.hospital.member.user.repository.MemberRepository;
 
 @Service
@@ -26,7 +26,7 @@ public class ManagerJwtAccessService {
     private final MemberRepository memberRepository;
 
     //staff 권한 접근.
-    public void managerAccess(ServletRequest servletRequest, Long memberId,
+    public void accessManager(ServletRequest servletRequest, Long memberId,
             Long existingHospitalId) {
 
         Long JwtHospitalId = getJwtHospitalNumber(servletRequest);

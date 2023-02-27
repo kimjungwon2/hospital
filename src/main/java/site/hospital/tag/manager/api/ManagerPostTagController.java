@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.hospital.tag.manager.api.dto.postTag.PostTagLinkTagResponse;
-import site.hospital.tag.manager.api.dto.postTag.PostTagStaffLinkTagRequest;
-import site.hospital.tag.manager.api.dto.postTag.PostTagViewHospitalTagResponse;
+import site.hospital.tag.manager.api.dto.posttag.PostTagLinkTagResponse;
+import site.hospital.tag.manager.api.dto.posttag.PostTagStaffLinkTagRequest;
+import site.hospital.tag.manager.api.dto.posttag.PostTagViewHospitalTagResponse;
 import site.hospital.tag.manager.service.ManagerPostTagService;
 
 @RestController

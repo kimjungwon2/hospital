@@ -20,11 +20,11 @@ public class AdminHospitalAdditionalInfoService {
     //병원 추가 정보 삭제
     @Transactional
     public void adminDeleteStaffHosInfo(Long staffHosId) {
-        StaffHosInformation staffHosInformation = hospitalAdditionalInfoRepository.findById(staffHosId)
+        hospitalAdditionalInfoRepository.findById(staffHosId)
                 .orElseThrow(
                         () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
-        Hospital hospital = hospitalRepository.findHospitalAdditionalInfoId(staffHosId);
-        hospital.deleteStaffHosId();
+        Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(staffHosId);
+        hospital.deleteHospitalAdditionalInfo();
 
         hospitalAdditionalInfoRepository.deleteById(staffHosId);
     }
@@ -39,7 +39,7 @@ public class AdminHospitalAdditionalInfoService {
                 .consultationHour(request.getConsultationHour())
                 .introduction(request.getIntroduction()).build();
 
-        staffHosInformation.modifyStaffHosInformation(modifyStaffHosInformation);
+        staffHosInformation.modifyHospitalAdditionalInfo(modifyStaffHosInformation);
     }
 
 

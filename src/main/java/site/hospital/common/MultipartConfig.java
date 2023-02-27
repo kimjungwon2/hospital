@@ -11,7 +11,8 @@ public class MultipartConfig {
     @Bean
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(50 * 1024 * 1024); //50 mb
+        //이미지 크기 50MB 제한
+        multipartResolver.setMaxUploadSize(50 * 1024 * 1024);
         return multipartResolver;
     }
 }

@@ -2,8 +2,8 @@ package site.hospital.hospital.user.api.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import site.hospital.hospital.user.domain.detailedHosInformation.HospitalAddress;
-import site.hospital.hospital.user.domain.detailedHosInformation.HospitalLocation;
+import site.hospital.hospital.user.domain.detailedinfo.HospitalAddress;
+import site.hospital.hospital.user.domain.detailedinfo.HospitalLocation;
 import site.hospital.hospital.user.domain.BusinessCondition;
 
 @Data

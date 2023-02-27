@@ -6,7 +6,7 @@ public interface HospitalRepositoryCustom {
 
     Hospital viewHospital(Long hospitalId);
 
-    Hospital findHospitalAdditionalInfoId(Long staffHosId);
+    Hospital findHospitalByHosAdditionalInfoId(Long staffHosId);
 
     Hospital findByDoctorId(Long doctorId);
 

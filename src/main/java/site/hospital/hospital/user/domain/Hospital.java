@@ -23,7 +23,7 @@ import site.hospital.bookmark.user.domain.Bookmark;
 import site.hospital.tag.manager.domain.PostTag;
 import site.hospital.question.user.domain.Question;
 import site.hospital.common.domain.BaseEntity;
-import site.hospital.hospital.user.domain.detailedHosInformation.DetailedHosInformation;
+import site.hospital.hospital.user.domain.detailedinfo.DetailedHosInformation;
 import site.hospital.estimation.user.domain.Estimation;
 import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
 
@@ -62,7 +62,6 @@ public class Hospital extends BaseEntity {
     @JoinColumn(name = "hospitalThumbnail_id")
     private HospitalThumbnail hospitalThumbnail;
 
-    //인허가 날짜
     @NotNull
     private String licensingDate;
     @NotNull
@@ -96,32 +95,19 @@ public class Hospital extends BaseEntity {
         hospitalThumbnail.setHospital(this);
     }
 
-    //연관 관계 메서드
-    public void addHospitalImage(HospitalImage hospitalImage) {
-        hospitalImages.add(hospitalImage);
-        hospitalImage.setHospital(this);
-    }
-
-
-    //병원 수정
-    public void modifyHospital(Hospital hospital) {
-        this.licensingDate = hospital.getLicensingDate();
-        this.hospitalName = hospital.getHospitalName();
-        this.phoneNumber = hospital.getPhoneNumber();
-        this.distinguishedName = hospital.getDistinguishedName();
-        this.medicalSubjectInformation = hospital.getMedicalSubjectInformation();
-        this.businessCondition = hospital.getBusinessCondition();
-        this.cityName = hospital.getCityName();
-    }
 
     /*생성자*/
 
-    //병원 생성
     @Builder
-    public Hospital(Long id, String licensingDate, String hospitalName,
-            String phoneNumber, String distinguishedName,
-            String medicalSubjectInformation, BusinessCondition businessCondition,
-            String cityName) {
+    public Hospital(Long id,
+            String licensingDate,
+            String hospitalName,
+            String phoneNumber,
+            String distinguishedName,
+            String medicalSubjectInformation,
+            BusinessCondition businessCondition,
+            String cityName
+    ) {
         this.id = id;
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
@@ -132,24 +118,35 @@ public class Hospital extends BaseEntity {
         this.cityName = cityName;
     }
 
-    //fk 제거를 위해서 staffHos 지우기
-    public void deleteStaffHosId() {
+    public void deleteHospitalAdditionalInfo() {
         this.staffHosInformation = null;
     }
-
-    //fk 제거를 위해서 DetailedHos 지우기
     public void deleteDetailedHosId() {
         this.detailedHosInformation = null;
     }
-
-    //fk 제거를 위해서 thumbnail 지우기
     public void deleteHospitalThumbnailId() {
         this.hospitalThumbnail = null;
     }
 
-    public void updateHospital(String licensingDate, String hospitalName, String phoneNumber,
-            String distinguishedName, String medicalSubjectInformation,
-            BusinessCondition businessCondition, String cityName) {
+    public void modifyHospital(Hospital hospital) {
+        this.licensingDate = hospital.getLicensingDate();
+        this.hospitalName = hospital.getHospitalName();
+        this.phoneNumber = hospital.getPhoneNumber();
+        this.distinguishedName = hospital.getDistinguishedName();
+        this.medicalSubjectInformation = hospital.getMedicalSubjectInformation();
+        this.businessCondition = hospital.getBusinessCondition();
+        this.cityName = hospital.getCityName();
+    }
+
+    public void updateHospital(
+            String licensingDate,
+            String hospitalName,
+            String phoneNumber,
+            String distinguishedName,
+            String medicalSubjectInformation,
+            BusinessCondition businessCondition,
+            String cityName
+    ) {
         this.licensingDate = licensingDate;
         this.hospitalName = hospitalName;
         this.phoneNumber = phoneNumber;

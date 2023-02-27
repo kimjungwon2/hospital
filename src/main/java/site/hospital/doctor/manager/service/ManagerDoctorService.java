@@ -33,7 +33,7 @@ public class ManagerDoctorService {
         Hospital hospital = checkEmptyHospitalAdditionalInfo(request);
 
         managerJwtAccessService
-                .managerAccess(servletRequest, request.getMemberId(), hospital.getId());
+                .accessManager(servletRequest, request.getMemberId(), hospital.getId());
 
         StaffHosInformation hospitalAdditionalInfo = hospitalAdditionalInfoRepository
                 .findById(request.getHospitalAdditionalInfoId())
@@ -48,7 +48,7 @@ public class ManagerDoctorService {
     @Transactional
     public void deleteDoctor(ServletRequest servletRequest, Long memberId, Long doctorId) {
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
-        managerJwtAccessService.managerAccess(servletRequest, memberId, hospital.getId());
+        managerJwtAccessService.accessManager(servletRequest, memberId, hospital.getId());
         doctorRepository.deleteById(doctorId);
     }
 
@@ -63,7 +63,7 @@ public class ManagerDoctorService {
 
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
 
-        managerJwtAccessService.managerAccess(servletRequest, request.getMemberId(), hospital.getId());
+        managerJwtAccessService.accessManager(servletRequest, request.getMemberId(), hospital.getId());
 
         Doctor modifiedDoctor = Doctor
                 .builder()
@@ -89,7 +89,7 @@ public class ManagerDoctorService {
     }
 
     private Hospital checkEmptyHospitalAdditionalInfo(DoctorManagerCreateRequest request) {
-        Hospital hospital = hospitalRepository.findHospitalAdditionalInfoId(request.getHospitalAdditionalInfoId());
+        Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(request.getHospitalAdditionalInfoId());
 
         if (hospital == null) {
             throw new IllegalStateException("병원이 존재하지 않습니다.");

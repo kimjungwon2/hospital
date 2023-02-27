@@ -46,28 +46,26 @@ public class StaffHosInformation extends BaseEntity {
     @Column(length = 1000)
     private String abnormality;
 
-    //생성자
+
     @Builder
-    public StaffHosInformation(String introduction, String consultationHour, String abnormality) {
+    public StaffHosInformation(
+            String introduction,
+            String consultationHour,
+            String abnormality
+    ) {
         this.introduction = introduction;
         this.consultationHour = consultationHour;
         this.abnormality = abnormality;
     }
 
-    //생성 메서드
     public static StaffHosInformation createStaffHosInformation(
-            StaffHosInformation staffHosInformation, List<Doctor> doctors) {
+            StaffHosInformation staffHosInformation,
+            List<Doctor> doctors
+    ) {
 
         for (Doctor doctor : doctors) {
             staffHosInformation.addDoctor(doctor);
         }
-
-        return staffHosInformation;
-    }
-
-    public static StaffHosInformation createDoctor(Doctor doctor) {
-        StaffHosInformation staffHosInformation = new StaffHosInformation();
-        staffHosInformation.addDoctor(doctor);
 
         return staffHosInformation;
     }
@@ -83,18 +81,11 @@ public class StaffHosInformation extends BaseEntity {
         doctor.setStaffHosInformation(this);
     }
 
-    //수정 메서드
-    public void modifyStaffHosInformation(StaffHosInformation staffHosInformation) {
-        this.introduction = staffHosInformation.getIntroduction();
-        this.consultationHour = staffHosInformation.getConsultationHour();
-        this.abnormality = staffHosInformation.getAbnormality();
+    public void modifyHospitalAdditionalInfo(StaffHosInformation hospitalAdditionalInfo) {
+        this.introduction = hospitalAdditionalInfo.getIntroduction();
+        this.consultationHour = hospitalAdditionalInfo.getConsultationHour();
+        this.abnormality = hospitalAdditionalInfo.getAbnormality();
     }
 
-    public void modifyStaffHosInformation(String introduction,
-            String consultationHour, String abnormality) {
-        this.introduction = introduction;
-        this.consultationHour = consultationHour;
-        this.abnormality = abnormality;
-    }
 
 }
