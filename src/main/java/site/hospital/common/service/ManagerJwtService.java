@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import site.hospital.common.jwt.TokenProvider;
-import site.hospital.member.user.domain.Authorization;
-import site.hospital.member.user.domain.MemberAuthority;
-import site.hospital.member.user.repository.MemberRepository;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,15 +19,14 @@ public class ManagerJwtService {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final Logger logger = LoggerFactory.getLogger(ManagerJwtService.class);
     private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
 
     public void accessManager(
             ServletRequest servletRequest,
-            Long existingHospitalId
+            Long hospitalId
     ) {
         Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
-        if (mismatchHosNumAccess(existingHospitalId, hospitalNumberInJwt)) {
+        if (confirmHospitalNumber(hospitalId, hospitalNumberInJwt)) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
@@ -75,8 +71,12 @@ public class ManagerJwtService {
         return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ");
     }
 
-    private boolean mismatchHosNumAccess(Long existingHospitalId, Long hospitalNumberInJwt) {
-        return hospitalNumberInJwt != existingHospitalId;
+    private boolean confirmHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
+
+        if(hospitalNumberInJwt.equals(hospitalId)){
+            return false;
+        }
+        return true;
     }
 
 }

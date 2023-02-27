@@ -10,9 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.common.jwt.CustomUserDetail;
+import site.hospital.member.user.domain.Authorization;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberAuthority;
-import site.hospital.common.jwt.CustomUserDetail;
 import site.hospital.member.user.repository.MemberRepository;
 
 @Service
@@ -76,7 +77,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     private Long findHospitalNumber(List<MemberAuthority> memberAuthorities) {
         Optional<MemberAuthority> managerAuthority = memberAuthorities
                 .stream()
-                .filter(a -> a.getAuthority().equals("ROLE_MANAGER"))
+                .filter(a -> confirmRoleManager(a))
                 .findFirst();
 
         Long hospitalNumber = managerAuthority
@@ -84,6 +85,10 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .getHospitalNo();
 
         return hospitalNumber;
+    }
+
+    private boolean confirmRoleManager(MemberAuthority a) {
+        return a.getAuthority().getAuthorizationStatus() == Authorization.ROLE_MANAGER;
     }
 
     private boolean confirmUser(List<GrantedAuthority> grantedAuthorities) {
