@@ -14,7 +14,7 @@ public class JwtSecurityConfig extends
         this.tokenProvider = tokenProvider;
     }
 
-    //JWT Filter를 통해 Security 로직에 필터 등록
+    //Security 로직에 JWT 필터 등록
     @Override
     public void configure(HttpSecurity http) {
         JwtFilter customFilter = new JwtFilter(tokenProvider);

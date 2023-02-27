@@ -36,19 +36,19 @@ public class TokenProvider implements Serializable {
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
-    private static final String NICKNAME_KEY = "nickName";
     private static final String PHONE_KEY = "phoneNumber";
     private static final String HOSPITAL_NUMBER_KEY = "hospitalNumber";
 
 
-    //토큰 생성
     public String createToken(Authentication authentication, String phoneNumber) {
-        String authorities = authentication.getAuthorities().stream()
+
+        String authorities = authentication
+                .getAuthorities()
+                .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.JWT_TOKEN_VALIDITY);
+        Date validity = createValidity();
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
@@ -59,15 +59,18 @@ public class TokenProvider implements Serializable {
                 .compact();
     }
 
-    //STAFF 토큰 생성
-    public String createManagerToken(Authentication authentication, String phoneNumber,
-            Long hospitalNumber) {
-        String authorities = authentication.getAuthorities().stream()
+    public String createManagerToken(
+            Authentication authentication,
+            String phoneNumber,
+            Long hospitalNumber
+    ) {
+        String authorities = authentication
+                .getAuthorities()
+                .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.JWT_TOKEN_VALIDITY);
+        Date validity = createValidity();
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
@@ -79,51 +82,30 @@ public class TokenProvider implements Serializable {
                 .compact();
     }
 
-    //STAFF 병원 번호 반환
-    public Long getHospitalNumber(String token) {
-        Claims claims = Jwts
-                .parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+    public Long getHospitalNumberInManager(String token) {
+        Claims claims = createClaims(token);
 
-        if (claims.get(HOSPITAL_NUMBER_KEY) == null) {
-            throw new AccessDeniedException("병원 번호가 존재하지 않는 계정");
-        }
+        checkHospitalNumberNull(claims);
 
         String hospitalNumber = claims.get(HOSPITAL_NUMBER_KEY).toString();
 
         return Long.parseLong(hospitalNumber);
     }
 
-    //Token 정보를 이용해 Authentication 반환.
     public Authentication getAuthentication(String token) {
 
-        //클레임 생성
-        Claims claims = Jwts
-                .parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = createClaims(token);
 
-        //클레임에서 권한 정보들을 얻기
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        Collection<? extends GrantedAuthority> authorities = getAuthoritiesByClaims(claims);
+        User principal = createUserByAuthorities(claims, authorities);
 
-        //권한 정보를 이용해서 유저 객체 생성
-        User principal = new User(claims.getSubject(), "", authorities);
-
-        //이를 이용해 유저 객체를 만들어 최종적으로 Authentication 객체를 리턴한다.
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    //토큰의 유효성 검사
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-            //문제가 없으면 true
+
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             logger.info("잘못된 JWT 서명입니다.");
@@ -135,5 +117,41 @@ public class TokenProvider implements Serializable {
             logger.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
+    }
+
+    private User createUserByAuthorities(Claims claims, Collection<? extends GrantedAuthority> authorities) {
+        User principal = new User(claims.getSubject(), "", authorities);
+        return principal;
+    }
+
+    private Collection<? extends GrantedAuthority> getAuthoritiesByClaims(Claims claims) {
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+        return authorities;
+    }
+
+    private Claims createClaims(String token) {
+        Claims claims = Jwts
+                .parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims;
+    }
+
+    private Date createValidity() {
+        long now = (new Date()).getTime();
+
+        Date validity = new Date(now + this.JWT_TOKEN_VALIDITY);
+
+        return validity;
+    }
+
+    private void checkHospitalNumberNull(Claims claims) {
+        if (claims.get(HOSPITAL_NUMBER_KEY) == null) {
+            throw new AccessDeniedException("병원 번호가 존재하지 않는 계정");
+        }
     }
 }

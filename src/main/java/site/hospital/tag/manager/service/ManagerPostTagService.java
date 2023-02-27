@@ -6,7 +6,7 @@ import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 import site.hospital.tag.manager.api.dto.posttag.PostTagLinkTagResponse;
 import site.hospital.tag.manager.api.dto.posttag.PostTagStaffLinkTagRequest;
 import site.hospital.tag.manager.api.dto.posttag.PostTagViewHospitalTagResponse;
@@ -26,14 +26,14 @@ public class ManagerPostTagService {
     private final PostTagRepository postTagRepository;
     private final TagRepository tagRepository;
     private final HospitalRepository hospitalRepository;
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
 
     @Transactional
     public PostTagLinkTagResponse managerLinkTag(
             ServletRequest servletRequest,
             PostTagStaffLinkTagRequest request
     ) {
-        managerJwtAccessService.accessManager(servletRequest, request.getMemberId(), request.getHospitalId());
+        managerJwtService.accessManager(servletRequest, request.getMemberId(), request.getHospitalId());
 
         Tag tag = tagRepository.findById(request.getTagId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
@@ -61,7 +61,7 @@ public class ManagerPostTagService {
         PostTag postTag = postTagRepository.findById(postTagId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 연결 태그가 존재하지 않습니다."));
 
-        managerJwtAccessService.accessManager(servletRequest, memberId, postTag.getHospital().getId());
+        managerJwtService.accessManager(servletRequest, memberId, postTag.getHospital().getId());
 
         postTagRepository.deleteById(postTagId);
     }

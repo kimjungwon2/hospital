@@ -14,14 +14,14 @@ import site.hospital.bookmark.user.api.dto.BookmarkAdminSearchMemberResponse;
 import site.hospital.bookmark.user.domain.Bookmark;
 import site.hospital.bookmark.user.repository.BookmarkRepository;
 import site.hospital.bookmark.user.repository.dto.ManagerBookmarkSearchCondition;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ManagerBookmarkService {
 
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
     private final BookmarkRepository bookmarkRepository;
 
     public Page<Bookmark> managerSearchBookmarkUsers(
@@ -64,7 +64,7 @@ public class ManagerBookmarkService {
                         .phoneNumber(phoneNumber)
                         .build();
 
-        Long hospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
+        Long hospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
         Page<Bookmark> findSearchBookmarkUsers = bookmarkRepository
                 .managerSearchBookmarkUsers(hospitalId, searchCondition, pageable);

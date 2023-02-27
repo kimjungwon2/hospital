@@ -11,7 +11,7 @@ import site.hospital.question.user.domain.Question;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.repository.MemberRepository;
 import site.hospital.question.user.repository.QuestionRepository;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +21,7 @@ public class ManagerAnswerService {
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
 
     @Transactional
     public Long registerAnswer(
@@ -36,7 +36,7 @@ public class ManagerAnswerService {
                                               .orElseThrow(
                                                       () -> new IllegalStateException("Question not exist"));
 
-        managerJwtAccessService.accessManager(servletRequest,
+        managerJwtService.accessManager(servletRequest,
                                               member.getId(),
                                               question.getHospital().getId());
 

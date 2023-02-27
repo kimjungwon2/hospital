@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 import site.hospital.review.user.api.dto.searchReviews.ReviewSearchListsResponse;
 import site.hospital.review.user.domain.Review;
 import site.hospital.review.user.repository.ReviewRepository;
@@ -21,7 +21,7 @@ import site.hospital.review.manager.repository.dto.ManagerReviewSearchCondition;
 @RequiredArgsConstructor
 public class ManagerReviewService {
 
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
     private final ReviewRepository reviewRepository;
 
     public Page<ReviewSearchListsResponse> managerSearchReviews(
@@ -30,7 +30,7 @@ public class ManagerReviewService {
             String memberIdName,
             Pageable pageable
     ) {
-        Long hospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
+        Long hospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
         Page<Review> reviews = getSearchReviewResults(nickName, memberIdName, pageable, hospitalId);
 

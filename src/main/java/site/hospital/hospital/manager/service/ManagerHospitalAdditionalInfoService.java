@@ -4,7 +4,7 @@ import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 import site.hospital.hospital.manager.api.dto.StaffModifyStaffHosRequest;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.hospital.user.domain.StaffHosInformation;
@@ -17,7 +17,7 @@ import site.hospital.hospital.user.repository.HospitalAdditionalInfoRepository;
 public class ManagerHospitalAdditionalInfoService {
 
     private final HospitalRepository hospitalRepository;
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
     private final HospitalAdditionalInfoRepository hospitalAdditionalInfoRepository;
 
 
@@ -33,7 +33,7 @@ public class ManagerHospitalAdditionalInfoService {
 
         Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(hosAdditionalInfoId);
 
-        managerJwtAccessService
+        managerJwtService
                 .accessManager(servletRequest, request.getMemberId(), hospital.getId());
 
         StaffHosInformation modifiedHospitalAdditionalInfo = StaffHosInformation
@@ -58,7 +58,7 @@ public class ManagerHospitalAdditionalInfoService {
 
         Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(hosAdditionalInfoId);
 
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospital.getId());
+        managerJwtService.accessManager(servletRequest, memberId, hospital.getId());
 
         deleteHosAdditionalInfoInHospital(hosAdditionalInfoId, hospital);
     }

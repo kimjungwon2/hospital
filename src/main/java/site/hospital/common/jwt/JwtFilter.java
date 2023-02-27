@@ -27,16 +27,18 @@ public class JwtFilter extends GenericFilterBean {
 
     //JWT TOKEN의 인증정보를 Security Context에 저장하는 역할 수행.
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-            FilterChain filterChain)
-            throws IOException, ServletException {
+    public void doFilter(
+            ServletRequest servletRequest,
+            ServletResponse servletResponse,
+            FilterChain filterChain
+    ) throws IOException, ServletException {
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String jwt = resolveToken(httpServletRequest);
+        String jwt = takeToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (checkTokenValue(jwt) && tokenProvider.validateToken(jwt)) {
+            injectAuthenticationInSecurityContextHolder(jwt);
         } else {
             logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
@@ -44,12 +46,26 @@ public class JwtFilter extends GenericFilterBean {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    //Request Header에서 토큰 정보를 꺼내온다.
-    private String resolveToken(HttpServletRequest request) {
+    private boolean checkTokenValue(String jwt) {
+        return StringUtils.hasText(jwt);
+    }
+
+    private void injectAuthenticationInSecurityContextHolder(String jwt) {
+        Authentication authentication = tokenProvider.getAuthentication(jwt);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private String takeToken(HttpServletRequest request) {
+
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+
+        if (checkBearerPrefix(bearerToken)) {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private boolean checkBearerPrefix(String bearerToken) {
+        return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ");
     }
 }

@@ -6,7 +6,7 @@ import javax.servlet.ServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 import site.hospital.doctor.manager.domain.Doctor;
 import site.hospital.hospital.manager.api.dto.ManagerHospitalView;
 import site.hospital.hospital.manager.api.dto.ManagerModifyHospitalRequest;
@@ -32,7 +32,7 @@ public class ManagerHospitalService {
 
     private final HospitalRepository hospitalRepository;
     private final HospitalImageRepository hospitalImageRepository;
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
     private final HospitalAdditionalInfoRepository hospitalAdditionalInfoRepository;
     private final HospitalDetailedInfoRepository hospitalDetailedInfoRepository;
     private final HospitalThumbnailRepository hospitalThumbnailRepository;
@@ -53,7 +53,7 @@ public class ManagerHospitalService {
     }
 
     public ManagerHospitalView viewHospital(ServletRequest servletRequest) {
-        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
+        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
         Hospital hospital = hospitalRepository.viewHospital(JwtHospitalId);
 
         Long detailedHosId = checkNullDetailedHospital(hospital);
@@ -77,7 +77,7 @@ public class ManagerHospitalService {
             ManagerModifyHospitalRequest request
     ) {
         Long memberId = request.getMemberId();
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
+        managerJwtService.accessManager(servletRequest, memberId, hospitalId);
 
         Hospital modifiedHospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
@@ -164,7 +164,7 @@ public class ManagerHospitalService {
             ServletRequest servletRequest,
             HospitalManagerCreateDetailHosInfoRequest request
     ) {
-        managerJwtAccessService.accessManager(servletRequest, request.getMemberId(),
+        managerJwtService.accessManager(servletRequest, request.getMemberId(),
                 request.getHospitalId());
 
         Hospital hospital = hospitalRepository.findById(request.getHospitalId()).
@@ -199,7 +199,7 @@ public class ManagerHospitalService {
         
         Hospital hospital = hospitalRepository.findByDetailedHosInformation(detailedHosInformation);
 
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospital.getId());
+        managerJwtService.accessManager(servletRequest, memberId, hospital.getId());
 
         deleteDetailedHosInfo(detailedHosInfoId, hospital);
     }
@@ -219,7 +219,7 @@ public class ManagerHospitalService {
             StaffHosInformation HospitalAdditionalInfo,
             List<Doctor> doctors
     ) {
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
+        managerJwtService.accessManager(servletRequest, memberId, hospitalId);
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
@@ -239,7 +239,7 @@ public class ManagerHospitalService {
             StaffHosInformation staffHosInformation
     ) {
 
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
+        managerJwtService.accessManager(servletRequest, memberId, hospitalId);
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));

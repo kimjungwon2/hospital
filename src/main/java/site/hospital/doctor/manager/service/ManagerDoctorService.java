@@ -13,7 +13,7 @@ import site.hospital.doctor.manager.api.dto.DoctorManagerCreateRequest;
 import site.hospital.doctor.manager.repository.DoctorRepository;
 import site.hospital.hospital.user.repository.HospitalAdditionalInfoRepository;
 import site.hospital.hospital.user.repository.HospitalRepository;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,7 +23,7 @@ public class ManagerDoctorService {
     private final DoctorRepository doctorRepository;
     private final HospitalAdditionalInfoRepository hospitalAdditionalInfoRepository;
     private final HospitalRepository hospitalRepository;
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
 
     @Transactional
     public DoctorCreateResponse createDoctor(
@@ -32,7 +32,7 @@ public class ManagerDoctorService {
     ) {
         Hospital hospital = checkEmptyHospitalAdditionalInfo(request);
 
-        managerJwtAccessService
+        managerJwtService
                 .accessManager(servletRequest, request.getMemberId(), hospital.getId());
 
         StaffHosInformation hospitalAdditionalInfo = hospitalAdditionalInfoRepository
@@ -48,7 +48,7 @@ public class ManagerDoctorService {
     @Transactional
     public void deleteDoctor(ServletRequest servletRequest, Long memberId, Long doctorId) {
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospital.getId());
+        managerJwtService.accessManager(servletRequest, memberId, hospital.getId());
         doctorRepository.deleteById(doctorId);
     }
 
@@ -63,7 +63,7 @@ public class ManagerDoctorService {
 
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
 
-        managerJwtAccessService.accessManager(servletRequest, request.getMemberId(), hospital.getId());
+        managerJwtService.accessManager(servletRequest, request.getMemberId(), hospital.getId());
 
         Doctor modifiedDoctor = Doctor
                 .builder()

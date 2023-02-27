@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.common.service.ManagerJwtAccessService;
+import site.hospital.common.service.ManagerJwtService;
 import site.hospital.question.user.api.dto.QuestionSearchResponse;
 import site.hospital.question.user.domain.Question;
 import site.hospital.question.user.repository.QuestionRepository;
@@ -21,7 +21,7 @@ import site.hospital.question.manager.repository.dto.ManagerQuestionSearchCondit
 public class ManagerQuestionService {
 
     private final QuestionRepository questionRepository;
-    private final ManagerJwtAccessService managerJwtAccessService;
+    private final ManagerJwtService managerJwtService;
 
     public Page<Question> searchHospitalQuestions(
             ServletRequest servletRequest,
@@ -46,7 +46,7 @@ public class ManagerQuestionService {
     }
     
     public Long countQuestionsWithNoAnswer(ServletRequest servletRequest) {
-        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
+        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
         return questionRepository.managerCountQuestionsWithNoAnswer(JwtHospitalId);
     }
@@ -76,7 +76,7 @@ public class ManagerQuestionService {
                         .memberIdName(memberIdName)
                         .build();
 
-        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
+        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
         Page<Question> questions = questionRepository
                 .managerSearchNoQuestion(JwtHospitalId, condition, pageable);
@@ -96,7 +96,7 @@ public class ManagerQuestionService {
                         .memberIdName(memberIdName)
                         .build();
 
-        Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
+        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
         Page<Question> questions = questionRepository
                 .managerSearchHospitalQuestion(JwtHospitalId, condition, pageable);
