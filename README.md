@@ -111,7 +111,7 @@
 
 - 토큰의 병원 번호와 DB의 병원 번호가 일치하더라도 프론트단에서 수정하려는 병원 번호(pk)를 조작하면 그 병원의 정보 갱신이 가능해집니다. 이에 아래와 같이 설계했습니다.
 
-![검증 확인](https://user-images.githubusercontent.com/40010165/203344171-fb2206bd-ba72-435b-a8a0-fbaefee656cb.png) 
+![병원 번호 검증](https://user-images.githubusercontent.com/40010165/221642895-6c21f57b-446a-46c2-b0cf-4e651019de0b.png)
  
 - 먼저 기존의 doFilter를 통해 Manager 권한을 부여하여, Manager 권한이 필요한 특정 URL에 매번 들어갈 수 있습니다. **(1차 검증)**
 
