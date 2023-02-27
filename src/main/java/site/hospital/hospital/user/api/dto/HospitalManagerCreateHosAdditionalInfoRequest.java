@@ -5,7 +5,7 @@ import lombok.Data;
 import site.hospital.doctor.admin.api.dto.DoctorAdminCreateRequest;
 
 @Data
-public class HospitalManagerCreateStaffHosInfoRequest {
+public class HospitalManagerCreateHosAdditionalInfoRequest {
 
     private Long hospitalId;
     private Long memberId;

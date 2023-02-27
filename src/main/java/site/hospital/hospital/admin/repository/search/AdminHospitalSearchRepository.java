@@ -27,8 +27,10 @@ public class AdminHospitalSearchRepository {
     }
 
 
-    public Page<AdminSearchHospitalDto> adminSearchHospitals(AdminHospitalSearchCondition condition,
-            Pageable pageable) {
+    public Page<AdminSearchHospitalDto> adminSearchHospitals(
+            AdminHospitalSearchCondition condition,
+            Pageable pageable
+    ) {
         QueryResults<AdminSearchHospitalDto> result = queryFactory
                 .select(new QAdminSearchHospitalDto(
                         hospital.id, detailedHosInformation.id,

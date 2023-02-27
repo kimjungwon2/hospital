@@ -58,7 +58,7 @@ public class StaffHosInformation extends BaseEntity {
         this.abnormality = abnormality;
     }
 
-    public static StaffHosInformation createStaffHosInformation(
+    public static StaffHosInformation createHosAddtionalInfoWithDoctors(
             StaffHosInformation staffHosInformation,
             List<Doctor> doctors
     ) {

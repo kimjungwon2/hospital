@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.common.service.ManagerJwtAccessService;
 import site.hospital.doctor.manager.domain.Doctor;
 import site.hospital.hospital.manager.api.dto.ManagerHospitalView;
-import site.hospital.hospital.manager.api.dto.StaffModifyHospitalRequest;
+import site.hospital.hospital.manager.api.dto.ManagerModifyHospitalRequest;
 import site.hospital.hospital.user.api.dto.HospitalManagerCreateDetailHosInfoRequest;
-import site.hospital.hospital.user.api.dto.HospitalManagerCreateStaffHosInfoRequest;
+import site.hospital.hospital.user.api.dto.HospitalManagerCreateHosAdditionalInfoRequest;
 import site.hospital.hospital.user.api.dto.HospitalResponse;
 import site.hospital.hospital.user.api.dto.HospitalViewImageResponse;
 import site.hospital.hospital.user.domain.Hospital;
@@ -24,7 +24,6 @@ import site.hospital.hospital.user.repository.HospitalImageRepository;
 import site.hospital.hospital.user.repository.HospitalRepository;
 import site.hospital.hospital.user.repository.HospitalThumbnailRepository;
 import site.hospital.hospital.user.repository.HospitalAdditionalInfoRepository;
-import site.hospital.hospital.user.repository.dto.ModifyHospitalRequest;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,212 +37,149 @@ public class ManagerHospitalService {
     private final HospitalDetailedInfoRepository hospitalDetailedInfoRepository;
     private final HospitalThumbnailRepository hospitalThumbnailRepository;
 
-    //관리자 병원 이미지들 보기
     public List<HospitalViewImageResponse> viewHospitalImages(Long hospitalId) {
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 병원이 존재하지 않습니다."));
 
-        List<HospitalImage> hospitalImage = hospitalImageRepository.findByHospital(hospital);
+        List<HospitalImage> hospitalImages = hospitalImageRepository.findByHospital(hospital);
 
-        List<HospitalViewImageResponse> images = hospitalImage.stream()
+        List<HospitalViewImageResponse> images =
+                hospitalImages
+                .stream()
                 .map(h -> HospitalViewImageResponse.from(h))
                 .collect(Collectors.toList());
 
         return images;
     }
 
-    //병원 관계자 병원 보기
     public ManagerHospitalView viewHospital(ServletRequest servletRequest) {
         Long JwtHospitalId = managerJwtAccessService.getHospitalNumber(servletRequest);
         Hospital hospital = hospitalRepository.viewHospital(JwtHospitalId);
 
-        //NullPointerException 방지.
-        Long detailedHosId;
-        Long staffHosId;
-        Long hospitalThumbnailId;
+        Long detailedHosId = checkNullDetailedHospital(hospital);
+        Long hosAdditionalInfoId = checkNullHospitalAdditionalInfo(hospital);
+        Long hospitalThumbnailId = checkNullHospitalThumbnail(hospital);
 
-        if (hospital.getDetailedHosInformation() == null) {
-            detailedHosId = null;
-        } else {
-            detailedHosId = hospital.getDetailedHosInformation().getId();
-        }
-
-        if (hospital.getStaffHosInformation() == null) {
-            staffHosId = null;
-        } else {
-            staffHosId = hospital.getStaffHosInformation().getId();
-        }
-
-        if (hospital.getHospitalThumbnail() == null) {
-            hospitalThumbnailId = null;
-        } else {
-            hospitalThumbnailId = hospital.getHospitalThumbnail().getId();
-        }
-
-        ManagerHospitalView managerHospitalView = new ManagerHospitalView(
+        ManagerHospitalView managerHospitalView =
+                new ManagerHospitalView(
                 hospital,
                 detailedHosId,
-                staffHosId,
+                hosAdditionalInfoId,
                 hospitalThumbnailId);
 
         return managerHospitalView;
     }
 
-    //병원 관계자 병원 수정하기
     @Transactional
-    public HospitalResponse staffUpdateHospital(
+    public HospitalResponse modifyHospital(
             ServletRequest servletRequest,
             Long hospitalId,
-            StaffModifyHospitalRequest request
+            ManagerModifyHospitalRequest request
     ) {
         Long memberId = request.getMemberId();
-
         managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
 
-        Hospital modifyHospital = hospitalRepository.findById(hospitalId)
+        Hospital modifiedHospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
-
-        Hospital hospital = Hospital.builder().hospitalName(request.getHospitalName())
-                .cityName(request.getCityName()).businessCondition(request.getBusinessCondition())
+        
+        Hospital hospital = Hospital
+                .builder()
+                .hospitalName(request.getHospitalName())
+                .cityName(request.getCityName())
+                .businessCondition(request.getBusinessCondition())
                 .medicalSubjectInformation(request.getMedicalSubjectInformation())
                 .distinguishedName(request.getDistinguishedName())
-                .phoneNumber(request.getPhoneNumber()).licensingDate(request.getLicensingDate())
+                .phoneNumber(request.getPhoneNumber())
+                .licensingDate(request.getLicensingDate())
                 .build();
-
-        modifyHospital.modifyHospital(hospital);
-
-        //병원 추가정보 수정 유무
-        if (request.getDetailedModifyCheck() == true) {
-            //detailed hospitalId가 일치하지 않으면 수정 취소.
-            if (modifyHospital.getDetailedHosInformation().getId() != request
-                    .getDetailedHosInfoId()) {
-                throw new IllegalStateException("DetailedHosInfoId가 일치하지 않습니다.");
-            }
+        
+        modifiedHospital.modifyHospital(hospital);
+        
+        if (checkModifyDetailedHosInfo(request)) {
+            checkMatchDetailedHosInfo(request, modifiedHospital);
 
             DetailedHosInformation detailedHosInformation = hospitalDetailedInfoRepository
                     .findById(request.getDetailedHosInfoId())
                     .orElseThrow(
                             () -> new IllegalStateException("해당 id에 속하는 상세 병원 정보가 존재하지 않습니다."));
 
-            DetailedHosInformation modifyDetailedHosInformation = DetailedHosInformation.builder()
+            DetailedHosInformation modifyDetailedHosInformation = DetailedHosInformation
+                    .builder()
                     .numberPatientRoom(request.getNumberPatientRoom())
                     .numberWard(request.getNumberWard())
                     .numberHealthcareProvider(request.getNumberHealthcareProvider())
                     .hospitalAddress(request.getHospitalAddress())
-                    .hospitalLocation(request.getHospitalLocation()).build();
+                    .hospitalLocation(request.getHospitalLocation())
+                    .build();
 
             detailedHosInformation.modifyDetailedHosInformation(modifyDetailedHosInformation);
         }
-        return HospitalResponse.from(modifyHospital.getId());
+
+        return HospitalResponse.from(modifiedHospital.getId());
     }
 
-
-    //병원 관계자 병원 추가정보 + 의사 등록
     @Transactional
-    public Long staffRegisterStaffHosInformation(ServletRequest servletRequest, Long memberId,
-            Long hospitalId,
-            StaffHosInformation staffHosInformation,
-            List<Doctor> doctors) {
-
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
-
-        Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
-
-        //병원 테이블 추가정보 유무 확인
-        if (hospital.getStaffHosInformation() != null) {
-            throw new IllegalStateException("이미 추가 정보가 있습니다.");
-        }
-
-        StaffHosInformation.createStaffHosInformation(staffHosInformation, doctors);
-        hospitalAdditionalInfoRepository.save(staffHosInformation);
-
-        //양방향 연관관계
-        hospital.changeStaffHosInformation(staffHosInformation);
-
-        return staffHosInformation.getId();
-    }
-
-
-    //병원 관계자 병원 추가 정보 등록
-    @Transactional
-    public HospitalResponse staffCreateStaffHosInfo(
+    public HospitalResponse registerHosAdditionalInfo(
             ServletRequest servletRequest,
-            HospitalManagerCreateStaffHosInfoRequest request
+            HospitalManagerCreateHosAdditionalInfoRequest request
     ) {
 
-        StaffHosInformation staffHosInformation = StaffHosInformation.builder()
+        StaffHosInformation hospitalAdditionalInfo =
+                StaffHosInformation
+                .builder()
                 .abnormality(request.getAbnormality())
                 .consultationHour(request.getConsultationHour())
-                .introduction(request.getIntroduction()).build();
+                .introduction(request.getIntroduction())
+                .build();
 
-        //의사 정보가 있어야지 의사 추가.
-        if (request.getDoctors() != null) {
-            List<Doctor> doctors = request.getDoctors().stream().map(d -> new Doctor(d))
+        if (checkDoctorInfo(request)) {
+            List<Doctor> doctors = request
+                    .getDoctors()
+                    .stream()
+                    .map(d -> new Doctor(d))
                     .collect(Collectors.toList());
-            Long id = staffRegisterStaffHosInformation(servletRequest, request.getMemberId(),
-                    request.getHospitalId(), staffHosInformation, doctors);
-            return HospitalResponse.from(id);
+            
+            Long HospitalAdditionalInfoId = registerHosAdditionalInfoWithDoctor(
+                    servletRequest,
+                    request.getMemberId(),
+                    request.getHospitalId(),
+                    hospitalAdditionalInfo,
+                    doctors);
+            
+            return HospitalResponse.from(HospitalAdditionalInfoId);
         }
-        //추가 정보만 추가.
-        else {
-            Long id = staffRegisterStaffHosInfo(servletRequest, request.getMemberId(),
-                    request.getHospitalId(), staffHosInformation);
-            return HospitalResponse.from(id);
-        }
+
+        Long HospitalAdditionalInfoId = registerOnlyHosAdditionalInfo(
+                servletRequest,
+                request.getMemberId(),
+                request.getHospitalId(),
+                hospitalAdditionalInfo);
+
+        return HospitalResponse.from(HospitalAdditionalInfoId);
 
     }
 
-
-    //병원 관계자 병원 추가정보만 등록.
     @Transactional
-    public Long staffRegisterStaffHosInfo(ServletRequest servletRequest, Long memberId,
-            Long hospitalId,
-            StaffHosInformation staffHosInformation) {
-
-        managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
-
-        Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
-
-        //병원 테이블 추가정보 유무 확인
-        if (hospital.getStaffHosInformation() != null) {
-            throw new IllegalStateException("이미 추가 정보가 있습니다.");
-        }
-
-        hospitalAdditionalInfoRepository.save(staffHosInformation);
-
-        //양방향 연관관계
-        hospital.changeStaffHosInformation(staffHosInformation);
-
-        return staffHosInformation.getId();
-    }
-
-
-
-    //병원 관계자 추가 정보 등록하기
-    @Transactional
-    public HospitalResponse staffRegisterDetailHospitalInformation(
+    public HospitalResponse registerDetailedHosInfo(
             ServletRequest servletRequest,
             HospitalManagerCreateDetailHosInfoRequest request
     ) {
-        DetailedHosInformation detailedHosInformation = DetailedHosInformation.builder()
-                .numberPatientRoom(request.getNumberPatientRoom())
-                .numberWard(request.getNumberWard())
-                .numberHealthcareProvider(request.getNumberHealthcareProvider())
-                .hospitalLocation(request.getHospitalLocation())
-                .hospitalAddress(request.getHospitalAddress()).build();
-
         managerJwtAccessService.accessManager(servletRequest, request.getMemberId(),
                 request.getHospitalId());
 
         Hospital hospital = hospitalRepository.findById(request.getHospitalId()).
-                orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
 
-        //병원 테이블 추가정보 유무 확인
-        if (hospital.getDetailedHosInformation() != null) {
-            throw new IllegalStateException("이미 상세 정보가 있습니다.");
-        }
+        checkDetailedHosInfo(hospital);
+
+        DetailedHosInformation detailedHosInformation = DetailedHosInformation
+                .builder()
+                .numberPatientRoom(request.getNumberPatientRoom())
+                .numberWard(request.getNumberWard())
+                .numberHealthcareProvider(request.getNumberHealthcareProvider())
+                .hospitalLocation(request.getHospitalLocation())
+                .hospitalAddress(request.getHospitalAddress())
+                .build();
 
         hospital.changeDetailedHosInformation(detailedHosInformation);
         hospitalDetailedInfoRepository.save(detailedHosInformation);
@@ -251,64 +187,142 @@ public class ManagerHospitalService {
         return HospitalResponse.from(detailedHosInformation.getId());
     }
 
-
-    //병원 관계자 상세 정보 삭제하기
     @Transactional
-    public void staffDeleteDetailHospitalInformation(ServletRequest servletRequest, Long memberId,
-            Long detailedHosInfoId) {
+    public void deleteDetailedHospitalInfo(
+            ServletRequest servletRequest,
+            Long memberId,
+            Long detailedHosInfoId
+    ) {
         DetailedHosInformation detailedHosInformation = hospitalDetailedInfoRepository
                 .findById(detailedHosInfoId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 상세 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("병원 상세 정보가 존재하지 않습니다."));
+        
         Hospital hospital = hospitalRepository.findByDetailedHosInformation(detailedHosInformation);
 
         managerJwtAccessService.accessManager(servletRequest, memberId, hospital.getId());
 
-        hospital.deleteDetailedHosId();
+        deleteDetailedHosInfo(detailedHosInfoId, hospital);
+    }
 
+    public HospitalThumbnail viewThumbnail(Long thumbnailId) {
+        HospitalThumbnail thumbnail = hospitalThumbnailRepository.findById(thumbnailId)
+                .orElseThrow(() -> new IllegalStateException("썸네일이 존재하지 않습니다."));
+        
+        return thumbnail;
+    }
+
+    @Transactional
+    protected Long registerHosAdditionalInfoWithDoctor(
+            ServletRequest servletRequest,
+            Long memberId,
+            Long hospitalId,
+            StaffHosInformation HospitalAdditionalInfo,
+            List<Doctor> doctors
+    ) {
+        managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
+
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
+
+        checkHospitalAdditionalInfo(hospital);
+        insertHosAdditionalInfoInHospital(HospitalAdditionalInfo, doctors, hospital);
+
+        return HospitalAdditionalInfo.getId();
+    }
+
+
+    @Transactional
+    protected Long registerOnlyHosAdditionalInfo(
+            ServletRequest servletRequest,
+            Long memberId,
+            Long hospitalId,
+            StaffHosInformation staffHosInformation
+    ) {
+
+        managerJwtAccessService.accessManager(servletRequest, memberId, hospitalId);
+
+        Hospital hospital = hospitalRepository.findById(hospitalId)
+                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
+
+        checkHospitalAdditionalInfo(hospital);
+
+        hospitalAdditionalInfoRepository.save(staffHosInformation);
+        hospital.changeStaffHosInformation(staffHosInformation);
+
+        return staffHosInformation.getId();
+    }
+
+    private boolean checkDoctorInfo(HospitalManagerCreateHosAdditionalInfoRequest request) {
+        return request.getDoctors() != null;
+    }
+
+    private void deleteDetailedHosInfo(Long detailedHosInfoId, Hospital hospital) {
+        hospital.deleteDetailedHosId();
         hospitalDetailedInfoRepository.deleteById(detailedHosInfoId);
     }
 
+    private Long checkNullHospitalThumbnail(Hospital hospital) {
+        Long hospitalThumbnailId;
 
-    //병원 + 상세 정보 수정 (미사용 상태)
-    @Transactional
-    public Long modifyAllHosInformation(Long hospitalId, Long detailedHosId,
-            ModifyHospitalRequest request) {
-        //병원 정보만 수정.
-        Hospital selectHospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
-
-        if (detailedHosId == null) {
-
-            selectHospital.updateHospital(request.getLicensingDate(), request.getHospitalName(),
-                    request.getPhoneNumber(),
-                    request.getDistinguishedName(),
-                    request.getMedicalSubjectInformation(), request.getBusinessCondition(),
-                    request.getCityName());
+        if (hospital.getHospitalThumbnail() == null) {
+            hospitalThumbnailId = null;
+        } else {
+            hospitalThumbnailId = hospital.getHospitalThumbnail().getId();
         }
-        //병원 + 상세 정보 수정.
-        else {
-            DetailedHosInformation selectDetailedHosInfo = hospitalDetailedInfoRepository
-                    .findById(detailedHosId)
-                    .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 상세 정보가 존재하지 않습니다."));
-
-            selectHospital.updateHospital(request.getLicensingDate(), request.getHospitalName(),
-                    request.getPhoneNumber(),
-                    request.getDistinguishedName(),
-                    request.getMedicalSubjectInformation(), request.getBusinessCondition(),
-                    request.getCityName());
-
-            selectDetailedHosInfo.updateDetailedHosInformation(request.getNumberWard(),
-                    request.getNumberHealthcareProvider(), request.getNumberPatientRoom(),
-                    request.getHospitalAddress(), request.getHospitalLocation());
-        }
-        return selectHospital.getId();
+        return hospitalThumbnailId;
     }
 
-    //관리자 병원 섬네일 보기
-    public HospitalThumbnail viewThumbnail(Long thumbnailId) {
-        HospitalThumbnail thumbnail = hospitalThumbnailRepository.findById(thumbnailId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 썸네일이 존재하지 않습니다."));
-        return thumbnail;
+    private Long checkNullHospitalAdditionalInfo(Hospital hospital) {
+        Long hospitalAdditionalInfoId;
+
+        if (hospital.getStaffHosInformation() == null) {
+            hospitalAdditionalInfoId = null;
+        } else {
+            hospitalAdditionalInfoId = hospital.getStaffHosInformation().getId();
+        }
+        return hospitalAdditionalInfoId;
+    }
+
+    private Long checkNullDetailedHospital(Hospital hospital) {
+        Long detailedHosId;
+
+        if (hospital.getDetailedHosInformation() == null) {
+            detailedHosId = null;
+        } else {
+            detailedHosId = hospital.getDetailedHosInformation().getId();
+        }
+        return detailedHosId;
+    }
+
+    private void checkMatchDetailedHosInfo(ManagerModifyHospitalRequest request, Hospital modifiedHospital) {
+        if (modifiedHospital.getDetailedHosInformation().getId() != request
+                .getDetailedHosInfoId()) {
+            throw new IllegalStateException("DetailedHosInfoId가 일치하지 않습니다.");
+        }
+    }
+
+    private boolean checkModifyDetailedHosInfo(ManagerModifyHospitalRequest request) {
+        return request.getDetailedModifyCheck() == true;
+    }
+
+    private void checkDetailedHosInfo(Hospital hospital) {
+        if (hospital.getDetailedHosInformation() != null) {
+            throw new IllegalStateException("이미 상세 정보가 있습니다.");
+        }
+    }
+    private void insertHosAdditionalInfoInHospital(
+            StaffHosInformation HospitalAdditionalInfo,
+            List<Doctor> doctors,
+            Hospital hospital) {
+        StaffHosInformation.createHosAddtionalInfoWithDoctors(HospitalAdditionalInfo, doctors);
+        hospitalAdditionalInfoRepository.save(HospitalAdditionalInfo);
+        hospital.changeStaffHosInformation(HospitalAdditionalInfo);
+    }
+
+    private void checkHospitalAdditionalInfo(Hospital hospital) {
+        if (hospital.getStaffHosInformation() != null) {
+            throw new IllegalStateException("이미 추가 정보가 있습니다.");
+        }
     }
 
 }

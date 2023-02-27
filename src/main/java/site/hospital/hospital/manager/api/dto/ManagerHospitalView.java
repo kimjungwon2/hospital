@@ -39,8 +39,12 @@ public class ManagerHospitalView {
     private List<StaffHospitalTagDTO> hospitalTags;
     private List<StaffHospitalEstimationDTO> estimations;
 
-    public ManagerHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId,
-            Long hospitalThumbnailId) {
+    public ManagerHospitalView(
+            Hospital hospital,
+            Long detailedHosInfoId,
+            Long staffHosInfoId,
+            Long hospitalThumbnailId
+    ) {
         this.hospitalId = hospital.getId();
         this.licensingDate = hospital.getLicensingDate();
         this.hospitalName = hospital.getHospitalName();

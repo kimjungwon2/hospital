@@ -7,7 +7,7 @@ import site.hospital.hospital.user.domain.detailedinfo.HospitalLocation;
 import site.hospital.hospital.user.domain.BusinessCondition;
 
 @Data
-public class StaffModifyHospitalRequest {
+public class ManagerModifyHospitalRequest {
 
     private Long memberId;
     private String licensingDate;

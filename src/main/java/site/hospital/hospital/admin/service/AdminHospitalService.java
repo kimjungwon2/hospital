@@ -100,16 +100,19 @@ public class AdminHospitalService {
         Hospital modifyHospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
 
-        Hospital hospital = Hospital.builder().hospitalName(request.getHospitalName())
-                .cityName(request.getCityName()).businessCondition(request.getBusinessCondition())
+        Hospital hospital = Hospital
+                .builder()
+                .hospitalName(request.getHospitalName())
+                .cityName(request.getCityName())
+                .businessCondition(request.getBusinessCondition())
                 .medicalSubjectInformation(request.getMedicalSubjectInformation())
                 .distinguishedName(request.getDistinguishedName())
-                .phoneNumber(request.getPhoneNumber()).licensingDate(request.getLicensingDate())
+                .phoneNumber(request.getPhoneNumber())
+                .licensingDate(request.getLicensingDate())
                 .build();
 
         modifyHospital.modifyHospital(hospital);
 
-        //병원 추가정보 수정 유무
         if (request.getDetailedModifyCheck() == true) {
             //detailed hospitalId가 일치하지 않으면 수정 취소.
             if (modifyHospital.getDetailedHosInformation().getId() != request
@@ -147,7 +150,7 @@ public class AdminHospitalService {
             throw new IllegalStateException("이미 추가 정보가 있습니다.");
         }
 
-        StaffHosInformation.createStaffHosInformation(staffHosInformation, doctors);
+        StaffHosInformation.createHosAddtionalInfoWithDoctors(staffHosInformation, doctors);
         hospitalAdditionalInfoRepository.save(staffHosInformation);
 
         //양방향 연관관계

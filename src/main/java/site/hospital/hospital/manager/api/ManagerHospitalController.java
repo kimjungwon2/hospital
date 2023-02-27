@@ -18,11 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import site.hospital.common.service.image.HospitalImagesService;
 import site.hospital.common.service.image.HospitalThumbnailImageService;
 import site.hospital.hospital.manager.api.dto.ManagerHospitalView;
-import site.hospital.hospital.manager.api.dto.StaffModifyHospitalRequest;
+import site.hospital.hospital.manager.api.dto.ManagerModifyHospitalRequest;
 import site.hospital.hospital.manager.service.ManagerHospitalService;
 import site.hospital.hospital.user.api.dto.HospitalAdminViewThumbnailResponse;
 import site.hospital.hospital.user.api.dto.HospitalManagerCreateDetailHosInfoRequest;
-import site.hospital.hospital.user.api.dto.HospitalManagerCreateStaffHosInfoRequest;
+import site.hospital.hospital.user.api.dto.HospitalManagerCreateHosAdditionalInfoRequest;
 import site.hospital.hospital.user.api.dto.HospitalResponse;
 import site.hospital.hospital.user.api.dto.HospitalViewImageResponse;
 import site.hospital.hospital.user.domain.HospitalThumbnail;
@@ -38,96 +38,83 @@ public class ManagerHospitalController {
 
 
     @GetMapping("/staff/hospital/view")
-    public ManagerHospitalView viewHospital(ServletRequest servletRequest) {
+    public ManagerHospitalView managerViewHospital(ServletRequest servletRequest) {
         return managerHospitalService.viewHospital(servletRequest);
     }
 
-    //병원 관계자 병원 수정
     @PutMapping("/staff/hospital/modify/{hospitalId}")
-    public HospitalResponse staffUpdateHospital(
+    public HospitalResponse managerModifyHospital(
             ServletRequest servletRequest,
             @PathVariable("hospitalId") Long hospitalId,
-            @RequestBody @Validated StaffModifyHospitalRequest request
+            @RequestBody @Validated ManagerModifyHospitalRequest request
     ) {
-        return managerHospitalService.staffUpdateHospital(servletRequest, hospitalId, request);
+        return managerHospitalService.modifyHospital(servletRequest, hospitalId, request);
     }
 
-    //병원 관계자 상세 정보 등록
     @PostMapping("/staff/hospital/register/detailed")
-    public HospitalResponse staffCreateDetailedHosInfo(
+    public HospitalResponse managerRegisterDetailedHosInfo(
             ServletRequest servletRequest,
             @RequestBody @Validated HospitalManagerCreateDetailHosInfoRequest request
     ) {
-        return managerHospitalService
-                .staffRegisterDetailHospitalInformation(servletRequest, request);
+        return managerHospitalService.registerDetailedHosInfo(servletRequest, request);
     }
 
-    //병원 관계자 병원 추가 정보 등록
     @PostMapping("/staff/hospital/register/staffHosInfo")
-    public HospitalResponse staffCreateStaffHosInfo(
+    public HospitalResponse managerRegisterHosAdditionalInfo(
             ServletRequest servletRequest,
-            @RequestBody @Validated HospitalManagerCreateStaffHosInfoRequest request
+            @RequestBody @Validated HospitalManagerCreateHosAdditionalInfoRequest request
     ) {
-        return managerHospitalService.staffCreateStaffHosInfo(servletRequest, request);
+        return managerHospitalService.registerHosAdditionalInfo(servletRequest, request);
     }
 
-    //병원 관계자 상세 정보 삭제
     @DeleteMapping("/staff/{memberId}/detailedHos/delete/{detailedHosInfoId}")
-    public void deleteDetailedHospitalInformation(
+    public void managerDeleteDetailedHospitalInfo(
             ServletRequest servletRequest,
             @PathVariable("memberId") Long memberId,
             @PathVariable("detailedHosInfoId") Long detailedHosInfoId
     ) {
-        managerHospitalService
-                .staffDeleteDetailHospitalInformation(servletRequest, memberId, detailedHosInfoId);
+        managerHospitalService.deleteDetailedHospitalInfo(servletRequest, memberId, detailedHosInfoId);
     }
 
-    //관계자 섬네일 등록
     @PostMapping("/staff/hospital/register/thumbnail")
-    public String staffRegisterThumbnail(
+    public String managerRegisterThumbnail(
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
         return hospitalThumbnailImageService.uploadImage(imageFile, hospitalId);
     }
 
-    //관계자 섬네일 보기
     @GetMapping("/staff/hospital/view/thumbnail")
-    public HospitalAdminViewThumbnailResponse staffViewThumbnail(
+    public HospitalAdminViewThumbnailResponse managerViewThumbnail(
             @RequestParam(value = "thumbnailId", required = false) Long thumbnailId) {
         HospitalThumbnail hospitalThumbnail = managerHospitalService.viewThumbnail(thumbnailId);
 
         return HospitalAdminViewThumbnailResponse.from(hospitalThumbnail);
     }
 
-    //관계자 섬네일 삭제
     @DeleteMapping("/staff/hospital/delete/thumbnail/{thumbnailId}")
-    public void staffDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId) {
+    public void managerDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId) {
         hospitalThumbnailImageService.deleteImage(thumbnailId);
     }
 
-    //관계자 이미지 등록
     @PostMapping("/staff/hospital/register/images")
-    public List<String> staffRegisterHospitalImages(
+    public List<String> managerRegisterHospitalImages(
             @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
-        List<String> ImageURLS = hospitalImagesService
-                .uploadImage(imageFiles, hospitalId);
+        List<String> ImageURLS = hospitalImagesService.uploadImage(imageFiles, hospitalId);
 
         return ImageURLS;
     }
 
-    //관계자 이미지 보기
     @GetMapping("/staff/hospital/view/hospitalImages")
-    public List<HospitalViewImageResponse> staffViewHospitalImages(
+    public List<HospitalViewImageResponse> managerViewHospitalImages(
             @RequestParam(value = "hospitalId", required = false) Long hospitalId) {
         return managerHospitalService.viewHospitalImages(hospitalId);
     }
 
-    //관계자 병원 이미지 삭제
     @DeleteMapping("/staff/hospital/delete/hospitalImages/{hospitalImageId}")
-    public void staffDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId) {
+    public void managerDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId) {
         hospitalImagesService.deleteImage(hospitalImageId);
     }
 
