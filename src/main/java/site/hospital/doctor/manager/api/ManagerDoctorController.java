@@ -39,13 +39,14 @@ public class ManagerDoctorController {
         managerDoctorService.modifyDoctor(doctorId,servletRequest, request);
     }
 
+    //수정 예정
     @DeleteMapping("/staff/{memberId}/doctor/delete/{doctorId}")
     public void managerDeleteDoctor(
             ServletRequest servletRequest,
             @PathVariable("memberId") Long memberId,
             @PathVariable("doctorId") Long doctorId
     ) {
-        managerDoctorService.deleteDoctor(servletRequest, memberId, doctorId);
+        managerDoctorService.deleteDoctor(servletRequest, doctorId);
     }
 
 

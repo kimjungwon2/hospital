@@ -36,9 +36,7 @@ public class ManagerAnswerService {
                                               .orElseThrow(
                                                       () -> new IllegalStateException("Question not exist"));
 
-        managerJwtService.accessManager(servletRequest,
-                                              member.getId(),
-                                              question.getHospital().getId());
+        managerJwtService.accessManager(servletRequest, question.getHospital().getId());
 
         Answer answer = createAnswer(request, member, question);
 

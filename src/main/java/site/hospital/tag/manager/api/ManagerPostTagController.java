@@ -31,13 +31,14 @@ public class ManagerPostTagController {
         return managerPostTagService.managerLinkTag(servletRequest, request);
     }
 
+    //수정 예정
     @DeleteMapping("/staff/{memberId}/hospital/tag/delete/{postTagId}")
     public void managerDeletePostTag(
             ServletRequest servletRequest,
             @PathVariable("memberId") Long memberId,
             @PathVariable("postTagId") Long postTagId
     ) {
-        managerPostTagService.managerDeletePostTag(servletRequest, memberId, postTagId);
+        managerPostTagService.managerDeletePostTag(servletRequest, postTagId);
     }
 
     //병원 연결 태그 보기.

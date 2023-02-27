@@ -34,7 +34,7 @@ public class ManagerHospitalAdditionalInfoService {
         Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(hosAdditionalInfoId);
 
         managerJwtService
-                .accessManager(servletRequest, request.getMemberId(), hospital.getId());
+                .accessManager(servletRequest, hospital.getId());
 
         StaffHosInformation modifiedHospitalAdditionalInfo = StaffHosInformation
                 .builder()
@@ -49,7 +49,6 @@ public class ManagerHospitalAdditionalInfoService {
     @Transactional
     public void deleteHospitalAdditionalInfo(
             ServletRequest servletRequest,
-            Long memberId,
             Long hosAdditionalInfoId
     ) {
         hospitalAdditionalInfoRepository.findById(hosAdditionalInfoId)
@@ -58,7 +57,7 @@ public class ManagerHospitalAdditionalInfoService {
 
         Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(hosAdditionalInfoId);
 
-        managerJwtService.accessManager(servletRequest, memberId, hospital.getId());
+        managerJwtService.accessManager(servletRequest, hospital.getId());
 
         deleteHosAdditionalInfoInHospital(hosAdditionalInfoId, hospital);
     }

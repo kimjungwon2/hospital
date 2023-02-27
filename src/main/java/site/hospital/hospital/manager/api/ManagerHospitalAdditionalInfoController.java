@@ -38,12 +38,13 @@ public class ManagerHospitalAdditionalInfoController {
         managerHospitalAdditionalInfoService.modifyHospitalAdditionalInfo(servletRequest, staffHosId, request);
     }
 
+    //수정 예정
     @DeleteMapping("/staff/{memberId}/staffHosInfo/delete/{staffHosId}")
     public void managerDeleteHosAdditionalInfo(
             ServletRequest servletRequest,
             @PathVariable("memberId") Long memberId,
             @PathVariable("staffHosId") Long staffHosId
     ) {
-        managerHospitalAdditionalInfoService.deleteHospitalAdditionalInfo(servletRequest, memberId, staffHosId);
+        managerHospitalAdditionalInfoService.deleteHospitalAdditionalInfo(servletRequest, staffHosId);
     }
 }
