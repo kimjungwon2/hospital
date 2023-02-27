@@ -26,7 +26,9 @@ public class ManagerJwtService {
     ) {
         Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
-        if (confirmHospitalNumber(hospitalId, hospitalNumberInJwt)) {
+        if (confirmAdmin(hospitalNumberInJwt)) {
+            throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
+        } else if (confirmHospitalNumber(hospitalId, hospitalNumberInJwt)) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
@@ -71,12 +73,12 @@ public class ManagerJwtService {
         return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ");
     }
 
-    private boolean confirmHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
+    private boolean confirmAdmin(Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(0L);
+    }
 
-        if(hospitalNumberInJwt.equals(hospitalId)){
-            return false;
-        }
-        return true;
+    private boolean confirmHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(hospitalId)? false: true;
     }
 
 }
