@@ -124,17 +124,25 @@
     ) {
         Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
-        if (confirmHospitalNumber(hospitalId, hospitalNumberInJwt)) {
+        if (confirmAdmin(hospitalNumberInJwt)) {
+            throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
+        } else if (confirmMatchHospitalNumber(hospitalId, hospitalNumberInJwt)) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
     
-    private boolean confirmHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
+    private boolean confirmAdmin(Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(0L);
+    }
+
+    private boolean confirmMatchHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
         return hospitalNumberInJwt.equals(hospitalId)? false: true;
     }
     
 
 - ServletRequest을 통해 토큰의 병원 번호를 꺼냅니다. 그리고 프론트 엔드에서 수정 요청한 병원 번호와 DB의 병원 번호가 같은지 확인했습니다. 
+
+- MANAGER 권한이 아닌 ADMIN 권한은 병원 번호 default를 0으로 표시했습니다. 그렇기에 0이 나오면 ADMIN 권한으로 판단했습니다. 
 
 </br>
 
