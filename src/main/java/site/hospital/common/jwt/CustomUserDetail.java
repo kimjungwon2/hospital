@@ -17,7 +17,8 @@ public class CustomUserDetail extends User {
             String username,
             String password,
             Collection<? extends GrantedAuthority> authorities,
-            String phoneNumber, Long hospitalNumber,
+            String phoneNumber,
+            Long hospitalNumber,
             Long memberId,
             String nickName,
             MemberStatus memberStatus

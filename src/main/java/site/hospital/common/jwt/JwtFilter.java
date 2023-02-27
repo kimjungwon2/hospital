@@ -10,9 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
+@Component
 public class JwtFilter extends GenericFilterBean {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
@@ -46,10 +48,6 @@ public class JwtFilter extends GenericFilterBean {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private boolean checkTokenValue(String jwt) {
-        return StringUtils.hasText(jwt);
-    }
-
     private void injectAuthenticationInSecurityContextHolder(String jwt) {
         Authentication authentication = tokenProvider.getAuthentication(jwt);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -63,6 +61,10 @@ public class JwtFilter extends GenericFilterBean {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private boolean checkTokenValue(String jwt) {
+        return StringUtils.hasText(jwt);
     }
 
     private boolean checkBearerPrefix(String bearerToken) {

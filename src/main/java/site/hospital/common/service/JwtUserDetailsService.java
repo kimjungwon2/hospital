@@ -25,33 +25,83 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String memberIdName) {
-        Optional<Member> memberOptional = memberRepository
+        Optional<Member> loginMember = memberRepository
                 .findOneEmailByMemberIdName(memberIdName);
 
-        Member member = memberOptional
+        Member member = loginMember
                 .orElseThrow(() -> new IllegalStateException("로그인하려는 아이디가 존재하지 않습니다."));
 
-        List<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(memberIdName);
+        List<MemberAuthority> memberAuthorities = memberRepository.findMemberAuthorities(memberIdName);
 
+        List<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(memberAuthorities);
+
+        if(confirmUser(grantedAuthorities)){
+            return createCustomUserDetail(member, grantedAuthorities);
+        }
+
+        return createCustomUserDetail(member, memberAuthorities, grantedAuthorities);
+    }
+
+    private CustomUserDetail createCustomUserDetail(
+            Member member,
+            List<MemberAuthority> memberAuthorities,
+            List<GrantedAuthority> grantedAuthorities
+    ) {
         return new CustomUserDetail(
                 member.getMemberIdName(),
                 member.getPassword(),
                 grantedAuthorities,
                 member.getPhoneNumber(),
-                member.getHospitalNumber(),
+                findHospitalNumber(memberAuthorities),
                 member.getId(),
                 member.getNickName(),
                 member.getMemberStatus());
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(String name) {
-        List<MemberAuthority> memberAuthorities = memberRepository.findMemberAuthorities(name);
+    private CustomUserDetail createCustomUserDetail(
+            Member member,
+            List<GrantedAuthority> grantedAuthorities
+    ) {
+        return new CustomUserDetail(
+                member.getMemberIdName(),
+                member.getPassword(),
+                grantedAuthorities,
+                member.getPhoneNumber(),
+                0L,
+                member.getId(),
+                member.getNickName(),
+                member.getMemberStatus());
+    }
+
+    private Long findHospitalNumber(List<MemberAuthority> memberAuthorities) {
+        Optional<MemberAuthority> managerAuthority = memberAuthorities
+                .stream()
+                .filter(a -> a.getAuthority().equals("ROLE_MANAGER"))
+                .findFirst();
+
+        Long hospitalNumber = managerAuthority
+                .orElseThrow(() -> new IllegalStateException("MANAGER 권한이 없습니다."))
+                .getHospitalNo();
+
+        return hospitalNumber;
+    }
+
+    private boolean confirmUser(List<GrantedAuthority> grantedAuthorities) {
+        if(grantedAuthorities.size()==1){
+            return true;
+        }
+
+        return false;
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(List<MemberAuthority> memberAuthorities) {
 
         List<GrantedAuthority> grantedAuthorities = memberAuthorities
                 .stream()
                 .map(a -> new SimpleGrantedAuthority(
                         a.getAuthority().getAuthorizationStatus().toString()))
                 .collect(Collectors.toList());
+
         return grantedAuthorities;
     }
 }
