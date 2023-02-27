@@ -5,7 +5,7 @@ import lombok.Data;
 import site.hospital.hospital.user.domain.BusinessCondition;
 
 @Data
-public class AdminSearchHospitalDto {
+public class AdminHospitalSearchSelectQuery {
 
     Long hospitalId;
     Long detailedHosId;
@@ -17,10 +17,16 @@ public class AdminSearchHospitalDto {
     String phoneNumber;
 
     @QueryProjection
-    public AdminSearchHospitalDto(Long hospitalId, Long detailedHosId, Long staffHosInformationId,
+    public AdminHospitalSearchSelectQuery(
+            Long hospitalId,
+            Long detailedHosId,
+            Long staffHosInformationId,
             Long thumbnailId,
-            String hospitalName, BusinessCondition businessCondition,
-            String cityName, String phoneNumber) {
+            String hospitalName,
+            BusinessCondition businessCondition,
+            String cityName,
+            String phoneNumber
+    ) {
         this.hospitalId = hospitalId;
         this.detailedHosId = detailedHosId;
         this.staffHosInformationId = staffHosInformationId;

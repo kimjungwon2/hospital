@@ -138,21 +138,4 @@ public class Hospital extends BaseEntity {
         this.cityName = hospital.getCityName();
     }
 
-    public void updateHospital(
-            String licensingDate,
-            String hospitalName,
-            String phoneNumber,
-            String distinguishedName,
-            String medicalSubjectInformation,
-            BusinessCondition businessCondition,
-            String cityName
-    ) {
-        this.licensingDate = licensingDate;
-        this.hospitalName = hospitalName;
-        this.phoneNumber = phoneNumber;
-        this.distinguishedName = distinguishedName;
-        this.medicalSubjectInformation = medicalSubjectInformation;
-        this.businessCondition = businessCondition;
-        this.cityName = cityName;
-    }
 }

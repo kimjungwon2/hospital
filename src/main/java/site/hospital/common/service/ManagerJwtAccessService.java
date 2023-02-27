@@ -25,7 +25,6 @@ public class ManagerJwtAccessService {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
 
-    //staff 권한 접근.
     public void accessManager(ServletRequest servletRequest, Long memberId,
             Long existingHospitalId) {
 
@@ -61,7 +60,7 @@ public class ManagerJwtAccessService {
     //JWT TOKEN의 병원 번호를 꺼내오는 역할.
     private Long getJwtHospitalNumber(ServletRequest servletRequest) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String jwt = resolveToken(httpServletRequest);
+        String jwt = takeToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
@@ -73,8 +72,7 @@ public class ManagerJwtAccessService {
         }
     }
 
-    //Request Header에서 토큰 정보를 꺼내온다.
-    private String resolveToken(HttpServletRequest request) {
+    private String takeToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);

@@ -16,7 +16,8 @@ public class HospitalAdditionalInfoService {
 
 
     public HospitalAdditionalInfoViewResponse viewHospitalAdditionalInfo(Long hosAdditionalInfoId) {
-        StaffHosInformation hospitalAdditionalInfo = hospitalAdditionalInfoRepository.findById(hosAdditionalInfoId)
+        StaffHosInformation hospitalAdditionalInfo = hospitalAdditionalInfoRepository
+                .findById(hosAdditionalInfoId)
                 .orElseThrow(
                         () -> new IllegalStateException("병원 추가 정보가 존재하지 않습니다."));
 

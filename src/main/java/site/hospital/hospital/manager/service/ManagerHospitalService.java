@@ -101,7 +101,7 @@ public class ManagerHospitalService {
             DetailedHosInformation detailedHosInformation = hospitalDetailedInfoRepository
                     .findById(request.getDetailedHosInfoId())
                     .orElseThrow(
-                            () -> new IllegalStateException("해당 id에 속하는 상세 병원 정보가 존재하지 않습니다."));
+                            () -> new IllegalStateException("상세 병원 정보가 존재하지 않습니다."));
 
             DetailedHosInformation modifyDetailedHosInformation = DetailedHosInformation
                     .builder()

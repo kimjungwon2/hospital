@@ -22,26 +22,23 @@ public class AdminHospitalAdditionalInfoController {
     private final AdminHospitalAdditionalInfoService adminHospitalAdditionalInfoService;
     private final HospitalAdditionalInfoService hospitalAdditionalInfoService;
 
-    //관리자 병원 추가 정보 보기
     @GetMapping("/admin/staffHosInfo/{staffHosId}")
-    public HospitalAdditionalInfoViewResponse adminViewStaffHosInfo(
-            @PathVariable("staffHosId") Long staffHosId) {
-        return hospitalAdditionalInfoService.viewHospitalAdditionalInfo(staffHosId);
+    public HospitalAdditionalInfoViewResponse adminViewHospitalAdditionalInfo(
+            @PathVariable("staffHosId") Long hosAdditionalInfoId) {
+        return hospitalAdditionalInfoService.viewHospitalAdditionalInfo(hosAdditionalInfoId);
     }
 
-    //관리자 추가 정보 수정하기
     @PutMapping("/admin/staffHosInfo/modify/{staffHosId}")
-    public void modifyStaffHosInfo(
-            @PathVariable("staffHosId") Long staffHosId,
+    public void adminModifyHospitalAdditionalInfo(
+            @PathVariable("staffHosId") Long hosAdditionalInfoId,
             @RequestBody @Validated AdminModifyStaffHosRequest request
     ) {
-        adminHospitalAdditionalInfoService.adminModifyStaffHosInfo(staffHosId, request);
+        adminHospitalAdditionalInfoService.modifyHospitalAdditionalInfo(hosAdditionalInfoId, request);
     }
 
-    //관리자 추가 정보 삭제하기
     @DeleteMapping("/admin/staffHosInfo/delete/{staffHosId}")
-    public void deleteStaffHosInfo(@PathVariable("staffHosId") Long staffHosId) {
-        adminHospitalAdditionalInfoService.adminDeleteStaffHosInfo(staffHosId);
+    public void adminDeleteHospitalAdditionalInfo(@PathVariable("staffHosId") Long hosAdditionalInfoId) {
+        adminHospitalAdditionalInfoService.deleteHospitalAdditionalInfo(hosAdditionalInfoId);
     }
 
 }

@@ -17,30 +17,35 @@ public class AdminHospitalAdditionalInfoService {
     private final HospitalAdditionalInfoRepository hospitalAdditionalInfoRepository;
     private final HospitalRepository hospitalRepository;
 
-    //병원 추가 정보 삭제
     @Transactional
-    public void adminDeleteStaffHosInfo(Long staffHosId) {
-        hospitalAdditionalInfoRepository.findById(staffHosId)
+    public void deleteHospitalAdditionalInfo(Long hosAdditionalInfoId) {
+        hospitalAdditionalInfoRepository.findById(hosAdditionalInfoId)
                 .orElseThrow(
-                        () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
-        Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(staffHosId);
-        hospital.deleteHospitalAdditionalInfo();
+                        () -> new IllegalStateException("병원 추가 정보가 존재하지 않습니다."));
 
-        hospitalAdditionalInfoRepository.deleteById(staffHosId);
+        Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(hosAdditionalInfoId);
+        hospital.deleteHospitalAdditionalInfo();
+        hospitalAdditionalInfoRepository.deleteById(hosAdditionalInfoId);
     }
 
     @Transactional
-    public void adminModifyStaffHosInfo(Long staffHosId, AdminModifyStaffHosRequest request) {
-        StaffHosInformation staffHosInformation = hospitalAdditionalInfoRepository.findById(staffHosId)
+    public void modifyHospitalAdditionalInfo(
+            Long hosAdditionalInfoId,
+            AdminModifyStaffHosRequest request
+    ) {
+        StaffHosInformation hosAdditionalInfo = hospitalAdditionalInfoRepository
+                .findById(hosAdditionalInfoId)
                 .orElseThrow(
-                        () -> new IllegalStateException("해당 id에 속하는 직원이 추가하는 병원 정보가 존재하지 않습니다."));
-        StaffHosInformation modifyStaffHosInformation = StaffHosInformation.builder()
+                        () -> new IllegalStateException("병원 추가 정보가 존재하지 않습니다."));
+
+        StaffHosInformation modifiedHospitalAdditionalInfo = StaffHosInformation
+                .builder()
                 .abnormality(request.getAbnormality())
                 .consultationHour(request.getConsultationHour())
-                .introduction(request.getIntroduction()).build();
+                .introduction(request.getIntroduction())
+                .build();
 
-        staffHosInformation.modifyHospitalAdditionalInfo(modifyStaffHosInformation);
+        hosAdditionalInfo.modifyHospitalAdditionalInfo(modifiedHospitalAdditionalInfo);
     }
-
 
 }

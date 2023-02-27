@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import site.hospital.common.service.image.HospitalImagesService;
 import site.hospital.common.service.image.HospitalThumbnailImageService;
-import site.hospital.hospital.admin.repository.search.AdminSearchHospitalDto;
+import site.hospital.hospital.admin.repository.search.AdminHospitalSearchSelectQuery;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalView;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.admin.service.AdminHospitalService;
@@ -42,16 +42,15 @@ public class AdminHospitalController {
     private final HospitalThumbnailImageService hospitalThumbnailImageService;
     private final HospitalImagesService hospitalImagesService;
 
-    //관리자 병원 검색
     @GetMapping("/admin/hospital/search")
-    public Page<AdminSearchHospitalDto> adminSearchHospitals(
+    public Page<AdminHospitalSearchSelectQuery> adminSearchHospitals(
             @RequestParam(value = "hospitalId", required = false) Long hospitalId,
             @RequestParam(value = "hospitalName", required = false) String hospitalName,
             @RequestParam(value = "businessCondition", required = false) BusinessCondition businessCondition,
             @RequestParam(value = "cityName", required = false) String cityName,
             Pageable pageable
     ) {
-        return adminHospitalService.adminSearchHospitals(
+        return adminHospitalService.searchHospitals(
                 hospitalId,
                 hospitalName,
                 businessCondition,
@@ -59,65 +58,58 @@ public class AdminHospitalController {
                 pageable);
     }
 
-    //관리자 병원 생성
     @PostMapping("/admin/hospital/register")
-    public HospitalResponse saveHospital(
+    public HospitalResponse adminRegisterHospital(
             @RequestBody @Validated HospitalCreateRequest request) {
-        return adminHospitalService.adminSaveHospital(request);
+        return adminHospitalService.registerHospital(request);
     }
 
-    //관리자 병원 보기
     @GetMapping("/admin/hospital/view")
-    public AdminHospitalView viewHospital(
+    public AdminHospitalView adminViewHospital(
             @RequestParam(value = "hospitalId", required = false) Long hospitalId,
             @RequestParam(value = "detailedHosInfoId", required = false) Long detailedHosInfoId,
             @RequestParam(value = "staffHosInfoId", required = false) Long staffHosInfoId,
             @RequestParam(value = "thumbnailId", required = false) Long thumbnailId
     ) {
         return adminHospitalService
-                .adminViewHospital(hospitalId, detailedHosInfoId, staffHosInfoId, thumbnailId);
+                .viewHospital(hospitalId, detailedHosInfoId, staffHosInfoId, thumbnailId);
     }
 
-    //관리자 병원 수정
     @PutMapping("/admin/hospital/modify/{hospitalId}")
-    public HospitalResponse updateHospital(
+    public HospitalResponse adminModifyHospital(
             @PathVariable("hospitalId") Long hospitalId,
             @RequestBody @Validated AdminModifyHospitalRequest request
     ) {
-        return adminHospitalService.adminUpdateHospital(hospitalId, request);
+        return adminHospitalService.modifyHospital(hospitalId, request);
     }
 
-    //관리자 병원 삭제
     @DeleteMapping("/admin/hospital/delete/{hospitalId}")
-    public void deleteHospital(
+    public void adminDeleteHospital(
             @PathVariable("hospitalId") Long hospitalId,
             @RequestParam(value = "staffHosInfoId", required = false) Long staffHosInfoId
     ) {
-        adminHospitalService.adminDeleteHospital(hospitalId, staffHosInfoId);
+        adminHospitalService.deleteHospital(hospitalId, staffHosInfoId);
     }
 
-    //관리자 병원 상세 정보 삭제
+
     @DeleteMapping("/admin/detailedHos/delete/{detailedHosInfoId}")
-    public void deleteDetailedHospitalInformation(
+    public void adminDeleteDetailedHospitalInfo(
             @PathVariable("detailedHosInfoId") Long detailedHosInfoId) {
-        adminHospitalService.deleteDetailHospitalInformation(detailedHosInfoId);
+        adminHospitalService.deleteDetailedHospitalInfo(detailedHosInfoId);
     }
 
-    //관리자 병원 추가 정보 등록
     @PostMapping("/admin/hospital/register/staff")
-    public HospitalResponse adminCreateStaffHosInfo(
+    public HospitalResponse adminRegisterHosAdditionalInfo(
             @RequestBody @Validated HospitalCreateStaffHosInfoRequest request) {
-        return adminHospitalService.adminCreateStaffHosInfo(request);
+        return adminHospitalService.registerHosAdditionalInfo(request);
     }
 
-    //관리자 상세 정보 등록
     @PostMapping("/admin/hospital/register/detailed")
-    public HospitalResponse adminCreateDetailedHosInfo(
+    public HospitalResponse adminRegisterDetailedHosInfo(
             @RequestBody @Validated HospitalCreateDetailedHosInfoRequest request) {
-        return adminHospitalService.registerDetailHospitalInformation(request, request.getHospitalId());
+        return adminHospitalService.registerDetailedHosInfo(request, request.getHospitalId());
     }
 
-    //관리자 섬네일 등록
     @PostMapping("/admin/hospital/register/thumbnail")
     public String adminRegisterThumbnail(
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
@@ -128,23 +120,19 @@ public class AdminHospitalController {
         return ImageURL;
     }
 
-
-    //관리자 섬네일 보기
     @GetMapping("/admin/hospital/view/thumbnail")
-    public HospitalAdminViewThumbnailResponse viewThumbnail(
+    public HospitalAdminViewThumbnailResponse adminViewThumbnail(
             @RequestParam(value = "thumbnailId", required = false) Long thumbnailId) {
         HospitalThumbnail hospitalThumbnail = managerHospitalService.viewThumbnail(thumbnailId);
 
         return HospitalAdminViewThumbnailResponse.from(hospitalThumbnail);
     }
 
-    //관리자 섬네일 삭제
     @DeleteMapping("/admin/hospital/delete/thumbnail/{thumbnailId}")
     public void adminDeleteThumbnail(@PathVariable("thumbnailId") Long thumbnailId) {
         hospitalThumbnailImageService.deleteImage(thumbnailId);
     }
 
-    //관리자 이미지 등록
     @PostMapping("/admin/hospital/register/images")
     public List<String> adminRegisterHospitalImages(
             @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
@@ -156,14 +144,12 @@ public class AdminHospitalController {
         return ImageURLS;
     }
 
-    //관리자 이미지 보기
     @GetMapping("/admin/hospital/view/hospitalImages")
     public List<HospitalViewImageResponse> adminViewHospitalImages(
             @RequestParam(value = "hospitalId", required = false) Long hospitalId) {
         return managerHospitalService.viewHospitalImages(hospitalId);
     }
 
-    //관리자 병원 이미지 삭제
     @DeleteMapping("/admin/hospital/delete/hospitalImages/{hospitalImageId}")
     public void adminDeleteHospitalImage(@PathVariable("hospitalImageId") Long hospitalImageId) {
         hospitalImagesService.deleteImage(hospitalImageId);
