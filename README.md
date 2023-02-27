@@ -118,40 +118,23 @@
 - 병원 번호를 확인하는 메소드를 아래와 같이 만들었습니다. 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호인지 확인하기 위해 매번 확인 메소드를 넣었습니다. **(2차 검증)** 
 
     ~~~java
-    public void staffAccessFunction(ServletRequest servletRequest, Long memberId,
-            Long existingHospitalId) {
+    public void accessManager(
+            ServletRequest servletRequest,
+            Long hospitalId
+    ) {
+        Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
-        //servletRequest를 통해 토큰의 병원 번호를 가져옵니다.
-        Long JwtHospitalId = getJwtHospitalNumber(servletRequest);
-
-        //쿼리를 통해 DB속 멤버 권한의 병원 번호를 불러옵니다.
-        MemberAuthority findMemberManager = memberRepository
-                .findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
-                
-        //멤버 권한의 병원 번호가 null이면은 Manager 권한이 없다고 표시했습니다. 
-        if (findMemberManager == null) {
-            throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");
-        }
-        /** MANAGER 권한이 아닌 ADMIN 권한은 병원 번호 default를 0으로 표시했습니다. 
-              그렇기에 0이 나오면 ADMIN 권한으로 판단했습니다. **/
-        else if (findMemberManager.getHospitalNo() == 0) {
-            throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
-        }
-        //토큰에서 불러온 병원 번호와 쿼리를 통해 불러온 병원 정보가 같지 않으면 인증 오류로 판단합니다. 
-        else if (JwtHospitalId != findMemberManager.getHospitalNo()) {
-            throw new AccessDeniedException("토큰 번호와 권한 번호가 일치하지 않습니다.");
-        }
-        /** 프론트 엔드에서 수정 요청한 병원 번호(PK)와 DB의 병원 번호가 같은지 확인했고, 
-          다르면 접근을 차단했습니다. **/
-        else if (findMemberManager.getHospitalNo() != existingHospitalId) {
+        if (confirmHospitalNumber(hospitalId, hospitalNumberInJwt)) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
     
+    private boolean confirmHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(hospitalId)? false: true;
+    }
+    
 
-- ServletRequest을 통해 토큰의 병원 번호를 꺼냅니다. 그리고 멤버 권한의 병원 번호를 DB에서 찾는 쿼리를 날려서, 토큰의 병원 번호와 DB의 병원 번호가 같은지 확인했습니다.
-
-- 프론트 엔드에서 수정 요청한 병원 번호(PK)와 DB의 병원 번호가 같은지 확인했습니다. 
+- ServletRequest을 통해 토큰의 병원 번호를 꺼냅니다. 그리고 프론트 엔드에서 수정 요청한 병원 번호와 DB의 병원 번호가 같은지 확인했습니다. 
 
 </br>
 
