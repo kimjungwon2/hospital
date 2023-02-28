@@ -50,7 +50,6 @@ public class ManagerHospitalAdditionalInfoServiceImpl implements ManagerHospital
     @Override
     public void deleteHospitalAdditionalInfo(
             ServletRequest servletRequest,
-            Long memberId,
             Long hosAdditionalInfoId
     ) {
         hospitalAdditionalInfoRepository.findById(hosAdditionalInfoId)

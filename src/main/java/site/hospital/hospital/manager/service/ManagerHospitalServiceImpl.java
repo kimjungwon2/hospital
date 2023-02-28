@@ -195,7 +195,6 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
     @Override
     public void deleteDetailedHospitalInfo(
             ServletRequest servletRequest,
-            Long memberId,
             Long detailedHosInfoId
     ) {
         DetailedHosInformation detailedHosInformation = hospitalDetailedInfoRepository

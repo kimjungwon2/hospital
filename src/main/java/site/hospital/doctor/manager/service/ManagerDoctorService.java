@@ -12,7 +12,7 @@ public interface ManagerDoctorService {
             DoctorManagerCreateRequest request
     );
 
-    void deleteDoctor(ServletRequest servletRequest, Long memberId, Long doctorId);
+    void deleteDoctor(ServletRequest servletRequest, Long doctorId);
 
     Long modifyDoctor(
             Long doctorId,

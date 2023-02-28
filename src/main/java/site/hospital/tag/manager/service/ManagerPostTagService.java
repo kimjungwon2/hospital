@@ -21,7 +21,6 @@ public interface ManagerPostTagService {
 
     void managerDeletePostTag(
             ServletRequest servletRequest,
-            Long memberId,
             Long postTagId
     );
 

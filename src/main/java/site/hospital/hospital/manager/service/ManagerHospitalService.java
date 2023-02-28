@@ -35,7 +35,6 @@ public interface ManagerHospitalService {
 
     void deleteDetailedHospitalInfo(
             ServletRequest servletRequest,
-            Long memberId,
             Long detailedHosInfoId
     );
 

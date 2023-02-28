@@ -58,7 +58,6 @@ public class ManagerPostTagServiceImpl implements ManagerPostTagService {
     @Override
     public void managerDeletePostTag(
             ServletRequest servletRequest,
-            Long memberId,
             Long postTagId
     ) {
         PostTag postTag = postTagRepository.findById(postTagId)

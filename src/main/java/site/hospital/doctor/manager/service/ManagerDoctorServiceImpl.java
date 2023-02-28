@@ -47,7 +47,7 @@ public class ManagerDoctorServiceImpl implements ManagerDoctorService {
 
     @Transactional
     @Override
-    public void deleteDoctor(ServletRequest servletRequest, Long memberId, Long doctorId) {
+    public void deleteDoctor(ServletRequest servletRequest, Long doctorId) {
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
         managerJwtService.accessManager(servletRequest, hospital.getId());
         doctorRepository.deleteById(doctorId);
