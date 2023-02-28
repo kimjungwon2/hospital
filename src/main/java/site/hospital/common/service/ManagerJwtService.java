@@ -7,7 +7,7 @@ public interface ManagerJwtService {
 
     void accessManager(
             ServletRequest servletRequest,
-            Long requestHospitalId
+            Long hospitalIdRequest
     );
 
     Long getHospitalNumber(ServletRequest servletRequest);

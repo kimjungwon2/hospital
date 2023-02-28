@@ -24,13 +24,13 @@ public class ManagerJwtServiceImpl implements ManagerJwtService {
 
     public void accessManager(
             ServletRequest servletRequest,
-            Long requestHospitalId
+            Long hospitalIdRequest
     ) {
         Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
         if (confirmAdmin(hospitalNumberInJwt)) {
             throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
-        } else if (confirmMatchHospitalNumber(requestHospitalId, hospitalNumberInJwt)) {
+        } else if (confirmMatchHospitalNumber(hospitalIdRequest, hospitalNumberInJwt)) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
