@@ -1,11 +1,11 @@
-package site.hospital.hospital.manager.api.dto;
+package site.hospital.hospital.manager.api.dto.view;
 
 import lombok.Data;
 import site.hospital.estimation.user.domain.Estimation;
 import site.hospital.estimation.user.domain.EstimationList;
 
 @Data
-public class StaffHospitalEstimationDTO {
+public class ManagerHospitalViewEstimationDTO {
 
     private Long estimationId;
 
@@ -14,7 +14,7 @@ public class StaffHospitalEstimationDTO {
     private String distinctionGrade;
     private EstimationList estimationList;
 
-    public StaffHospitalEstimationDTO(Estimation estimation) {
+    public ManagerHospitalViewEstimationDTO(Estimation estimation) {
         this.estimationId = estimation.getId();
         this.city = estimation.getCityName();
         this.hospitalName = estimation.getHospitalName();

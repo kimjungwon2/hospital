@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.common.service.ManagerJwtService;
-import site.hospital.hospital.manager.api.dto.StaffModifyStaffHosRequest;
+import site.hospital.hospital.manager.api.dto.ManagerModifyStaffHosRequest;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.hospital.user.domain.StaffHosInformation;
 import site.hospital.hospital.user.repository.HospitalAdditionalInfoRepository;
@@ -26,7 +26,7 @@ public class ManagerHospitalAdditionalInfoServiceImpl implements ManagerHospital
     public void modifyHospitalAdditionalInfo(
             ServletRequest servletRequest,
             Long hosAdditionalInfoId,
-            StaffModifyStaffHosRequest request
+            ManagerModifyStaffHosRequest request
     ) {
         StaffHosInformation hospitalAdditionalInfo = hospitalAdditionalInfoRepository.findById(hosAdditionalInfoId)
                 .orElseThrow(

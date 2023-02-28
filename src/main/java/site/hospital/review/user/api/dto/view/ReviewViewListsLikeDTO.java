@@ -1,4 +1,4 @@
-package site.hospital.review.user.api.dto.viewLists;
+package site.hospital.review.user.api.dto.view;
 
 import lombok.Data;
 import site.hospital.review.user.domain.ReviewLike;

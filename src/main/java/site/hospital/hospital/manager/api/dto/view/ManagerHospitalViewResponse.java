@@ -1,14 +1,15 @@
-package site.hospital.hospital.admin.repository.dto;
+package site.hospital.hospital.manager.api.dto.view;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Data;
+import org.springframework.util.Assert;
 import site.hospital.hospital.user.domain.BusinessCondition;
 import site.hospital.hospital.user.domain.Hospital;
 
 @Data
-public class AdminHospitalView {
+public class ManagerHospitalViewResponse {
 
     private Long hospitalId;
 
@@ -21,8 +22,6 @@ public class AdminHospitalView {
     private String cityName;
 
     private Long detailedHosInfoId;
-    private Long staffHosInfoId;
-    private Long thumbnailId;
 
     private Integer numberHealthcareProvider;
     private Integer numberWard;
@@ -35,12 +34,18 @@ public class AdminHospitalView {
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    private List<AdminHospitalTagDTO> hospitalTags;
-    private List<AdminReviewHospitalDTO> reviewHospitals;
-    private List<AdminHospitalEstimationDTO> estimations;
+    private Long staffHosInfoId;
+    private Long thumbnailId;
 
-    public AdminHospitalView(Hospital hospital, Long detailedHosInfoId, Long staffHosInfoId,
-            Long thumbnailId) {
+    private List<ManagerHospitalViewTagDTO> hospitalTags;
+    private List<ManagerHospitalViewEstimationDTO> estimations;
+
+    private ManagerHospitalViewResponse(
+            Hospital hospital,
+            Long detailedHosInfoId,
+            Long staffHosInfoId,
+            Long hospitalThumbnailId
+    ) {
         this.hospitalId = hospital.getId();
         this.licensingDate = hospital.getLicensingDate();
         this.hospitalName = hospital.getHospitalName();
@@ -51,6 +56,8 @@ public class AdminHospitalView {
         this.cityName = hospital.getCityName();
 
         if (detailedHosInfoId != null) {
+            Assert.notNull(hospital.getDetailedHosInformation(),"detailedHosInfo must be provided");
+
             this.detailedHosInfoId = hospital.getDetailedHosInformation().getId();
             this.numberHealthcareProvider = hospital.getDetailedHosInformation()
                     .getNumberHealthcareProvider();
@@ -70,21 +77,40 @@ public class AdminHospitalView {
             this.longitude = hospital.getDetailedHosInformation().getHospitalLocation()
                     .getLongitude();
         }
+
         if (staffHosInfoId != null) {
+            Assert.notNull(hospital.getStaffHosInformation(),"hosAdditionalInfo must be provided");
+
             this.staffHosInfoId = hospital.getStaffHosInformation().getId();
         }
 
-        if (thumbnailId != null) {
+        if (hospitalThumbnailId != null) {
+            Assert.notNull(hospital.getHospitalThumbnail(),"thumbnail must be provided");
+
             this.thumbnailId = hospital.getHospitalThumbnail().getId();
         }
 
-        this.hospitalTags = hospital.getPostTags().stream().map(h -> new AdminHospitalTagDTO(h))
+        this.hospitalTags = hospital
+                .getPostTags()
+                .stream()
+                .map(h -> new ManagerHospitalViewTagDTO(h))
                 .collect(Collectors.toList());
-        this.reviewHospitals = hospital.getReviewHospitals().stream()
-                .map(r -> new AdminReviewHospitalDTO(r))
+
+        this.estimations = hospital
+                .getEstimations()
+                .stream()
+                .map(e -> new ManagerHospitalViewEstimationDTO(e))
                 .collect(Collectors.toList());
-        this.estimations = hospital.getEstimations().stream()
-                .map(e -> new AdminHospitalEstimationDTO(e))
-                .collect(Collectors.toList());
+    }
+
+    public static ManagerHospitalViewResponse from(
+            Hospital hospital,
+            Long detailedHosInfoId,
+            Long staffHosInfoId,
+            Long hospitalThumbnailId
+    ){
+        Assert.notNull(hospital,"hospital must be provided");
+
+        return new ManagerHospitalViewResponse(hospital,detailedHosInfoId, staffHosInfoId, hospitalThumbnailId);
     }
 }

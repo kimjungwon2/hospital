@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.review.admin.repository.dto.AdminReviewSearchCondition;
-import site.hospital.review.user.api.dto.searchReviews.ReviewSearchListsResponse;
+import site.hospital.review.user.api.dto.search.ReviewSearchListsResponse;
 import site.hospital.review.user.domain.Review;
 import site.hospital.review.user.domain.ReviewAuthentication;
 import site.hospital.review.user.repository.ReviewRepository;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hospital.common.service.ManagerJwtService;
 import site.hospital.doctor.manager.domain.Doctor;
-import site.hospital.hospital.manager.api.dto.ManagerHospitalView;
+import site.hospital.hospital.manager.api.dto.view.ManagerHospitalViewResponse;
 import site.hospital.hospital.manager.api.dto.ManagerModifyHospitalRequest;
 import site.hospital.hospital.user.api.dto.HospitalManagerCreateDetailHosInfoRequest;
 import site.hospital.hospital.user.api.dto.HospitalManagerCreateHosAdditionalInfoRequest;
@@ -54,7 +54,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
     }
 
     @Override
-    public ManagerHospitalView viewHospital(ServletRequest servletRequest) {
+    public ManagerHospitalViewResponse viewHospital(ServletRequest servletRequest) {
         Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
         Hospital hospital = hospitalRepository.viewHospital(JwtHospitalId);
 
@@ -62,14 +62,14 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
         Long hosAdditionalInfoId = checkNullHospitalAdditionalInfo(hospital);
         Long hospitalThumbnailId = checkNullHospitalThumbnail(hospital);
 
-        ManagerHospitalView managerHospitalView =
-                new ManagerHospitalView(
+        ManagerHospitalViewResponse managerHospitalViewResponse =
+                ManagerHospitalViewResponse.from(
                         hospital,
                         detailedHosId,
                         hosAdditionalInfoId,
                         hospitalThumbnailId);
 
-        return managerHospitalView;
+        return managerHospitalViewResponse;
     }
 
     @Transactional

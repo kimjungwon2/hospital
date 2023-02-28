@@ -1,4 +1,4 @@
-package site.hospital.hospital.admin.repository.dto.hospitalAdditionalInfo;
+package site.hospital.hospital.admin.repository.dto.additionalinfo;
 
 import lombok.Data;
 

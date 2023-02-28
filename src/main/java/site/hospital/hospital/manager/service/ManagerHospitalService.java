@@ -2,7 +2,7 @@ package site.hospital.hospital.manager.service;
 
 import java.util.List;
 import javax.servlet.ServletRequest;
-import site.hospital.hospital.manager.api.dto.ManagerHospitalView;
+import site.hospital.hospital.manager.api.dto.view.ManagerHospitalViewResponse;
 import site.hospital.hospital.manager.api.dto.ManagerModifyHospitalRequest;
 import site.hospital.hospital.user.api.dto.HospitalManagerCreateDetailHosInfoRequest;
 import site.hospital.hospital.user.api.dto.HospitalManagerCreateHosAdditionalInfoRequest;
@@ -15,7 +15,7 @@ public interface ManagerHospitalService {
 
     List<HospitalViewImageResponse> viewHospitalImages(Long hospitalId);
 
-    ManagerHospitalView viewHospital(ServletRequest servletRequest);
+    ManagerHospitalViewResponse viewHospital(ServletRequest servletRequest);
 
     HospitalResponse modifyHospital(
             ServletRequest servletRequest,

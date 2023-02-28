@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.hospital.admin.service.AdminHospitalAdditionalInfoService;
 import site.hospital.hospital.user.api.dto.additionalinfo.HospitalAdditionalInfoViewResponse;
-import site.hospital.hospital.admin.repository.dto.hospitalAdditionalInfo.AdminModifyStaffHosRequest;
+import site.hospital.hospital.admin.repository.dto.additionalinfo.AdminModifyStaffHosRequest;
 import site.hospital.hospital.user.service.HospitalAdditionalInfoService;
 
 @RestController

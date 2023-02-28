@@ -1,7 +1,7 @@
 package site.hospital.hospital.manager.service;
 
 import javax.servlet.ServletRequest;
-import site.hospital.hospital.manager.api.dto.StaffModifyStaffHosRequest;
+import site.hospital.hospital.manager.api.dto.ManagerModifyStaffHosRequest;
 
 
 public interface ManagerHospitalAdditionalInfoService {
@@ -9,7 +9,7 @@ public interface ManagerHospitalAdditionalInfoService {
     void modifyHospitalAdditionalInfo(
             ServletRequest servletRequest,
             Long hosAdditionalInfoId,
-            StaffModifyStaffHosRequest request
+            ManagerModifyStaffHosRequest request
     );
 
     void deleteHospitalAdditionalInfo(

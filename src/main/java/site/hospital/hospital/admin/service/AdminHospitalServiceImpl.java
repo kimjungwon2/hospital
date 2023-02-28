@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.doctor.manager.domain.Doctor;
 import site.hospital.estimation.admin.repository.EstimationRepository;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalSearchCondition;
-import site.hospital.hospital.admin.repository.dto.AdminHospitalView;
+import site.hospital.hospital.admin.repository.dto.view.AdminHospitalView;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.admin.repository.search.AdminHospitalSearchRepository;
 import site.hospital.hospital.admin.repository.search.AdminHospitalSearchSelectQuery;

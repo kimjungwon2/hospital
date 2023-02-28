@@ -14,8 +14,13 @@ public class ManagerSearchReviewDTO {
     private Long likeNumber;
 
     @QueryProjection
-    public ManagerSearchReviewDTO(Long reviewId, ReviewAuthentication reviewAuthentication,
-            String memberIdName, String nickName, Long likeNumber) {
+    public ManagerSearchReviewDTO(
+            Long reviewId,
+            ReviewAuthentication reviewAuthentication,
+            String memberIdName,
+            String nickName,
+            Long likeNumber
+    ) {
         this.reviewId = reviewId;
         this.reviewAuthentication = reviewAuthentication;
         this.memberIdName = memberIdName;

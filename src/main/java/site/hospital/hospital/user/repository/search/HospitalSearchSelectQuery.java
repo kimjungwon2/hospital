@@ -19,10 +19,14 @@ public class HospitalSearchSelectQuery {
     private List<HospitalSearchReviewHospitalDTO> reviewHospitals;
 
     @QueryProjection
-    public HospitalSearchSelectQuery(Long hospitalId, String hospitalName, String imageKey,
+    public HospitalSearchSelectQuery(
+            Long hospitalId,
+            String hospitalName,
+            String imageKey,
             BusinessCondition businessCondition,
             String medicalSubjectInformation,
-            String roadBaseAddress) {
+            String roadBaseAddress
+    ) {
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;
         this.imageKey = imageKey;

@@ -1,15 +1,15 @@
-package site.hospital.hospital.manager.api.dto;
+package site.hospital.hospital.manager.api.dto.view;
 
 import lombok.Data;
 import site.hospital.tag.manager.domain.PostTag;
 
 @Data
-public class StaffHospitalTagDTO {
+public class ManagerHospitalViewTagDTO {
 
     private Long postTagId;
     private String tagName;
 
-    public StaffHospitalTagDTO(PostTag postTag) {
+    public ManagerHospitalViewTagDTO(PostTag postTag) {
         this.postTagId = postTag.getId();
         this.tagName = postTag.getTag().getName();
     }

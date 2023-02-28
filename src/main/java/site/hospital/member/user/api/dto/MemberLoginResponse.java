@@ -14,9 +14,12 @@ public class MemberLoginResponse {
     private final MemberStatus memberStatus;
     private final String token;
 
-    public static MemberLoginResponse from(Long memberId, String nickName,
+    public static MemberLoginResponse from(
+            Long memberId,
+            String nickName,
             MemberStatus memberStatus,
-            String token) {
+            String token
+    ) {
         return MemberLoginResponse
                 .builder()
                 .memberId(memberId)

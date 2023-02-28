@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.Assert;
 import site.hospital.bookmark.user.domain.Bookmark;
 import site.hospital.hospital.user.domain.BusinessCondition;
 
@@ -22,6 +23,9 @@ public class BookmarkSearchResponse {
     private final LocalDateTime createTime;
 
     public static BookmarkSearchResponse from(Bookmark bookmark) {
+        Assert.notNull(bookmark.getHospital(),"hospital must be provided");
+        Assert.notNull(bookmark.getMember(),"member must be provided");
+
         return BookmarkSearchResponse
                 .builder()
                 .bookmarkId(bookmark.getId())

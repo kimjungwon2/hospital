@@ -1,11 +1,9 @@
-package site.hospital.hospital.manager.api.dto;
+package site.hospital.hospital.admin.repository.dto.additionalinfo;
 
 import lombok.Data;
 
 @Data
-public class StaffModifyStaffHosRequest {
-
-    private Long memberId;
+public class AdminModifyStaffHosRequest{
     private String introduction;
     private String consultationHour;
     private String abnormality;

@@ -1,4 +1,4 @@
-package site.hospital.hospital.admin.repository.dto;
+package site.hospital.hospital.admin.repository.dto.view;
 
 import lombok.Data;
 import site.hospital.estimation.user.domain.Estimation;

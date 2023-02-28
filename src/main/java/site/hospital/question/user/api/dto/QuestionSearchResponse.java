@@ -3,6 +3,7 @@ package site.hospital.question.user.api.dto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.Assert;
 import site.hospital.question.user.domain.Question;
 
 @Data
@@ -17,6 +18,7 @@ public class QuestionSearchResponse {
     private final String answerContent;
 
     public static QuestionSearchResponse from(Question question) {
+        Assert.notNull(question.getMember(),"member must be provided");
 
         if (question.getAnswer() != null) {
             return QuestionSearchResponse

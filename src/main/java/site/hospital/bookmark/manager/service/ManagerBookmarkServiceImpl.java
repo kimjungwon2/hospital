@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.bookmark.user.api.dto.BookmarkAdminSearchMemberResponse;
+import site.hospital.bookmark.admin.api.dto.BookmarkAdminSearchMemberResponse;
 import site.hospital.bookmark.user.domain.Bookmark;
 import site.hospital.bookmark.user.repository.BookmarkRepository;
 import site.hospital.bookmark.user.repository.dto.ManagerBookmarkSearchCondition;

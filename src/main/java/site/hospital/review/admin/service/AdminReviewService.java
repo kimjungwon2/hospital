@@ -2,7 +2,7 @@ package site.hospital.review.admin.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import site.hospital.review.user.api.dto.searchReviews.ReviewSearchListsResponse;
+import site.hospital.review.user.api.dto.search.ReviewSearchListsResponse;
 import site.hospital.review.user.domain.ReviewAuthentication;
 
 public interface AdminReviewService {

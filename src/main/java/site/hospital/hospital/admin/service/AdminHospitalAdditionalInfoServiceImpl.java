@@ -3,7 +3,7 @@ package site.hospital.hospital.admin.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hospital.hospital.admin.repository.dto.hospitalAdditionalInfo.AdminModifyStaffHosRequest;
+import site.hospital.hospital.admin.repository.dto.additionalinfo.AdminModifyStaffHosRequest;
 import site.hospital.hospital.user.domain.Hospital;
 import site.hospital.hospital.user.domain.StaffHosInformation;
 import site.hospital.hospital.user.repository.HospitalAdditionalInfoRepository;

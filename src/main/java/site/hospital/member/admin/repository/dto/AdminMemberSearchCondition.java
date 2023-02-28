@@ -19,10 +19,16 @@ public class AdminMemberSearchCondition {
     private Long hospitalNumber;
 
     @Builder
-    public AdminMemberSearchCondition(String allSearch, Long memberId, String memberIdName,
-            String nickName, String userName,
-            String phoneNumber, MemberStatus memberStatus,
-            Long hospitalNumber) {
+    public AdminMemberSearchCondition(
+            String allSearch,
+            Long memberId,
+            String memberIdName,
+            String nickName,
+            String userName,
+            String phoneNumber,
+            MemberStatus memberStatus,
+            Long hospitalNumber
+    ) {
         this.allSearch = allSearch;
         this.memberId = memberId;
         this.memberIdName = memberIdName;

@@ -1,4 +1,4 @@
-package site.hospital.review.user.api.dto.searchReviews;
+package site.hospital.review.user.api.dto.search;
 
 import lombok.Data;
 import site.hospital.review.user.domain.reviewHospital.ReviewHospital;

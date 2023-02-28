@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.review.manager.service.ManagerReviewService;
-import site.hospital.review.user.api.dto.searchReviews.ReviewSearchListsResponse;
-import site.hospital.review.user.api.dto.viewDetail.ReviewViewDetailResponse;
+import site.hospital.review.user.api.dto.search.ReviewSearchListsResponse;
+import site.hospital.review.user.api.dto.detail.ReviewViewDetailResponse;
 import site.hospital.review.user.service.ReviewService;
 
 @RestController

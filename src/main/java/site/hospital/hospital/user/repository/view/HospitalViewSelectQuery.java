@@ -41,7 +41,8 @@ public class HospitalViewSelectQuery {
     private List<HospitalViewImagesDTO> hospitalImages;
 
     @QueryProjection
-    public HospitalViewSelectQuery(Long hospitalId,
+    public HospitalViewSelectQuery(
+            Long hospitalId,
             Long detailedHosId,
             Long staffHosInfoId,
             Long hospitalThumbnailId,

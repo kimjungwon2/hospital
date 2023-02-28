@@ -1,4 +1,4 @@
-package site.hospital.review.user.api.dto;
+package site.hospital.review.admin.api.dto;
 
 import lombok.Data;
 import site.hospital.review.user.domain.ReviewAuthentication;

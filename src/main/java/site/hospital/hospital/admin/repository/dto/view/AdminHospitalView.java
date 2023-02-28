@@ -1,14 +1,15 @@
-package site.hospital.hospital.manager.api.dto;
+package site.hospital.hospital.admin.repository.dto.view;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Data;
+import org.springframework.util.Assert;
 import site.hospital.hospital.user.domain.BusinessCondition;
 import site.hospital.hospital.user.domain.Hospital;
 
 @Data
-public class ManagerHospitalView {
+public class AdminHospitalView {
 
     private Long hospitalId;
 
@@ -21,6 +22,8 @@ public class ManagerHospitalView {
     private String cityName;
 
     private Long detailedHosInfoId;
+    private Long staffHosInfoId;
+    private Long thumbnailId;
 
     private Integer numberHealthcareProvider;
     private Integer numberWard;
@@ -33,17 +36,15 @@ public class ManagerHospitalView {
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    private Long staffHosInfoId;
-    private Long thumbnailId;
+    private List<AdminHospitalTagDTO> hospitalTags;
+    private List<AdminReviewHospitalDTO> reviewHospitals;
+    private List<AdminHospitalEstimationDTO> estimations;
 
-    private List<StaffHospitalTagDTO> hospitalTags;
-    private List<StaffHospitalEstimationDTO> estimations;
-
-    public ManagerHospitalView(
+    public AdminHospitalView(
             Hospital hospital,
             Long detailedHosInfoId,
             Long staffHosInfoId,
-            Long hospitalThumbnailId
+            Long thumbnailId
     ) {
         this.hospitalId = hospital.getId();
         this.licensingDate = hospital.getLicensingDate();
@@ -55,6 +56,8 @@ public class ManagerHospitalView {
         this.cityName = hospital.getCityName();
 
         if (detailedHosInfoId != null) {
+            Assert.notNull(hospital.getDetailedHosInformation(),"detailedHosInfo must be provided");
+
             this.detailedHosInfoId = hospital.getDetailedHosInformation().getId();
             this.numberHealthcareProvider = hospital.getDetailedHosInformation()
                     .getNumberHealthcareProvider();
@@ -76,17 +79,33 @@ public class ManagerHospitalView {
         }
 
         if (staffHosInfoId != null) {
+            Assert.notNull(hospital.getStaffHosInformation(),"hosAdditionalInfo must be provided");
+
             this.staffHosInfoId = hospital.getStaffHosInformation().getId();
         }
 
-        if (hospitalThumbnailId != null) {
+        if (thumbnailId != null) {
+            Assert.notNull(hospital.getHospitalThumbnail(),"thumbnail must be provided");
+
             this.thumbnailId = hospital.getHospitalThumbnail().getId();
         }
 
-        this.hospitalTags = hospital.getPostTags().stream().map(h -> new StaffHospitalTagDTO(h))
+        this.hospitalTags = hospital
+                .getPostTags()
+                .stream()
+                .map(h -> new AdminHospitalTagDTO(h))
                 .collect(Collectors.toList());
-        this.estimations = hospital.getEstimations().stream()
-                .map(e -> new StaffHospitalEstimationDTO(e))
+
+        this.reviewHospitals = hospital
+                .getReviewHospitals()
+                .stream()
+                .map(r -> new AdminReviewHospitalDTO(r))
+                .collect(Collectors.toList());
+
+        this.estimations = hospital
+                .getEstimations()
+                .stream()
+                .map(e -> new AdminHospitalEstimationDTO(e))
                 .collect(Collectors.toList());
     }
 }

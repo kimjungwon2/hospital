@@ -1,6 +1,7 @@
-package site.hospital.review.user.api.dto.viewDetail;
+package site.hospital.review.user.api.dto.detail;
 
 import lombok.Data;
+import org.springframework.util.Assert;
 import site.hospital.review.user.domain.reviewHospital.EvaluationCriteria;
 import site.hospital.review.user.domain.reviewHospital.Recommendation;
 import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
@@ -15,6 +16,8 @@ public class ReviewViewDetailHospitalDTO {
     EvaluationCriteria evaluationCriteria;
 
     public ReviewViewDetailHospitalDTO(ReviewHospital reviewHospital) {
+        Assert.notNull(reviewHospital.getHospital(),"hospital must be provided");
+
         this.hospitalName = reviewHospital.getHospital().getHospitalName();
         this.medicalSubjectInformation = reviewHospital.getHospital()
                 .getMedicalSubjectInformation();

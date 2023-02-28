@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.hospital.hospital.manager.api.dto.StaffModifyStaffHosRequest;
+import site.hospital.hospital.manager.api.dto.ManagerModifyStaffHosRequest;
 import site.hospital.hospital.manager.service.ManagerHospitalAdditionalInfoService;
 import site.hospital.hospital.user.api.dto.additionalinfo.HospitalAdditionalInfoViewResponse;
 import site.hospital.hospital.user.service.HospitalAdditionalInfoService;
@@ -33,7 +33,7 @@ public class ManagerHospitalAdditionalInfoController {
     public void managerModifyHosAdditionalInfo(
             ServletRequest servletRequest,
             @PathVariable("staffHosId") Long staffHosId,
-            @RequestBody @Validated StaffModifyStaffHosRequest request
+            @RequestBody @Validated ManagerModifyStaffHosRequest request
     ) {
         managerHospitalAdditionalInfoService.modifyHospitalAdditionalInfo(servletRequest, staffHosId, request);
     }

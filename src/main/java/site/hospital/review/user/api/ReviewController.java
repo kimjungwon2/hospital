@@ -20,8 +20,8 @@ import site.hospital.review.user.api.dto.ReviewCreateRequest;
 import site.hospital.review.user.api.dto.ReviewCreateResponse;
 import site.hospital.review.user.api.dto.ReviewLikeButtonRequest;
 import site.hospital.review.user.api.dto.member.ReviewViewByMemberResponse;
-import site.hospital.review.user.api.dto.viewDetail.ReviewViewDetailResponse;
-import site.hospital.review.user.api.dto.viewLists.ReviewViewListsResponse;
+import site.hospital.review.user.api.dto.detail.ReviewViewDetailResponse;
+import site.hospital.review.user.api.dto.view.ReviewViewListsResponse;
 import site.hospital.review.user.repository.search.ReviewSearchSelectQuery;
 import site.hospital.review.user.service.ReviewService;
 

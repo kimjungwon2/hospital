@@ -1,6 +1,6 @@
 package site.hospital.hospital.admin.service;
 
-import site.hospital.hospital.admin.repository.dto.hospitalAdditionalInfo.AdminModifyStaffHosRequest;
+import site.hospital.hospital.admin.repository.dto.additionalinfo.AdminModifyStaffHosRequest;
 
 
 public interface AdminHospitalAdditionalInfoService {

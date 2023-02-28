@@ -1,8 +1,9 @@
-package site.hospital.bookmark.user.api.dto;
+package site.hospital.bookmark.admin.api.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.Assert;
 import site.hospital.bookmark.user.domain.Bookmark;
 
 @Data
@@ -15,6 +16,8 @@ public class BookmarkAdminSearchMemberResponse {
     private final String phoneNumber;
 
     public static BookmarkAdminSearchMemberResponse from(Bookmark bookmark) {
+        Assert.notNull(bookmark.getMember(),"member must be provided");
+
         return BookmarkAdminSearchMemberResponse
                 .builder()
                 .bookmarkId(bookmark.getId())

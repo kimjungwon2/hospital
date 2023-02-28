@@ -11,7 +11,11 @@ public class ManagerBookmarkSearchCondition {
     private String phoneNumber;
 
     @Builder
-    public ManagerBookmarkSearchCondition(String nickName, String phoneNumber, String memberIdName) {
+    public ManagerBookmarkSearchCondition(
+            String nickName,
+            String phoneNumber,
+            String memberIdName
+    ) {
         this.nickName = nickName;
         this.memberIdName = memberIdName;
         this.phoneNumber = phoneNumber;
