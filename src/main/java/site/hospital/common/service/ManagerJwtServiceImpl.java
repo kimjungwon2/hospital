@@ -13,43 +13,28 @@ import site.hospital.common.jwt.TokenProvider;
 import site.hospital.member.user.domain.Authorization;
 import site.hospital.member.user.domain.MemberAuthority;
 import site.hospital.member.user.repository.MemberRepository;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ManagerJwtServiceImpl implements ManagerJwtService {
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final Logger logger = LoggerFactory.getLogger(ManagerJwtService.class);
     private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
 
-    @Override
     public void accessManager(
             ServletRequest servletRequest,
-            Long memberId,
-            Long existingHospitalId
+            Long requestHospitalId
     ) {
+        Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
-        Long HospitalIdInJwt = getHospitalNumberInJwt(servletRequest);
-
-        MemberAuthority ManagerAuthority = memberRepository
-                .findManagerAuthority(memberId, Authorization.ROLE_MANAGER);
-
-        if (checkMangerAuthorityNull(ManagerAuthority)) {
-            throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");
-        } else if(checkAdminAuthority(ManagerAuthority)) {
+        if (confirmAdmin(hospitalNumberInJwt)) {
             throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
-        }
-        else if (confirmHosNumMatch(HospitalIdInJwt, ManagerAuthority)) {
-            throw new AccessDeniedException("토큰 번호와 권한 번호가 일치하지 않습니다.");
-        }
-        else if (mismatchHosNumAccess(existingHospitalId, ManagerAuthority)) {
+        } else if (confirmMatchHospitalNumber(requestHospitalId, hospitalNumberInJwt)) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
 
-    @Override
     public Long getHospitalNumber(ServletRequest servletRequest) {
         Long JwtHospitalId = getHospitalNumberInJwt(servletRequest);
 
@@ -90,19 +75,12 @@ public class ManagerJwtServiceImpl implements ManagerJwtService {
         return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ");
     }
 
-    private boolean mismatchHosNumAccess(Long existingHospitalId, MemberAuthority ManagerAuthority) {
-        return ManagerAuthority.getHospitalNo() != existingHospitalId;
+    private boolean confirmAdmin(Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(0L);
     }
 
-    private boolean confirmHosNumMatch(Long HospitalIdInJwt, MemberAuthority ManagerAuthority) {
-        return HospitalIdInJwt != ManagerAuthority.getHospitalNo();
+    private boolean confirmMatchHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(hospitalId)? false: true;
     }
 
-    private boolean checkAdminAuthority(MemberAuthority ManagerAuthority) {
-        return ManagerAuthority.getHospitalNo() == 0;
-    }
-
-    private boolean checkMangerAuthorityNull(MemberAuthority ManagerAuthority) {
-        return ManagerAuthority == null;
-    }
 }

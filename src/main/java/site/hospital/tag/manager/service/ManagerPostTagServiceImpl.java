@@ -34,7 +34,7 @@ public class ManagerPostTagServiceImpl implements ManagerPostTagService {
             ServletRequest servletRequest,
             PostTagStaffLinkTagRequest request
     ) {
-        managerJwtService.accessManager(servletRequest, request.getMemberId(), request.getHospitalId());
+        managerJwtService.accessManager(servletRequest, request.getHospitalId());
 
         Tag tag = tagRepository.findById(request.getTagId())
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
@@ -64,7 +64,7 @@ public class ManagerPostTagServiceImpl implements ManagerPostTagService {
         PostTag postTag = postTagRepository.findById(postTagId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 연결 태그가 존재하지 않습니다."));
 
-        managerJwtService.accessManager(servletRequest, memberId, postTag.getHospital().getId());
+        managerJwtService.accessManager(servletRequest, postTag.getHospital().getId());
 
         postTagRepository.deleteById(postTagId);
     }

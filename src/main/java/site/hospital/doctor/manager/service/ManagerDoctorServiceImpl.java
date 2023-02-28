@@ -33,8 +33,7 @@ public class ManagerDoctorServiceImpl implements ManagerDoctorService {
     ) {
         Hospital hospital = checkEmptyHospitalAdditionalInfo(request);
 
-        managerJwtService
-                .accessManager(servletRequest, request.getMemberId(), hospital.getId());
+        managerJwtService.accessManager(servletRequest, hospital.getId());
 
         StaffHosInformation hospitalAdditionalInfo = hospitalAdditionalInfoRepository
                 .findById(request.getHospitalAdditionalInfoId())
@@ -50,7 +49,7 @@ public class ManagerDoctorServiceImpl implements ManagerDoctorService {
     @Override
     public void deleteDoctor(ServletRequest servletRequest, Long memberId, Long doctorId) {
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
-        managerJwtService.accessManager(servletRequest, memberId, hospital.getId());
+        managerJwtService.accessManager(servletRequest, hospital.getId());
         doctorRepository.deleteById(doctorId);
     }
 
@@ -66,7 +65,7 @@ public class ManagerDoctorServiceImpl implements ManagerDoctorService {
 
         Hospital hospital = hospitalRepository.findByDoctorId(doctorId);
 
-        managerJwtService.accessManager(servletRequest, request.getMemberId(), hospital.getId());
+        managerJwtService.accessManager(servletRequest, hospital.getId());
 
         Doctor modifiedDoctor = Doctor
                 .builder()

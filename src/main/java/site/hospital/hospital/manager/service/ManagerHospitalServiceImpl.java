@@ -80,7 +80,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
             ManagerModifyHospitalRequest request
     ) {
         Long memberId = request.getMemberId();
-        managerJwtService.accessManager(servletRequest, memberId, hospitalId);
+        managerJwtService.accessManager(servletRequest, hospitalId);
 
         Hospital modifiedHospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
@@ -169,8 +169,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
             ServletRequest servletRequest,
             HospitalManagerCreateDetailHosInfoRequest request
     ) {
-        managerJwtService.accessManager(servletRequest, request.getMemberId(),
-                request.getHospitalId());
+        managerJwtService.accessManager(servletRequest, request.getHospitalId());
 
         Hospital hospital = hospitalRepository.findById(request.getHospitalId()).
                 orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
@@ -205,7 +204,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
 
         Hospital hospital = hospitalRepository.findByDetailedHosInformation(detailedHosInformation);
 
-        managerJwtService.accessManager(servletRequest, memberId, hospital.getId());
+        managerJwtService.accessManager(servletRequest, hospital.getId());
 
         deleteDetailedHosInfo(detailedHosInfoId, hospital);
     }
@@ -226,7 +225,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
             StaffHosInformation HospitalAdditionalInfo,
             List<Doctor> doctors
     ) {
-        managerJwtService.accessManager(servletRequest, memberId, hospitalId);
+        managerJwtService.accessManager(servletRequest, hospitalId);
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
@@ -246,7 +245,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
             StaffHosInformation staffHosInformation
     ) {
 
-        managerJwtService.accessManager(servletRequest, memberId, hospitalId);
+        managerJwtService.accessManager(servletRequest, hospitalId);
 
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 정보가 존재하지 않습니다."));
