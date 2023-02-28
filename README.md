@@ -107,51 +107,42 @@
 
  
  ### (3) 병원 번호 확인
-- '병원의 고유 번호(ex.5764)를 가진 사람이 어떻게 자신의 병원만 수정하게 할까?' 고심하던 중, 병원 관계자 계정이 URL을 이동할 때마다 doFilter로 병원 번호를 확인하는 쿼리를 매번 날리는 건 비효율적이라 생각했습니다. 
+- '병원의 고유 번호(ex.5764)를 가진 사람이 어떻게 자신의 병원만 수정하게 할까?' 고심하던 중, token payload의 정보를 가져올 생각을 했습니다.
 
-- 토큰의 병원 번호와 DB의 병원 번호가 일치하더라도 프론트단에서 수정하려는 병원 번호(pk)를 조작하면 그 병원의 정보 갱신이 가능해집니다. 이에 아래와 같이 설계했습니다.
+- 병원 MANAGER 권한을 갖은 계정이 클라이언트에서 수정하려는 병원 번호(pk)를 조작하면 다른 병원의 정보 갱신이 가능해집니다. 이에 아래와 같이 설계했습니다.
 
-![검증 확인](https://user-images.githubusercontent.com/40010165/203344171-fb2206bd-ba72-435b-a8a0-fbaefee656cb.png) 
+![병원 번호 검증](https://user-images.githubusercontent.com/40010165/221642895-6c21f57b-446a-46c2-b0cf-4e651019de0b.png)
  
 - 먼저 기존의 doFilter를 통해 Manager 권한을 부여하여, Manager 권한이 필요한 특정 URL에 매번 들어갈 수 있습니다. **(1차 검증)**
 
 - 병원 번호를 확인하는 메소드를 아래와 같이 만들었습니다. 병원 정보를 수정/삭제/추가하려는 경우, 자신이 관리하는 병원 번호인지 확인하기 위해 매번 확인 메소드를 넣었습니다. **(2차 검증)** 
 
     ~~~java
-    public void staffAccessFunction(ServletRequest servletRequest, Long memberId,
-            Long existingHospitalId) {
+    public void accessManager(
+            ServletRequest servletRequest,
+            Long hospitalId
+    ) {
+        Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
-        //servletRequest를 통해 토큰의 병원 번호를 가져옵니다.
-        Long JwtHospitalId = getJwtHospitalNumber(servletRequest);
-
-        //쿼리를 통해 DB속 멤버 권한의 병원 번호를 불러옵니다.
-        MemberAuthority findMemberManager = memberRepository
-                .findMemberStaffAuthority(memberId, Authorization.ROLE_MANAGER);
-                
-        //멤버 권한의 병원 번호가 null이면은 Manager 권한이 없다고 표시했습니다. 
-        if (findMemberManager == null) {
-            throw new AccessDeniedException("해당 멤버는 Manager 권한이 없습니다.");
-        }
-        /** MANAGER 권한이 아닌 ADMIN 권한은 병원 번호 default를 0으로 표시했습니다. 
-              그렇기에 0이 나오면 ADMIN 권한으로 판단했습니다. **/
-        else if (findMemberManager.getHospitalNo() == 0) {
+        if (confirmAdmin(hospitalNumberInJwt)) {
             throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
-        }
-        //토큰에서 불러온 병원 번호와 쿼리를 통해 불러온 병원 정보가 같지 않으면 인증 오류로 판단합니다. 
-        else if (JwtHospitalId != findMemberManager.getHospitalNo()) {
-            throw new AccessDeniedException("토큰 번호와 권한 번호가 일치하지 않습니다.");
-        }
-        /** 프론트 엔드에서 수정 요청한 병원 번호(PK)와 DB의 병원 번호가 같은지 확인했고, 
-          다르면 접근을 차단했습니다. **/
-        else if (findMemberManager.getHospitalNo() != existingHospitalId) {
+        } else if (confirmMatchHospitalNumber(hospitalId, hospitalNumberInJwt)) {
             throw new AccessDeniedException("자신의 병원 번호만 조작이 가능합니다.");
         }
     }
     
+    private boolean confirmAdmin(Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(0L);
+    }
 
-- ServletRequest을 통해 토큰의 병원 번호를 꺼냅니다. 그리고 멤버 권한의 병원 번호를 DB에서 찾는 쿼리를 날려서, 토큰의 병원 번호와 DB의 병원 번호가 같은지 확인했습니다.
+    private boolean confirmMatchHospitalNumber(Long hospitalId, Long hospitalNumberInJwt) {
+        return hospitalNumberInJwt.equals(hospitalId)? false: true;
+    }
+    
 
-- 프론트 엔드에서 수정 요청한 병원 번호(PK)와 DB의 병원 번호가 같은지 확인했습니다. 
+- ServletRequest을 통해 토큰의 병원 번호를 꺼냅니다. 그리고 프론트 엔드에서 수정 요청한 병원 번호와 DB의 병원 번호가 같은지 확인했습니다. 
+
+- MANAGER 권한이 아닌 ADMIN 권한은 병원 번호 default를 0으로 표시했습니다. 그렇기에 0이 나오면 ADMIN 권한으로 판단했습니다. 
 
 </br>
 

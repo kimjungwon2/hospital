@@ -67,13 +67,14 @@ public class ManagerHospitalController {
         return managerHospitalService.registerHosAdditionalInfo(servletRequest, request);
     }
 
+    //수정 예정
     @DeleteMapping("/staff/{memberId}/detailedHos/delete/{detailedHosInfoId}")
     public void managerDeleteDetailedHospitalInfo(
             ServletRequest servletRequest,
             @PathVariable("memberId") Long memberId,
             @PathVariable("detailedHosInfoId") Long detailedHosInfoId
     ) {
-        managerHospitalService.deleteDetailedHospitalInfo(servletRequest, memberId, detailedHosInfoId);
+        managerHospitalService.deleteDetailedHospitalInfo(servletRequest, detailedHosInfoId);
     }
 
     @PostMapping("/staff/hospital/register/thumbnail")
