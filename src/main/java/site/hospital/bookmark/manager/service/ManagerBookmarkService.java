@@ -16,59 +16,14 @@ import site.hospital.bookmark.user.repository.BookmarkRepository;
 import site.hospital.bookmark.user.repository.dto.ManagerBookmarkSearchCondition;
 import site.hospital.common.service.ManagerJwtService;
 
-@Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class ManagerBookmarkService {
+public interface ManagerBookmarkService {
 
-    private final ManagerJwtService managerJwtService;
-    private final BookmarkRepository bookmarkRepository;
-
-    public Page<Bookmark> managerSearchBookmarkUsers(
+    Page<Bookmark> managerSearchBookmarkUsers(
             ServletRequest servletRequest,
             String nickName,
             String memberIdName,
             String phoneNumber,
             Pageable pageable
-    ) {
-        Page<Bookmark> managerSearchBookmarkUsers = getManagerSearchBookmarkUsers(
-                                                servletRequest,
-                                                nickName,
-                                                memberIdName,
-                                                phoneNumber,
-                                                pageable);
+    );
 
-        List<BookmarkAdminSearchMemberResponse> content =
-                        managerSearchBookmarkUsers
-                        .stream()
-                        .map(b -> BookmarkAdminSearchMemberResponse.from(b))
-                        .collect(Collectors.toList());
-
-        Long totalAmount = managerSearchBookmarkUsers.getTotalElements();
-
-        return new PageImpl(content, pageable, totalAmount);
-    }
-
-    private Page<Bookmark> getManagerSearchBookmarkUsers(
-            ServletRequest servletRequest,
-            String nickName,
-            String memberIdName,
-            String phoneNumber,
-            Pageable pageable
-    ) {
-        ManagerBookmarkSearchCondition searchCondition =
-                ManagerBookmarkSearchCondition
-                        .builder()
-                        .nickName(nickName)
-                        .memberIdName(memberIdName)
-                        .phoneNumber(phoneNumber)
-                        .build();
-
-        Long hospitalId = managerJwtService.getHospitalNumber(servletRequest);
-
-        Page<Bookmark> findSearchBookmarkUsers = bookmarkRepository
-                .managerSearchBookmarkUsers(hospitalId, searchCondition, pageable);
-
-        return findSearchBookmarkUsers;
-    }
 }
