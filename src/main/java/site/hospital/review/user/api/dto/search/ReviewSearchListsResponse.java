@@ -10,7 +10,6 @@ import site.hospital.review.user.domain.Review;
 import site.hospital.review.user.domain.ReviewAuthentication;
 
 @Data
-@Builder(access = AccessLevel.PRIVATE)
 public class ReviewSearchListsResponse {
 
     private final Long reviewId;
