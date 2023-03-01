@@ -41,10 +41,10 @@ public class BookmarkServiceImpl implements BookmarkService {
                 .userCheckBookmark(request.getMemberId(), request.getHospitalId());
 
         if (checkBookmark(bookmark)) {
-            saveBookmark(request);
+            deleteBookmark(bookmark);
         }
         else {
-            deleteBookmark(bookmark);
+            saveBookmark(request);
         }
     }
 
@@ -79,10 +79,10 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     private boolean checkBookmark(Bookmark bookmark) {
 
-        boolean bookmarkPresence = true;
+        boolean bookmarkPresence = false;
 
         if (bookmark != null) {
-            bookmarkPresence = false;
+            bookmarkPresence = true;
         }
 
         return bookmarkPresence;
