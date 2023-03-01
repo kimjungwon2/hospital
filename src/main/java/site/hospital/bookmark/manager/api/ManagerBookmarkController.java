@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import site.hospital.bookmark.manager.service.ManagerBookmarkService;
+import site.hospital.bookmark.user.domain.Bookmark;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class ManagerBookmarkController {
     private final ManagerBookmarkService managerBookmarkService;
 
     @GetMapping("/staff/bookmark/search/user")
-    public Page managerSearchBookmarkUsers(ServletRequest servletRequest,
+    public Page<Bookmark> managerSearchBookmarkUsers(ServletRequest servletRequest,
             @RequestParam(value = "nickName", required = false) String nickName,
             @RequestParam(value = "memberIdName", required = false) String memberIdName,
             @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
