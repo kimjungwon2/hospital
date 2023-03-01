@@ -12,7 +12,7 @@ public class MultipartConfig {
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         //이미지 크기 50MB 제한
-        multipartResolver.setMaxUploadSize(50 * 1024 * 1024);
+        multipartResolver.setMaxUploadSize( (long)50 * 1024 * 1024);
         return multipartResolver;
     }
 }

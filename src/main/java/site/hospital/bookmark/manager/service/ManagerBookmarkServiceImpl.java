@@ -42,7 +42,7 @@ public class ManagerBookmarkServiceImpl implements ManagerBookmarkService {
         List<BookmarkAdminSearchMemberResponse> content =
                 managerSearchBookmarkUsers
                         .stream()
-                        .map(b -> BookmarkAdminSearchMemberResponse.from(b))
+                        .map(BookmarkAdminSearchMemberResponse::from)
                         .collect(Collectors.toList());
 
         Long totalAmount = managerSearchBookmarkUsers.getTotalElements();
@@ -67,9 +67,7 @@ public class ManagerBookmarkServiceImpl implements ManagerBookmarkService {
 
         Long hospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
-        Page<Bookmark> findSearchBookmarkUsers = bookmarkRepository
+        return bookmarkRepository
                 .managerSearchBookmarkUsers(hospitalId, searchCondition, pageable);
-
-        return findSearchBookmarkUsers;
     }
 }

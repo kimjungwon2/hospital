@@ -17,7 +17,7 @@ import org.springframework.web.filter.GenericFilterBean;
 @Component
 public class JwtFilter extends GenericFilterBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(GenericFilterBean.class);
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
@@ -42,7 +42,7 @@ public class JwtFilter extends GenericFilterBean {
         if (checkTokenValue(jwt) && tokenProvider.validateToken(jwt)) {
             injectAuthenticationInSecurityContextHolder(jwt);
         } else {
-            logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+            log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

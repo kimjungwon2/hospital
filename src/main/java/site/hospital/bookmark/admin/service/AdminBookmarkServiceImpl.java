@@ -23,7 +23,7 @@ public class AdminBookmarkServiceImpl implements AdminBookmarkService {
 
         return bookmarks
                 .stream()
-                .map(bookmark -> BookmarkSearchResponse.from(bookmark))
+                .map(BookmarkSearchResponse::from)
                 .collect(Collectors.toList());
     }
 }

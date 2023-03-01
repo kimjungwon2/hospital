@@ -40,7 +40,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         Bookmark checkBookmark = bookmarkRepository
                 .userCheckBookmark(request.getMemberId(), request.getHospitalId());
 
-        Boolean bookmarkExistence = bookmarkPresent(checkBookmark);
+        boolean bookmarkExistence = bookmarkPresent(checkBookmark);
 
         if (bookmarkExistence == true) {
             deleteBookmark(checkBookmark);

@@ -78,8 +78,10 @@ public class ManagerDoctorServiceImpl implements ManagerDoctorService {
         return doctor.getId();
     }
 
-    private Doctor saveDoctor(DoctorManagerCreateRequest request,
-            StaffHosInformation hospitalAdditionalInfo) {
+    private Doctor saveDoctor(
+            DoctorManagerCreateRequest request,
+            StaffHosInformation hospitalAdditionalInfo
+    ) {
         Doctor doctor = Doctor.builder()
                 .staffHosInformation(hospitalAdditionalInfo)
                 .history(request.getHistory())
@@ -91,7 +93,8 @@ public class ManagerDoctorServiceImpl implements ManagerDoctorService {
     }
 
     private Hospital checkEmptyHospitalAdditionalInfo(DoctorManagerCreateRequest request) {
-        Hospital hospital = hospitalRepository.findHospitalByHosAdditionalInfoId(request.getHospitalAdditionalInfoId());
+        Hospital hospital = hospitalRepository
+                .findHospitalByHosAdditionalInfoId(request.getHospitalAdditionalInfoId());
 
         if (hospital == null) {
             throw new IllegalStateException("병원이 존재하지 않습니다.");
