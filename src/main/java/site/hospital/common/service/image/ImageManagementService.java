@@ -68,7 +68,8 @@ public abstract class ImageManagementService {
         deleteS3Images(imageNames);
     }
 
-    protected String confirmImageExtension(File uploadFile) {
+    protected String confirmImageExtension(File uploadFile)
+            throws NoSuchFileException, DirectoryNotEmptyException, IOException  {
         String uploadImageName = uploadFile.getName();
         String extension = getExtension(uploadImageName);
 
@@ -109,7 +110,8 @@ public abstract class ImageManagementService {
         return extension;
     }
 
-    private void confirmImage(String extension, File uploadFile) {
+    private void confirmImage(String extension, File uploadFile)
+            throws NoSuchFileException, DirectoryNotEmptyException, IOException  {
         List<String> imageExtensions = new ArrayList<>
                 (Arrays.asList("bmp","rle","dib","jpeg","jpg","png","gif",
                         "jfif","tif","tiff", "raw"));

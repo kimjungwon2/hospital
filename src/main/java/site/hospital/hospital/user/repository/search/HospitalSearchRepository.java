@@ -125,8 +125,10 @@ public class HospitalSearchRepository {
         return countQuery;
     }
 
-    private boolean checkEmpty(Page<HospitalSearchSelectQuery> result) {
-        return result.getContent() != null && result.getContent().isEmpty();
+    private boolean checkEmpty(Page<HospitalSearchSelectQuery> searchResults) {
+        Assert.notNull(searchResults,"searchResult must be provided");
+
+        return searchResults.getContent().isEmpty();
     }
 
 

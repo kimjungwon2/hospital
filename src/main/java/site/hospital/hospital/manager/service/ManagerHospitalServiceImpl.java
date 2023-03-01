@@ -79,7 +79,6 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
             Long hospitalId,
             ManagerModifyHospitalRequest request
     ) {
-        Long memberId = request.getMemberId();
         managerJwtService.accessManager(servletRequest, hospitalId);
 
         Hospital modifiedHospital = hospitalRepository.findById(hospitalId)

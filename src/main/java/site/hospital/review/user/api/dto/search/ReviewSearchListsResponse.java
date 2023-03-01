@@ -36,7 +36,7 @@ public class ReviewSearchListsResponse {
         this.reviewLike = review
                 .getReviewLikes()
                 .stream()
-                .map(reviewLike -> new ReviewSearchListsLikeDTO(reviewLike))
+                .map(like -> new ReviewSearchListsLikeDTO(like))
                 .collect(Collectors.toList());
     }
 

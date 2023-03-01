@@ -64,13 +64,15 @@ public class DetailedHosInformation extends BaseEntity {
         this.numberWard = numberWard;
         this.numberPatientRoom = numberPatientRoom;
 
-        this.hospitalAddress = hospitalAddress.builder()
+        this.hospitalAddress = hospitalAddress
+                .builder()
                 .roadBaseAddress(hospitalAddress.getRoadBaseAddress())
                 .landLotBasedSystem(hospitalAddress.getLandLotBasedSystem())
                 .zipCode(hospitalAddress.getZipCode())
                 .build();
 
-        this.hospitalLocation = hospitalLocation.builder()
+        this.hospitalLocation = hospitalLocation
+                .builder()
                 .latitude(hospitalLocation.getLatitude())
                 .longitude(hospitalLocation.getLongitude())
                 .x_coordination(hospitalLocation.getX_coordination())
@@ -94,13 +96,15 @@ public class DetailedHosInformation extends BaseEntity {
         this.numberWard = numberWard;
         this.numberPatientRoom = numberPatientRoom;
 
-        this.hospitalAddress = hospitalAddress.builder()
+        this.hospitalAddress = hospitalAddress
+                .builder()
                 .roadBaseAddress(hospitalAddress.getRoadBaseAddress())
                 .landLotBasedSystem(hospitalAddress.getLandLotBasedSystem())
                 .zipCode(hospitalAddress.getZipCode())
                 .build();
 
-        this.hospitalLocation = hospitalLocation.builder()
+        this.hospitalLocation = hospitalLocation
+                .builder()
                 .latitude(hospitalLocation.getLatitude())
                 .longitude(hospitalLocation.getLongitude())
                 .x_coordination(hospitalLocation.getX_coordination())
