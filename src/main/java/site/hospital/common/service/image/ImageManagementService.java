@@ -7,6 +7,9 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,12 +44,9 @@ public abstract class ImageManagementService {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
-    protected void removeLocalImage(File targetFile) {
-        if (targetFile.delete()) {
-            log.info("File delete success");
-            return;
-        }
-        log.info("File delete fail");
+    protected void removeLocalImage(File targetFile) throws NoSuchFileException, DirectoryNotEmptyException, IOException  {
+        Files.delete(targetFile.toPath());
+        log.info("File delete success");
     }
 
     protected Optional<File> uploadLocal(MultipartFile file) throws IOException {

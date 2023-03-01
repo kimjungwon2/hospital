@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -96,7 +98,7 @@ public class HospitalImagesService extends ImageManagementService{
     private List<String> uploadHospitalImages(
             List<File> uploadFiles,
             Long hospitalId
-    ) {
+    ) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
 
         List<String> uploadImageUrls = new ArrayList<>();
 

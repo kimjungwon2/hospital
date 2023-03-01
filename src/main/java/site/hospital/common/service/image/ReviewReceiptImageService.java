@@ -3,6 +3,8 @@ package site.hospital.common.service.image;
 import com.amazonaws.services.s3.AmazonS3Client;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.NoSuchFileException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,7 +84,8 @@ public class ReviewReceiptImageService extends ImageManagementService{
         reviewImageRepository.save(reviewImage);
     }
 
-    private String uploadReviewReceiptImage(File uploadFile, Long reviewId) {
+    private String uploadReviewReceiptImage(File uploadFile, Long reviewId)
+            throws NoSuchFileException, DirectoryNotEmptyException, IOException{
 
         String extension = confirmImageExtension(uploadFile);
 

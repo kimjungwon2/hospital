@@ -144,7 +144,7 @@ public class TokenProvider implements Serializable {
     private Date createValidity() {
         long now = (new Date()).getTime();
 
-        Date validity = new Date(now + this.JWT_TOKEN_VALIDITY);
+        Date validity = new Date(now + JWT_TOKEN_VALIDITY);
 
         return validity;
     }
