@@ -42,6 +42,8 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     private final HospitalDetailedInfoRepository hospitalDetailedInfoRepository;
     private final HospitalAdditionalInfoRepository hospitalAdditionalInfoRepository;
 
+    private static final String HOSPITAL_NOT_EXISTS= "병원이 존재하지 않습니다.";
+
 
     @Override
     public Page<AdminHospitalSearchSelectQuery> searchHospitals(
@@ -84,7 +86,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     @Override
     public void deleteHospital(Long hospitalId, Long hosAdditionalInfoId) {
         Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new IllegalStateException("해당 병원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(HOSPITAL_NOT_EXISTS));
 
         deleteHospitalAdditionalInfo(hosAdditionalInfoId, hospital);
 
@@ -99,7 +101,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     @Override
     public HospitalResponse modifyHospital(Long hospitalId, AdminModifyHospitalRequest request) {
         Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new IllegalStateException("해당 병원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(HOSPITAL_NOT_EXISTS));
 
         Hospital modifiedHospital = Hospital
                 .builder()
@@ -229,7 +231,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
             , Long hospitalId
     ) {
         Hospital hospital = hospitalRepository.findById(hospitalId).
-                orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
+                orElseThrow(() -> new IllegalStateException(HOSPITAL_NOT_EXISTS));
 
         checkDetailedHosInfo(hospital);
 
@@ -254,7 +256,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
             StaffHosInformation staffHosInformation
     ) {
         Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(HOSPITAL_NOT_EXISTS));
 
         checkHospitalAdditionalInfo(hospital);
 
@@ -287,7 +289,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
             List<Doctor> doctors
     ) {
         Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(HOSPITAL_NOT_EXISTS));
 
         checkHospitalAdditionalInfo(hospital);
 

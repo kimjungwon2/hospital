@@ -38,11 +38,13 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     private final HospitalRepository hospitalRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final static String MEMBER_NOT_EXISTS = "멤버가 존재하지 않습니다.";
+
     @Transactional
     @Override
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(MEMBER_NOT_EXISTS));
 
         memberRepository.adminDeleteAllAuthority(member);
         memberRepository.deleteById(memberId);
@@ -61,7 +63,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
                 .build();
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(MEMBER_NOT_EXISTS));
 
         if (confirmSameAuthority(memberChange, member)) {
             member.modifyMember(memberChange);
@@ -156,7 +158,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     @Override
     public MemberAdminViewInfoResponse viewMemberInformation(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(MEMBER_NOT_EXISTS));
 
         return MemberAdminViewInfoResponse.from(member);
     }

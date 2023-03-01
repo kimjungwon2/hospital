@@ -33,7 +33,7 @@ public class TokenProvider implements Serializable {
     @Value("${jwt.secret}")
     private String secret;
 
-    private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String PHONE_KEY = "phoneNumber";
