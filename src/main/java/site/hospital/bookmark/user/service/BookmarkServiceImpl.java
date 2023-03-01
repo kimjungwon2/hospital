@@ -28,7 +28,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public BookmarkCheckResponse userCheckBookmark(Long memberId, Long hospitalId) {
         Bookmark checkBookmark = bookmarkRepository.userCheckBookmark(memberId, hospitalId);
-        Boolean bookmarkExistence = bookmarkPresent(checkBookmark);
+        Boolean bookmarkExistence = checkBookmark(checkBookmark);
 
         return BookmarkCheckResponse.from(bookmarkExistence);
     }
@@ -37,16 +37,14 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public void userRegisterBookmark(BookmarkCreateRequest request) {
 
-        Bookmark checkBookmark = bookmarkRepository
+        Bookmark bookmark = bookmarkRepository
                 .userCheckBookmark(request.getMemberId(), request.getHospitalId());
 
-        boolean bookmarkExistence = bookmarkPresent(checkBookmark);
-
-        if (bookmarkExistence == true) {
-            deleteBookmark(checkBookmark);
+        if (checkBookmark(bookmark)) {
+            saveBookmark(request);
         }
         else {
-            saveBookmark(request);
+            deleteBookmark(bookmark);
         }
     }
 
@@ -79,13 +77,15 @@ public class BookmarkServiceImpl implements BookmarkService {
         bookmarkRepository.save(bookmark);
     }
 
-    private Boolean bookmarkPresent(Bookmark bookmark) {
-        Boolean checkBookmark = false;
+    private boolean checkBookmark(Bookmark bookmark) {
+
+        boolean bookmarkPresence = false;
 
         if (bookmark != null) {
-            checkBookmark = true;
+            bookmarkPresence = true;
         }
-        return checkBookmark;
+
+        return bookmarkPresence;
     }
 
 }
