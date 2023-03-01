@@ -79,10 +79,10 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     private boolean checkBookmark(Bookmark bookmark) {
 
-        boolean bookmarkPresence = false;
+        boolean bookmarkPresence = true;
 
         if (bookmark != null) {
-            bookmarkPresence = true;
+            bookmarkPresence = false;
         }
 
         return bookmarkPresence;
