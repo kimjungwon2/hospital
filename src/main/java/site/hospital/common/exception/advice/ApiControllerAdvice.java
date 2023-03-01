@@ -23,28 +23,28 @@ public class ApiControllerAdvice {
     @ExceptionHandler
     public ErrorResponse illegalArgumentHandle(IllegalArgumentException e) {
         log.error("IllegalArgumentException:", e);
-        return new ErrorResponse(this.BAD_CODE, e.getMessage());
+        return new ErrorResponse(BAD_CODE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResponse illegalStateHandle(IllegalStateException e) {
         log.error("IllegalStateException:", e);
-        return new ErrorResponse(this.BAD_CODE, e.getMessage());
+        return new ErrorResponse(BAD_CODE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResponse userHandle(HttpRequestMethodNotSupportedException e) {
         log.error("HttpRequestMethodNotSupportedException:", e);
-        return new ErrorResponse(this.BAD_CODE, e.getMessage());
+        return new ErrorResponse(BAD_CODE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResponse EmptyResultDataAccess(EmptyResultDataAccessException e) {
         log.error("EmptyResultDataAccessException:", e);
-        return new ErrorResponse(this.BAD_CODE, e.getMessage());
+        return new ErrorResponse(BAD_CODE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -60,7 +60,7 @@ public class ApiControllerAdvice {
     public ErrorResponse BadCredentialsException(
             org.springframework.security.authentication.BadCredentialsException e) {
         log.error("BadCredentialsException:", e);
-        return new ErrorResponse(this.BAD_CODE, e.getMessage());
+        return new ErrorResponse(BAD_CODE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -75,7 +75,7 @@ public class ApiControllerAdvice {
     @ExceptionHandler
     public ErrorResponse ServletException(javax.servlet.ServletException e) {
         log.error("javax.servlet.ServletException:", e);
-        return new ErrorResponse(this.BAD_CODE, "아이디와 비밀번호가 일치하지 않습니다.");
+        return new ErrorResponse(BAD_CODE, "아이디와 비밀번호가 일치하지 않습니다.");
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
