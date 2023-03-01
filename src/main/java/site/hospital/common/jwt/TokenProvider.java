@@ -126,7 +126,9 @@ public class TokenProvider implements Serializable {
 
     private Collection<? extends GrantedAuthority> getAuthoritiesByClaims(Claims claims) {
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                Arrays.stream(claims.get(AUTHORITIES_KEY)
+                       .toString()
+                       .split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
         return authorities;

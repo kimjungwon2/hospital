@@ -39,7 +39,7 @@ public class ManagerTagServiceImpl implements ManagerTagService {
         List<TagSearchTagnameResponse> searchTagName =
                 searchTag
                         .stream()
-                        .map(t -> TagSearchTagnameResponse.from(t))
+                        .map(TagSearchTagnameResponse::from)
                         .collect(Collectors.toList());
 
         Long totalAmount = searchTag.getTotalElements();

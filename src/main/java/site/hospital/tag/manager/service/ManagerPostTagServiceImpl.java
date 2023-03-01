@@ -70,11 +70,11 @@ public class ManagerPostTagServiceImpl implements ManagerPostTagService {
 
     @Override
     public List<PostTagViewHospitalTagResponse> viewHospitalTag(Long hospitalId) {
-        List<PostTag> PostTags = postTagRepository.viewPostTags(hospitalId);
+        List<PostTag> postTags = postTagRepository.viewPostTags(hospitalId);
 
-        return PostTags
+        return postTags
                 .stream()
-                .map(p -> PostTagViewHospitalTagResponse.from(p))
+                .map(PostTagViewHospitalTagResponse::from)
                 .collect(Collectors.toList());
     }
 

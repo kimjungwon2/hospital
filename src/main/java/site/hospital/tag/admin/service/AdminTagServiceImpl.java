@@ -32,7 +32,7 @@ public class AdminTagServiceImpl implements AdminTagService {
         List<TagAdminViewAllResponse> searchTags =
                 allTags
                         .stream()
-                        .map(t -> TagAdminViewAllResponse.from(t))
+                        .map(TagAdminViewAllResponse::from)
                         .collect(Collectors.toList());
 
         Long totalAmount = allTags.getTotalElements();

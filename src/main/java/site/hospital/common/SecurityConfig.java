@@ -94,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Allow UTF-8 values
         Pattern allowed = Pattern.compile("[\\p{IsAssigned}&&[^\\p{IsControl}]]*");
-        firewall.setAllowedHeaderValues((header) -> {
+        firewall.setAllowedHeaderValues( header -> {
             String parsed = new String(header.getBytes(ISO_8859_1), UTF_8);
             return allowed.matcher(parsed).matches();
         });

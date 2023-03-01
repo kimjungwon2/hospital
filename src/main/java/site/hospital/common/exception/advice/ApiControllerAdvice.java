@@ -42,14 +42,14 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ErrorResponse EmptyResultDataAccess(EmptyResultDataAccessException e) {
+    public ErrorResponse emptyResultDataAccess(EmptyResultDataAccessException e) {
         log.error("EmptyResultDataAccessException:", e);
         return new ErrorResponse(BAD_CODE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
-    public ErrorResponse NullPointerHandle(java.lang.NullPointerException e) {
+    public ErrorResponse nullPointerHandle(java.lang.NullPointerException e) {
         log.error("NullPointerException:", e);
         return new ErrorResponse("NOT_FOUND", "조건에 해당하는 데이터가 없습니다.");
     }
@@ -57,7 +57,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
-    public ErrorResponse BadCredentialsException(
+    public ErrorResponse badCredentialsException(
             org.springframework.security.authentication.BadCredentialsException e) {
         log.error("BadCredentialsException:", e);
         return new ErrorResponse(BAD_CODE, e.getMessage());
@@ -65,7 +65,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler
-    public ErrorResponse BadCredentialsException(
+    public ErrorResponse badCredentialsException(
             org.springframework.security.access.AccessDeniedException e) {
         log.error("AccessDeniedException:", e);
         return new ErrorResponse("FORBIDDEN", e.getMessage());
@@ -73,14 +73,14 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
-    public ErrorResponse ServletException(javax.servlet.ServletException e) {
+    public ErrorResponse servletException(javax.servlet.ServletException e) {
         log.error("javax.servlet.ServletException:", e);
         return new ErrorResponse(BAD_CODE, "아이디와 비밀번호가 일치하지 않습니다.");
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
-    public ErrorResponse NullPointerHandle(HttpMessageNotReadableException e) {
+    public ErrorResponse nullPointerHandle(HttpMessageNotReadableException e) {
         log.error("HttpMessageNotReadableException:", e);
         return new ErrorResponse("NOT_FOUND", e.getMessage());
     }

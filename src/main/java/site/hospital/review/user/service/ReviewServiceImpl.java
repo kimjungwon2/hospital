@@ -86,26 +86,21 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewViewListsResponse> viewHospitalReviews(Long hospitalId) {
         List<Review> reviews = reviewRepository.searchHospitalReviews(hospitalId, null);
 
-        List<ReviewViewListsResponse> reviewLists =
-                reviews
-                        .stream()
-                        .map(r -> ReviewViewListsResponse.from(r))
-                        .collect(Collectors.toList());
-
-        return reviewLists;
+        return reviews
+               .stream()
+               .map(ReviewViewListsResponse::from)
+               .collect(Collectors.toList());
     }
 
     @Override
     public List<ReviewViewByMemberResponse> viewReviewsByUser(Long memberId) {
         List<Review> review = reviewRepository.searchHospitalReviews(null, memberId);
 
-        List<ReviewViewByMemberResponse> reviewListsByUser =
-                review
-                        .stream()
-                        .map(r -> ReviewViewByMemberResponse.from(r))
-                        .collect(Collectors.toList());
+        return review
+               .stream()
+               .map(ReviewViewByMemberResponse::from)
+               .collect(Collectors.toList());
 
-        return reviewListsByUser;
     }
 
     @Override
@@ -134,8 +129,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .evCriteria(evaluationCriteria)
                 .build();
 
-        ReviewHospital createdReviewHospital = ReviewHospital.saveReviewHospital(hospital, reviewHospital);
-        return createdReviewHospital;
+        return ReviewHospital.saveReviewHospital(hospital, reviewHospital);
     }
 
     private void checkReceiptImage(MultipartFile receiptImage, Review review) throws IOException {

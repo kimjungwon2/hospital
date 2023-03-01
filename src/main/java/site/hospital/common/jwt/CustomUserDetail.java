@@ -50,4 +50,14 @@ public class CustomUserDetail extends User {
     public MemberStatus getMemberStatus() {
         return memberStatus;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

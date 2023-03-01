@@ -22,14 +22,14 @@ public class MemberApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ErrorResponse BadCredentialsException(BadCredentialsException e) {
+    public ErrorResponse badCredentialsException(BadCredentialsException e) {
         log.error("BadCredentialsException:", e);
         return new ErrorResponse(BAD_CODE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public ErrorResponse ServletException(ServletException e) {
+    public ErrorResponse servletException(ServletException e) {
         log.error("ServletException:", e);
         return new ErrorResponse(BAD_CODE, "아이디와 비밀번호가 일치하지 않습니다.");
     }

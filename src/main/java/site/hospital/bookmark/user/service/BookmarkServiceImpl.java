@@ -54,7 +54,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         return bookmarks
                 .stream()
-                .map(bookmark -> BookmarkSearchMemberResponse.from(bookmark))
+                .map(BookmarkSearchMemberResponse::from)
                 .collect(Collectors.toList());
     }
 

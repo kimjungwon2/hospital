@@ -17,7 +17,7 @@ import org.springframework.web.filter.GenericFilterBean;
 @Component
 public class JwtFilter extends GenericFilterBean {
 
-    private static final Logger log = LoggerFactory.getLogger(GenericFilterBean.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtFilter.class);
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
