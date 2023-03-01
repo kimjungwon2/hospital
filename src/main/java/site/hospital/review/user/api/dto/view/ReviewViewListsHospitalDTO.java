@@ -1,8 +1,8 @@
 package site.hospital.review.user.api.dto.view;
 
 import lombok.Data;
-import site.hospital.review.user.domain.reviewHospital.Recommendation;
-import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
+import site.hospital.review.user.domain.reviewhospital.Recommendation;
+import site.hospital.review.user.domain.reviewhospital.ReviewHospital;
 
 @Data
 public class ReviewViewListsHospitalDTO {

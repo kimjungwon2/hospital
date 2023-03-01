@@ -5,7 +5,7 @@ import static site.hospital.review.user.domain.QReviewLike.reviewLike;
 import static site.hospital.hospital.user.domain.QHospital.hospital;
 import static site.hospital.member.user.domain.QMember.member;
 import static site.hospital.review.user.domain.QReview.review;
-import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.review.user.domain.reviewhospital.QReviewHospital.reviewHospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 import site.hospital.review.user.domain.Review;
 
 @Repository
@@ -127,12 +128,16 @@ public class ReviewSearchRepository {
         return countQuery;
     }
 
-    private BooleanExpression reviewHospitalContent(String name) {
-        return isEmpty(name) ? null : review.reviewHospitals.any().content.contains(name);
+    private BooleanExpression reviewHospitalContent(String content) {
+        Assert.notNull(content,"content must be provided");
+
+        return isEmpty(content) ? null : review.reviewHospitals.any().content.contains(content);
     }
 
-    private BooleanExpression reviewHospitalDisease(String name) {
-        return isEmpty(name) ? null : review.reviewHospitals.any().disease.contains(name);
+    private BooleanExpression reviewHospitalDisease(String disease) {
+        Assert.notNull(disease,"disease must be provided");
+
+        return isEmpty(disease) ? null : review.reviewHospitals.any().disease.contains(disease);
     }
 
 }

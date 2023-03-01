@@ -2,9 +2,9 @@ package site.hospital.review.user.api.dto.detail;
 
 import lombok.Data;
 import org.springframework.util.Assert;
-import site.hospital.review.user.domain.reviewHospital.EvaluationCriteria;
-import site.hospital.review.user.domain.reviewHospital.Recommendation;
-import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
+import site.hospital.review.user.domain.reviewhospital.EvaluationCriteria;
+import site.hospital.review.user.domain.reviewhospital.Recommendation;
+import site.hospital.review.user.domain.reviewhospital.ReviewHospital;
 
 @Data
 public class ReviewViewDetailHospitalDTO {

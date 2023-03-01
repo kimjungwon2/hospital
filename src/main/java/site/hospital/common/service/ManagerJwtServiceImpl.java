@@ -28,6 +28,10 @@ public class ManagerJwtServiceImpl implements ManagerJwtService {
     ) {
         Long hospitalNumberInJwt = getHospitalNumberInJwt(servletRequest);
 
+        if (hospitalNumberInJwt == null) {
+            throw new AccessDeniedException("병원 번호가 존재하지 않습니다.");
+        }
+
         if (confirmAdmin(hospitalNumberInJwt)) {
             throw new AccessDeniedException("관리자 계정은 관리자 기능을 이용해주세요.");
         } else if (confirmMatchHospitalNumber(hospitalIdRequest, hospitalNumberInJwt)) {

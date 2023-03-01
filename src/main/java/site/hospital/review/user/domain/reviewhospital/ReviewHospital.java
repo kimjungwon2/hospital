@@ -1,4 +1,4 @@
-package site.hospital.review.user.domain.reviewHospital;
+package site.hospital.review.user.domain.reviewhospital;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;

@@ -315,14 +315,14 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     }
 
     private void checkHosAdditionalInfoMatch(Long hosAdditionalInfoId, Hospital hospital) {
-        if (hospital.getStaffHosInformation().getId() != hosAdditionalInfoId) {
+        if (!hospital.getStaffHosInformation().getId().equals(hosAdditionalInfoId)) {
             throw new IllegalStateException("해당 병원과 staffId가 일치하지 않습니다.");
         }
     }
 
     private void checkMatchDetailedHosInfo(AdminModifyHospitalRequest request, Hospital hospital) {
-        if (hospital.getDetailedHosInformation().getId() != request
-                .getDetailedHosInfoId()) {
+        if (!hospital.getDetailedHosInformation().getId()
+                .equals(request.getDetailedHosInfoId())) {
             throw new IllegalStateException("DetailedHosInfoId가 일치하지 않습니다.");
         }
     }
@@ -364,7 +364,6 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
                 request.getHospitalLocation() != null
                 && request.getHospitalLocation().getLatitude() != null
                 && request.getHospitalLocation().getLongitude() != null
-                && request.getHospitalLocation().getX_coordination() != null
                 && request.getHospitalLocation().getX_coordination() != null
                 && request.getHospitalLocation().getY_coordination() != null
                 && request.getHospitalAddress() != null

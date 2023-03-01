@@ -2,7 +2,7 @@ package site.hospital.review.user.api.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import site.hospital.review.user.domain.reviewHospital.Recommendation;
+import site.hospital.review.user.domain.reviewhospital.Recommendation;
 
 @Data
 public class ReviewCreateRequest {

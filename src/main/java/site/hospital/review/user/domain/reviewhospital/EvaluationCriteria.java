@@ -1,4 +1,4 @@
-package site.hospital.review.user.domain.reviewHospital;
+package site.hospital.review.user.domain.reviewhospital;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
@@ -38,6 +38,6 @@ public class EvaluationCriteria {
         this.symptomRelief = symptomRelief;
         this.cleanliness = cleanliness;
         this.waitTime = waitTime;
-        this.averageRate = (sumPrice + kindness + symptomRelief + cleanliness + waitTime) / 5;
+        this.averageRate = (double)(sumPrice + kindness + symptomRelief + cleanliness + waitTime) / 5;
     }
 }

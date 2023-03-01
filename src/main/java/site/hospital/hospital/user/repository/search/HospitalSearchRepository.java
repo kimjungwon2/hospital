@@ -6,7 +6,7 @@ import static site.hospital.tag.manager.domain.QPostTag.postTag;
 import static site.hospital.tag.manager.domain.QTag.tag;
 import static site.hospital.hospital.user.domain.detailedinfo.QDetailedHosInformation.detailedHosInformation;
 import static site.hospital.hospital.user.domain.QHospital.hospital;
-import static site.hospital.review.user.domain.reviewHospital.QReviewHospital.reviewHospital;
+import static site.hospital.review.user.domain.reviewhospital.QReviewHospital.reviewHospital;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.MathExpressions;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 import site.hospital.hospital.user.domain.Hospital;
 
 @Repository
@@ -129,16 +130,22 @@ public class HospitalSearchRepository {
     }
 
 
-    private BooleanExpression hospitalNameLike(String name) {
-        return isEmpty(name) ? null : hospital.hospitalName.contains(name);
+    private BooleanExpression hospitalNameLike(String hospitalName) {
+        Assert.notNull(hospitalName,"hospitalName must be provided");
+
+        return isEmpty(hospitalName) ? null : hospital.hospitalName.contains(hospitalName);
     }
 
-    private BooleanExpression hospitalSubjectLike(String name) {
-        return isEmpty(name) ? null : hospital.medicalSubjectInformation.contains(name);
+    private BooleanExpression hospitalSubjectLike(String hospitalSubject) {
+        Assert.notNull(hospitalSubject,"hospitalSubject must be provided");
+
+        return isEmpty(hospitalSubject) ? null : hospital.medicalSubjectInformation.contains(hospitalSubject);
     }
 
-    private BooleanExpression tagNameLike(String name) {
-        return isEmpty(name) ? null : hospital.postTags.any().tag.name.eq(name);
+    private BooleanExpression tagNameLike(String tagName) {
+        Assert.notNull(tagName,"tagName must be provided");
+
+        return isEmpty(tagName) ? null : hospital.postTags.any().tag.name.eq(tagName);
     }
 
 }

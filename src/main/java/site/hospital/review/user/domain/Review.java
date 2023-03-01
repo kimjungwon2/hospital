@@ -21,7 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.hospital.common.domain.BaseEntity;
 import site.hospital.member.user.domain.Member;
-import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
+import site.hospital.review.user.domain.reviewhospital.ReviewHospital;
 
 @Entity
 @Getter

@@ -25,7 +25,7 @@ import site.hospital.question.user.domain.Question;
 import site.hospital.common.domain.BaseEntity;
 import site.hospital.hospital.user.domain.detailedinfo.DetailedHosInformation;
 import site.hospital.estimation.user.domain.Estimation;
-import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
+import site.hospital.review.user.domain.reviewhospital.ReviewHospital;
 
 @Entity
 @Getter

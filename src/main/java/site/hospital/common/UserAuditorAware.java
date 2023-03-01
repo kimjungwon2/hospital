@@ -14,8 +14,9 @@ public class UserAuditorAware implements AuditorAware<String> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            return null;
+            return Optional.ofNullable(null);
         }
+
         String username = authentication.getName();
         return Optional.of(username);
     }

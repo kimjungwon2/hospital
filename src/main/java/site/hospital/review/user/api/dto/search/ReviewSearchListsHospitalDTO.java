@@ -1,7 +1,7 @@
 package site.hospital.review.user.api.dto.search;
 
 import lombok.Data;
-import site.hospital.review.user.domain.reviewHospital.ReviewHospital;
+import site.hospital.review.user.domain.reviewhospital.ReviewHospital;
 
 @Data
 public class ReviewSearchListsHospitalDTO {
