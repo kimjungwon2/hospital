@@ -64,7 +64,7 @@ test {
 sonarqube {
 	properties {
 		property "sonar.host.url", "http://localhost:8500"
-		property "sonar.login", "squ_bbd22a061ed84be878ea1cc30d9e8e9c1f8787b1"
+		property "sonar.login", "squ_7a36167b0e274087ed87e768e8ad4dded9803834"
 		property "sonar.sources", "src"
 		property "sonar.language", "java"
 		property "sonar.sourceEncoding", "UTF-8"
