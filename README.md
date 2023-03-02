@@ -12,7 +12,10 @@
 </br>
 
 ## 2. 프로젝트 구조
+### Architecture
 ![architecture](https://user-images.githubusercontent.com/40010165/216532852-b428aa72-c4da-4ad1-aca3-93b17f6b73c6.png)
+
+### CI/CD
 ![CI CD](https://user-images.githubusercontent.com/40010165/222424155-bcf20524-a687-4321-bb81-96b485d5021e.png)
 ![sonarQube 적용](https://user-images.githubusercontent.com/40010165/222424257-fcaebbf9-e630-4ec1-8574-259af083a13c.png)
 
