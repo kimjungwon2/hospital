@@ -48,7 +48,7 @@ public class HospitalImagesService extends ImageManagementService{
                         () -> new IllegalStateException("등록되지 않은 병원 이미지입니다."));
 
         String imageKey = hospitalImage.getImageKey();
-        deleteS3Images(this.DIR_NAME, imageKey);
+        deleteS3Images(DIR_NAME, imageKey);
         deleteHospitalImage(imageId);
     }
 

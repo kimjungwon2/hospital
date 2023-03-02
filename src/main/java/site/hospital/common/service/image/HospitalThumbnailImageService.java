@@ -46,7 +46,7 @@ public class HospitalThumbnailImageService extends ImageManagementService{
                 .orElseThrow(() -> new IllegalStateException("등록되지 않은 섬네일입니다."));
         
         String imageKey = hospitalThumbnail.getImageKey();
-        deleteS3Images(this.DIR_NAME, imageKey);
+        deleteS3Images(DIR_NAME, imageKey);
         deleteHospitalThumbnail(imageId, hospitalThumbnail);
     }
 
@@ -87,12 +87,12 @@ public class HospitalThumbnailImageService extends ImageManagementService{
 
         String extension = confirmImageExtension(uploadFile);
 
-        String imageName = createUUIDName(this.DIR_NAME, extension);
+        String imageName = createUUIDName(DIR_NAME, extension);
         String uploadImageUrl = putS3(uploadFile, imageName);
 
         removeLocalImage(uploadFile);
 
-        String imageKey = getImageKey(this.DIR_NAME, imageName);
+        String imageKey = getImageKey(DIR_NAME, imageName);
 
         registerThumbnailKey(uploadFile, hospitalId, imageKey);
 

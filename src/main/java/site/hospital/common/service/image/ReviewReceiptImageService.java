@@ -47,7 +47,7 @@ public class ReviewReceiptImageService extends ImageManagementService{
                 .orElseThrow(() -> new IllegalStateException("등록되지 않은 영수증 사진."));
 
         String imageKey = reviewImage.getImageKey();
-        deleteS3Images(this.DIR_NAME, imageKey);
+        deleteS3Images(DIR_NAME, imageKey);
         deleteReviewReceiptImage(imageId);
     }
 
@@ -87,11 +87,11 @@ public class ReviewReceiptImageService extends ImageManagementService{
 
         String extension = confirmImageExtension(uploadFile);
 
-        String imageName = createUUIDName(this.DIR_NAME, extension);
+        String imageName = createUUIDName(DIR_NAME, extension);
         String uploadImageUrl = putS3(uploadFile, imageName);
         removeLocalImage(uploadFile);
 
-        String imageKey = getImageKey(this.DIR_NAME, imageName);
+        String imageKey = getImageKey(DIR_NAME, imageName);
 
 
         ReviewImage reviewImage =
