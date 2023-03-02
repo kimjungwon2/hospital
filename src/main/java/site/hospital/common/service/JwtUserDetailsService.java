@@ -77,14 +77,12 @@ public class JwtUserDetailsService implements UserDetailsService {
     private Long findHospitalNumber(List<MemberAuthority> memberAuthorities) {
         Optional<MemberAuthority> managerAuthority = memberAuthorities
                 .stream()
-                .filter(a -> confirmRoleManager(a))
+                .filter(this::confirmRoleManager)
                 .findFirst();
 
-        Long hospitalNumber = managerAuthority
+        return managerAuthority
                 .orElseThrow(() -> new IllegalStateException("MANAGER 권한이 없습니다."))
                 .getHospitalNo();
-
-        return hospitalNumber;
     }
 
     private boolean confirmRoleManager(MemberAuthority a) {
@@ -101,12 +99,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     private List<GrantedAuthority> getGrantedAuthorities(List<MemberAuthority> memberAuthorities) {
 
-        List<GrantedAuthority> grantedAuthorities = memberAuthorities
+        return memberAuthorities
                 .stream()
                 .map(a -> new SimpleGrantedAuthority(
                         a.getAuthority().getAuthorizationStatus().toString()))
                 .collect(Collectors.toList());
 
-        return grantedAuthorities;
     }
 }

@@ -10,16 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import site.hospital.common.jwt.TokenProvider;
-import site.hospital.member.user.domain.Authorization;
-import site.hospital.member.user.domain.MemberAuthority;
-import site.hospital.member.user.repository.MemberRepository;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ManagerJwtServiceImpl implements ManagerJwtService {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final Logger logger = LoggerFactory.getLogger(ManagerJwtService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ManagerJwtServiceImpl.class);
     private final TokenProvider tokenProvider;
 
     public void accessManager(
@@ -40,9 +37,7 @@ public class ManagerJwtServiceImpl implements ManagerJwtService {
     }
 
     public Long getHospitalNumber(ServletRequest servletRequest) {
-        Long JwtHospitalId = getHospitalNumberInJwt(servletRequest);
-
-        return JwtHospitalId;
+        return getHospitalNumberInJwt(servletRequest);
     }
 
     private Long getHospitalNumberInJwt(ServletRequest servletRequest) {
@@ -51,9 +46,7 @@ public class ManagerJwtServiceImpl implements ManagerJwtService {
         String requestURI = httpServletRequest.getRequestURI();
 
         if (checkTokenValue(jwt) && tokenProvider.validateToken(jwt)) {
-            Long hospitalNumber = tokenProvider.getHospitalNumberInManager(jwt);
-
-            return hospitalNumber;
+            return tokenProvider.getHospitalNumberInManager(jwt);
         } else {
             logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
 

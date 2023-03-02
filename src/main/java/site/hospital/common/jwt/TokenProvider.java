@@ -120,35 +120,29 @@ public class TokenProvider implements Serializable {
     }
 
     private User createUserByAuthorities(Claims claims, Collection<? extends GrantedAuthority> authorities) {
-        User principal = new User(claims.getSubject(), "", authorities);
-        return principal;
+        return new User(claims.getSubject(), "", authorities);
     }
 
     private Collection<? extends GrantedAuthority> getAuthoritiesByClaims(Claims claims) {
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY)
+        return Arrays.stream(claims.get(AUTHORITIES_KEY)
                        .toString()
                        .split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
-        return authorities;
     }
 
     private Claims createClaims(String token) {
-        Claims claims = Jwts
+        return Jwts
                 .parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims;
     }
 
     private Date createValidity() {
         long now = (new Date()).getTime();
 
-        Date validity = new Date(now + JWT_TOKEN_VALIDITY);
-
-        return validity;
+        return new Date(now + JWT_TOKEN_VALIDITY);
     }
 
     private void checkHospitalNumberNull(Claims claims) {
