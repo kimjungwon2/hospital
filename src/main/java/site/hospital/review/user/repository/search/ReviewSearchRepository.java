@@ -107,7 +107,7 @@ public class ReviewSearchRepository {
         Map<Long, List<ReviewSearchReviewHospitalDTO>> reviewHospitalMap =
                 reviewHospitalDto
                 .stream()
-                .collect(Collectors.groupingBy(ReviewHospitalDTO -> ReviewHospitalDTO.getReviewId()));
+                .collect(Collectors.groupingBy(ReviewSearchReviewHospitalDTO::getReviewId));
 
         result.forEach(r -> r.setReviewHospitals(reviewHospitalMap.get(r.getReviewId())));
     }
