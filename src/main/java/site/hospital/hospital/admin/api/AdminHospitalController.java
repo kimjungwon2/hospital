@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.hospital.common.service.image.HospitalImagesService;
 import site.hospital.common.service.image.HospitalThumbnailImageService;
 import site.hospital.hospital.admin.repository.search.AdminHospitalSearchSelectQuery;
-import site.hospital.hospital.admin.repository.dto.view.AdminHospitalView;
+import site.hospital.hospital.admin.repository.dto.view.AdminHospitalViewResponse;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.admin.service.AdminHospitalService;
 import site.hospital.hospital.manager.service.ManagerHospitalService;
@@ -65,7 +65,7 @@ public class AdminHospitalController {
     }
 
     @GetMapping("/admin/hospital/view")
-    public AdminHospitalView adminViewHospital(
+    public AdminHospitalViewResponse adminViewHospital(
             @RequestParam(value = "hospitalId", required = false) Long hospitalId,
             @RequestParam(value = "detailedHosInfoId", required = false) Long detailedHosInfoId,
             @RequestParam(value = "staffHosInfoId", required = false) Long staffHosInfoId,

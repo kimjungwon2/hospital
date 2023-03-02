@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.hospital.doctor.manager.domain.Doctor;
 import site.hospital.estimation.admin.repository.EstimationRepository;
 import site.hospital.hospital.admin.repository.dto.AdminHospitalSearchCondition;
-import site.hospital.hospital.admin.repository.dto.view.AdminHospitalView;
+import site.hospital.hospital.admin.repository.dto.view.AdminHospitalViewResponse;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.admin.repository.search.AdminHospitalSearchRepository;
 import site.hospital.hospital.admin.repository.search.AdminHospitalSearchSelectQuery;
@@ -65,7 +65,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     }
 
     @Override
-    public AdminHospitalView viewHospital(
+    public AdminHospitalViewResponse viewHospital(
             Long hospitalId,
             Long detailedHosInfoId,
             Long staffHosInfoId,
@@ -73,7 +73,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     ) {
         Hospital hospital = hospitalRepository.viewHospital(hospitalId);
 
-        return new AdminHospitalView(
+        return new AdminHospitalViewResponse(
                 hospital,
                 detailedHosInfoId,
                 staffHosInfoId,

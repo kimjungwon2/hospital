@@ -9,7 +9,7 @@ import site.hospital.hospital.user.domain.BusinessCondition;
 import site.hospital.hospital.user.domain.Hospital;
 
 @Data
-public class AdminHospitalView {
+public class AdminHospitalViewResponse {
 
     private Long hospitalId;
 
@@ -40,7 +40,7 @@ public class AdminHospitalView {
     private List<AdminReviewHospitalDTO> reviewHospitals;
     private List<AdminHospitalEstimationDTO> estimations;
 
-    public AdminHospitalView(
+    public AdminHospitalViewResponse(
             Hospital hospital,
             Long detailedHosInfoId,
             Long staffHosInfoId,

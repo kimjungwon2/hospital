@@ -3,7 +3,7 @@ package site.hospital.hospital.admin.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import site.hospital.hospital.admin.repository.dto.view.AdminHospitalView;
+import site.hospital.hospital.admin.repository.dto.view.AdminHospitalViewResponse;
 import site.hospital.hospital.admin.repository.dto.AdminModifyHospitalRequest;
 import site.hospital.hospital.admin.repository.search.AdminHospitalSearchSelectQuery;
 import site.hospital.hospital.user.api.dto.HospitalCreateDetailedHosInfoRequest;
@@ -24,7 +24,7 @@ public interface AdminHospitalService {
             Pageable pageable
     );
 
-    AdminHospitalView viewHospital(
+    AdminHospitalViewResponse viewHospital(
             Long hospitalId,
             Long detailedHosInfoId,
             Long staffHosInfoId,
