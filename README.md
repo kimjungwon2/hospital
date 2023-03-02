@@ -8,11 +8,13 @@
 - 관리자 계정: 악용을 방지하기 위해서 mac20010@naver.com 메일로 요청하시면 아이디와 패스워드를 제공하겠습니다.</br>
 
 ## 1. 프로젝트 요약 
-![Project Summary](https://user-images.githubusercontent.com/40010165/216533775-86625161-12c3-4f45-b7f2-4bc8fcd17a9c.png)
+![프로젝트 요약](https://user-images.githubusercontent.com/40010165/222424090-6ff992f2-2728-48b0-a7ac-e0e929300b0f.png)
 </br>
 
 ## 2. 프로젝트 구조
 ![architecture](https://user-images.githubusercontent.com/40010165/216532852-b428aa72-c4da-4ad1-aca3-93b17f6b73c6.png)
+![CI CD](https://user-images.githubusercontent.com/40010165/222424155-bcf20524-a687-4321-bb81-96b485d5021e.png)
+![sonarQube 적용](https://user-images.githubusercontent.com/40010165/222424257-fcaebbf9-e630-4ec1-8574-259af083a13c.png)
 
 ## 3. ERD 설계
 ![ERD](https://user-images.githubusercontent.com/40010165/194764130-5e4caaff-892f-47a0-a871-78929755aeb7.png)
