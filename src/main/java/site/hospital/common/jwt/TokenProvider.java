@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class TokenProvider implements Serializable {
 
     private static final long serialVersionUID = -798416586417070603L;
-    private static final long JWT_TOKEN_VALIDITY = (long)60 * 60 * 3000;
+    private static final long JWT_TOKEN_VALIDITY = (long)60 * 60 * 6000;
 
     @Value("${jwt.secret}")
     private String secret;
