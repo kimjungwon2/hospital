@@ -168,16 +168,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private boolean confirmManager(Authentication authentication) {
-        return !authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) &&
+        return authentication.getAuthorities().stream()
+                .noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) &&
 
                 authentication.getAuthorities().stream()
                         .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"));
     }
 
     private boolean cofirmUser(Authentication authentication) {
-        return !authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER")) &&
+        return authentication.getAuthorities().stream()
+                .noneMatch(a -> a.getAuthority().equals("ROLE_MANAGER")) &&
 
                 authentication.getAuthorities().stream()
                         .anyMatch(a -> a.getAuthority().equals("ROLE_USER"));
