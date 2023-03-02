@@ -293,8 +293,8 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
     }
 
     private void checkMatchDetailedHosInfo(ManagerModifyHospitalRequest request, Hospital modifiedHospital) {
-        if (modifiedHospital.getDetailedHosInformation().getId() != request
-                .getDetailedHosInfoId()) {
+        if (!modifiedHospital.getDetailedHosInformation().getId()
+                .equals(request.getDetailedHosInfoId())) {
             throw new IllegalStateException("DetailedHosInfoId가 일치하지 않습니다.");
         }
     }
