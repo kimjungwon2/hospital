@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 public class HospitalLocation {
 
     @Column(columnDefinition = "Decimal(19,12)")
-    private BigDecimal x_coordination;
+    private BigDecimal xCoordination;
     @Column(columnDefinition = "Decimal(19,12)")
-    private BigDecimal y_coordination;
+    private BigDecimal yCoordination;
 
     //위도, 경도
     @Column(columnDefinition = "Decimal(19,12)")
@@ -29,13 +29,13 @@ public class HospitalLocation {
 
     @Builder
     public HospitalLocation(
-            BigDecimal x_coordination,
-            BigDecimal y_coordination,
+            BigDecimal xCoordination,
+            BigDecimal yCoordination,
             BigDecimal latitude,
             BigDecimal longitude
     ) {
-        this.x_coordination = x_coordination;
-        this.y_coordination = y_coordination;
+        this.xCoordination = xCoordination;
+        this.yCoordination = yCoordination;
         this.latitude = latitude;
         this.longitude = longitude;
     }

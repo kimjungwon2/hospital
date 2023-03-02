@@ -75,8 +75,8 @@ public class DetailedHosInformation extends BaseEntity {
                 .builder()
                 .latitude(hospitalLocation.getLatitude())
                 .longitude(hospitalLocation.getLongitude())
-                .x_coordination(hospitalLocation.getX_coordination())
-                .y_coordination(hospitalLocation.getY_coordination())
+                .xCoordination(hospitalLocation.getXCoordination())
+                .yCoordination(hospitalLocation.getYCoordination())
                 .build();
     }
 
@@ -107,8 +107,8 @@ public class DetailedHosInformation extends BaseEntity {
                 .builder()
                 .latitude(hospitalLocation.getLatitude())
                 .longitude(hospitalLocation.getLongitude())
-                .x_coordination(hospitalLocation.getX_coordination())
-                .y_coordination(hospitalLocation.getY_coordination())
+                .xCoordination(hospitalLocation.getXCoordination())
+                .yCoordination(hospitalLocation.getYCoordination())
                 .build();
     }
 

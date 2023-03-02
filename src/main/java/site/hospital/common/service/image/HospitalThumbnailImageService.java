@@ -3,8 +3,6 @@ package site.hospital.common.service.image;
 import com.amazonaws.services.s3.AmazonS3Client;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.NoSuchFileException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +16,7 @@ public class HospitalThumbnailImageService extends ImageManagementService{
 
     private final HospitalRepository hospitalRepository;
     private final HospitalThumbnailRepository hospitalThumbnailRepository;
-    private final String dirName = "thumbnail";
+    private static final String DIR_NAME = "thumbnail";
 
     public HospitalThumbnailImageService(
             AmazonS3Client amazonS3Client,
@@ -48,7 +46,7 @@ public class HospitalThumbnailImageService extends ImageManagementService{
                 .orElseThrow(() -> new IllegalStateException("등록되지 않은 섬네일입니다."));
         
         String imageKey = hospitalThumbnail.getImageKey();
-        deleteS3Images(this.dirName, imageKey);
+        deleteS3Images(this.DIR_NAME, imageKey);
         deleteHospitalThumbnail(imageId, hospitalThumbnail);
     }
 
@@ -85,16 +83,16 @@ public class HospitalThumbnailImageService extends ImageManagementService{
     }
 
     private String uploadThumbnail(File uploadFile, Long hospitalId)
-            throws NoSuchFileException, DirectoryNotEmptyException, IOException {
+            throws IOException {
 
         String extension = confirmImageExtension(uploadFile);
 
-        String imageName = createUUIDName(this.dirName, extension);
+        String imageName = createUUIDName(this.DIR_NAME, extension);
         String uploadImageUrl = putS3(uploadFile, imageName);
 
         removeLocalImage(uploadFile);
 
-        String imageKey = getImageKey(this.dirName, imageName);
+        String imageKey = getImageKey(this.DIR_NAME, imageName);
 
         registerThumbnailKey(uploadFile, hospitalId, imageKey);
 

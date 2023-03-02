@@ -78,15 +78,13 @@ public class ReviewHospital extends BaseTimeEntity {
                 .cleanliness(reviewHospitalDTO.getEvCriteria().getCleanliness())
                 .waitTime(reviewHospitalDTO.getEvCriteria().getWaitTime()).build();
 
-        ReviewHospital reviewHospital = ReviewHospital.builder()
+        return ReviewHospital.builder()
                 .hospital(hospital)
                 .content(reviewHospitalDTO.getContent())
                 .disease(reviewHospitalDTO.getDisease())
                 .evCriteria(evaluationCriteria)
                 .recommendationStatus(reviewHospitalDTO.getRecommendationStatus())
                 .build();
-
-        return reviewHospital;
     }
 
 }

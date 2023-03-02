@@ -52,7 +52,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private Question createQuestion(QuestionCreateRequest request, Member member, Hospital hospital) {
-        Question question = Question.CreateQuestion(member, hospital, request.getContent());
+        Question question = Question.createQuestion(member, hospital, request.getContent());
         questionRepository.save(question);
         return question;
     }

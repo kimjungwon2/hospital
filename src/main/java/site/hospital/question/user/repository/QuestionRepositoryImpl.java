@@ -57,7 +57,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     }
 
     @Override
-    public Page<Question> managerSearchNoQuestion(
+    public Page<Question> managerSearchNoQuestions(
             Long hospitalId,
             ManagerQuestionSearchCondition condition,
             Pageable pageable

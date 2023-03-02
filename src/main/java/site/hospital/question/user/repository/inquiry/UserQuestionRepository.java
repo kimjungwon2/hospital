@@ -22,8 +22,7 @@ public class UserQuestionRepository {
     }
 
     public List<UserQuestionSelectQuery> inquireQuestionsByUser(Long memberId) {
-
-        List<UserQuestionSelectQuery> result = queryFactory
+        return queryFactory
                 .select(new QUserQuestionSelectQuery(
                         question.id,
                         hospital.id,
@@ -39,7 +38,6 @@ public class UserQuestionRepository {
                 .orderBy(answer.id.asc().nullsFirst())
                 .where(hospitalIdEq(memberId))
                 .fetch();
-        return result;
     }
 
     private BooleanExpression hospitalIdEq(Long id) {

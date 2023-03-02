@@ -20,8 +20,7 @@ public class HospitalQuestionRepository {
     }
 
     public List<HospitalQuestionSelectQuery> inquireHospitalQuestions(Long hospitalId) {
-
-        List<HospitalQuestionSelectQuery> result = queryFactory
+        return queryFactory
                 .select(new QHospitalQuestionSelectQuery(
                         question.id,
                         member.nickName,
@@ -34,7 +33,6 @@ public class HospitalQuestionRepository {
                 .where(hospitalIdEq(hospitalId))
                 .orderBy(answer.id.asc().nullsLast())
                 .fetch();
-        return result;
     }
 
     private BooleanExpression hospitalIdEq(Long id) {

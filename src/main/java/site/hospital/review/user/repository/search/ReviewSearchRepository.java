@@ -68,7 +68,7 @@ public class ReviewSearchRepository {
 
         JPAQuery<Review> countQuery = getTotalCount(searchWord);
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
+        return PageableExecutionUtils.getPage(content, pageable,countQuery::fetchCount);
     }
 
     private void insertReviewLike(Page<ReviewSearchSelectQuery> result, List<Long> reviewIds) {
@@ -84,7 +84,7 @@ public class ReviewSearchRepository {
                 reviewSearchLikeDTO
                 .stream()
                 .collect(Collectors
-                .groupingBy(ReviewSearchLikeDTO -> ReviewSearchLikeDTO.getReviewId()));
+                .groupingBy(ReviewSearchLikeDTO::getReviewId));
 
         result.forEach(r -> r.setReviewLikes(reviewLikeMap.get(r.getReviewId())));
     }
@@ -118,14 +118,13 @@ public class ReviewSearchRepository {
     
 
     private JPAQuery<Review> getTotalCount(String searchName) {
-        JPAQuery<Review> countQuery = queryFactory
+        return queryFactory
                 .selectFrom(review)
                 .join(review.member, member)
                 .where(
                         reviewHospitalContent(searchName)
                                 .or(reviewHospitalDisease(searchName))
                 );
-        return countQuery;
     }
 
     private BooleanExpression reviewHospitalContent(String content) {

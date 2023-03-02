@@ -3,8 +3,6 @@ package site.hospital.common.service.image;
 import com.amazonaws.services.s3.AmazonS3Client;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.NoSuchFileException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +17,7 @@ public class ReviewReceiptImageService extends ImageManagementService{
 
     private final ReviewImageRepository reviewImageRepository;
     private final ReviewRepository reviewRepository;
-    private final String dirName = "receipt";
+    private static final String DIR_NAME = "receipt";
 
     public ReviewReceiptImageService(
             AmazonS3Client amazonS3Client,
@@ -49,7 +47,7 @@ public class ReviewReceiptImageService extends ImageManagementService{
                 .orElseThrow(() -> new IllegalStateException("등록되지 않은 영수증 사진."));
 
         String imageKey = reviewImage.getImageKey();
-        deleteS3Images(this.dirName, imageKey);
+        deleteS3Images(this.DIR_NAME, imageKey);
         deleteReviewReceiptImage(imageId);
     }
 
@@ -85,15 +83,15 @@ public class ReviewReceiptImageService extends ImageManagementService{
     }
 
     private String uploadReviewReceiptImage(File uploadFile, Long reviewId)
-            throws NoSuchFileException, DirectoryNotEmptyException, IOException{
+            throws IOException{
 
         String extension = confirmImageExtension(uploadFile);
 
-        String imageName = createUUIDName(this.dirName, extension);
+        String imageName = createUUIDName(this.DIR_NAME, extension);
         String uploadImageUrl = putS3(uploadFile, imageName);
         removeLocalImage(uploadFile);
 
-        String imageKey = getImageKey(this.dirName, imageName);
+        String imageKey = getImageKey(this.DIR_NAME, imageName);
 
 
         ReviewImage reviewImage =

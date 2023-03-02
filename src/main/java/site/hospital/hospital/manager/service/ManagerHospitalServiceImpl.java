@@ -44,32 +44,28 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
 
         List<HospitalImage> hospitalImages = hospitalImageRepository.findByHospital(hospital);
 
-        List<HospitalViewImageResponse> images =
-                hospitalImages
-                        .stream()
-                        .map(h -> HospitalViewImageResponse.from(h))
-                        .collect(Collectors.toList());
-
-        return images;
+        return hospitalImages
+               .stream()
+               .map(HospitalViewImageResponse::from)
+               .collect(Collectors.toList());
     }
 
     @Override
     public ManagerHospitalViewResponse viewHospital(ServletRequest servletRequest) {
-        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
-        Hospital hospital = hospitalRepository.viewHospital(JwtHospitalId);
+        Long jwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
+        Hospital hospital = hospitalRepository.viewHospital(jwtHospitalId);
 
         Long detailedHosId = checkNullDetailedHospital(hospital);
         Long hosAdditionalInfoId = checkNullHospitalAdditionalInfo(hospital);
         Long hospitalThumbnailId = checkNullHospitalThumbnail(hospital);
 
-        ManagerHospitalViewResponse managerHospitalViewResponse =
-                ManagerHospitalViewResponse.from(
+
+        return ManagerHospitalViewResponse.from(
                         hospital,
                         detailedHosId,
                         hosAdditionalInfoId,
                         hospitalThumbnailId);
 
-        return managerHospitalViewResponse;
     }
 
     @Transactional
@@ -139,26 +135,26 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
             List<Doctor> doctors = request
                     .getDoctors()
                     .stream()
-                    .map(d -> new Doctor(d))
+                    .map(Doctor::new)
                     .collect(Collectors.toList());
 
-            Long HospitalAdditionalInfoId = registerHosAdditionalInfoWithDoctor(
+            Long hospitalAdditionalInfoId = registerHosAdditionalInfoWithDoctor(
                     servletRequest,
                     request.getMemberId(),
                     request.getHospitalId(),
                     hospitalAdditionalInfo,
                     doctors);
 
-            return HospitalResponse.from(HospitalAdditionalInfoId);
+            return HospitalResponse.from(hospitalAdditionalInfoId);
         }
 
-        Long HospitalAdditionalInfoId = registerOnlyHosAdditionalInfo(
+        Long hospitalAdditionalInfoId = registerOnlyHosAdditionalInfo(
                 servletRequest,
                 request.getMemberId(),
                 request.getHospitalId(),
                 hospitalAdditionalInfo);
 
-        return HospitalResponse.from(HospitalAdditionalInfoId);
+        return HospitalResponse.from(hospitalAdditionalInfoId);
 
     }
 
@@ -209,10 +205,8 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
 
     @Override
     public HospitalThumbnail viewThumbnail(Long thumbnailId) {
-        HospitalThumbnail thumbnail = hospitalThumbnailRepository.findById(thumbnailId)
+        return hospitalThumbnailRepository.findById(thumbnailId)
                 .orElseThrow(() -> new IllegalStateException("썸네일이 존재하지 않습니다."));
-
-        return thumbnail;
     }
 
     @Transactional
@@ -220,7 +214,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
             ServletRequest servletRequest,
             Long memberId,
             Long hospitalId,
-            StaffHosInformation HospitalAdditionalInfo,
+            StaffHosInformation hospitalAdditionalInfo,
             List<Doctor> doctors
     ) {
         managerJwtService.accessManager(servletRequest, hospitalId);
@@ -229,9 +223,9 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
                 .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
 
         checkHospitalAdditionalInfo(hospital);
-        insertHosAdditionalInfoInHospital(HospitalAdditionalInfo, doctors, hospital);
+        insertHosAdditionalInfoInHospital(hospitalAdditionalInfo, doctors, hospital);
 
-        return HospitalAdditionalInfo.getId();
+        return hospitalAdditionalInfo.getId();
     }
 
 
@@ -306,7 +300,7 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
     }
 
     private boolean checkModifyDetailedHosInfo(ManagerModifyHospitalRequest request) {
-        return request.getDetailedModifyCheck() == true;
+        return request.getDetailedModifyCheck();
     }
 
     private void checkDetailedHosInfo(Hospital hospital) {
@@ -315,12 +309,12 @@ public class ManagerHospitalServiceImpl implements ManagerHospitalService {
         }
     }
     private void insertHosAdditionalInfoInHospital(
-            StaffHosInformation HospitalAdditionalInfo,
+            StaffHosInformation hospitalAdditionalInfo,
             List<Doctor> doctors,
             Hospital hospital) {
-        StaffHosInformation.createHosAddtionalInfoWithDoctors(HospitalAdditionalInfo, doctors);
-        hospitalAdditionalInfoRepository.save(HospitalAdditionalInfo);
-        hospital.changeStaffHosInformation(HospitalAdditionalInfo);
+        StaffHosInformation.createHosAddtionalInfoWithDoctors(hospitalAdditionalInfo, doctors);
+        hospitalAdditionalInfoRepository.save(hospitalAdditionalInfo);
+        hospital.changeStaffHosInformation(hospitalAdditionalInfo);
     }
 
     private void checkHospitalAdditionalInfo(Hospital hospital) {

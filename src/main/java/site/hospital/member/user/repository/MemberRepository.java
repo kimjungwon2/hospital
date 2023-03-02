@@ -7,7 +7,7 @@ import site.hospital.member.user.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
-    List<Member> findByMemberIdName(String MemberIdName);
+    List<Member> findByMemberIdName(String memberIdName);
 
     Optional<Member> findOneEmailByMemberIdName(String memberIdName);
 }

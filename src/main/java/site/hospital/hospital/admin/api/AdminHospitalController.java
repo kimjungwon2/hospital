@@ -115,9 +115,7 @@ public class AdminHospitalController {
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
-        String ImageURL = hospitalThumbnailImageService.uploadImage(imageFile, hospitalId);
-
-        return ImageURL;
+        return hospitalThumbnailImageService.uploadImage(imageFile, hospitalId);
     }
 
     @GetMapping("/admin/hospital/view/thumbnail")
@@ -138,10 +136,8 @@ public class AdminHospitalController {
             @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
-        List<String> ImageURLS = hospitalImagesService
+        return hospitalImagesService
                 .uploadImage(imageFiles, hospitalId);
-
-        return ImageURLS;
     }
 
     @GetMapping("/admin/hospital/view/hospitalImages")

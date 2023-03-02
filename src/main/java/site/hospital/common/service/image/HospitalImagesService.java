@@ -4,8 +4,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ public class HospitalImagesService extends ImageManagementService{
 
     private final HospitalRepository hospitalRepository;
     private final HospitalImageRepository hospitalImageRepository;
-    private final String dirName = "hospitalImage";
+    private static final String DIR_NAME = "hospitalImage";
 
 
     public HospitalImagesService(
@@ -50,7 +48,7 @@ public class HospitalImagesService extends ImageManagementService{
                         () -> new IllegalStateException("등록되지 않은 병원 이미지입니다."));
 
         String imageKey = hospitalImage.getImageKey();
-        deleteS3Images(this.dirName, imageKey);
+        deleteS3Images(this.DIR_NAME, imageKey);
         deleteHospitalImage(imageId);
     }
 
@@ -98,7 +96,7 @@ public class HospitalImagesService extends ImageManagementService{
     private List<String> uploadHospitalImages(
             List<File> uploadFiles,
             Long hospitalId
-    ) throws NoSuchFileException, DirectoryNotEmptyException, IOException{
+    ) throws IOException{
 
         List<String> uploadImageUrls = new ArrayList<>();
 
@@ -106,13 +104,13 @@ public class HospitalImagesService extends ImageManagementService{
 
             String imageExtension = confirmImageExtension(uploadFile);
 
-            String imageName = createUUIDName(this.dirName, imageExtension);
+            String imageName = createUUIDName(DIR_NAME, imageExtension);
             String uploadImageUrl = putS3(uploadFile, imageName);
             removeLocalImage(uploadFile);
 
             uploadImageUrls.add(uploadImageUrl);
 
-            String imageKey = getImageKey(this.dirName, imageName);
+            String imageKey = getImageKey(DIR_NAME, imageName);
 
             registerHospitalImage(uploadFile.getName(), imageKey, hospitalId);
         }

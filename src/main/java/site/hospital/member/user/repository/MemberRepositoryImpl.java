@@ -8,16 +8,15 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import site.hospital.member.admin.repository.dto.AdminMemberSearchCondition;
 import site.hospital.member.user.domain.Authorization;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberAuthority;
 import site.hospital.member.user.domain.MemberStatus;
-import site.hospital.member.admin.repository.dto.AdminMemberSearchCondition;
 
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 

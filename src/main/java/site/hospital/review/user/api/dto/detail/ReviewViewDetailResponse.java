@@ -3,8 +3,6 @@ package site.hospital.review.user.api.dto.detail;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.util.Assert;
 import site.hospital.review.user.domain.Review;
@@ -36,7 +34,7 @@ public class ReviewViewDetailResponse {
             this.reviewHospitals = review
                     .getReviewHospitals()
                     .stream()
-                    .map(reviewHospital -> new ReviewViewDetailHospitalDTO(reviewHospital))
+                    .map(ReviewViewDetailHospitalDTO::new)
                     .collect(Collectors.toList());
         }
         else{
@@ -51,7 +49,7 @@ public class ReviewViewDetailResponse {
             this.reviewHospitals = review
                     .getReviewHospitals()
                     .stream()
-                    .map(reviewHospital -> new ReviewViewDetailHospitalDTO(reviewHospital))
+                    .map(ReviewViewDetailHospitalDTO::new)
                     .collect(Collectors.toList());
         }
     }

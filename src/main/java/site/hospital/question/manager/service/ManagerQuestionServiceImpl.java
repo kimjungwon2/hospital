@@ -49,16 +49,16 @@ public class ManagerQuestionServiceImpl implements ManagerQuestionService {
 
     @Override
     public Long countQuestionsWithNoAnswer(ServletRequest servletRequest) {
-        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
+        Long jwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
-        return questionRepository.managerCountQuestionsWithNoAnswer(JwtHospitalId);
+        return questionRepository.managerCountQuestionsWithNoAnswer(jwtHospitalId);
     }
 
     private PageImpl getPagingQuestions(Pageable pageable, Page<Question> questions) {
         List<QuestionSearchResponse> result =
                 questions
                         .stream()
-                        .map(q -> QuestionSearchResponse.from(q))
+                        .map(QuestionSearchResponse::from)
                         .collect(Collectors.toList());
 
         Long total = questions.getTotalElements();
@@ -79,12 +79,10 @@ public class ManagerQuestionServiceImpl implements ManagerQuestionService {
                         .memberIdName(memberIdName)
                         .build();
 
-        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
+        Long jwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
-        Page<Question> questions = questionRepository
-                .managerSearchNoQuestion(JwtHospitalId, condition, pageable);
-
-        return questions;
+        return questionRepository
+                .managerSearchNoQuestions(jwtHospitalId, condition, pageable);
     }
 
     private Page<Question> getHospitalQuestions(
@@ -99,12 +97,11 @@ public class ManagerQuestionServiceImpl implements ManagerQuestionService {
                         .memberIdName(memberIdName)
                         .build();
 
-        Long JwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
+        Long jwtHospitalId = managerJwtService.getHospitalNumber(servletRequest);
 
-        Page<Question> questions = questionRepository
-                .managerSearchHospitalQuestion(JwtHospitalId, condition, pageable);
+        return questionRepository
+                .managerSearchHospitalQuestion(jwtHospitalId, condition, pageable);
 
-        return questions;
     }
 
 }

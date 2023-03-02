@@ -29,8 +29,8 @@ public class HospitalViewSelectQuery {
     private Integer numberWard;
     private Integer numberPatientRoom;
 
-    private BigDecimal x_coordination;
-    private BigDecimal y_coordination;
+    private BigDecimal xCoordination;
+    private BigDecimal yCoordination;
 
     private BigDecimal latitude;
     private BigDecimal longitude;
@@ -59,8 +59,8 @@ public class HospitalViewSelectQuery {
             Integer numberHealthcareProvider,
             Integer numberWard,
             Integer numberPatientRoom,
-            BigDecimal x_coordination,
-            BigDecimal y_coordination,
+            BigDecimal xCoordination,
+            BigDecimal yCoordination,
             BigDecimal latitude,
             BigDecimal longitude
     ) {
@@ -83,8 +83,8 @@ public class HospitalViewSelectQuery {
         this.numberHealthcareProvider = numberHealthcareProvider;
         this.numberWard = numberWard;
         this.numberPatientRoom = numberPatientRoom;
-        this.x_coordination = x_coordination;
-        this.y_coordination = y_coordination;
+        this.xCoordination = xCoordination;
+        this.yCoordination = yCoordination;
         this.latitude = latitude;
         this.longitude = longitude;
     }

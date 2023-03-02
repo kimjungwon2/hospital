@@ -1,6 +1,5 @@
 package site.hospital.hospital.user.repository;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
 import static site.hospital.hospital.user.domain.QHospital.hospital;
 import static site.hospital.hospital.user.domain.QHospitalThumbnail.hospitalThumbnail;
 import static site.hospital.hospital.user.domain.QStaffHosInformation.staffHosInformation;
@@ -20,7 +19,7 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
     }
 
     public Hospital viewHospital(Long hospitalId) {
-        Hospital result = queryFactory
+        return queryFactory
                 .select(hospital)
                 .from(hospital)
                 .leftJoin(hospital.detailedHosInformation, detailedHosInformation).fetchJoin()
@@ -28,24 +27,20 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
                 .leftJoin(hospital.hospitalThumbnail, hospitalThumbnail).fetchJoin()
                 .where(hospitalIdEq(hospitalId))
                 .fetchOne();
-        return result;
     }
 
     public Hospital findHospitalByHosAdditionalInfoId(Long staffHosId) {
-        Hospital result = queryFactory
+        return queryFactory
                 .selectFrom(hospital)
                 .where(hospitalAdditionalInfoIdEq(staffHosId))
                 .fetchOne();
-        return result;
     }
 
     public Hospital findByDoctorId(Long doctorId) {
-        Hospital result = queryFactory
+        return queryFactory
                 .selectFrom(hospital)
                 .where(doctorIdEq(doctorId))
                 .fetchOne();
-
-        return result;
     }
 
     private BooleanExpression hospitalAdditionalInfoIdEq(Long id) {

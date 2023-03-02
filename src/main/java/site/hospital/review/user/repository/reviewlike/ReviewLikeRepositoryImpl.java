@@ -16,13 +16,11 @@ public class ReviewLikeRepositoryImpl implements ReviewLikeRepositoryCustom {
     }
 
     public ReviewLike checkReviewLike(Long memberId, Long reviewId) {
-        ReviewLike result = queryFactory
+        return queryFactory
                 .select(reviewLike)
                 .from(reviewLike)
                 .where(memberIdEq(memberId), reviewIdEq(reviewId))
                 .fetchOne();
-
-        return result;
     }
 
     private BooleanExpression memberIdEq(Long id) {

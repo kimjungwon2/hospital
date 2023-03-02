@@ -31,8 +31,8 @@ public class AdminHospitalView {
     private String landLotBasedSystem;
     private String roadBaseAddress;
     private String zipCode;
-    private BigDecimal x_coordination;
-    private BigDecimal y_coordination;
+    private BigDecimal xCoordination;
+    private BigDecimal yCoordination;
     private BigDecimal latitude;
     private BigDecimal longitude;
 
@@ -68,10 +68,10 @@ public class AdminHospitalView {
             this.roadBaseAddress = hospital.getDetailedHosInformation().getHospitalAddress()
                     .getRoadBaseAddress();
             this.zipCode = hospital.getDetailedHosInformation().getHospitalAddress().getZipCode();
-            this.x_coordination = hospital.getDetailedHosInformation().getHospitalLocation()
-                    .getX_coordination();
-            this.y_coordination = hospital.getDetailedHosInformation().getHospitalLocation()
-                    .getY_coordination();
+            this.xCoordination = hospital.getDetailedHosInformation().getHospitalLocation()
+                    .getXCoordination();
+            this.yCoordination = hospital.getDetailedHosInformation().getHospitalLocation()
+                    .getYCoordination();
             this.latitude = hospital.getDetailedHosInformation().getHospitalLocation()
                     .getLatitude();
             this.longitude = hospital.getDetailedHosInformation().getHospitalLocation()
@@ -93,19 +93,19 @@ public class AdminHospitalView {
         this.hospitalTags = hospital
                 .getPostTags()
                 .stream()
-                .map(h -> new AdminHospitalTagDTO(h))
+                .map(AdminHospitalTagDTO::new)
                 .collect(Collectors.toList());
 
         this.reviewHospitals = hospital
                 .getReviewHospitals()
                 .stream()
-                .map(r -> new AdminReviewHospitalDTO(r))
+                .map(AdminReviewHospitalDTO::new)
                 .collect(Collectors.toList());
 
         this.estimations = hospital
                 .getEstimations()
                 .stream()
-                .map(e -> new AdminHospitalEstimationDTO(e))
+                .map(AdminHospitalEstimationDTO::new)
                 .collect(Collectors.toList());
     }
 }

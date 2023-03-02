@@ -72,9 +72,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void likeReview(Long memberId, Long reviewId) {
         ReviewLike reviewLike = reviewLikeRepository.checkReviewLike(memberId, reviewId);
 
-        Boolean isReviewLike = checkLike(reviewLike);
-
-        if (isReviewLike == true) {
+        if (checkLike(reviewLike)) {
             deleteReviewLike(reviewLike);
         }
         else {
@@ -144,8 +142,8 @@ public class ReviewServiceImpl implements ReviewService {
         return review;
     }
 
-    private Boolean checkLike(ReviewLike reviewLike) {
-        Boolean isReviewLike = false;
+    private boolean checkLike(ReviewLike reviewLike) {
+        boolean isReviewLike = false;
 
         if (reviewLike != null) {
             isReviewLike = true;

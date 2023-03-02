@@ -13,7 +13,7 @@ public interface QuestionRepositoryCustom {
     Page<Question> managerSearchHospitalQuestion(Long hospitalId,
             ManagerQuestionSearchCondition condition, Pageable pageable);
 
-    Page<Question> managerSearchNoQuestion(Long hospitalId, ManagerQuestionSearchCondition condition,
+    Page<Question> managerSearchNoQuestions(Long hospitalId, ManagerQuestionSearchCondition condition,
             Pageable pageable);
 
     Long managerCountQuestionsWithNoAnswer(Long hospitalId);

@@ -2,8 +2,6 @@ package site.hospital.review.user.api.dto.search;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.util.Assert;
 import site.hospital.review.user.domain.Review;
@@ -30,13 +28,13 @@ public class ReviewSearchListsResponse {
         this.reviewHospitals = review
                 .getReviewHospitals()
                 .stream()
-                .map(reviewHospital -> new ReviewSearchListsHospitalDTO(reviewHospital))
+                .map(ReviewSearchListsHospitalDTO::new)
                 .collect(Collectors.toList());
 
         this.reviewLike = review
                 .getReviewLikes()
                 .stream()
-                .map(like -> new ReviewSearchListsLikeDTO(like))
+                .map(ReviewSearchListsLikeDTO::new)
                 .collect(Collectors.toList());
     }
 

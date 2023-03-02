@@ -38,7 +38,7 @@ public class ManagerReviewServiceImpl implements ManagerReviewService {
         List<ReviewSearchListsResponse> searchResults =
                 reviews
                         .stream()
-                        .map(r -> ReviewSearchListsResponse.from(r))
+                        .map(ReviewSearchListsResponse::from)
                         .collect(Collectors.toList());
 
         Long totalCounts = reviews.getTotalElements();
@@ -59,9 +59,7 @@ public class ManagerReviewServiceImpl implements ManagerReviewService {
                         .memberIdName(memberIdName)
                         .build();
 
-        Page<Review> reviews = reviewRepository.managerSearchReviews(hospitalId, searchCondition, pageable);
-
-        return reviews;
+        return reviewRepository.managerSearchReviews(hospitalId, searchCondition, pageable);
     }
 
 }

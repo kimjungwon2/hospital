@@ -21,7 +21,7 @@ public class HospitalAdditionalInfoViewResponse {
         this.doctors = hospitalAdditionalInfo
                 .getDoctors()
                 .stream()
-                .map(d -> new HospitalAdditionalInfoDoctorDTO(d))
+                .map(HospitalAdditionalInfoDoctorDTO::new)
                 .collect(Collectors.toList());
     }
 

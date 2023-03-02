@@ -7,7 +7,7 @@ import site.hospital.review.user.domain.ReviewLike;
 public class ReviewSearchListsLikeDTO {
     private Long reviewLikeId;
 
-    public ReviewSearchListsLikeDTO(ReviewLike ReviewLike) {
-        this.reviewLikeId = ReviewLike.getId();
+    public ReviewSearchListsLikeDTO(ReviewLike reviewLike) {
+        this.reviewLikeId = reviewLike.getId();
     }
 }

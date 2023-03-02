@@ -38,7 +38,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     private final HospitalRepository hospitalRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final static String MEMBER_NOT_EXISTS = "멤버가 존재하지 않습니다.";
+    private static final String MEMBER_NOT_EXISTS = "멤버가 존재하지 않습니다.";
 
     @Transactional
     @Override
@@ -164,31 +164,31 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     private void giveAdminAuthority(Member createdMember) {
-        Authority authority_ADMIN = findAdminAuthority();
+        Authority authorityAdmin = findAdminAuthority();
 
         MemberAuthority adminAuthority = MemberAuthority.builder()
-                .member(createdMember).authority(authority_ADMIN).build();
+                .member(createdMember).authority(authorityAdmin).build();
 
         memberAuthorityRepository.save(adminAuthority);
     }
 
     private Authority findAdminAuthority() {
-        Authority authority_ADMIN = authorityRepository
+        Authority authorityAdmin = authorityRepository
                 .findByAuthorizationStatus(Authorization.ROLE_ADMIN);
 
-        if (authority_ADMIN == null) {
+        if (authorityAdmin == null) {
             throw new IllegalStateException("ADMIN 권한 데이터가 없습니다.");
         }
-        return authority_ADMIN;
+        return authorityAdmin;
     }
 
     private void giveManagerAuthorityByAdmin(Member createdMember) {
-        Authority authority_MANAGER = findManagerAuthority();
+        Authority authorityManager = findManagerAuthority();
 
         MemberAuthority managerAuthority = MemberAuthority
                 .builder()
                 .member(createdMember)
-                .authority(authority_MANAGER)
+                .authority(authorityManager)
                 .build();
 
         memberAuthorityRepository.save(managerAuthority);
@@ -196,12 +196,12 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 
 
     private void giveManagerAuthority(Member modifyMember, Member member) {
-        Authority authority_MANAGER = findManagerAuthority();
+        Authority authorityManager = findManagerAuthority();
 
         MemberAuthority managerAuthority = MemberAuthority
                 .builder()
                 .member(member)
-                .authority(authority_MANAGER)
+                .authority(authorityManager)
                 .hospitalNo(modifyMember.getHospitalNumber())
                 .build();
 
@@ -209,12 +209,12 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     private void giveManagerAuthority(Member member) {
-        Authority authority_MANAGER = findManagerAuthority();
+        Authority authorityManager = findManagerAuthority();
 
         MemberAuthority managerAuthority = MemberAuthority
                 .builder()
                 .member(member)
-                .authority(authority_MANAGER)
+                .authority(authorityManager)
                 .hospitalNo(member.getHospitalNumber())
                 .build();
 
@@ -222,13 +222,13 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     private Authority findManagerAuthority() {
-        Authority authority_MANAGER = authorityRepository
+        Authority authorityManager = authorityRepository
                 .findByAuthorizationStatus(Authorization.ROLE_MANAGER);
 
-        if (authority_MANAGER == null) {
+        if (authorityManager == null) {
             throw new IllegalStateException("MANAGER 권한 데이터가 없습니다.");
         }
-        return authority_MANAGER;
+        return authorityManager;
     }
 
     private void confirmHospitalPresence(Member member) {
@@ -241,25 +241,25 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     private void giveUserAuthority(Member member) {
-        Authority authority_USER = findUserAuthority();
+        Authority authorityUser = findUserAuthority();
 
         MemberAuthority memberAuthority = MemberAuthority
                 .builder()
                 .member(member)
-                .authority(authority_USER)
+                .authority(authorityUser)
                 .build();
 
         memberAuthorityRepository.save(memberAuthority);
     }
 
     private Authority findUserAuthority() {
-        Authority authority_USER = authorityRepository
+        Authority authorityUser = authorityRepository
                 .findByAuthorizationStatus(Authorization.ROLE_USER);
 
-        if (authority_USER == null) {
+        if (authorityUser == null) {
             throw new IllegalStateException("USER 권한 데이터가 없습니다.");
         }
-        return authority_USER;
+        return authorityUser;
     }
 
     private boolean confirmUserAuthority(Member modifyMember) {
@@ -278,7 +278,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     private PageImpl getPagingMember(Pageable pageable, Page<Member> searchedMembers) {
         List<MemberSearchResponse> result = searchedMembers
                 .stream()
-                .map(m -> MemberSearchResponse.from(m))
+                .map(MemberSearchResponse::from)
                 .collect(Collectors.toList());
 
         Long total = searchedMembers.getTotalElements();

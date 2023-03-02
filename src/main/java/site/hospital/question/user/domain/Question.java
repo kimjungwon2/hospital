@@ -53,7 +53,7 @@ public class Question extends BaseTimeEntity {
     }
 
     //생성 메서드
-    public static Question CreateQuestion(Member member, Hospital hospital, String content) {
+    public static Question createQuestion(Member member, Hospital hospital, String content) {
         Question question = new Question(content);
         question.changeMember(member);
         question.changeHospital(hospital);

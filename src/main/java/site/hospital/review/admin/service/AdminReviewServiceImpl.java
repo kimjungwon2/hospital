@@ -45,7 +45,7 @@ public class AdminReviewServiceImpl implements AdminReviewService {
         List<ReviewSearchListsResponse> searchResults =
                 reviews
                         .stream()
-                        .map(r -> ReviewSearchListsResponse.from(r))
+                        .map(ReviewSearchListsResponse::from)
                         .collect(Collectors.toList());
 
         Long totalCounts = reviews.getTotalElements();
@@ -70,7 +70,7 @@ public class AdminReviewServiceImpl implements AdminReviewService {
         List<ReviewSearchListsResponse> searchResults =
                 reviews
                         .stream()
-                        .map(r -> ReviewSearchListsResponse.from(r))
+                        .map(ReviewSearchListsResponse::from)
                         .collect(Collectors.toList());
 
         Long totalCounts = reviews.getTotalElements();
@@ -92,7 +92,6 @@ public class AdminReviewServiceImpl implements AdminReviewService {
                         .memberIdName(memberIdName)
                         .build();
 
-        Page<Review> reviews = reviewRepository.adminSearchReviews(condition, pageable);
-        return reviews;
+        return reviewRepository.adminSearchReviews(condition, pageable);
     }
 }

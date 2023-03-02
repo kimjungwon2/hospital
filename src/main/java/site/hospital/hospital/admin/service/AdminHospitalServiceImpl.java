@@ -73,13 +73,11 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     ) {
         Hospital hospital = hospitalRepository.viewHospital(hospitalId);
 
-        AdminHospitalView adminHospitalView = new AdminHospitalView(
+        return new AdminHospitalView(
                 hospital,
                 detailedHosInfoId,
                 staffHosInfoId,
                 thumbnailId);
-
-        return adminHospitalView;
     }
 
     @Transactional
@@ -194,22 +192,22 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
             List<Doctor> doctors = request
                     .getDoctors()
                     .stream()
-                    .map(d -> new Doctor(d))
+                    .map(Doctor::new)
                     .collect(Collectors.toList());
 
-            Long HospitalAdditionalInfoId = registerHosAdditionalInfoWithDoctor(
+            Long hospitalAdditionalInfoId = registerHosAdditionalInfoWithDoctor(
                     request.getHospitalId(),
                     hospitalAdditionalInfo,
                     doctors);
 
-            return HospitalResponse.from(HospitalAdditionalInfoId);
+            return HospitalResponse.from(hospitalAdditionalInfoId);
         }
 
-        Long HospitalAdditionalInfoId = registerOnlyHosAdditionalInfo(
+        Long hospitalAdditionalInfoId = registerOnlyHosAdditionalInfo(
                 request.getHospitalId(),
                 hospitalAdditionalInfo);
 
-        return HospitalResponse.from(HospitalAdditionalInfoId);
+        return HospitalResponse.from(hospitalAdditionalInfoId);
     }
 
     @Transactional
@@ -330,7 +328,7 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     }
 
     private boolean checkModifyDetailedHosInfo(AdminModifyHospitalRequest request) {
-        return request.getDetailedModifyCheck() == true;
+        return request.getDetailedModifyCheck();
     }
 
     private void deleteDetailedHosInfo(Long detailedHosInfoId, Hospital hospital) {
@@ -338,8 +336,11 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
         hospitalDetailedInfoRepository.deleteById(detailedHosInfoId);
     }
 
-    private void insertHosAdditionalInfoInHospital(StaffHosInformation hospitalAdditionalInfo, List<Doctor> doctors,
-            Hospital hospital) {
+    private void insertHosAdditionalInfoInHospital(
+            StaffHosInformation hospitalAdditionalInfo,
+            List<Doctor> doctors,
+            Hospital hospital
+    ) {
         StaffHosInformation.createHosAddtionalInfoWithDoctors(hospitalAdditionalInfo, doctors);
         hospitalAdditionalInfoRepository.save(hospitalAdditionalInfo);
         hospital.changeStaffHosInformation(hospitalAdditionalInfo);
@@ -362,12 +363,12 @@ public class AdminHospitalServiceImpl implements AdminHospitalService {
     }
 
     private boolean checkDetailedHosInfoTrue(HospitalCreateRequest request) {
-        return request.getDetailedInfoCheck() == true &&
+        return request.getDetailedInfoCheck() &&
                 request.getHospitalLocation() != null
                 && request.getHospitalLocation().getLatitude() != null
                 && request.getHospitalLocation().getLongitude() != null
-                && request.getHospitalLocation().getX_coordination() != null
-                && request.getHospitalLocation().getY_coordination() != null
+                && request.getHospitalLocation().getXCoordination() != null
+                && request.getHospitalLocation().getYCoordination() != null
                 && request.getHospitalAddress() != null
                 && request.getHospitalAddress().getLandLotBasedSystem() != null
                 && request.getHospitalAddress().getRoadBaseAddress() != null

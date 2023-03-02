@@ -19,12 +19,11 @@ public class EstimationRepositoryImpl implements EstimationRepositoryCustom {
     }
 
     public List<Estimation> searchEstimations(Hospital hospital, EstimationList estimationList) {
-        List<Estimation> result = queryFactory
+        return queryFactory
                 .select(estimation)
                 .from(estimation)
                 .where(hospitalEq(hospital), cityNameEq(estimationList))
                 .fetch();
-        return result;
     }
 
     @Override

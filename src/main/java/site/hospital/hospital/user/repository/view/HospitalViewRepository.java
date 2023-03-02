@@ -91,8 +91,7 @@ public class HospitalViewRepository {
     }
 
     private HospitalViewSelectQuery findHospital(Long hospitalId) {
-
-        HospitalViewSelectQuery result = queryFactory
+        return queryFactory
                 .select(new QHospitalViewSelectQuery(
                         hospital.id,
                         detailedHosInformation.id,
@@ -111,8 +110,8 @@ public class HospitalViewRepository {
                         detailedHosInformation.numberHealthcareProvider,
                         detailedHosInformation.numberWard,
                         detailedHosInformation.numberPatientRoom,
-                        detailedHosInformation.hospitalLocation.x_coordination,
-                        detailedHosInformation.hospitalLocation.y_coordination,
+                        detailedHosInformation.hospitalLocation.xCoordination,
+                        detailedHosInformation.hospitalLocation.yCoordination,
                         detailedHosInformation.hospitalLocation.latitude,
                         detailedHosInformation.hospitalLocation.longitude
                 ))
@@ -121,7 +120,6 @@ public class HospitalViewRepository {
                 .where(hospitalIdEq(hospitalId))
                 .fetchOne();
 
-        return result;
     }
 
     private BooleanExpression hospitalIdEq(Long id) {

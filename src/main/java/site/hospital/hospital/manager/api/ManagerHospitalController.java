@@ -103,9 +103,7 @@ public class ManagerHospitalController {
             @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
             @RequestParam(value = "hospitalId", required = false) Long hospitalId
     ) throws IOException {
-        List<String> ImageURLS = hospitalImagesService.uploadImage(imageFiles, hospitalId);
-
-        return ImageURLS;
+        return hospitalImagesService.uploadImage(imageFiles, hospitalId);
     }
 
     @GetMapping("/staff/hospital/view/hospitalImages")

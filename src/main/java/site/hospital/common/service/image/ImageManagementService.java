@@ -31,12 +31,12 @@ public abstract class ImageManagementService {
     @Value("${cloud.aws.s3.bucket}")
     protected String bucket;
 
-    abstract public String uploadImage(
+    public abstract String uploadImage(
             MultipartFile multipartFile,
             Long hospitalId)
             throws IOException;
 
-    abstract public void deleteImage(Long imageId);
+    public abstract void deleteImage(Long imageId);
 
     protected String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
@@ -44,7 +44,7 @@ public abstract class ImageManagementService {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
-    protected void removeLocalImage(File targetFile) throws NoSuchFileException, DirectoryNotEmptyException, IOException  {
+    protected void removeLocalImage(File targetFile) throws IOException  {
         Files.delete(targetFile.toPath());
         log.info("File delete success");
     }
@@ -69,7 +69,7 @@ public abstract class ImageManagementService {
     }
 
     protected String confirmImageExtension(File uploadFile)
-            throws NoSuchFileException, DirectoryNotEmptyException, IOException  {
+            throws IOException  {
         String uploadImageName = uploadFile.getName();
         String extension = getExtension(uploadImageName);
 
@@ -79,8 +79,7 @@ public abstract class ImageManagementService {
     }
 
     protected String getImageKey(String dirName, String imageName) {
-        String key = imageName.replace(dirName + "/", "");
-        return key;
+        return imageName.replace(dirName + "/", "");
     }
 
     protected String createUUIDName(String dirName, String extension) {
@@ -111,7 +110,7 @@ public abstract class ImageManagementService {
     }
 
     private void confirmImage(String extension, File uploadFile)
-            throws NoSuchFileException, DirectoryNotEmptyException, IOException  {
+            throws IOException  {
         List<String> imageExtensions = new ArrayList<>
                 (Arrays.asList("bmp","rle","dib","jpeg","jpg","png","gif",
                         "jfif","tif","tiff", "raw"));

@@ -132,7 +132,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private String createJWToken(Authentication authentication, CustomUserDetail user) {
-        String jwt = GetJwToken(authentication, user);
+        String jwt = getJwToken(authentication, user);
 
         if (jwt == null) {
             throw new IllegalStateException("토큰 값이 null 입니다.");
@@ -142,9 +142,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private CustomUserDetail createUser(Authentication authentication) {
-        CustomUserDetail user =
-                (CustomUserDetail) authentication.getPrincipal();
-        return user;
+        return (CustomUserDetail) authentication.getPrincipal();
     }
 
     private Authentication setAuthentication(UsernamePasswordAuthenticationToken authenticationToken) {
@@ -157,10 +155,10 @@ public class MemberServiceImpl implements MemberService {
 
     private UsernamePasswordAuthenticationToken createAuthenticationToken(
             MemberLoginRequest request) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(request.getMemberIdName(),
-                        request.getPassword());
-        return authenticationToken;
+
+        return new UsernamePasswordAuthenticationToken(
+                request.getMemberIdName(),
+                request.getPassword());
     }
 
 
@@ -207,20 +205,19 @@ public class MemberServiceImpl implements MemberService {
         return authority;
     }
 
-    private Member createMember(Member memberDto) {
-        Member member = Member
+    private Member createMember(Member member) {
+        return Member
                 .builder()
-                .userName(memberDto.getUserName())
-                .nickName(memberDto.getNickName())
-                .phoneNumber(memberDto.getPhoneNumber())
-                .memberIdName(memberDto.getMemberIdName())
+                .userName(member.getUserName())
+                .nickName(member.getNickName())
+                .phoneNumber(member.getPhoneNumber())
+                .memberIdName(member.getMemberIdName())
                 .memberStatus(MemberStatus.NORMAL)
-                .password(passwordEncoder.encode(memberDto.getPassword()))
+                .password(passwordEncoder.encode(member.getPassword()))
                 .build();
-        return member;
     }
 
-    private String GetJwToken(
+    private String getJwToken(
             Authentication authentication,
             CustomUserDetail user
     ) {

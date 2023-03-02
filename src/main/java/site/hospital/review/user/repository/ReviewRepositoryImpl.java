@@ -31,19 +31,17 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     @Override
     public List<Review> searchHospitalReviews(Long hospitalId, Long memberId) {
-        List<Review> result = queryFactory
+        return queryFactory
                 .select(review)
                 .from(review)
                 .join(review.member, member).fetchJoin()
                 .where(hospitalIdEq(hospitalId), memberIdEq(memberId))
                 .fetch();
-
-        return result;
     }
 
     @Override
     public Review viewHospitalReview(Long reviewId) {
-        Review result = queryFactory
+        return queryFactory
                 .select(review)
                 .from(review)
                 .join(review.member, member).fetchJoin()
@@ -51,7 +49,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .where(reviewIdEq(reviewId))
                 .fetchOne();
 
-        return result;
     }
 
     @Override

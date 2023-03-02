@@ -61,7 +61,7 @@ public class HospitalSearchRepository {
                         .fetch();
 
         Map<Long, List<HospitalSearchPostTagDTO>> tagHospitalMap = hospitalSearchPostTagDTOS.stream()
-                .collect(Collectors.groupingBy(HospitalSearchPostTagDTO -> HospitalSearchPostTagDTO.getHospitalId()));
+                .collect(Collectors.groupingBy(HospitalSearchPostTagDTO::getHospitalId));
 
         searchResults.forEach(h -> h.setHospitalSearchPostTagDTOS(tagHospitalMap.get(h.getHospitalId())));
     }
@@ -81,8 +81,7 @@ public class HospitalSearchRepository {
 
         Map<Long, List<HospitalSearchReviewHospitalDTO>> reviewHospitalMap = hospitalSearchReviewHospitalDTOS.stream()
                 .collect(Collectors
-                        .groupingBy(
-                                hospitalSearchReviewHospitalDTO -> hospitalSearchReviewHospitalDTO.getHospitalId()));
+                        .groupingBy(HospitalSearchReviewHospitalDTO::getHospitalId));
 
         searchResults.forEach(h -> h.setReviewHospitals(reviewHospitalMap.get(h.getHospitalId())));
     }
@@ -110,11 +109,11 @@ public class HospitalSearchRepository {
 
         JPAQuery<Hospital> countQuery = getCountQuery(searchName);
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
     private JPAQuery<Hospital> getCountQuery(String searchName) {
-        JPAQuery<Hospital> countQuery = queryFactory
+        return queryFactory
                 .select(hospital)
                 .from(hospital)
                 .join(hospital.detailedHosInformation, detailedHosInformation)
@@ -122,7 +121,6 @@ public class HospitalSearchRepository {
                         .or(hospitalSubjectLike(searchName)
                                 .or(tagNameLike(searchName)
                                 ))));
-        return countQuery;
     }
 
     private boolean checkEmpty(Page<HospitalSearchSelectQuery> searchResults) {
