@@ -64,7 +64,7 @@ public class HospitalImagesService extends ImageManagementService{
     @Transactional
     protected Long registerHospitalImage(String originalName, String key, Long hospitalId) {
         Hospital hospital = hospitalRepository.findById(hospitalId).
-                orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
 
         HospitalImage hospitalImage = saveHospitalImage(originalName, key, hospital);
 
@@ -76,7 +76,7 @@ public class HospitalImagesService extends ImageManagementService{
 
         HospitalImage hospitalImage = hospitalImageRepository.
                 findById(hospitalImageId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원 이미지가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("병원 이미지가 존재하지 않습니다."));
 
         hospitalImageRepository.deleteById(hospitalImage.getId());
     }

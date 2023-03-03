@@ -49,9 +49,9 @@ public class ReviewServiceImpl implements ReviewService {
     ) throws IOException {
 
         Member member = memberRepository.findById(requestData.getMemberId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("멤버가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findById(requestData.getHospitalId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
 
         ReviewHospital reviewHospital = createReviewHospital(requestData, hospital);
         Review review = createReview(member, reviewHospital);
@@ -153,9 +153,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     private void registerReviewLike(Long memberId, Long reviewId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("멤버가 존재하지 않습니다."));
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("리뷰가 존재하지 않습니다."));
 
         ReviewLike reviewLike = ReviewLike.createReviewLike(member, review);
         reviewLikeRepository.save(reviewLike);

@@ -27,9 +27,9 @@ public class AdminPostTagServiceImpl implements AdminPostTagService {
     @Override
     public PostTagLinkTagResponse adminLinkTag(PostTagLinkTagRequest request) {
         Tag tag = tagRepository.findById(request.getTagId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("태그가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findById(request.getHospitalId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
 
         managerPostTagService.validateDuplicateLinkTag(tag, hospital);
         PostTag postTag = managerPostTagService.linkTag(tag,hospital);
@@ -42,7 +42,7 @@ public class AdminPostTagServiceImpl implements AdminPostTagService {
     public void adminDeletePostTag(Long postTagId) {
         postTagRepository.findById(postTagId)
                 .orElseThrow(
-                        () -> new IllegalStateException("해당 id에 속하는 연결 태그가 존재하지 않습니다."));
+                        () -> new IllegalStateException("연결 태그가 존재하지 않습니다."));
         postTagRepository.deleteById(postTagId);
     }
 

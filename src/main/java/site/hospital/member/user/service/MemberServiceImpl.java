@@ -88,7 +88,7 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("멤버가 존재하지 않습니다."));
 
         member.modifyMember(memberChange);
     }
@@ -97,7 +97,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberViewInfoResponse viewUserInformation(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("멤버가 존재하지 않습니다."));
 
         return MemberViewInfoResponse.from(member);
     }

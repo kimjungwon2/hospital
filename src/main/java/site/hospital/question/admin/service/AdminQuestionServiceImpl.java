@@ -44,7 +44,7 @@ public class AdminQuestionServiceImpl implements AdminQuestionService {
     @Override
     public void deleteQuestion(Long questionId, Long answerId) {
         questionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 질문이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("질문이 존재하지 않습니다."));
         questionRepository.deleteById(questionId);
 
         if (answerId != null) {
@@ -54,7 +54,7 @@ public class AdminQuestionServiceImpl implements AdminQuestionService {
 
     private void deleteWithAnswer(Long answerId) {
         answerRepository.findById(answerId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 답변이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("답변이 존재하지 않습니다."));
         answerRepository.deleteById(answerId);
     }
 

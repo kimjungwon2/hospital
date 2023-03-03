@@ -66,12 +66,12 @@ public class BookmarkServiceImpl implements BookmarkService {
         Member member = memberRepository
                 .findById(request.getMemberId())
                 .orElseThrow(
-                        () -> new IllegalStateException("해당 id에 속하는 멤버가 존재하지 않습니다."));
+                        () -> new IllegalStateException("멤버가 존재하지 않습니다."));
 
         Hospital hospital = hospitalRepository
                 .findById(request.getHospitalId())
                 .orElseThrow(
-                        () -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                        () -> new IllegalStateException("병원이 존재하지 않습니다."));
 
         Bookmark bookmark = Bookmark.createBookmark(member, hospital);
         bookmarkRepository.save(bookmark);

@@ -37,9 +37,9 @@ public class ManagerPostTagServiceImpl implements ManagerPostTagService {
         managerJwtService.accessManager(servletRequest, request.getHospitalId());
 
         Tag tag = tagRepository.findById(request.getTagId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 태그가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("태그가 존재하지 않습니다."));
         Hospital hospital = hospitalRepository.findById(request.getHospitalId())
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
 
         validateDuplicateLinkTag(tag, hospital);
         PostTag postTag = linkTag(tag, hospital);
@@ -61,7 +61,7 @@ public class ManagerPostTagServiceImpl implements ManagerPostTagService {
             Long postTagId
     ) {
         PostTag postTag = postTagRepository.findById(postTagId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 연결 태그가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("연결 태그가 존재하지 않습니다."));
 
         managerJwtService.accessManager(servletRequest, postTag.getHospital().getId());
 

@@ -62,7 +62,7 @@ public class HospitalThumbnailImageService extends ImageManagementService{
     @Transactional
     protected Long registerHospitalThumbnail(HospitalThumbnail hospitalThumbnail, Long hospitalId) {
         Hospital hospital = hospitalRepository.findById(hospitalId).
-                orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                orElseThrow(() -> new IllegalStateException("병원이 존재하지 않습니다."));
 
         checkThumbnail(hospital);
 

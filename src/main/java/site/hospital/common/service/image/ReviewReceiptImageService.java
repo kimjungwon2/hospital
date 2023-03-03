@@ -57,7 +57,7 @@ public class ReviewReceiptImageService extends ImageManagementService{
             , Long reviewId
     ) {
         Review review = reviewRepository.findById(reviewId).
-                orElseThrow(() -> new IllegalStateException("해당 id에 속하는 병원이 존재하지 않습니다."));
+                orElseThrow(() -> new IllegalStateException("리뷰가 존재하지 않습니다."));
 
         checkReviewReceiptImage(review);
         registerReviewReceiptImage(reviewImage, review);

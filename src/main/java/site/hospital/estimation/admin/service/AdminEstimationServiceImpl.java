@@ -42,7 +42,7 @@ public class AdminEstimationServiceImpl implements AdminEstimationService{
     @Override
     public void deleteEstimation(Long estimationId) {
         estimationRepository.findById(estimationId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 평가가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("평가가 존재하지 않습니다."));
 
         estimationRepository.deleteById(estimationId);
     }
@@ -51,7 +51,7 @@ public class AdminEstimationServiceImpl implements AdminEstimationService{
     @Override
     public void modifyEstimation(Long estimationId, EstimationAdminModifyRequest request) {
         Estimation estimation = estimationRepository.findById(estimationId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 평가가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("평가가 존재하지 않습니다."));
 
         Estimation modifiedEstimation = Estimation
                 .builder()

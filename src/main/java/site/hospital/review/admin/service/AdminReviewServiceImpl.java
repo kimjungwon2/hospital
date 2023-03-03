@@ -25,7 +25,7 @@ public class AdminReviewServiceImpl implements AdminReviewService {
     @Override
     public void deleteReview(Long reviewId) {
         reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("리뷰가 존재하지 않습니다."));
 
         reviewRepository.deleteById(reviewId);
     }
@@ -34,7 +34,7 @@ public class AdminReviewServiceImpl implements AdminReviewService {
     @Override
     public void approveReview(Long reviewId, ReviewAuthentication reviewAuthentication) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalStateException("해당 id에 속하는 리뷰가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("리뷰가 존재하지 않습니다."));
         review.approveReviewCertification(reviewAuthentication);
     }
 
