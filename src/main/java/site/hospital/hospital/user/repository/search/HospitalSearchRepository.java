@@ -63,7 +63,7 @@ public class HospitalSearchRepository {
         Map<Long, List<HospitalSearchPostTagDTO>> tagHospitalMap = hospitalSearchPostTagDTOS.stream()
                 .collect(Collectors.groupingBy(HospitalSearchPostTagDTO::getHospitalId));
 
-        searchResults.forEach(h -> h.setHospitalSearchPostTagDTOS(tagHospitalMap.get(h.getHospitalId())));
+        searchResults.forEach(h -> h.setPostTagDtos(tagHospitalMap.get(h.getHospitalId())));
     }
 
     private void insertReviewHospitals(Page<HospitalSearchSelectQuery> searchResults, List<Long> hospitalIds) {
