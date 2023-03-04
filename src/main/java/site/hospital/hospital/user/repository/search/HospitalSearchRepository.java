@@ -101,7 +101,7 @@ public class HospitalSearchRepository {
                 .leftJoin(hospital.hospitalThumbnail, hospitalThumbnail)
                 .where((hospitalNameLike(searchName)
                         .or(hospitalSubjectLike(searchName)
-                                .or(tagNameLike(searchName))))
+                                .or(tagNameEq(searchName))))
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -119,7 +119,7 @@ public class HospitalSearchRepository {
                 .join(hospital.detailedHosInformation, detailedHosInformation)
                 .where((hospitalNameLike(searchName)
                         .or(hospitalSubjectLike(searchName)
-                                .or(tagNameLike(searchName)
+                                .or(tagNameEq(searchName)
                                 ))));
     }
 
@@ -131,18 +131,18 @@ public class HospitalSearchRepository {
 
 
     private BooleanExpression hospitalNameLike(String hospitalName) {
-        Assert.notNull(hospitalName,"hospitalName must be provided");
+        Assert.notNull(hospitalName,"searchName must be provided");
 
         return isEmpty(hospitalName) ? null : hospital.hospitalName.contains(hospitalName);
     }
 
     private BooleanExpression hospitalSubjectLike(String hospitalSubject) {
-        Assert.notNull(hospitalSubject,"hospitalSubject must be provided");
+        Assert.notNull(hospitalSubject,"searchName must be provided");
 
         return isEmpty(hospitalSubject) ? null : hospital.medicalSubjectInformation.contains(hospitalSubject);
     }
 
-    private BooleanExpression tagNameLike(String tagName) {
+    private BooleanExpression tagNameEq(String tagName) {
         Assert.notNull(tagName,"tagName must be provided");
 
         return isEmpty(tagName) ? null : hospital.postTags.any().tag.name.eq(tagName);
