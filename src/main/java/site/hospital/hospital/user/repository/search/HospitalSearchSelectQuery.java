@@ -15,7 +15,7 @@ public class HospitalSearchSelectQuery {
     private BusinessCondition businessCondition;
     private String medicalSubjectInformation;
     private String roadBaseAddress;
-    private List<HospitalSearchPostTagDTO> hospitalSearchPostTagDTOS;
+    private List<HospitalSearchPostTagDTO> postTagDtos;
     private List<HospitalSearchReviewHospitalDTO> reviewHospitals;
 
     @QueryProjection
