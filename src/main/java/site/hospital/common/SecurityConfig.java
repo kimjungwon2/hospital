@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private static final String[] PUBLIC_URI = {
+            "/api/check",
             "/api/login",
             "/api/signup",
             "/api/search/hospital/**",
