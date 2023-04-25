@@ -25,6 +25,11 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/check")
+    public String checkServerStatus(){
+        return "check";
+    }
+
     @PostMapping("/login")
     public ResponseEntity<MemberLoginResponse> login(@RequestBody @Validated MemberLoginRequest request) {
         return memberService.login(request);
