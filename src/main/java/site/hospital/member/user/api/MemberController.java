@@ -27,7 +27,7 @@ public class MemberController {
 
     @GetMapping("/check")
     public String checkServerStatus(){
-        return "checkV4";
+        return "checkV5";
     }
 
     @PostMapping("/login")
