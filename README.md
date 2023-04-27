@@ -16,7 +16,7 @@
 ![architecture](https://user-images.githubusercontent.com/40010165/216532852-b428aa72-c4da-4ad1-aca3-93b17f6b73c6.png)
 
 ### CI/CD
-![CICD Flow](https://user-images.githubusercontent.com/40010165/234650714-a5b6e9f7-dc2d-486a-add0-00ba00d2cd40.jpg)
+![CICD](https://user-images.githubusercontent.com/40010165/234750622-304cb55f-e9af-4a0c-b9fb-c7cb53069673.png)
 ![sonarQube 적용](https://user-images.githubusercontent.com/40010165/222424257-fcaebbf9-e630-4ec1-8574-259af083a13c.png)
 
 ## 3. ERD 설계
