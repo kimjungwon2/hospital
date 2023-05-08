@@ -11,9 +11,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,6 +31,7 @@ import site.hospital.review.user.domain.reviewhospital.ReviewHospital;
 
 @Entity
 @Getter
+@Table(indexes = @Index(name="idx__subject__hospitalname",columnList = "medicalSubjectInformation,hospitalName"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hospital extends BaseEntity {
 
