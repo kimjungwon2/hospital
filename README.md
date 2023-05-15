@@ -12,7 +12,7 @@
 - **관리자 계정**: 악용을 방지하기 위해서 mac20010@naver.com 메일로 요청하시면 아이디와 패스워드를 제공하겠습니다.</br>
 
 ## 1. 프로젝트 요약 
-![프로젝트 요약](https://user-images.githubusercontent.com/40010165/234650806-cac5cefe-b72c-443d-aa90-69520fad1b69.jpg)
+![개발자](https://github.com/kimjungwon2/hospital/assets/40010165/2faf41f0-0b1e-4ba2-b7f2-3c050bbc986c)
 </br>
 
 ## 2. 프로젝트 구조
