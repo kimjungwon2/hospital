@@ -31,7 +31,6 @@ import site.hospital.review.user.domain.reviewhospital.ReviewHospital;
 
 @Entity
 @Getter
-@Table(indexes = @Index(name="idx__subject__hospitalname",columnList = "medicalSubjectInformation,hospitalName"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hospital extends BaseEntity {
 
