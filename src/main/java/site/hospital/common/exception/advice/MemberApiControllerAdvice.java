@@ -1,5 +1,7 @@
 package site.hospital.common.exception.advice;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import site.hospital.common.exception.ServiceException;
 import site.hospital.member.user.api.MemberController;
 import site.hospital.common.exception.ErrorResponse;
 
@@ -54,5 +57,17 @@ public class MemberApiControllerAdvice {
     public ErrorResponse illegalStateHandle(IllegalStateException e) {
         log.error("IllegalStateException:", e);
         return new ErrorResponse(BAD_CODE, e.getMessage());
+    }
+
+
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<Map<String, Object>> ServiceHandle(ServiceException e) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("code", e.getStatus());
+        responseBody.put("message", e.getMessage());
+
+        log.error("ServiceException:", e);
+
+        return new ResponseEntity<>(responseBody, e.getStatus());
     }
 }

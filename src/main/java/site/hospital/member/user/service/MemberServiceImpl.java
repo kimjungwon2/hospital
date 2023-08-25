@@ -5,13 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hospital.common.exception.ServiceException;
 import site.hospital.common.jwt.CustomUserDetail;
 import site.hospital.common.jwt.JwtFilter;
 import site.hospital.common.jwt.TokenProvider;
@@ -146,11 +149,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private Authentication setAuthentication(UsernamePasswordAuthenticationToken authenticationToken) {
-        Authentication authentication = authenticationManagerBuilder.getObject()
-                .authenticate(authenticationToken);
+        try {
+            Authentication authentication = authenticationManagerBuilder.getObject()
+                    .authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return authentication;
+            return authentication;
+
+        } catch(AuthenticationException e){
+            throw new ServiceException(HttpStatus.NOT_FOUND, "아이디와 비밀번호가 일치하지 않습니다.");
+        }
     }
 
     private UsernamePasswordAuthenticationToken createAuthenticationToken(

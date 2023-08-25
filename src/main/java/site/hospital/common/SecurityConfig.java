@@ -17,7 +17,6 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import site.hospital.common.exception.CustomAuthFailureHandler;
 import site.hospital.common.jwt.JwtAccessDeniedHandler;
 import site.hospital.common.jwt.JwtAuthenticationEntryPoint;
 import site.hospital.common.jwt.JwtSecurityConfig;
@@ -109,10 +108,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new CustomAuthFailureHandler();
-    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
