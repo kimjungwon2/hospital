@@ -61,10 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 
                 //exception 추가
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-                .and()
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .exceptionHandling(handler -> handler.accessDeniedHandler(jwtAccessDeniedHandler))
+
 
                 //세션을 설정 안 해서 추가.
                 .formLogin().disable()
