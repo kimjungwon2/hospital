@@ -139,7 +139,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.httpFirewall(firewall);
     }
-
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

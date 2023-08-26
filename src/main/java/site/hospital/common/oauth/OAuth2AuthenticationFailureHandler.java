@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private final OAuth2HttpRequestRepository oAuth2HttpRequestRepository;
+    private final OAuth2RemoveCookie oAuth2RemoveCookie;
 
     @Override
     public void onAuthenticationFailure(
@@ -33,7 +33,7 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
                 .queryParam("error", exception.getLocalizedMessage())
                 .build().toUriString();
 
-        oAuth2HttpRequestRepository.removeAuthorizationRequestCookies(request, response);
+        oAuth2RemoveCookie.removeAuthorizationRequestCookies(request, response);
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

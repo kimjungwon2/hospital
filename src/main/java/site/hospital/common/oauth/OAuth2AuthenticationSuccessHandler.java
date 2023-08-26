@@ -19,7 +19,7 @@ import java.util.*;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
-    private final OAuth2HttpRequestRepository oAuth2HttpRequestRepository;
+    private final OAuth2RemoveCookie oAuth2RemoveCookie;
 
     @Override
     public void onAuthenticationSuccess(
@@ -53,7 +53,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        oAuth2HttpRequestRepository.removeAuthorizationRequestCookies(request, response);
+        oAuth2RemoveCookie.removeAuthorizationRequestCookies(request, response);
     }
 
 }
