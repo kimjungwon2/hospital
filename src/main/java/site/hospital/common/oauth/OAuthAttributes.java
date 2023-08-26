@@ -3,10 +3,12 @@ package site.hospital.common.oauth;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberStatus;
 
 @Getter
+
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
@@ -14,6 +16,7 @@ public class OAuthAttributes {
     private String name;
     private String phoneNumber;
     private String nickName;
+
 
     @Builder
     public OAuthAttributes(
@@ -58,7 +61,10 @@ public class OAuthAttributes {
                 .build();
     }
 
-    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofNaver(
+            String userNameAttributeName,
+            Map<String, Object> attributes
+    ) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 
         return OAuthAttributes.builder()
@@ -73,11 +79,13 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
         kakao_account.put("id", attributes.get("id"));
 
+        Map<String, Object> properties = (Map<String,Object>) attributes.get("properties");
+        kakao_account.put("nickname", properties.get("nickname"));
+
         return OAuthAttributes.builder()
-                .name((String) profile.get("nickname"))
+                .nickName((String) properties.get("nickname"))
                 .email((String) kakao_account.get("email"))
                 .attributes(kakao_account)
                 .nameAttributeKey(userNameAttributeName)
@@ -91,6 +99,9 @@ public class OAuthAttributes {
         return deleteHyphen;
     }
 
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
 
     public Member toEntity(){
         if(nickName == null) {

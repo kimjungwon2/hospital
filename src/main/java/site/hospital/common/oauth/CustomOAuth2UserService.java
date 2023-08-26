@@ -58,10 +58,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Optional<Member> member = memberRepository.findOneEmailByMemberIdName(attributes.getEmail());
 
         if (member.isPresent()) {
+            convertToMutableHashTable(attributes, member.get());
+
             return updateMember(attributes, member);
         }
 
         return saveMember(attributes);
+    }
+
+    private void convertToMutableHashTable(OAuthAttributes attributes, Member member) {
+        Map<String, Object> inputData = new LinkedHashMap<>();
+        inputData.putAll(attributes.getAttributes());
+        inputData.put("memberId", member.getId());
+        attributes.setAttributes(inputData);
     }
 
     private Member updateMember(OAuthAttributes attributes, Optional<Member> member) {
@@ -88,6 +97,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Member newMember = attributes.toEntity();
         Authority userAuthority = memberService.findUserAuthority();
         memberService.saveMemberWithAuthority(newMember, userAuthority);
+
+        convertToMutableHashTable(attributes, newMember);
 
         return newMember;
     }
