@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -75,9 +74,21 @@ public class MemberServiceImpl implements MemberService {
 
         Member createdMember = createMember(member);
         Authority authority = findUserAuthority();
-        saveMember(createdMember, authority);
+        saveMemberWithAuthority(createdMember, authority);
 
         return MemberCreateResponse.from(createdMember.getId());
+    }
+
+    public void saveMemberWithAuthority(Member createdMember, Authority authority) {
+        memberRepository.save(createdMember);
+
+        MemberAuthority memberAuthority = MemberAuthority
+                .builder()
+                .member(createdMember)
+                .authority(authority)
+                .build();
+
+        memberAuthorityRepository.save(memberAuthority);
     }
 
     @Transactional
@@ -112,6 +123,15 @@ public class MemberServiceImpl implements MemberService {
         if (findMembers!=null && !findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원.");
         }
+    }
+
+    public Authority findUserAuthority() {
+        Authority authority = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
+
+        if (authority == null) {
+            throw new IllegalStateException("USER 권한 데이터가 없습니다.");
+        }
+        return authority;
     }
 
     private ResponseEntity<MemberLoginResponse> createLoginResponseEntity(
@@ -162,7 +182,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private UsernamePasswordAuthenticationToken createAuthenticationToken(
-            MemberLoginRequest request) {
+            MemberLoginRequest request
+    ) {
 
         return new UsernamePasswordAuthenticationToken(
                 request.getMemberIdName(),
@@ -189,28 +210,6 @@ public class MemberServiceImpl implements MemberService {
 
                 authentication.getAuthorities().stream()
                         .anyMatch(a -> a.getAuthority().equals("ROLE_USER"));
-    }
-
-
-    private void saveMember(Member createdMember, Authority authority) {
-        memberRepository.save(createdMember);
-
-        MemberAuthority memberAuthority = MemberAuthority
-                .builder()
-                .member(createdMember)
-                .authority(authority)
-                .build();
-
-        memberAuthorityRepository.save(memberAuthority);
-    }
-
-    private Authority findUserAuthority() {
-        Authority authority = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
-
-        if (authority == null) {
-            throw new IllegalStateException("USER 권한 데이터가 없습니다.");
-        }
-        return authority;
     }
 
     private Member createMember(Member member) {

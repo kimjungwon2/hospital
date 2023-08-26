@@ -20,6 +20,9 @@ import site.hospital.common.jwt.JwtAccessDeniedHandler;
 import site.hospital.common.jwt.JwtAuthenticationEntryPoint;
 import site.hospital.common.jwt.JwtSecurityConfig;
 import site.hospital.common.jwt.TokenProvider;
+import site.hospital.common.oauth.CustomOAuth2UserService;
+import site.hospital.common.oauth.OAuth2AuthenticationFailureHandler;
+import site.hospital.common.oauth.OAuth2AuthenticationSuccessHandler;
 import site.hospital.common.oauth.OAuth2HttpRequestRepository;
 
 @EnableWebSecurity
@@ -28,17 +31,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private static final String DEPLOYMENT_IP_ADDRESS = "http://3.37.47.173";
 
     public SecurityConfig(
             TokenProvider tokenProvider,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
+            JwtAccessDeniedHandler jwtAccessDeniedHandler,
+            CustomOAuth2UserService customOAuth2UserService,
+            OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
+            OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler
     ) {
         this.tokenProvider = tokenProvider;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
     }
 
     private static final String[] PUBLIC_URI = {
@@ -90,8 +102,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .redirectionEndpoint()
                 .baseUri("/login/oauth2/code/**")
-                .and()
 
+                .and()
+                .userInfoEndpoint().userService(customOAuth2UserService)
+
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler)
 
                 //만들었던 JwtFilter 적용.
                 .and()

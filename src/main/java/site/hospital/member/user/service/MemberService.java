@@ -7,6 +7,7 @@ import site.hospital.member.user.api.dto.MemberLoginRequest;
 import site.hospital.member.user.api.dto.MemberLoginResponse;
 import site.hospital.member.user.api.dto.MemberModifyRequest;
 import site.hospital.member.user.api.dto.MemberViewInfoResponse;
+import site.hospital.member.user.domain.Authority;
 import site.hospital.member.user.domain.Member;
 
 public interface MemberService {
@@ -20,5 +21,9 @@ public interface MemberService {
     MemberViewInfoResponse viewUserInformation(Long memberId);
 
     void validateDuplicateMember(Member member);
+
+    Authority findUserAuthority();
+
+    void saveMemberWithAuthority(Member createdMember, Authority authority);
 
 }

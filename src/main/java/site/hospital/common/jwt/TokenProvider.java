@@ -34,7 +34,6 @@ public class TokenProvider implements Serializable {
     private String secret;
 
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-
     private static final String AUTHORITIES_KEY = "auth";
     private static final String PHONE_KEY = "phoneNumber";
     private static final String HOSPITAL_NUMBER_KEY = "hospitalNumber";
@@ -54,6 +53,24 @@ public class TokenProvider implements Serializable {
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(PHONE_KEY, phoneNumber)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createToken(Authentication authentication) {
+
+        String authorities = authentication
+                .getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        Date validity = createValidity();
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(validity)
                 .compact();
