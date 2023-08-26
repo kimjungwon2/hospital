@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,6 +20,7 @@ import site.hospital.common.jwt.JwtAccessDeniedHandler;
 import site.hospital.common.jwt.JwtAuthenticationEntryPoint;
 import site.hospital.common.jwt.JwtSecurityConfig;
 import site.hospital.common.jwt.TokenProvider;
+import site.hospital.common.oauth.OAuth2HttpRequestRepository;
 
 @EnableWebSecurity
 @Configuration
@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/hospital/view/**",
             "/api/hospital/staffHosInfo/**",
             "/api/hospital/review/**",
-            "/api/hospital/question/**"
+            "/api/hospital/question/**",
+            "/api/oauth2/**"
     };
 
     @Override
@@ -58,6 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().and()
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+
 
                 //exception 추가
                 .exceptionHandling()
@@ -77,6 +81,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/staff/**").hasAnyRole("MANAGER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
+
+                .and()
+                .oauth2Login()
+                .authorizationEndpoint().baseUri("/api/oauth2/authorize")
+                .authorizationRequestRepository(oAuth2HttpRequestRepository())
+
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/login/oauth2/code/**")
+                .and()
+
 
                 //만들었던 JwtFilter 적용.
                 .and()
@@ -106,6 +121,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    OAuth2HttpRequestRepository oAuth2HttpRequestRepository(){
+        return new OAuth2HttpRequestRepository();
     }
 
 
