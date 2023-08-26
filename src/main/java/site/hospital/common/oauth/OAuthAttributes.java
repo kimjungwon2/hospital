@@ -13,6 +13,7 @@ public class OAuthAttributes {
     private String email;
     private String name;
     private String phoneNumber;
+    private String nickName;
 
     @Builder
     public OAuthAttributes(
@@ -20,13 +21,15 @@ public class OAuthAttributes {
             String nameAttributeKey,
             String email,
             String name,
-            String phoneNumber
+            String phoneNumber,
+            String nickName
     ) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.email = email;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.nickName = nickName;
     }
 
     public static OAuthAttributes of(
@@ -34,6 +37,12 @@ public class OAuthAttributes {
             String userNameAttributeName,
             Map<String, Object> attributes
     ){
+        if(registrationId.equals("naver")){
+            return ofNaver("id",attributes);
+        } else if(registrationId.equals("kakao")){
+            return ofKakao("id",attributes);
+        }
+
         return ofGoogle(userNameAttributeName,attributes);
     }
 
@@ -49,15 +58,58 @@ public class OAuthAttributes {
                 .build();
     }
 
+    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        return OAuthAttributes.builder()
+                .name((String) response.get("name"))
+                .nickName((String) response.get("nickname"))
+                .email((String) response.get("email"))
+                .phoneNumber(deleteHyphen(response))
+                .attributes(response)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
+        kakao_account.put("id", attributes.get("id"));
+
+        return OAuthAttributes.builder()
+                .name((String) profile.get("nickname"))
+                .email((String) kakao_account.get("email"))
+                .attributes(kakao_account)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    private static String deleteHyphen(Map<String, Object> response) {
+        String phoneNumber= (String) response.get("mobile");
+        String deleteHyphen = phoneNumber.replace("-","");
+
+        return deleteHyphen;
+    }
+
+
     public Member toEntity(){
+        if(nickName == null) {
+            return Member.builder()
+                    .memberIdName(email)
+                    .nickName(name)
+                    .userName(name)
+                    .phoneNumber(phoneNumber)
+                    .memberStatus(MemberStatus.NORMAL)
+                    .build();
+        }
+
         return Member.builder()
                 .memberIdName(email)
-                .nickName(name)
+                .nickName(nickName)
                 .userName(name)
                 .phoneNumber(phoneNumber)
                 .memberStatus(MemberStatus.NORMAL)
                 .build();
-
     }
 
 

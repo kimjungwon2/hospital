@@ -79,6 +79,8 @@ public class MemberServiceImpl implements MemberService {
         return MemberCreateResponse.from(createdMember.getId());
     }
 
+    @Override
+    @Transactional
     public void saveMemberWithAuthority(Member createdMember, Authority authority) {
         memberRepository.save(createdMember);
 
@@ -125,6 +127,7 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
     public Authority findUserAuthority() {
         Authority authority = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
 
