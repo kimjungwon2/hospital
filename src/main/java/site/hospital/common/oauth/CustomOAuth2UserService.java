@@ -14,12 +14,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import site.hospital.member.user.domain.Authority;
-import site.hospital.member.user.domain.Authorization;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberAuthority;
-import site.hospital.member.user.repository.AuthorityRepository;
-import site.hospital.member.user.repository.MemberAuthorityRepository;
 import site.hospital.member.user.repository.MemberRepository;
+import site.hospital.member.user.service.MemberService;
 
 @RequiredArgsConstructor
 @Service
@@ -27,9 +25,7 @@ import site.hospital.member.user.repository.MemberRepository;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
-    private final AuthorityRepository authorityRepository;
-    private final MemberAuthorityRepository memberAuthorityRepository;
-
+    private final MemberService memberService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -42,14 +38,20 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         Member member = saveOrUpdate(attributes);
-        List<MemberAuthority> memberAuthorities = memberRepository.findMemberAuthorities(member.getMemberIdName());
-        List<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(memberAuthorities);
+
+        List<GrantedAuthority> grantedAuthorities = memberConvertToGrantedAuthorities(member);
 
         return new DefaultOAuth2User(
                 grantedAuthorities,
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey()
         );
+    }
+
+    private List<GrantedAuthority> memberConvertToGrantedAuthorities(Member member) {
+        List<MemberAuthority> memberAuthorities = memberRepository.findMemberAuthorities(member.getMemberIdName());
+        List<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(memberAuthorities);
+        return grantedAuthorities;
     }
 
     private Member saveOrUpdate(OAuthAttributes attributes) {
@@ -70,37 +72,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         return member.orElseThrow(() -> new IllegalArgumentException("멤버가 존재하지 않습니다."));
     }
 
-    private Member saveMember(OAuthAttributes attributes) {
-        log.info("새로운 {} 회원 생성",attributes.getName());
-
-        Member newMember = attributes.toEntity();
-        Authority userAuthority = findUserAuthority();
-        saveMemberWithAuthority(newMember, userAuthority);
-
-        return newMember;
-    }
-
-    private Authority findUserAuthority() {
-        Authority authority = authorityRepository.findByAuthorizationStatus(Authorization.ROLE_USER);
-
-        if (authority == null) {
-            throw new IllegalStateException("USER 권한 데이터가 없습니다.");
-        }
-        return authority;
-    }
-
-    private void saveMemberWithAuthority(Member createdMember, Authority authority) {
-        memberRepository.save(createdMember);
-
-        MemberAuthority memberAuthority = MemberAuthority
-                .builder()
-                .member(createdMember)
-                .authority(authority)
-                .build();
-
-        memberAuthorityRepository.save(memberAuthority);
-    }
-
     private List<GrantedAuthority> getGrantedAuthorities(List<MemberAuthority> memberAuthorities) {
 
         return memberAuthorities
@@ -109,5 +80,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         a.getAuthority().getAuthorizationStatus().toString()))
                 .collect(Collectors.toList());
 
+    }
+
+    private Member saveMember(OAuthAttributes attributes) {
+        log.info("새로운 {} 회원 생성",attributes.getName());
+
+        Member newMember = attributes.toEntity();
+        Authority userAuthority = memberService.findUserAuthority();
+        memberService.saveMemberWithAuthority(newMember, userAuthority);
+
+        return newMember;
     }
 }

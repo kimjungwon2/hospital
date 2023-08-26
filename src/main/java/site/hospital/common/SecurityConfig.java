@@ -115,6 +115,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(new JwtSecurityConfig(tokenProvider));
     }
 
+    @Bean
+    public OAuth2HttpRequestRepository oAuth2HttpRequestRepository(){
+        return new OAuth2HttpRequestRepository();
+    }
+
     @Override
     public void configure(WebSecurity web) {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
@@ -134,17 +139,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.httpFirewall(firewall);
     }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    OAuth2HttpRequestRepository oAuth2HttpRequestRepository(){
-        return new OAuth2HttpRequestRepository();
-    }
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
