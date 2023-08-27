@@ -23,6 +23,7 @@ bin/
 application-db.yml
 application-jwt.yml
 application-aws.yml
+application-ssl.yml
 *.iws
 *.iml
 *.ipr
@@ -40,3 +41,4 @@ application-aws.yml
 .vscode/
 /out/
 /build/**
+/src/main/resources/keystore.p12
