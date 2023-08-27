@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,6 +20,10 @@ import site.hospital.common.jwt.JwtAccessDeniedHandler;
 import site.hospital.common.jwt.JwtAuthenticationEntryPoint;
 import site.hospital.common.jwt.JwtSecurityConfig;
 import site.hospital.common.jwt.TokenProvider;
+import site.hospital.common.oauth.CustomOAuth2UserService;
+import site.hospital.common.oauth.OAuth2AuthenticationFailureHandler;
+import site.hospital.common.oauth.OAuth2AuthenticationSuccessHandler;
+import site.hospital.common.oauth.OAuth2HttpRequestRepository;
 
 @EnableWebSecurity
 @Configuration
@@ -28,17 +31,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private static final String DEPLOYMENT_IP_ADDRESS = "http://3.37.47.173";
 
     public SecurityConfig(
             TokenProvider tokenProvider,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
+            JwtAccessDeniedHandler jwtAccessDeniedHandler,
+            CustomOAuth2UserService customOAuth2UserService,
+            OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
+            OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler
     ) {
         this.tokenProvider = tokenProvider;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
     }
 
     private static final String[] PUBLIC_URI = {
@@ -50,7 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/hospital/view/**",
             "/api/hospital/staffHosInfo/**",
             "/api/hospital/review/**",
-            "/api/hospital/question/**"
+            "/api/hospital/question/**",
+            "/api/oauth2/**"
     };
 
     @Override
@@ -58,6 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().and()
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+
 
                 //exception 추가
                 .exceptionHandling()
@@ -78,9 +94,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
 
+                .and()
+                .oauth2Login()
+                .authorizationEndpoint().baseUri("/api/oauth2/authorize")
+                .authorizationRequestRepository(oAuth2HttpRequestRepository())
+
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/login/oauth2/code/**")
+
+                .and()
+                .userInfoEndpoint().userService(customOAuth2UserService)
+
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler)
+
                 //만들었던 JwtFilter 적용.
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
+    }
+
+    @Bean
+    public OAuth2HttpRequestRepository oAuth2HttpRequestRepository(){
+        return new OAuth2HttpRequestRepository();
     }
 
     @Override
@@ -102,13 +139,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.httpFirewall(firewall);
     }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
