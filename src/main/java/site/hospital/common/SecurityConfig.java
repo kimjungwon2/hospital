@@ -101,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/login/oauth2/code/**")
+                .baseUri("/api/login/oauth2/code/**")
 
                 .and()
                 .userInfoEndpoint().userService(customOAuth2UserService)
