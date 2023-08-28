@@ -2,7 +2,6 @@ spring:
   profiles:
     include:
       - jwt
-      - aws
   datasource:
     username: sa
     url: jdbc:h2:tcp://localhost/~/site

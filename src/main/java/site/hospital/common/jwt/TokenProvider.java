@@ -11,8 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,16 +23,16 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 @PropertySource("classpath:application-jwt.yml")
 public class TokenProvider implements Serializable {
 
     private static final long serialVersionUID = -798416586417070603L;
-    private static final long JWT_TOKEN_VALIDITY = (long)60 * 60 * 6000;
+    private static final long JWT_TOKEN_VALIDITY = (long)30 * 60 * 1000; //30분
 
     @Value("${jwt.secret}")
     private String secret;
 
-    private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
     private static final String PHONE_KEY = "phoneNumber";
     private static final String HOSPITAL_NUMBER_KEY = "hospitalNumber";
@@ -125,13 +124,13 @@ public class TokenProvider implements Serializable {
 
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            logger.info("잘못된 JWT 서명입니다.");
+            log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
-            logger.info("만료된 JWT 토큰입니다.");
+            log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
-            logger.info("지원되지 않는 JWT 토큰입니다.");
+            log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
-            logger.info("JWT 토큰이 잘못되었습니다.");
+            log.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
     }

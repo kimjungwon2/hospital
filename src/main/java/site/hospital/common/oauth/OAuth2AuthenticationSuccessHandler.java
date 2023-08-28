@@ -23,6 +23,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final TokenProvider tokenProvider;
     private final OAuth2RemoveAuthenticationCookie oAuth2RemoveAuthenticationCookie;
 
+    public static final String LOGIN_COOKIE_KEY_MEMBER_ID = "member_id";
+    public static final String LOGIN_COOKIE_KEY_NICKNAME = "nick_name";
+    public static final String LOGIN_COOKIE_KEY_MEMBER_STATUS = "member_status";
+    private final int loginCookieExpireSeconds = 6 * 30 * 24 * 60 * 60; // 6달
+
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -47,22 +52,21 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         setLoginCookies(response, authentication);
 
+        String token = tokenProvider.createToken(authentication);
+
         return UriComponentsBuilder
                 .fromUriString(targetUrl)
-                .queryParam("success", true)
+                .queryParam("token", token)
                 .build()
                 .toUriString();
     }
 
     private void setLoginCookies(HttpServletResponse response, Authentication authentication) {
-        String token = tokenProvider.createToken(authentication);
-
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         setMemberStatusCookie(response, oAuth2User);
         setNickNameCookie(response, attributes);
-        setTokenCookie(response, token, attributes);
         setMemberIdCookie(response, attributes);
     }
 
@@ -76,27 +80,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if(attributes.get("memberId")==null){
             throw new IllegalStateException("회원이 존재하지 않습니다.");
         } else if(attributes.get("memberId")!=null){
-            CookieUtils.addCookie(response, "member_id", String.valueOf(attributes.get("memberId")), 180);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_ID, String.valueOf(attributes.get("memberId")), loginCookieExpireSeconds);
         }
     }
-
-    private void setTokenCookie(HttpServletResponse response, String token,
-            Map<String, Object> attributes) {
-        if(token ==null){
-            throw new IllegalStateException("로그인 실패");
-        } else if(token!=null){
-            CookieUtils.addCookie(response, "token", token, 180);
-        }
-    }
-
 
     private void setMemberStatusCookie(HttpServletResponse response, OAuth2User oAuth2User) {
         if(oAuth2User.getAuthorities().size()==1){
-            CookieUtils.addCookie(response, "member_status", String.valueOf(MemberStatus.NORMAL), 180);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.NORMAL), loginCookieExpireSeconds);
         } else if(oAuth2User.getAuthorities().size()==2){
-            CookieUtils.addCookie(response, "member_status", String.valueOf(MemberStatus.STAFF), 180);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.STAFF), loginCookieExpireSeconds);
         } else if(oAuth2User.getAuthorities().size()==3){
-            CookieUtils.addCookie(response, "member_status", String.valueOf(MemberStatus.ADMIN), 180);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.ADMIN), loginCookieExpireSeconds);
         } else{
             throw new IllegalStateException("권한이 잘못 부여됐습니다.");
         }
@@ -104,9 +98,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private void setNickNameCookie(HttpServletResponse response, Map<String, Object> attributes) {
         if(attributes.get("nickname")==null){
-            CookieUtils.addCookie(response,"nick_name", (String) attributes.get("given_name"),180);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_NICKNAME, (String) attributes.get("name"),loginCookieExpireSeconds);
         } else if(attributes.get("nickname")!=null){
-            CookieUtils.addCookie(response, "nick_name", (String) attributes.get("nickname"), 180);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_NICKNAME, (String) attributes.get("nickname"), loginCookieExpireSeconds);
         }
     }
 
