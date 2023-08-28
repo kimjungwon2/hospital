@@ -40,3 +40,5 @@ application-aws.yml
 .vscode/
 /out/
 /build/**
+/src/main/resources/application-ssl.yml
+/src/main/resources/keystore.p12
