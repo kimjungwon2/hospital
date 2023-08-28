@@ -65,7 +65,7 @@ public class CookieUtils {
     }
 
     private static String removeExclamationMark(String input){
-        String deletedString = input.replaceAll("[^a-zA-Z0-9]", "");
+        String deletedString = input.replaceAll("[^a-zA-Z가-힣0-9]", "");
 
         return deletedString;
     }
