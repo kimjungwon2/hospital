@@ -24,7 +24,9 @@ public class CookieUtils {
     }
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
+        String removedExclamationValue = removeExclamationMark(value);
+
+        Cookie cookie = new Cookie(name, removedExclamationValue);
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
@@ -52,6 +54,12 @@ public class CookieUtils {
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
         return cls.cast(SerializationUtils.deserialize(
                 Base64.getUrlDecoder().decode(cookie.getValue())));
+    }
+
+    private static String removeExclamationMark(String input){
+        String deletedString = input.replaceAll("[^a-zA-Z0-9]", "");
+
+        return deletedString;
     }
 
 }
