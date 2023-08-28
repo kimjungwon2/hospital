@@ -30,6 +30,16 @@ public class CookieUtils {
         response.addCookie(cookie);
     }
 
+    public static void setCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        String removedExclamationValue = removeExclamationMark(value);
+
+        Cookie cookie = new Cookie(name, removedExclamationValue);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        response.addCookie(cookie);
+    }
+
+
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length > 0) {
@@ -52,6 +62,12 @@ public class CookieUtils {
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
         return cls.cast(SerializationUtils.deserialize(
                 Base64.getUrlDecoder().decode(cookie.getValue())));
+    }
+
+    private static String removeExclamationMark(String input){
+        String deletedString = input.replaceAll("[^a-zA-Z가-힣0-9]", "");
+
+        return deletedString;
     }
 
 }

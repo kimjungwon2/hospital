@@ -3,12 +3,10 @@ package site.hospital.common.oauth;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberStatus;
 
 @Getter
-
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
@@ -71,7 +69,6 @@ public class OAuthAttributes {
                 .name((String) response.get("name"))
                 .nickName((String) response.get("nickname"))
                 .email((String) response.get("email"))
-                .phoneNumber(deleteHyphen(response))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -85,6 +82,7 @@ public class OAuthAttributes {
         kakao_account.put("nickname", properties.get("nickname"));
 
         return OAuthAttributes.builder()
+                .name((String) properties.get("nickname"))
                 .nickName((String) properties.get("nickname"))
                 .email((String) kakao_account.get("email"))
                 .attributes(kakao_account)
@@ -92,18 +90,12 @@ public class OAuthAttributes {
                 .build();
     }
 
-    private static String deleteHyphen(Map<String, Object> response) {
-        String phoneNumber= (String) response.get("mobile");
-        String deleteHyphen = phoneNumber.replace("-","");
-
-        return deleteHyphen;
-    }
-
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
     public Member toEntity(){
+
         if(nickName == null) {
             return Member.builder()
                     .memberIdName(email)

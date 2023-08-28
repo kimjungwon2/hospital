@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private static final String DEPLOYMENT_IP_ADDRESS = "http://3.37.47.173";
+    private static final String DNS_IP_ADDRESS ="http://kyeongihos.shop";
 
     public SecurityConfig(
             TokenProvider tokenProvider,
@@ -76,10 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 //exception 추가
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-                .and()
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .exceptionHandling(handler -> handler.accessDeniedHandler(jwtAccessDeniedHandler))
+
 
                 //세션을 설정 안 해서 추가.
                 .formLogin().disable()
@@ -101,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/login/oauth2/code/**")
+                .baseUri("/api/login/oauth2/code/**")
 
                 .and()
                 .userInfoEndpoint().userService(customOAuth2UserService)
@@ -144,6 +144,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(DEPLOYMENT_IP_ADDRESS);
+        configuration.addAllowedOrigin(DNS_IP_ADDRESS);
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

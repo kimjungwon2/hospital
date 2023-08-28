@@ -106,9 +106,8 @@ public class Member extends BaseTimeEntity {
         this.userName = member.getUserName();
     }
 
-    public Member updateOauth(String name, String phoneNumber){
+    public Member updateOauth(String name){
         this.nickName = name;
-        this.phoneNumber = phoneNumber;
         this.userName = name;
 
         return this;
