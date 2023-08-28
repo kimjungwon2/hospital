@@ -1,5 +1,8 @@
 package site.hospital.common.exception.advice;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import java.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -71,12 +74,6 @@ public class ApiControllerAdvice {
         return new ErrorResponse("FORBIDDEN", e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler
-    public ErrorResponse servletException(javax.servlet.ServletException e) {
-        log.error("javax.servlet.ServletException:", e);
-        return new ErrorResponse(BAD_CODE, "아이디와 비밀번호가 일치하지 않습니다.");
-    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
@@ -92,4 +89,26 @@ public class ApiControllerAdvice {
         log.error("InternalServerException:", e);
         return new ErrorResponse("SERVER_ERROR", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler
+    public ErrorResponse signatureHandle(SignatureException e) {
+        log.error("UnAuthorizedException:", e);
+        return new ErrorResponse(BAD_CODE, "아이디와 비밀번호가 일치하지 않습니다.");
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler
+    public ErrorResponse malformedJwtHandle(MalformedJwtException e) {
+        log.error("UnAuthorizedException:", e);
+        return new ErrorResponse(BAD_CODE, "올바르지 않은 토큰입니다.");
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler
+    public ErrorResponse expiredJwtHandle(ExpiredJwtException e) {
+        log.error("UnAuthorizedException:", e);
+        return new ErrorResponse(BAD_CODE, "토큰이 만료되었습니다. 다시 로그인해주세요.");
+    }
+
 }
