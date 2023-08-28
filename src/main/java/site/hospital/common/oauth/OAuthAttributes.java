@@ -3,13 +3,10 @@ package site.hospital.common.oauth;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberStatus;
 
 @Getter
-@Slf4j
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;

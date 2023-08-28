@@ -24,7 +24,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final OAuth2RemoveAuthenticationCookie oAuth2RemoveAuthenticationCookie;
 
     public static final String LOGIN_COOKIE_KEY_MEMBER_ID = "member_id";
-    public static final String LOGIN_COOKIE_KEY_TOKEN = "token";
     public static final String LOGIN_COOKIE_KEY_NICKNAME = "nick_name";
     public static final String LOGIN_COOKIE_KEY_MEMBER_STATUS = "member_status";
     private final int loginCookieExpireSeconds = 6 * 30 * 24 * 60 * 60; // 6달
@@ -53,22 +52,21 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         setLoginCookies(response, authentication);
 
+        String token = tokenProvider.createToken(authentication);
+
         return UriComponentsBuilder
                 .fromUriString(targetUrl)
-                .queryParam("success", true)
+                .queryParam("token", token)
                 .build()
                 .toUriString();
     }
 
     private void setLoginCookies(HttpServletResponse response, Authentication authentication) {
-        String token = tokenProvider.createToken(authentication);
-
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         setMemberStatusCookie(response, oAuth2User);
         setNickNameCookie(response, attributes);
-        setTokenCookie(response, token);
         setMemberIdCookie(response, attributes);
     }
 
@@ -85,15 +83,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_ID, String.valueOf(attributes.get("memberId")), loginCookieExpireSeconds);
         }
     }
-
-    private void setTokenCookie(HttpServletResponse response, String token) {
-        if(token ==null){
-            throw new IllegalStateException("로그인 실패");
-        } else if(token!=null){
-            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_TOKEN, token, loginCookieExpireSeconds);
-        }
-    }
-
 
     private void setMemberStatusCookie(HttpServletResponse response, OAuth2User oAuth2User) {
         if(oAuth2User.getAuthorities().size()==1){
