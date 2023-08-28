@@ -69,7 +69,6 @@ public class OAuthAttributes {
                 .name((String) response.get("name"))
                 .nickName((String) response.get("nickname"))
                 .email((String) response.get("email"))
-                .phoneNumber(deleteHyphen(response))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -89,13 +88,6 @@ public class OAuthAttributes {
                 .attributes(kakao_account)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
-    }
-
-    private static String deleteHyphen(Map<String, Object> response) {
-        String phoneNumber= (String) response.get("mobile");
-        String deleteHyphen = phoneNumber.replace("-","");
-
-        return deleteHyphen;
     }
 
     public void setAttributes(Map<String, Object> attributes) {

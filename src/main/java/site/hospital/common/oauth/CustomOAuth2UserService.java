@@ -76,7 +76,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private Member updateMember(OAuthAttributes attributes, Optional<Member> member) {
         log.info("기존 {} 회원 수정",attributes.getName());
 
-        member.map(entity -> entity.updateOauth(attributes.getName(), attributes.getPhoneNumber()));
+        member.map(entity -> entity.updateOauth(attributes.getName()));
 
         return member.orElseThrow(() -> new IllegalArgumentException("멤버가 존재하지 않습니다."));
     }
