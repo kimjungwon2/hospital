@@ -4,11 +4,12 @@ import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import site.hospital.member.user.domain.Member;
 import site.hospital.member.user.domain.MemberStatus;
 
 @Getter
-
+@Slf4j
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
@@ -85,6 +86,7 @@ public class OAuthAttributes {
         kakao_account.put("nickname", properties.get("nickname"));
 
         return OAuthAttributes.builder()
+                .name((String) properties.get("nickname"))
                 .nickName((String) properties.get("nickname"))
                 .email((String) kakao_account.get("email"))
                 .attributes(kakao_account)
@@ -104,6 +106,7 @@ public class OAuthAttributes {
     }
 
     public Member toEntity(){
+
         if(nickName == null) {
             return Member.builder()
                     .memberIdName(email)
