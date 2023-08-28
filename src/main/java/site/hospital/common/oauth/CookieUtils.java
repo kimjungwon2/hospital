@@ -24,6 +24,13 @@ public class CookieUtils {
     }
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        response.addCookie(cookie);
+    }
+
+    public static void setCookie(HttpServletResponse response, String name, String value, int maxAge) {
         String removedExclamationValue = removeExclamationMark(value);
 
         Cookie cookie = new Cookie(name, removedExclamationValue);
@@ -31,6 +38,7 @@ public class CookieUtils {
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }
+
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
         Cookie[] cookies = request.getCookies();

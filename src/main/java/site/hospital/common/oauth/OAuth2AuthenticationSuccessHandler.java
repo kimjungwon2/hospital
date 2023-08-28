@@ -68,7 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         setMemberStatusCookie(response, oAuth2User);
         setNickNameCookie(response, attributes);
-        setTokenCookie(response, token, attributes);
+        setTokenCookie(response, token);
         setMemberIdCookie(response, attributes);
     }
 
@@ -82,31 +82,26 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if(attributes.get("memberId")==null){
             throw new IllegalStateException("회원이 존재하지 않습니다.");
         } else if(attributes.get("memberId")!=null){
-            CookieUtils.addCookie(
-                    response,
-                    LOGIN_COOKIE_KEY_MEMBER_ID,
-                    String.valueOf(attributes.get("memberId")),
-                    loginCookieExpireSeconds);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_ID, String.valueOf(attributes.get("memberId")), loginCookieExpireSeconds);
         }
     }
 
-    private void setTokenCookie(HttpServletResponse response, String token,
-            Map<String, Object> attributes) {
+    private void setTokenCookie(HttpServletResponse response, String token) {
         if(token ==null){
             throw new IllegalStateException("로그인 실패");
         } else if(token!=null){
-            CookieUtils.addCookie(response, LOGIN_COOKIE_KEY_TOKEN, token, loginCookieExpireSeconds);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_TOKEN, token, loginCookieExpireSeconds);
         }
     }
 
 
     private void setMemberStatusCookie(HttpServletResponse response, OAuth2User oAuth2User) {
         if(oAuth2User.getAuthorities().size()==1){
-            CookieUtils.addCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.NORMAL), loginCookieExpireSeconds);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.NORMAL), loginCookieExpireSeconds);
         } else if(oAuth2User.getAuthorities().size()==2){
-            CookieUtils.addCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.STAFF), loginCookieExpireSeconds);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.STAFF), loginCookieExpireSeconds);
         } else if(oAuth2User.getAuthorities().size()==3){
-            CookieUtils.addCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.ADMIN), loginCookieExpireSeconds);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_MEMBER_STATUS, String.valueOf(MemberStatus.ADMIN), loginCookieExpireSeconds);
         } else{
             throw new IllegalStateException("권한이 잘못 부여됐습니다.");
         }
@@ -114,9 +109,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private void setNickNameCookie(HttpServletResponse response, Map<String, Object> attributes) {
         if(attributes.get("nickname")==null){
-            CookieUtils.addCookie(response, LOGIN_COOKIE_KEY_NICKNAME, (String) attributes.get("given_name"),loginCookieExpireSeconds);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_NICKNAME, (String) attributes.get("name"),loginCookieExpireSeconds);
         } else if(attributes.get("nickname")!=null){
-            CookieUtils.addCookie(response, LOGIN_COOKIE_KEY_NICKNAME, (String) attributes.get("nickname"), loginCookieExpireSeconds);
+            CookieUtils.setCookie(response, LOGIN_COOKIE_KEY_NICKNAME, (String) attributes.get("nickname"), loginCookieExpireSeconds);
         }
     }
 
